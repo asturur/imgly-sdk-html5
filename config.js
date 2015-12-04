@@ -64,6 +64,7 @@ module.exports = {
     dest: destination + '/js/',
     destFiles: [
       destination + '/js/PhotoEditor-SDK.js',
+      destination + '/js/PhotoEditor-Rendering.js',
       destination + '/js/PhotoEditor-NightReactUI.js',
       destination + '/js/PhotoEditor-NightUI.js'
     ]
@@ -91,6 +92,7 @@ module.exports = {
     },
     entry: {
       SDK: './sdk/photoeditorsdk',
+      Rendering: './rendering/index',
       NightUI: './night-ui/ui',
       NightReactUI: './night-react-ui/ui'
     },
