@@ -1,3 +1,4 @@
+/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -10,8 +11,12 @@
 
 import Utils from '../utils/utils'
 
-export default class BaseRenderer {
+const { EventEmitter } = PhotoEditorSDK
+
+export default class BaseRenderer extends EventEmitter {
   constructor (width, height, options) {
+    super()
+
     this._width = width || 800
     this._height = height || 600
 

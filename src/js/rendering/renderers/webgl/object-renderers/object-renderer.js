@@ -11,6 +11,20 @@
 export default class ObjectRenderer {
   constructor (renderer) {
     this._renderer = renderer
+
+    this._onContextChange = this._onContextChange.bind(this)
+    this._renderer.on('context', this._onContextChange)
+
+    // Initial context change
+    this._onContextChange()
+  }
+
+  /**
+   * Gets called when the rendering context changes
+   * @private
+   */
+  _onContextChange () {
+
   }
 
   /**
@@ -32,5 +46,13 @@ export default class ObjectRenderer {
    */
   flush () {
 
+  }
+
+  /**
+   * Cleans up
+   */
+  dispose () {
+    this._renderer.off('context', this._onContextChange)
+    this._renderer = null
   }
 }

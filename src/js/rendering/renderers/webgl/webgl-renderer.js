@@ -18,8 +18,8 @@ export default class WebGLRenderer extends BaseRenderer {
   constructor (...args) {
     super(...args)
 
-    this.renderers = this._initRenderers()
     this.shaders = this._initShaders()
+    this.renderers = this._initRenderers()
 
     this._currentObjectRenderer = new ObjectRenderer(this)
   }
@@ -66,6 +66,9 @@ export default class WebGLRenderer extends BaseRenderer {
       canvas.getContext('experimental-webgl')
     this.id = gl.id = WebGLRenderer.contextId++
     gl.renderer = this
+
+    this.emit('context', gl)
+
     return gl
   }
 

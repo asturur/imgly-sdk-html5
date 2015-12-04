@@ -163,5 +163,7 @@ export default class Shader {
     return shader
   }
 
+  getUniforms () { return this._uniforms }
+  getAttributeLocations () { return this._attributeLocations }
   getProgram () { return this._program }
 }
