@@ -14,6 +14,7 @@ export default class SpriteRenderer extends ObjectRenderer {
   constructor (...args) {
     super(...args)
     this._sprites = []
+    this._maxBatchSize = 2000
   }
 
   /**
@@ -21,7 +22,13 @@ export default class SpriteRenderer extends ObjectRenderer {
    * @param  {Sprite} sprite
    */
   render (sprite) {
-    this._sprites.push(sprite)
+    const texture = sprite.getTexture()
+    const baseTexture = texture.getBaseTexture()
+
+    if (this._currentBatchSize >= this._maxBatchSize) {
+      this.flush()
+      this._currentBaseTexture = baseTexture
+    }
   }
 
   /**

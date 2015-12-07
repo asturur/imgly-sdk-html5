@@ -1,3 +1,4 @@
+/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -10,12 +11,22 @@
 
 import Container from '../display/container'
 
+const { Vector2 } = PhotoEditorSDK
+
 export default class Sprite extends Container {
   constructor (texture) {
     super()
 
+    this._onTextureUpdate = this._onTextureUpdate.bind(this)
+
     this._texture = texture
     this._shader = null
+
+    this._width = 0
+    this._height = 0
+    this._anchor = new Vector2(0, 0)
+
+    this.setTexture(texture)
   }
 
   /**
@@ -28,8 +39,30 @@ export default class Sprite extends Container {
     renderer.renderers.sprite.render(this)
   }
 
-  setTexture (texture) { this._texture = texture }
+  /**
+   * Gets called when this sprite's texture has been updated
+   * @private
+   */
+  _onTextureUpdate () {
+
+  }
+
+  setTexture (texture) {
+    this._texture = texture
+    if (texture.getBaseTexture().isLoaded()) {
+      this._onTextureUpdate()
+    } else {
+      texture.once('update', this._onTextureUpdate)
+    }
+  }
+
   getTexture () { return this._texture }
   setShader (shader) { this._shader = shader }
   getShader () { return this._shader }
+  setWidth (width) { this._width = width }
+  getWidth () { return this._width }
+  setHeight (height) { this._height = height }
+  getHeight () { return this._height }
+  getAnchor () { return this._anchor }
+  setAnchor (anchor) { this._anchor = anchor }
 }
