@@ -31,6 +31,17 @@ export default class WebGLRenderer extends BaseRenderer {
   setShader (shader) {
     this._currentShader = shader
     this._context.useProgram(shader.getProgram())
+    this._setAttributesForShader(shader)
+  }
+
+  /**
+   * Uploads the given shader's attributes to the GPU
+   * @param {Shader} shader
+   */
+  _setAttributesForShader (shader) {
+    const gl = this._context
+    // @TODO Disable / enable attribute arrays correctly
+    gl.enableVertexAttribArray(0)
   }
 
   /**
@@ -162,6 +173,8 @@ export default class WebGLRenderer extends BaseRenderer {
 
     return glTexture
   }
+
+  getCurrentRenderTarget () { return this._currentRenderTarget }
 }
 
 WebGLRenderer.contextId = 0

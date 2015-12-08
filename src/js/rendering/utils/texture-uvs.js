@@ -48,5 +48,5 @@ export default class TextureUVs {
     uv.y = (frame.y + frame.height) / baseFrame.height
   }
 
-  getUVs () { return this._uvs }
+  getUVs (index) { return this._uvs[index] }
 }

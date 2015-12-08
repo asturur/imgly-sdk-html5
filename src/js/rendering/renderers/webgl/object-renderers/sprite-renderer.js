@@ -24,11 +24,24 @@ export default class SpriteRenderer extends ObjectRenderer {
     this._colors = new Uint32Array(this._vertices)
     this._indices = new Uint16Array(BATCH_SIZE * 6)
 
+    // Fill vertex position indices
+    for (var i = 0, j = 0; i < BATCH_SIZE * 6; i += 6, j += 4) {
+      this._indices[i + 0] = j + 0
+      this._indices[i + 1] = j + 1
+      this._indices[i + 2] = j + 2
+      this._indices[i + 3] = j + 0
+      this._indices[i + 4] = j + 2
+      this._indices[i + 5] = j + 3
+    }
+
     this._shaders = []
     this._sprites = []
 
     this._currentBatchSize = 0
     this._currentBaseTexture = null
+
+    // Initial context change
+    this._onContextChange()
   }
 
   /**
@@ -40,26 +53,107 @@ export default class SpriteRenderer extends ObjectRenderer {
     const textureFrame = texture.getFrame()
     const baseTexture = texture.getBaseTexture()
 
+    // Has the maximum batch size been reached? Flush!
     if (this._currentBatchSize >= this._maxBatchSize) {
       this.flush()
       this._currentBaseTexture = baseTexture
     }
 
+    // No updated UVs => No rendering
     const uvs = texture.getUVs()
     if (!uvs) { return }
+
+    // Fill positions array
+    const index = this._currentBatchSize * VERTEX_BYTE_SIZE
+    this._addVertexCoordinates(sprite, index, textureFrame)
+    this._addTextureUVs(sprite, index, uvs)
+
+    // Add the sprite to the list of sprites
+    this._sprites[this._currentBatchSize] = sprite
+    this._currentBatchSize++
+  }
+
+  /**
+   * Adds the texture UV coordinates to the positions array for the given sprite
+   * @param {Sprite} sprite
+   * @param {Number} index
+   * @param {TextureUVs} uvs
+   * @private
+   */
+  _addTextureUVs (sprite, index, uvs) {
+    const positions = this._positions
+
+    // Add UVs
+    let uvCoords = uvs.getUVs(0)
+    positions[index + 2] = uvCoords.x
+    positions[index + 3] = uvCoords.y
+
+    uvCoords = uvs.getUVs(1)
+    positions[index + 7] = uvCoords.x
+    positions[index + 8] = uvCoords.y
+
+    uvCoords = uvs.getUVs(2)
+    positions[index + 12] = uvCoords.x
+    positions[index + 13] = uvCoords.y
+
+    uvCoords = uvs.getUVs(3)
+    positions[index + 17] = uvCoords.x
+    positions[index + 18] = uvCoords.y
+  }
+
+  /**
+   * Adds the vertex coordinates to the positions array for the given
+   * sprite and texture frame
+   * @param {Sprite} sprite
+   * @param {Number} index
+   * @param {Rectangle} textureFrame
+   * @private
+   */
+  _addVertexCoordinates (sprite, index, textureFrame) {
+    const positions = this._positions
+    const worldTransform = sprite.getWorldTransform()
 
     // Transform sprite coords with anchor in mind
     const anchor = sprite.getAnchor()
 
-    console.log(textureFrame)
-
+    // Anchor offsets (w0 = right, w1 = left, h0 = up, h1 = down)
     const w0 = textureFrame.width * (1 - anchor.x)
     const w1 = textureFrame.width * -anchor.x
     const h0 = textureFrame.height * (1 - anchor.y)
     const h1 = textureFrame.height * -anchor.y
 
-    const index = this._currentBatchSize * VERTEX_BYTE_SIZE
-    const worldTransform = sprite.getWorldTransform()
+    // Add vertex coordinates
+    // Bottom Left (X/Y)
+    positions[index] = worldTransform.a * w1 +
+      worldTransform.c * h1 +
+      worldTransform.tx
+    positions[index + 1] = worldTransform.d * h1 +
+      worldTransform.b * w1 +
+      worldTransform.ty
+
+    // Bottom Right (X/Y)
+    positions[index + 5] = worldTransform.a * w0 +
+      worldTransform.c * h1 +
+      worldTransform.tx
+    positions[index + 6] = worldTransform.d * h1 +
+      worldTransform.b * w0 +
+      worldTransform.ty
+
+    // Top Right (X/Y)
+    positions[index + 10] = worldTransform.a * w0 +
+      worldTransform.c * h0 +
+      worldTransform.tx
+    positions[index + 11] = worldTransform.d * h0 +
+      worldTransform.b * w0 +
+      worldTransform.ty
+
+    // Top Left (X/Y)
+    positions[index + 15] = worldTransform.a * w1 +
+      worldTransform.c * h0 +
+      worldTransform.tx
+    positions[index + 16] = worldTransform.d * h0 +
+      worldTransform.b * w1 +
+      worldTransform.ty
   }
 
   /**
@@ -85,83 +179,101 @@ export default class SpriteRenderer extends ObjectRenderer {
    * Gets called when this object renderer is activated
    */
   start () {
+    const gl = this._renderer.getContext()
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, this._vertexBuffer)
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer)
+
+    const attributeLocations = this._shader.getAttributeLocations()
+    gl.vertexAttribPointer(attributeLocations.a_position, 2, gl.FLOAT, false, VERTEX_BYTE_SIZE, 0)
+    gl.vertexAttribPointer(attributeLocations.a_texCoord, 2, gl.FLOAT, false, VERTEX_BYTE_SIZE, 2 * 4)
   }
 
   /**
-   * Renders whatever has been queued
+   * Renders the queued sprites in batches, every time the base texture has changed,
+   * it flushes the current batch to the graphics card
    */
   flush () {
     const renderer = this._renderer
+    const gl = renderer.getContext()
 
-    this._sprites.forEach((sprite) => {
-      const shader = sprite.getShader() || renderer.shaders.default
-      renderer.setShader(shader)
-      shader.syncUniforms()
+    if (this._currentBatchSize > BATCH_SIZE * 0.5) {
+      // Upload whole ArrayBuffer
+      gl.bufferSubData(gl.ARRAY_BUFFER, 0, this._vertices)
+    } else {
+      // Only upload sub array
+      const subArray = this._positions.subarray(0, this._currentBatchSize * VERTEX_BYTE_SIZE)
+      gl.bufferSubData(gl.ARRAY_BUFFER, 0, subArray)
+    }
 
-      this._renderSprite(sprite)
-    })
+    // Init variables
+    let currentBatchSize = 0
+    let currentBaseTexture = null
+    let nextBaseTexture = null
+    let currentShader = null
+    let nextShader = null
+    let shaderChanged = false
+    let textureChanged = false
+    let sprite = null
+    let batchStartIndex = 0
+
+    for (let i = 0, j = this._currentBatchSize; i < j; i++) {
+      sprite = this._sprites[i]
+
+      nextBaseTexture = sprite.getTexture().getBaseTexture()
+      nextShader = sprite.getShader() || this._shader
+      shaderChanged = currentShader !== nextShader
+      textureChanged = currentBaseTexture !== nextBaseTexture
+
+      if (textureChanged || shaderChanged) {
+        this._renderBatch(currentBaseTexture, currentBatchSize, batchStartIndex)
+
+        batchStartIndex = i
+        currentBatchSize = 0
+        currentBaseTexture = nextBaseTexture
+
+        // Shader has changed, set it
+        if (shaderChanged) {
+          currentShader = nextShader
+          renderer.setShader(currentShader)
+
+          const renderTarget = renderer.getCurrentRenderTarget()
+          const projectionMatrix = renderTarget.getProjectionMatrix().toArray()
+          currentShader.setUniform('u_projMatrix', projectionMatrix)
+          currentShader.syncUniforms()
+
+          gl.activeTexture(gl.TEXTURE0)
+        }
+      }
+
+      currentBatchSize++
+    }
+
+    this._renderBatch(currentBaseTexture, currentBatchSize, batchStartIndex)
+
+    // Reset the batch
+    this._currentBatchSize = 0
     this._sprites = []
   }
 
   /**
-   * Renders the given sprite
-   * @param  {Sprite} sprite
+   * Renders the current batch
+   * @param  {BaseTexture} baseTexture
+   * @param  {Number} batchSize
+   * @param  {Number} batchStartIndex
    * @private
    */
-  _renderSprite (sprite) {
+  _renderBatch (baseTexture, batchSize, batchStartIndex) {
+    if (batchSize === 0) return
+
     const renderer = this._renderer
     const gl = renderer.getContext()
 
-    const texture = sprite.getTexture()
-    const glTexture = renderer.getOrCreateGLTexture(texture.getBaseTexture())
+    const glTexture = renderer.getOrCreateGLTexture(baseTexture)
     gl.bindTexture(gl.TEXTURE_2D, glTexture)
 
-    this._uploadCoordinates()
-
-    gl.drawArrays(gl.TRIANGLES, 0, 6)
-  }
-
-  /**
-   * Uploads the texture and vector coordinates
-   * @private
-   */
-  _uploadCoordinates () {
-    const attributeLocations = this._shader.getAttributeLocations()
-    const gl = this._renderer.getContext()
-
-    const texCoordBuffer = gl.createBuffer()
-    const textureCoordinates = new Float32Array([
-      // First triangle
-      0.0, 0.0,
-      1.0, 0.0,
-      0.0, 1.0,
-
-      // Second triangle
-      0.0, 1.0,
-      1.0, 0.0,
-      1.0, 1.0
-    ])
-    gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer)
-    gl.vertexAttribPointer(attributeLocations.a_texCoord, 2, gl.FLOAT, false, 0, 0)
-    gl.bufferData(gl.ARRAY_BUFFER, textureCoordinates, gl.STATIC_DRAW)
-    gl.enableVertexAttribArray(attributeLocations.a_texCoord)
-
-    const positionBuffer = gl.createBuffer()
-    const vectorCoordinates = new Float32Array([
-      // First triangle
-      -1.0, -1.0,
-      1.0, -1.0,
-      -1.0, 1.0,
-
-      // Second triangle
-      -1.0, 1.0,
-      1.0, -1.0,
-      1.0, 1.0
-    ])
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-    gl.vertexAttribPointer(attributeLocations.a_position, 2, gl.FLOAT, false, 0, 0)
-    gl.bufferData(gl.ARRAY_BUFFER, vectorCoordinates, gl.STATIC_DRAW)
-    gl.enableVertexAttribArray(attributeLocations.a_position)
+    const verticesCount = batchSize * 6
+    const vertexOffset = batchStartIndex * 6 * 2
+    gl.drawElements(gl.TRIANGLES, verticesCount, gl.UNSIGNED_SHORT, vertexOffset)
   }
 }

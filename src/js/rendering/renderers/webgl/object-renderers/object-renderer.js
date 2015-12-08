@@ -14,9 +14,6 @@ export default class ObjectRenderer {
 
     this._onContextChange = this._onContextChange.bind(this)
     this._renderer.on('context', this._onContextChange)
-
-    // Initial context change
-    this._onContextChange()
   }
 
   /**

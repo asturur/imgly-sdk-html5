@@ -8,6 +8,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+/**
+ * @TODO Add support for multiple GL contexts
+ */
+
 export default class Shader {
   constructor (renderer, vertexSource, fragmentSource, uniforms, attributes) {
     this._renderer = renderer
@@ -163,7 +167,17 @@ export default class Shader {
     return shader
   }
 
+  /**
+   * Sets the given uniform to the given value
+   * @param {String} name
+   * @param {*} value
+   */
+  setUniform (name, value) {
+    this._uniforms[name].value = value
+  }
+
   getUniforms () { return this._uniforms }
+  getAttributes () { return this._attributes }
   getAttributeLocations () { return this._attributeLocations }
   getProgram () { return this._program }
 }

@@ -1,3 +1,4 @@
+/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -8,12 +9,15 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+const { Matrix } = PhotoEditorSDK
+
 export default class RenderTarget {
   constructor (gl, width, height, resolution) {
     this._gl = gl
     this._width = width
     this._height = height
     this._resolution = resolution
+    this._projectionMatrix = new Matrix()
 
     // `null` means render to canvas directly
     this._framebuffer = null
@@ -42,4 +46,6 @@ export default class RenderTarget {
     gl.clearColor(0, 0, 0, 0)
     gl.clear(gl.COLOR_BUFFER_BIT)
   }
+
+  getProjectionMatrix () { return this._projectionMatrix }
 }
