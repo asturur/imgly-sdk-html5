@@ -42,4 +42,5 @@ export default class DisplayObject {
   setRotation (rotation) { this._rotation = rotation }
   getAlpha () { return this._alpha }
   setAlpha (alpha) { this._alpha = alpha }
+  getWorldTransform () { return this._worldTransform }
 }

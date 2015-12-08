@@ -8,13 +8,27 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+const BATCH_SIZE = 2000
+const VERTEX_SIZE = 5
+const VERTEX_BYTE_SIZE = VERTEX_SIZE * 4
+
 import ObjectRenderer from './object-renderer'
 
 export default class SpriteRenderer extends ObjectRenderer {
   constructor (...args) {
     super(...args)
+
+    this._maxBatchSize = BATCH_SIZE
+    this._vertices = new ArrayBuffer(BATCH_SIZE * 4 * VERTEX_BYTE_SIZE)
+    this._positions = new Float32Array(this._vertices)
+    this._colors = new Uint32Array(this._vertices)
+    this._indices = new Uint16Array(BATCH_SIZE * 6)
+
+    this._shaders = []
     this._sprites = []
-    this._maxBatchSize = 2000
+
+    this._currentBatchSize = 0
+    this._currentBaseTexture = null
   }
 
   /**
@@ -23,12 +37,29 @@ export default class SpriteRenderer extends ObjectRenderer {
    */
   render (sprite) {
     const texture = sprite.getTexture()
+    const textureFrame = texture.getFrame()
     const baseTexture = texture.getBaseTexture()
 
     if (this._currentBatchSize >= this._maxBatchSize) {
       this.flush()
       this._currentBaseTexture = baseTexture
     }
+
+    const uvs = texture.getUVs()
+    if (!uvs) { return }
+
+    // Transform sprite coords with anchor in mind
+    const anchor = sprite.getAnchor()
+
+    console.log(textureFrame)
+
+    const w0 = textureFrame.width * (1 - anchor.x)
+    const w1 = textureFrame.width * -anchor.x
+    const h0 = textureFrame.height * (1 - anchor.y)
+    const h1 = textureFrame.height * -anchor.y
+
+    const index = this._currentBatchSize * VERTEX_BYTE_SIZE
+    const worldTransform = sprite.getWorldTransform()
   }
 
   /**
@@ -36,7 +67,18 @@ export default class SpriteRenderer extends ObjectRenderer {
    * @private
    */
   _onContextChange () {
+    const gl = this._renderer.getContext()
+
     this._shader = this._renderer.shaders.default
+
+    this._vertexBuffer = gl.createBuffer()
+    this._indexBuffer = gl.createBuffer()
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer)
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this._indices, gl.STATIC_DRAW)
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this._vertexBuffer)
+    gl.bufferData(gl.ARRAY_BUFFER, this._vertices, gl.DYNAMIC_DRAW)
   }
 
   /**

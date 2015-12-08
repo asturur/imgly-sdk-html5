@@ -1,3 +1,4 @@
+/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -8,14 +9,33 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import BaseTexture from './base-texture'
+const { EventEmitter } = PhotoEditorSDK
 
-export default class Texture {
+import BaseTexture from './base-texture'
+import TextureUVs from '../utils/texture-uvs'
+
+export default class Texture extends EventEmitter {
   constructor (baseTexture) {
+    super()
+
     if (!(baseTexture instanceof BaseTexture)) {
       throw new Error('\`baseTexture\` should be an instance of BaseTexture')
     }
     this._baseTexture = baseTexture
+
+    this._frame = null
+    this._uvs = new TextureUVs()
+    this._width = 0
+    this._height = 0
+
+    // Bind event handlers
+    this._onBaseTextureLoaded = this._onBaseTextureLoaded.bind(this)
+
+    if (!this._baseTexture.isLoaded()) {
+      this._baseTexture.once('loaded', this._onBaseTextureLoaded)
+    } else {
+      this._onBaseTextureLoaded()
+    }
   }
 
   /**
@@ -36,6 +56,38 @@ export default class Texture {
     return new Texture(baseTexture)
   }
 
+  /**
+   * Gets called when the base texture has been loaded
+   * @private
+   */
+  _onBaseTextureLoaded () {
+    const frame = this._baseTexture.getFrame().clone()
+    this.setFrame(frame)
+  }
+
+  /**
+   * Updates the UV coordinates of this texture
+   * @private
+   */
+  _updateUVs () {
+    this._uvs.update(
+      this._frame,
+      this._baseTexture.getFrame()
+    )
+  }
+
   getBaseTexture () { return this._baseTexture }
   setBaseTexture (texture) { this._baseTexture = texture }
+  getFrame () { return this._frame }
+  setFrame (frame) {
+    this._frame = frame
+
+    this._width = frame.width
+    this._height = frame.height
+
+    this._updateUVs()
+  }
+  getWidth () { return this._width }
+  getHeight () { return this._height }
+  getUVs () { return this._uvs }
 }

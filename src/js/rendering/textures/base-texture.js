@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { EventEmitter } = PhotoEditorSDK
+const { EventEmitter, Rectangle } = PhotoEditorSDK
 
 export default class BaseTexture extends EventEmitter {
   constructor (source) {
@@ -21,8 +21,9 @@ export default class BaseTexture extends EventEmitter {
     this._source = source
 
     this._loaded = false
-    this._width = 100
-    this._height = 100
+    this._width = 1
+    this._height = 1
+    this._frame = new Rectangle(0, 0, this._width, this._height)
 
     this._loadSource()
   }
@@ -33,7 +34,7 @@ export default class BaseTexture extends EventEmitter {
    */
   _loadSource () {
     const source = this._source
-    if (source.loaded) {
+    if (source.complete) {
       return this._onSourceLoaded()
     }
 
@@ -46,6 +47,7 @@ export default class BaseTexture extends EventEmitter {
    */
   _onSourceLoaded () {
     this._loaded = true
+    this.emit('loaded')
     this._update()
   }
 
@@ -56,6 +58,9 @@ export default class BaseTexture extends EventEmitter {
   _update () {
     this._width = this._source.width
     this._height = this._source.height
+
+    this._frame = new Rectangle(0, 0, this._width, this._height)
+
     this.emit('update')
   }
 
@@ -64,4 +69,6 @@ export default class BaseTexture extends EventEmitter {
   setSource (source) { this._source = source }
   setGLTextureForId (texture, id) { this._glTextures[id] = texture }
   getGLTextureForId (id) { return this._glTextures[id] }
+  getFrame () { return this._frame }
+  setFrame (frame) { this._frame = frame }
 }

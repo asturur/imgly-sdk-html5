@@ -11,9 +11,7 @@
 /**
  * Represents a 3-dimensional matrix
  * @class
- * @alias PhotoEditorSDK.Vector2
- * @param {number} x
- * @param {number} y
+ * @alias PhotoEditorSDK.Matrix
  * @private
  */
 export default class Matrix {
