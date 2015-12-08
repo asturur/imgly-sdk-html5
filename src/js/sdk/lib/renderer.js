@@ -208,8 +208,12 @@ export default class Renderer extends EventEmitter {
           orientationOperation.setRotation(degrees)
         }
 
-        if (flipNeedsChange) {
+        if ([2, 4].indexOf(exifTags.Orientation) !== -1) {
           orientationOperation.setFlipHorizontally(true)
+        }
+
+        if ([5, 7].indexOf(exifTags.Orientation) !== -1) {
+          orientationOperation.setFlipVertically(true)
         }
 
         this._exif.setOrientation(1)
