@@ -67,10 +67,27 @@ export default class SpriteRenderer extends ObjectRenderer {
     const index = this._currentBatchSize * VERTEX_BYTE_SIZE
     this._addVertexCoordinates(sprite, index, textureFrame)
     this._addTextureUVs(sprite, index, uvs)
+    this._addColors(sprite, index)
 
     // Add the sprite to the list of sprites
     this._sprites[this._currentBatchSize] = sprite
     this._currentBatchSize++
+  }
+
+  /**
+   * Adds the color to the positions array for the given sprite
+   * @param {Sprite} sprite
+   * @param {Number} index
+   * @private
+   */
+  _addColors (sprite, index) {
+    const colors = this._colors
+    const tint = 0xff0000ff
+    const color = (tint >> 16) + (tint & 0xff00) + ((tint & 0xff) << 16) + (255 << 24)
+    colors[index + 4] =
+      colors[index + 9] =
+      colors[index + 14] =
+      colors[index + 19] = color
   }
 
   /**
@@ -99,6 +116,15 @@ export default class SpriteRenderer extends ObjectRenderer {
     uvCoords = uvs.getUVs(3)
     positions[index + 17] = uvCoords.x
     positions[index + 18] = uvCoords.y
+
+    positions[index + 2] = 0
+    positions[index + 3] = 0
+    positions[index + 7] = 1
+    positions[index + 8] = 0
+    positions[index + 12] = 1
+    positions[index + 13] = 1
+    positions[index + 17] = 0
+    positions[index + 18] = 1
   }
 
   /**
@@ -187,6 +213,7 @@ export default class SpriteRenderer extends ObjectRenderer {
     const attributeLocations = this._shader.getAttributeLocations()
     gl.vertexAttribPointer(attributeLocations.a_position, 2, gl.FLOAT, false, VERTEX_BYTE_SIZE, 0)
     gl.vertexAttribPointer(attributeLocations.a_texCoord, 2, gl.FLOAT, false, VERTEX_BYTE_SIZE, 2 * 4)
+    gl.vertexAttribPointer(attributeLocations.a_color, 4, gl.UNSIGNED_BYTE, true, VERTEX_BYTE_SIZE, 4 * 4)
   }
 
   /**

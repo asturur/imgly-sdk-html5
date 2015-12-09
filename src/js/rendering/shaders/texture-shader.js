@@ -30,7 +30,8 @@ export default class TextureShader extends Shader {
 
     const attributes = [
       'a_position',
-      'a_texCoord'
+      'a_texCoord',
+      'a_color'
     ].concat(customAttributes)
 
     vertexSource = vertexSource || require('raw!./source/texture.vert')
