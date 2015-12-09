@@ -13,7 +13,7 @@ import Shader from './shader'
 import Utils from '../utils/utils'
 
 export default class TextureShader extends Shader {
-  constructor (renderer, vertexSource, fragmentSource, customUniforms, customAttributes) {
+  constructor (renderer, vertexSource, fragmentSource, customUniforms = {}, customAttributes = []) {
     // @TODO: Directly require Matrix when this has been merged into the SDK
     const matrix = new PhotoEditorSDK.Matrix()
 
