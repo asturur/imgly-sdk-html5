@@ -40,8 +40,13 @@ export default class WebGLRenderer extends BaseRenderer {
    */
   _setAttributesForShader (shader) {
     const gl = this._context
-    // @TODO Disable / enable attribute arrays correctly
-    gl.enableVertexAttribArray(0)
+    const attributes = shader.getAttributes()
+    const attributeLocations = shader.getAttributeLocations()
+
+    attributes.forEach((attributeName) => {
+      const attributeLocation = attributeLocations[attributeName]
+      gl.enableVertexAttribArray(attributeLocation)
+    })
   }
 
   /**
