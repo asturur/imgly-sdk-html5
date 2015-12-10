@@ -196,9 +196,11 @@ class StickerOperation extends Operation {
         const stickerImage = sticker.getImage()
         const stickerScale = sticker.getScale()
 
+        const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
         const absoluteStickerPosition = stickerPosition
           .clone()
           .multiply(canvasDimensions)
+          .divide(pixelRatio)
         const relativeClickPosition = position
           .clone()
           .subtract(absoluteStickerPosition)
