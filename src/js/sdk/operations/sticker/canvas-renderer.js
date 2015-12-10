@@ -200,8 +200,11 @@ export default class StickerCanvasRenderer {
 
       const parentScale = this._renderer.getScale()
       const canvasDimensions = new Vector2(outputCanvas.width, outputCanvas.height)
+
+      const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
       const drawDimensions = new Vector2(canvas.width, canvas.height)
         .multiply(parentScale)
+        .multiply(pixelRatio)
       const stickerPosition = sticker.getPosition()
         .clone()
         .multiply(canvasDimensions)
