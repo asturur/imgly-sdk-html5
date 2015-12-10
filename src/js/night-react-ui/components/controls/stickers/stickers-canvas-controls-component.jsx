@@ -365,8 +365,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
 
     const parentScale = kit.getRenderer().getScale()
 
-    const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
-    const maxDimensions = Math.min(canvasDimensions.x, canvasDimensions.y) / parentScale * 0.9 * pixelRatio
+    const maxDimensions = Math.min(canvasDimensions.x, canvasDimensions.y) / parentScale * 0.9
 
     const canvasRatio = canvasDimensions.x / canvasDimensions.y
     const stickerRatio = stickerDimensions.x / stickerDimensions.y
