@@ -20,7 +20,6 @@ export default class StickersSaturationControlsComponent extends ControlsCompone
     this._bindAll(
       '_onSliderValueChange'
     )
-    this._selectedSticker = this.getSharedState('selectedSticker')
     this._operation = this.getSharedState('operation')
   }
 
@@ -32,7 +31,8 @@ export default class StickersSaturationControlsComponent extends ControlsCompone
    * @private
    */
   _onSliderValueChange (value) {
-    let stickerAdjustments = this._selectedSticker.getAdjustments()
+    const selectedSticker = this.getSharedState('selectedSticker')
+    let stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setSaturation((value + 100) / 100)
     this._operation.setDirty(true)
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -45,7 +45,8 @@ export default class StickersSaturationControlsComponent extends ControlsCompone
    * @return {ReactBEM.Element}
    */
   renderControls () {
-    const adjustments = this._selectedSticker.getAdjustments()
+    const selectedSticker = this.getSharedState('selectedSticker')
+    const adjustments = selectedSticker.getAdjustments()
     const saturation = adjustments.getSaturation()
 
     return (<div bem='e:cell m:slider'>

@@ -20,7 +20,6 @@ export default class StickersBlurControlsComponent extends ControlsComponent {
     this._bindAll(
       '_onSliderValueChange'
     )
-    this._selectedSticker = this.getSharedState('selectedSticker')
     this._operation = this.getSharedState('operation')
   }
 
@@ -32,7 +31,8 @@ export default class StickersBlurControlsComponent extends ControlsComponent {
    * @private
    */
   _onSliderValueChange (value) {
-    const stickerAdjustments = this._selectedSticker.getAdjustments()
+    const selectedSticker = this.getSharedState('selectedSticker')
+    const stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setBlur(value / 100)
     this._operation.setDirty(true)
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -45,10 +45,12 @@ export default class StickersBlurControlsComponent extends ControlsComponent {
    * @return {ReactBEM.Element}
    */
   renderControls () {
+    const selectedSticker = this.getSharedState('selectedSticker')
+
     const { editor } = this.props
     const canvasDimensions = editor.getInitialDimensions()
 
-    const adjustments = this._selectedSticker.getAdjustments()
+    const adjustments = selectedSticker.getAdjustments()
     const blur = adjustments.getBlur()
     const maxBlur = canvasDimensions.x * 0.1
 
