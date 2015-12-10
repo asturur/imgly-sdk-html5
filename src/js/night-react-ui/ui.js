@@ -164,6 +164,7 @@ export default class NightReactUI extends EventEmitter {
         if (this._watermarkOperation) {
           this._watermarkOperation.setEnabled(true)
         }
+        this._kit.operationsStack.setAllToDirty()
 
         return output
       })
