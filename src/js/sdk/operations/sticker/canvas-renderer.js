@@ -121,18 +121,25 @@ export default class StickerCanvasRenderer {
     const canvas = this._textures[sticker.id]
     const context = canvas.getContext('2d')
 
-    if (!this._needsRerender(sticker)) {
+    const stickerAdjustments = sticker.getAdjustments()
+    const saturation = stickerAdjustments.getSaturation()
+    const brightness = stickerAdjustments.getBrightness()
+    const contrast = stickerAdjustments.getContrast()
+
+    const hasAdjustments =
+      saturation !== 1 ||
+      brightness !== 0 ||
+      contrast !== 1
+
+    if (!this._needsRerender(sticker) || (!this._hadAdjustments && !hasAdjustments)) {
+      this._hadAdjustments = false
       return Promise.resolve()
     }
+    this._hadAdjustments = true
 
     return new Promise((resolve, reject) => {
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       const { data } = imageData
-
-      const stickerAdjustments = sticker.getAdjustments()
-      const saturation = stickerAdjustments.getSaturation()
-      const brightness = stickerAdjustments.getBrightness()
-      const contrast = stickerAdjustments.getContrast()
 
       for (let x = 0; x < canvas.width; x++) {
         for (let y = 0; y < canvas.height; y++) {
@@ -170,14 +177,17 @@ export default class StickerCanvasRenderer {
   _applyBlur (sticker) {
     const canvas = this._textures[sticker.id]
     const context = canvas.getContext('2d')
+    const blurRadius = sticker.getAdjustments().getBlur() * canvas.width
 
-    if (!this._needsRerender(sticker)) {
+    const hasBlur = blurRadius !== 0
+    if (!this._needsRerender(sticker) || (!this._hadBlur && !hasBlur)) {
+      this._hadBlur = false
       return Promise.resolve()
     }
+    this._hadBlur = true
 
     return new Promise((resolve, reject) => {
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
-      const blurRadius = sticker.getAdjustments().getBlur() * canvas.width
 
       StackBlur.stackBlurCanvasRGBA(imageData, 0, 0, canvas.width, canvas.height, blurRadius)
 
