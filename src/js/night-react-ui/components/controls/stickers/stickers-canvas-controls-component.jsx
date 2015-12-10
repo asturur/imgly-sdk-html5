@@ -364,22 +364,22 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     let scale = sticker.getScale().clone()
 
     const parentScale = kit.getRenderer().getScale()
-    const maxDimensions = Math.min(canvasDimensions.x, canvasDimensions.y) / parentScale * 0.9
 
-    if (stickerDimensions.x > canvasDimensions.x ||
-        stickerDimensions.y > canvasDimensions.y) {
-      const canvasRatio = canvasDimensions.x / canvasDimensions.y
-      const stickerRatio = stickerDimensions.x / stickerDimensions.y
+    const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
+    const maxDimensions = Math.min(canvasDimensions.x, canvasDimensions.y) / parentScale * 0.9 * pixelRatio
 
-      let newScale
-      if (stickerRatio > canvasRatio) {
-        newScale = maxDimensions / stickerDimensions.x
-        scale.set(newScale, newScale)
-      } else {
-        newScale = maxDimensions / stickerDimensions.y
-        scale.set(newScale, newScale)
-      }
+    const canvasRatio = canvasDimensions.x / canvasDimensions.y
+    const stickerRatio = stickerDimensions.x / stickerDimensions.y
+
+    let newScale
+    if (stickerRatio > canvasRatio) {
+      newScale = maxDimensions / stickerDimensions.x
+      scale.set(newScale, newScale)
+    } else {
+      newScale = maxDimensions / stickerDimensions.y
+      scale.set(newScale, newScale)
     }
+
     sticker.setScale(scale)
     this._operation.setDirty(true)
 
