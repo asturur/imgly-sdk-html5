@@ -22,6 +22,13 @@ export default class Container extends DisplayObject {
    * @param {DisplayObject} child
    */
   addChild (child) {
+    // Remove from previous parent
+    const originalParent = child.getParent()
+    if (originalParent !== null) {
+      originalParent.removeChild(child)
+    }
+
+    child.setParent(this)
     this._children.push(child)
   }
 
@@ -35,6 +42,16 @@ export default class Container extends DisplayObject {
 
     this._children.forEach((child) => {
       child.renderWebGL(renderer)
+    })
+  }
+
+  /**
+   * Updates the world transform for this DisplayObject
+   */
+  updateTransform () {
+    super.updateTransform()
+    this._children.forEach((child) => {
+      child.updateTransform()
     })
   }
 

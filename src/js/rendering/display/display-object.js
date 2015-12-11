@@ -19,6 +19,7 @@ export default class DisplayObject {
     this._rotation = 0
     this._alpha = 1
     this._worldTransform = new Matrix()
+    this._parent = null
   }
 
   /**
@@ -28,6 +29,20 @@ export default class DisplayObject {
    */
   renderWebGL (renderer) {
 
+  }
+
+  /**
+   * Updates the world transform for this DisplayObject
+   */
+  updateTransform () {
+    const parentTransform = this._parent.getWorldTransform()
+    const worldTransform = this._worldTransform
+
+    // @TODO: Rotation
+    worldTransform.a = this._scale.x * parentTransform.a
+    worldTransform.b = this._scale.x * parentTransform.b
+    worldTransform.c = this._scale.y * parentTransform.c
+    worldTransform.d = this._scale.y * parentTransform.d
   }
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS
@@ -43,4 +58,6 @@ export default class DisplayObject {
   getAlpha () { return this._alpha }
   setAlpha (alpha) { this._alpha = alpha }
   getWorldTransform () { return this._worldTransform }
+  getParent () { return this._parent }
+  setParent (parent) { this._parent = parent }
 }

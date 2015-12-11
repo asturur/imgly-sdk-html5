@@ -13,10 +13,13 @@ import RenderTarget from '../../utils/render-target'
 import ObjectRenderer from './object-renderers/object-renderer'
 import SpriteRenderer from './object-renderers/sprite-renderer'
 import TextureShader from '../../shaders/texture-shader'
+import DisplayObject from '../../display/display-object'
 
 export default class WebGLRenderer extends BaseRenderer {
   constructor (...args) {
     super(...args)
+
+    this._fakeObject = new DisplayObject()
 
     this.shaders = this._initShaders()
     this.renderers = this._initRenderers()
@@ -135,7 +138,18 @@ export default class WebGLRenderer extends BaseRenderer {
     this._setRenderTarget(this._defaultRenderTarget)
     this._currentRenderTarget.clear()
 
+    // Since the given displayObject is the "root" object
+    // right now, we need to give it a dummy / fake object
+    // as parent with the default world transform and alpha
+    const originalParent = displayObject.getParent()
+    displayObject.setParent(this._fakeObject)
+
+    // Update transforms and render this object
+    displayObject.updateTransform()
     displayObject.renderWebGL(this)
+
+    // Reset parent
+    displayObject.setParent(originalParent)
 
     this._currentObjectRenderer.flush()
   }

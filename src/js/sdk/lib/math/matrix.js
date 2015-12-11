@@ -16,12 +16,7 @@
  */
 export default class Matrix {
   constructor () {
-    this.a = 1
-    this.b = 0
-    this.c = 0
-    this.d = 1
-    this.tx = 0
-    this.ty = 0
+    this.reset()
   }
 
   /**
@@ -45,6 +40,18 @@ export default class Matrix {
     this.tx = tx
     this.ty = ty
     return this
+  }
+
+  /**
+   * Resets this matrix to the identity matrix
+   */
+  reset () {
+    this.a = 1
+    this.b = 0
+    this.c = 0
+    this.d = 1
+    this.tx = 0
+    this.ty = 0
   }
 
   /**
