@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { React, ReactBEM } from '../globals'
+import { React, ReactBEM, SDKUtils } from '../globals'
 import ImageResizer from '../lib/image-resizer'
 import SplashScreenComponent from './screens/splash/splash-screen-component'
 import WebcamScreenComponent from './screens/webcam/webcam-screen-component'
@@ -93,7 +93,7 @@ class EditorComponent extends React.Component {
       this.setState({ screen: this._screens.editor })
     }
 
-    const maxPixels = this.props.options.maxMegaPixels * 1000000
+    const maxPixels = this._getMaxMegapixels() * 1000000
     const maxDimensions = this.props.kit.getMaxDimensions()
 
     const megaPixelsExceeded = image.width * image.height > maxPixels
@@ -161,6 +161,21 @@ class EditorComponent extends React.Component {
 
       <Screen editor={this} {...this._props} ref='screen' />
     </div>)
+  }
+
+  /**
+   * Returns the maximum megapixels for the current device
+   * @return {Number}
+   * @private
+   */
+  _getMaxMegapixels () {
+    const { maxMegaPixels } = this.props.options
+    if (typeof maxMegaPixels === 'number') {
+      return maxMegaPixels
+    } else {
+      const isMobile = SDKUtils.isMobile()
+      return maxMegaPixels[isMobile ? 'mobile' : 'desktop']
+    }
   }
 }
 

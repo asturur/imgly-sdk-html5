@@ -240,7 +240,7 @@ export default class NightReactUI extends EventEmitter {
       language: 'en',
       operations: 'all',
       title: 'PhotoEditor SDK',
-      maxMegaPixels: 10,
+      maxMegaPixels: {},
       responsive: false,
       webcam: true,
       assets: {},
@@ -251,6 +251,13 @@ export default class NightReactUI extends EventEmitter {
       controlsOptions: {},
       showNewButton: true
     })
+
+    if (typeof this._options.maxMegaPixels !== 'number') {
+      this._options.maxMegaPixels = SDKUtils.defaults(this._options.maxMegaPixels, {
+        mobile: 5,
+        desktop: 10
+      })
+    }
 
     this._options.extensions = SDKUtils.defaults(this._options.extensions || {}, {
       languages: [],
