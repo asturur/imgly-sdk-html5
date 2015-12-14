@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM } from '../../../../globals'
+import { SDKUtils, ReactBEM } from '../../../../globals'
 import ControlsComponent from '../../controls-component'
 import ScrollbarComponent from '../../../scrollbar-component'
 
@@ -28,6 +28,20 @@ const CONTROLS = [
 ]
 
 export default class StickersEditControlsComponent extends ControlsComponent {
+  constructor (...args) {
+    super(...args)
+
+    const { options } = this.context
+    const stickerOptions = options.controlsOptions.stickers || {}
+    this._options = SDKUtils.defaults(stickerOptions.adjustments, {
+      brightness: true,
+      saturation: true,
+      contrast: true,
+      blur: true,
+      flip: true
+    })
+  }
+
   // -------------------------------------------------------------------------- EVENTS
 
   /**
@@ -48,6 +62,9 @@ export default class StickersEditControlsComponent extends ControlsComponent {
    */
   _renderListItems () {
     return CONTROLS
+      .filter((control) => {
+        return this._options[control.identifier] !== false
+      })
       .map((control, i) => {
         const iconName = control.iconName || control.identifier
         return (<li
