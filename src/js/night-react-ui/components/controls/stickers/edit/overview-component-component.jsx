@@ -16,14 +16,14 @@ import ScrollbarComponent from '../../../scrollbar-component'
 import BrightnessControls from './adjustments/brightness-controls-component'
 import SaturationControls from './adjustments/saturation-controls-component'
 import ContrastControls from './adjustments/contrast-controls-component'
-import BlurControls from './blur-controls-component'
+// import BlurControls from './blur-controls-component'
 import FlipControls from './flip-controls-component'
 
 const CONTROLS = [
   BrightnessControls,
   SaturationControls,
   ContrastControls,
-  BlurControls,
+  // BlurControls,
   FlipControls
 ]
 
@@ -37,7 +37,7 @@ export default class StickersEditControlsComponent extends ControlsComponent {
       brightness: true,
       saturation: true,
       contrast: true,
-      blur: true,
+      // blur: true,
       flip: true
     })
   }
