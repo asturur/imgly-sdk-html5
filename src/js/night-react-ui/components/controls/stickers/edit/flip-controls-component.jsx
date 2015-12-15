@@ -8,7 +8,7 @@
  *
  * For commercial use, please contact us at contact@9elements.com
  */
-import { ReactBEM, Constants } from '../../../../globals'
+import { ReactBEM } from '../../../../globals'
 import ControlsComponent from '../../controls-component'
 import ScrollbarComponent from '../../../scrollbar-component'
 
@@ -37,7 +37,7 @@ export default class StickersFlipControlsComponent extends ControlsComponent {
         break
     }
     this._operation.setDirty(true)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- RENDERING

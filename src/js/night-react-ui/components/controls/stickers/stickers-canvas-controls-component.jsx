@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent, Vector2, Constants } from '../../../globals'
+import { ColorMatrix, ReactBEM, BaseComponent, Vector2, Constants } from '../../../globals'
 import DraggableComponent from '../../draggable-component.jsx'
 
 export default class StickerCanvasControlsComponent extends BaseComponent {
@@ -215,7 +215,15 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
       .subtract(stickerDimensions.clone().divide(2))
 
     const degrees = sticker.getRotation() * 180 / Math.PI
-    const transform = `rotate(${degrees.toFixed(2)}deg)`
+    let transform = `rotate(${degrees.toFixed(2)}deg)`
+
+    if (sticker.getFlipVertically()) {
+      transform += ` rotateX(180deg)`
+    }
+
+    if (sticker.getFlipHorizontally()) {
+      transform += ` rotateY(180deg)`
+    }
 
     return {
       top: stickerPosition.y,
@@ -340,6 +348,34 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     }
   }
 
+  /**
+   * Returns the style object for the given sticker
+   * @param  {Sticker} sticker
+   * @param  {Image} i
+   * @return {Object}
+   * @private
+   */
+  _renderStickerSVGFilters () {
+    const stickers = this._operation.getStickers()
+    const filters = stickers.map((sticker, i) => {
+      const adjustments = sticker.getAdjustments()
+      const brightness = adjustments.getBrightness()
+
+      console.log(brightness)
+      return (`<filter id='pesdk-sticker-${i}-filter'>
+        <feComponentTransfer>
+          <feFuncR type='linear' intercept='${brightness}' />
+          <feFuncG type='linear' intercept='${brightness}' />
+          <feFuncB type='linear' intercept='${brightness}' />
+        </feComponentTransfer>
+      </filter>`)
+    })
+
+    return (<svg xmlns='http://www.w3.org/2000/svg'>
+      {ReactBEM.createElement('defs', { dangerouslySetInnerHTML: { __html: filters.join() } })}
+    </svg>)
+  }
+
   // -------------------------------------------------------------------------- MISC
 
   /**
@@ -403,6 +439,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
         const stickerStyle = this._getStickerStyle(sticker)
         const isSelected = selectedSticker === sticker
         const className = isSelected ? 'is-selected' : null
+        const stickerImageStyle = { filter: `url("#pesdk-sticker-${i}-filter")` }
 
         return (<DraggableComponent
           onStart={this._onStickerDragStart.bind(this, sticker)}
@@ -412,7 +449,14 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
             style={stickerStyle}
             className={className}
             key={`sticker-${i}`}>
-              <img bem='e:image' src={sticker.getImage().src} />
+              <svg width={stickerStyle.width} height={stickerStyle.height}>
+                {ReactBEM.createElement('image', {
+                  xlinkHref: sticker.getImage().src,
+                  width: stickerStyle.width,
+                  height: stickerStyle.height,
+                  style: stickerImageStyle
+                })}
+              </svg>
           </div>
         </DraggableComponent>)
       })
@@ -424,6 +468,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    */
   renderWithBEM () {
     const selectedSticker = this.getSharedState('selectedSticker')
+    const stickerSVGFilters = this._renderStickerSVGFilters()
     const stickerItems = this._renderStickerItems()
 
     let knobs
@@ -456,6 +501,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
         <div
           bem='$b:stickersCanvasControls'
           ref='container'>
+          {stickerSVGFilters}
           {stickerItems}
           {knobs}
         </div>

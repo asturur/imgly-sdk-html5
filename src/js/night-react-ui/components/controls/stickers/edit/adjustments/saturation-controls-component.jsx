@@ -35,7 +35,8 @@ export default class StickersSaturationControlsComponent extends ControlsCompone
     let stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setSaturation((value + 100) / 100)
     this._operation.setDirty(true)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- RENDERING

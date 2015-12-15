@@ -32,10 +32,11 @@ export default class StickersContrastControlsComponent extends ControlsComponent
    */
   _onSliderValueChange (value) {
     const selectedSticker = this.getSharedState('selectedSticker')
-    const stickerAdjustments = selectedSticker.getAdjustments()
+    let stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setContrast((value + 100) / 100)
     this._operation.setDirty(true)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- RENDERING
