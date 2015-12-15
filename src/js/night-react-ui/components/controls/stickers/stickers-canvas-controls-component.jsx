@@ -31,6 +31,9 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
 
   componentDidMount () {
     super.componentDidMount()
+
+    this._operation.setEnabled(false)
+    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this._resizeNewStickers()
   }
 
@@ -61,7 +64,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
       this._stickers = stickers
       this._selectedSticker = null
       this._operation.setDirty(true)
-      this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+      // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
       this.setSharedState({
         stickers,
         selectedSticker: null
@@ -79,9 +82,9 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     if (e.target !== this.refs.container) return
     if (!this.getSharedState('selectedSticker')) return
 
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
-      this.props.onSwitchControls('back')
-    })
+    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
+    this.props.onSwitchControls('back')
+    // })
   }
 
   /**
@@ -117,7 +120,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
 
     this._operation.setDirty(true)
     this._selectedSticker.setPosition(newPosition)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this.forceUpdate()
   }
 
@@ -193,8 +196,8 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
 
     selectedSticker.getScale().set(newScale.x, newScale.x)
     selectedSticker.setRotation(radians)
-    this._operation.setDirty(true)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    // this._operation.setDirty(true)
+    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this.forceUpdate()
   }
 
@@ -409,7 +412,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
             style={stickerStyle}
             className={className}
             key={`sticker-${i}`}>
-
+              <img bem='e:image' src={sticker.getImage().src} />
           </div>
         </DraggableComponent>)
       })

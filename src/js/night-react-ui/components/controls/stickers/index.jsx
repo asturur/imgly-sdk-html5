@@ -25,14 +25,18 @@ export default {
    */
   onExit: function () {
     const { editor } = this.props
+    const operation = this.getSharedState('operation')
+
     editor.addHistory(
-      this.getSharedState('operation'),
+      operation,
       this.getSharedState('initialOptions'),
       this.getSharedState('operationExistedBefore')
     )
 
+    operation.setEnabled(true)
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
   },
 
   /**
