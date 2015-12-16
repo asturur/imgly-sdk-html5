@@ -83,9 +83,25 @@ class OrientationOperation extends Operation {
       // Clone the canvas
       const tempCanvas = renderer.cloneCanvas()
 
+      let scaleX = 1
+      let scaleY = 1
+      let translateX = 0
+      let translateY = 0
+
+      if (this._options.flipHorizontally) {
+        scaleX = -1
+        translateX = canvas.width
+      }
+
+      if (this._options.flipVertically) {
+        scaleY = -1
+        translateY = canvas.height
+      }
+
       renderer.resizeTo(newDimensions)
       context.save()
       context.translate(canvas.width / 2, canvas.height / 2)
+      context.scale(scaleX, scaleY)
       context.rotate(radians)
       context.drawImage(tempCanvas, -tempCanvas.width / 2, -tempCanvas.height / 2)
       context.restore()
