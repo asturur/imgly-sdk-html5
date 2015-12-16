@@ -60,6 +60,7 @@ export default class OverviewCanvasControlsComponent extends BaseComponent {
     return (<div
       bem='$b:canvasControls e:container m:full'
       ref='container'
-      onClick={this._onClick} />)
+      onMouseDown={this._onClick}
+      onTouchStart={this._onClick} />)
   }
 }
