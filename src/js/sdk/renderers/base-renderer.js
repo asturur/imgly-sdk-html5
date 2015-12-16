@@ -263,8 +263,6 @@ export default class BaseRenderer extends EventEmitter {
     return outputDimensions.divide(inputDimensions).x
   }
 
-  setSize (size) { this._size.copy(size) }
-
   /**
    * Returns the maximum texture size
    * @return {Number}

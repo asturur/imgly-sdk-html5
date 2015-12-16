@@ -151,28 +151,6 @@ class CanvasRenderer extends BaseRenderer {
   }
 
   /**
-   * Sets the canvas dimensions
-   * @param {Vector2} dimensions
-   */
-  setSize (dimensions) {
-    dimensions = dimensions.clone().floor()
-    if (this._canvas.width === dimensions.x &&
-        this._canvas.height === dimensions.y) {
-      return
-    }
-
-    if (this._canvas.style) {
-      this._canvas.style.width = `${dimensions.x}px`
-      this._canvas.style.height = `${dimensions.y}px`
-    }
-
-    const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
-    this._canvas.width = dimensions.x * pixelRatio
-    this._canvas.height = dimensions.y * pixelRatio
-    this._size.copy(dimensions)
-  }
-
-  /**
    * Gets called after the rendering has been done. Resizes the canvas
    * to its final size
    * @param {ImageDimensions} dimensions
