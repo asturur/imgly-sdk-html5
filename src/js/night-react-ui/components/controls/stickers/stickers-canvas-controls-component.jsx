@@ -361,7 +361,6 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
       const adjustments = sticker.getAdjustments()
       const brightness = adjustments.getBrightness()
 
-      console.log(brightness)
       return (`<filter id='pesdk-sticker-${i}-filter'>
         <feComponentTransfer>
           <feFuncR type='linear' intercept='${brightness}' />
@@ -371,7 +370,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
       </filter>`)
     })
 
-    return (<svg xmlns='http://www.w3.org/2000/svg'>
+    return (<svg xmlns='http://www.w3.org/2000/svg' width='0' height='0'>
       {ReactBEM.createElement('defs', { dangerouslySetInnerHTML: { __html: filters.join() } })}
     </svg>)
   }
