@@ -65,12 +65,13 @@ export default class NightReactUI extends EventEmitter {
   /**
    * Sets the given image
    * @param {Image} image
+   * @param {EXIF} exif = null
    */
-  setImage (image) {
+  setImage (image, exif = null) {
     this._kit.reset()
     this._kit.operationsStack.clear()
     this._operationsMap = {}
-    this._kit.setImage(image)
+    this._kit.setImage(image, exif)
 
     this.fixOperationsStack()
     this._initWatermarkOperation()
