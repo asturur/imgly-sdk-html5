@@ -357,7 +357,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    */
   _renderStickerSVGFilters () {
     const stickers = this._operation.getStickers()
-    const filters = stickers.map((sticker, i) => {
+    const filtersSVG = { __html: stickers.map((sticker, i) => {
       const adjustments = sticker.getAdjustments()
       const brightness = adjustments.getBrightness()
 
@@ -368,10 +368,13 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
           <feFuncB type='linear' intercept='${brightness}' />
         </feComponentTransfer>
       </filter>`)
-    })
+    }).join() }
 
-    return (<svg xmlns='http://www.w3.org/2000/svg' width='0' height='0'>
-      {ReactBEM.createElement('defs', { dangerouslySetInnerHTML: { __html: filters.join() } })}
+    // We added `key: Math.random()` because in Safari, dangerouslySetInnerHTML
+    // would not update without that...
+    // https://github.com/facebook/react/issues/2863
+    return (<svg width='0' height='0' color-interpolation-filters='sRGB' is='svg'>
+      {ReactBEM.createElement('defs', { key: Math.random(), dangerouslySetInnerHTML: filtersSVG })}
     </svg>)
   }
 
@@ -448,7 +451,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
             style={stickerStyle}
             className={className}
             key={`sticker-${i}`}>
-              <svg width={stickerStyle.width} height={stickerStyle.height}>
+              <svg width={stickerStyle.width} height={stickerStyle.height} color-interpolation-filters='sRGB' is='svg'>
                 {ReactBEM.createElement('image', {
                   xlinkHref: sticker.getImage().src,
                   width: stickerStyle.width,
