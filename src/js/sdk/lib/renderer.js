@@ -150,6 +150,7 @@ export default class Renderer extends EventEmitter {
       this._parseExif(image)
     } else {
       this._exif = exif
+      this._handleExifOrientation()
     }
   }
 
@@ -175,49 +176,57 @@ export default class Renderer extends EventEmitter {
       } catch (e) {}
       if (!this._exif) return
 
-      let exifTags = this._exif.getTags()
+      this._handleExifOrientation()
+    }
+  }
 
-      if (exifTags && exifTags.Orientation) {
-        const rotationNeedsChange = exifTags.Orientation !== 1 &&
-          exifTags.Orientation !== 2
-        const flipNeedsChange = [2, 4, 5, 7].indexOf(exifTags.Orientation) !== -1
+  /**
+   * Reads the EXIF orientation tag and fixes it with the OrientationOperation
+   * @private
+   */
+  _handleExifOrientation () {
+    let exifTags = this._exif.getTags()
 
-        let orientationOperation
-        if (rotationNeedsChange || flipNeedsChange) {
-          orientationOperation = this.createOperation('orientation')
-        }
+    if (exifTags && exifTags.Orientation) {
+      const rotationNeedsChange = exifTags.Orientation !== 1 &&
+        exifTags.Orientation !== 2
+      const flipNeedsChange = [2, 4, 5, 7].indexOf(exifTags.Orientation) !== -1
 
-        if (rotationNeedsChange) {
-          // We need to rotate
-          let degrees = 0
-          switch (exifTags.Orientation) {
-            case 7:
-            case 8:
-              degrees = -90
-              break
-            case 3:
-            case 4:
-              degrees = -180
-              break
-            case 5:
-            case 6:
-              degrees = 90
-              break
-          }
-
-          orientationOperation.setRotation(degrees)
-        }
-
-        if ([2, 4].indexOf(exifTags.Orientation) !== -1) {
-          orientationOperation.setFlipHorizontally(true)
-        }
-
-        if ([5, 7].indexOf(exifTags.Orientation) !== -1) {
-          orientationOperation.setFlipVertically(true)
-        }
-
-        this._exif.setOrientation(1)
+      let orientationOperation
+      if (rotationNeedsChange || flipNeedsChange) {
+        orientationOperation = this.createOperation('orientation')
       }
+
+      if (rotationNeedsChange) {
+        // We need to rotate
+        let degrees = 0
+        switch (exifTags.Orientation) {
+          case 7:
+          case 8:
+            degrees = -90
+            break
+          case 3:
+          case 4:
+            degrees = -180
+            break
+          case 5:
+          case 6:
+            degrees = 90
+            break
+        }
+
+        orientationOperation.setRotation(degrees)
+      }
+
+      if ([2, 4].indexOf(exifTags.Orientation) !== -1) {
+        orientationOperation.setFlipHorizontally(true)
+      }
+
+      if ([5, 7].indexOf(exifTags.Orientation) !== -1) {
+        orientationOperation.setFlipVertically(true)
+      }
+
+      this._exif.setOrientation(1)
     }
   }
 
