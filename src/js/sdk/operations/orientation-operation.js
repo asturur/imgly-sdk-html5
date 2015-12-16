@@ -101,8 +101,8 @@ class OrientationOperation extends Operation {
       renderer.resizeTo(newDimensions)
       context.save()
       context.translate(canvas.width / 2, canvas.height / 2)
-      context.scale(scaleX, scaleY)
       context.rotate(radians)
+      context.scale(scaleX, scaleY)
       context.drawImage(tempCanvas, -tempCanvas.width / 2, -tempCanvas.height / 2)
       context.restore()
 
