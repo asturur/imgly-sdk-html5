@@ -10,6 +10,7 @@
 
 import Promise from '../vendor/promise'
 import Matrix from '../lib/math/matrix'
+import Vector2 from '../lib/math/vector2'
 import Operation from './operation'
 
 /**
@@ -78,7 +79,11 @@ class OrientationOperation extends Operation {
       const context = renderer.getContext()
       const actualDegrees = this._options.rotation % 360
       const radians = actualDegrees * Math.PI / 180
-      const newDimensions = this.getNewDimensions(renderer)
+
+      const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
+      const canvasDimensions = new Vector2(canvas.width, canvas.height)
+        .divide(pixelRatio)
+      const newDimensions = this.getNewDimensions(renderer, canvasDimensions)
 
       // Clone the canvas
       const tempCanvas = renderer.cloneCanvas()
