@@ -132,15 +132,18 @@ export default class EditorScreenComponent extends ScreenComponent {
   _onExportClick () {
     const { ui, options } = this.context
     const exportOptions = options.export
-    const loadingModal = ModalManager.instance.displayLoading(this._t('loading.exporting'))
 
-    // Give it some time to display the loading modal
-    setTimeout(() => {
-      ui.export(exportOptions.download)
-        .then(() => {
-          loadingModal.close()
-        })
-    }, 1000)
+    this.switchToControls(OverviewControls, null, () => {
+      const loadingModal = ModalManager.instance.displayLoading(this._t('loading.exporting'))
+
+      // Give it some time to display the loading modal
+      setTimeout(() => {
+        ui.export(exportOptions.download)
+          .then(() => {
+            loadingModal.close()
+          })
+      }, 1000)
+    })
   }
 
   /**
@@ -349,8 +352,9 @@ export default class EditorScreenComponent extends ScreenComponent {
    * Switches to the given controls
    * @param  {Component} controls
    * @param  {Object} [state] = {}
+   * @param  {Function} [callback]
    */
-  switchToControls (controls, state = {}) {
+  switchToControls (controls, state = {}, callback = null) {
     let newControls = null
     if (controls === 'back') {
       newControls = this._previousControlsStack.pop()
@@ -377,7 +381,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     this.setState({
       controls: newControls,
       sharedState
-    })
+    }, callback)
   }
 
   /**
