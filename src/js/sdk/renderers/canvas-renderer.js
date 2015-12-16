@@ -43,8 +43,12 @@ class CanvasRenderer extends BaseRenderer {
    */
   drawCached (identifier) {
     let { data, size } = this._cache[identifier]
-    this._canvas.width = size.x
-    this._canvas.height = size.y
+
+    const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
+    const newSize = size.clone()
+    newSize.divide(pixelRatio)
+
+    this.resizeTo(newSize)
     this._context.putImageData(data, 0, 0)
   }
 
