@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { React, ReactBEM, SDKUtils } from '../globals'
+import { React, ReactBEM, SDKUtils, EXIF } from '../globals'
 import ImageResizer from '../lib/image-resizer'
 import SplashScreenComponent from './screens/splash/splash-screen-component'
 import WebcamScreenComponent from './screens/webcam/webcam-screen-component'
@@ -84,16 +84,18 @@ class EditorComponent extends React.Component {
    */
   setImage (image) {
     const translate = this.props.ui.translate.bind(this.props.ui)
+    const exif = EXIF.isJPEG(image.src) ? EXIF.fromBase64String(image.src) : null
 
     const done = (image) => {
-      this.props.ui.setImage(image)
+      this.props.ui.setImage(image, exif)
 
       // Forces reinitialization
       this.setState({ screen: null })
       this.setState({ screen: this._screens.editor })
     }
 
-    const maxPixels = this._getMaxMegapixels() * 1000000
+    const maxMegaPixels = this._getMaxMegapixels()
+    const maxPixels = maxMegaPixels * 1000000
     const maxDimensions = this.props.kit.getMaxDimensions()
 
     const megaPixelsExceeded = image.width * image.height > maxPixels
@@ -111,7 +113,7 @@ class EditorComponent extends React.Component {
             ModalManager.instance.displayWarning(
               translate('warnings.imageResized_megaPixels.title'),
               translate('warnings.imageResized_megaPixels.text', {
-                maxMegaPixels: this.props.options.maxMegaPixels,
+                maxMegaPixels: maxMegaPixels,
                 width: dimensions.x,
                 height: dimensions.y
               })
