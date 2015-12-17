@@ -1,3 +1,4 @@
+/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -14,6 +15,8 @@ import ObjectRenderer from './object-renderers/object-renderer'
 import SpriteRenderer from './object-renderers/sprite-renderer'
 import TextureShader from '../../shaders/texture-shader'
 import DisplayObject from '../../display/display-object'
+
+const { Vector2 } = PhotoEditorSDK
 
 export default class WebGLRenderer extends BaseRenderer {
   constructor (...args) {
@@ -107,6 +110,17 @@ export default class WebGLRenderer extends BaseRenderer {
       this._height,
       this._options.resolution)
     this._setRenderTarget(this._defaultRenderTarget)
+
+    this.resizeTo(new Vector2(this._width, this._height))
+  }
+
+  /**
+   * Resizes the context and view to the given size
+   * @param  {Vector2} dimensions
+   */
+  resizeTo (dimensions) {
+    super.resizeTo(dimensions)
+    this._currentRenderTarget.resizeTo(dimensions)
   }
 
   /**

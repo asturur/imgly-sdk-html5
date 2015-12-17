@@ -11,7 +11,7 @@
 
 import Utils from '../utils/utils'
 
-const { EventEmitter } = PhotoEditorSDK
+const { Vector2, EventEmitter } = PhotoEditorSDK
 
 export default class BaseRenderer extends EventEmitter {
   constructor (width, height, options) {
@@ -28,6 +28,26 @@ export default class BaseRenderer extends EventEmitter {
 
     this._context = this._createContext()
     this._setupContext()
+  }
+
+  /**
+   * Resizes the context and view to the given size
+   * @param  {Vector2} dimensions
+   */
+  resizeTo (dimensions) {
+    const { resolution } = this._options
+    this._width = dimensions.x * resolution
+    this._height = dimensions.y * resolution
+
+    this._canvas.width = this._width
+    this._canvas.height = this._height
+
+    if (this._canvas.style) {
+      this._canvas.style.width = `${this._width / resolution}px`
+      this._canvas.style.height = `${this._height / resolution}px`
+    }
+
+    this._dimensions = dimensions.clone()
   }
 
   /**
@@ -58,4 +78,6 @@ export default class BaseRenderer extends EventEmitter {
   }
 
   getContext () { return this._context }
+  getWidth () { return this._dimensions.x }
+  getHeight () { return this._dimensions.y }
 }

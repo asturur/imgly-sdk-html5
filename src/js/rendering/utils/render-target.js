@@ -24,6 +24,16 @@ export default class RenderTarget {
   }
 
   /**
+   * Resizes this RenderTarget to the given dimensions
+   * @param  {Vector2} dimensions
+   */
+  resizeTo (dimensions) {
+    this._width = dimensions.x | 0 // rounded
+    this._height = dimensions.y | 0 // rounded
+    this._calculateProjectionMatrix()
+  }
+
+  /**
    * Binds the framebuffer and resizes the viewport
    */
   activate () {
