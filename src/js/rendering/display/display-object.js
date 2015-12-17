@@ -17,6 +17,7 @@ export default class DisplayObject {
     this._scale = new Vector2(1, 1)
     this._pivot = new Vector2(0, 0)
     this._rotation = 0
+    this._lastRotation = null
     this._alpha = 1
     this._worldTransform = new Matrix()
     this._parent = null
@@ -38,11 +39,27 @@ export default class DisplayObject {
     const parentTransform = this._parent.getWorldTransform()
     const worldTransform = this._worldTransform
 
-    // @TODO: Rotation
-    worldTransform.a = this._scale.x * parentTransform.a
-    worldTransform.b = this._scale.x * parentTransform.b
-    worldTransform.c = this._scale.y * parentTransform.c
-    worldTransform.d = this._scale.y * parentTransform.d
+    // Only build rotation matrix if rotation has changed since last update
+    const rotationChanged = this._rotation !== this._lastRotation
+    if (rotationChanged) {
+      this._sinRotation = Math.sin(this._rotation)
+      this._cosRotation = Math.cos(this._rotation)
+      this._lastRotation = this._rotation
+    }
+
+    worldTransform.a = this._cosRotation * this._scale.x
+    worldTransform.b = this._sinRotation * this._scale.x
+    worldTransform.c = -this._sinRotation * this._scale.y
+    worldTransform.d = this._cosRotation * this._scale.y
+    worldTransform.tx = this._position.x
+    worldTransform.ty = this._position.y
+
+    if (this._pivot.x || this._pivot.y) {
+      worldTransform.tx -= this._pivot.x * worldTransform.a + this._pivot.y * worldTransform.c
+      worldTransform.ty -= this._pivot.x * worldTransform.b + this._pivot.y * worldTransform.d
+    }
+
+    worldTransform.multiply(parentTransform)
   }
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS
