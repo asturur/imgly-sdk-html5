@@ -48,11 +48,29 @@ export default class DisplayObject {
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
   getPosition () { return this._position }
-  setPosition (position) { this._position = position }
+  setPosition (position, y) {
+    if (position instanceof Vector2) {
+      this._position.copy(position)
+    } else {
+      this._position.set(position, y)
+    }
+  }
   getScale () { return this._scale }
-  setScale (scale) { this._scale = scale }
+  setScale (scale, y) {
+    if (scale instanceof Vector2) {
+      this._scale.copy(scale)
+    } else {
+      this._scale.set(scale, y)
+    }
+  }
   getPivot () { return this._pivot }
-  setPivot (pivot) { this._pivot = pivot }
+  setPivot (pivot, y) {
+    if (pivot instanceof Vector2) {
+      this._pivot.copy(pivot)
+    } else {
+      this._pivot.set(pivot, y)
+    }
+  }
   getRotation () { return this._rotation }
   setRotation (rotation) { this._rotation = rotation }
   getAlpha () { return this._alpha }

@@ -64,5 +64,11 @@ export default class Sprite extends Container {
   setHeight (height) { this._height = height }
   getHeight () { return this._height }
   getAnchor () { return this._anchor }
-  setAnchor (anchor) { this._anchor = anchor }
+  setAnchor (anchor, y) {
+    if (anchor instanceof Vector2) {
+      this._anchor.copy(anchor)
+    } else {
+      this._anchor.set(anchor, y)
+    }
+  }
 }
