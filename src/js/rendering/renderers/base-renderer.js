@@ -23,7 +23,7 @@ export default class BaseRenderer extends EventEmitter {
     this._canvas = options.canvas || document.createElement('canvas')
 
     this._options = Utils.defaults(options, {
-      resolution: 1
+      pixelRatio: 1
     })
 
     this._context = this._createContext()
@@ -35,16 +35,16 @@ export default class BaseRenderer extends EventEmitter {
    * @param  {Vector2} dimensions
    */
   resizeTo (dimensions) {
-    const { resolution } = this._options
-    this._width = dimensions.x * resolution
-    this._height = dimensions.y * resolution
+    const { pixelRatio } = this._options
+    this._width = dimensions.x * pixelRatio
+    this._height = dimensions.y * pixelRatio
 
     this._canvas.width = this._width
     this._canvas.height = this._height
 
     if (this._canvas.style) {
-      this._canvas.style.width = `${this._width / resolution}px`
-      this._canvas.style.height = `${this._height / resolution}px`
+      this._canvas.style.width = `${this._width / pixelRatio}px`
+      this._canvas.style.height = `${this._height / pixelRatio}px`
     }
 
     this._dimensions = dimensions.clone()

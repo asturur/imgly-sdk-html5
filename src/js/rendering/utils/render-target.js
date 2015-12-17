@@ -12,15 +12,21 @@
 const { Matrix } = PhotoEditorSDK
 
 export default class RenderTarget {
-  constructor (gl, width, height, resolution) {
+  constructor (gl, width, height, pixelRatio, isRoot = true) {
     this._gl = gl
     this._width = width
     this._height = height
-    this._resolution = resolution
+    this._pixelRatio = pixelRatio
     this._projectionMatrix = new Matrix()
 
     // `null` means render to canvas directly
     this._framebuffer = null
+
+    this._isRoot = isRoot
+
+    if (!isRoot) {
+      this._initFrameBuffer()
+    }
   }
 
   /**
@@ -44,8 +50,8 @@ export default class RenderTarget {
 
     gl.viewport(0,
       0,
-      this._width * this._resolution,
-      this._height * this._resolution)
+      this._width * this._pixelRatio,
+      this._height * this._pixelRatio)
   }
 
   /**

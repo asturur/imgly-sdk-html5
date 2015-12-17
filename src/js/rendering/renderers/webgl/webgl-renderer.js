@@ -108,7 +108,7 @@ export default class WebGLRenderer extends BaseRenderer {
     this._defaultRenderTarget = new RenderTarget(gl,
       this._width,
       this._height,
-      this._options.resolution)
+      this._options.pixelRatio)
     this._setRenderTarget(this._defaultRenderTarget)
 
     this.resizeTo(new Vector2(this._width, this._height))
