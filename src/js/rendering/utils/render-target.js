@@ -57,7 +57,7 @@ export default class RenderTarget {
     const projectionMatrix = this._projectionMatrix
     projectionMatrix.reset()
     projectionMatrix.a = 1 / this._width * 2
-    projectionMatrix.d = 1 / this._height * 2
+    projectionMatrix.d = -1 / this._height * 2
 
     /**
      * @TODO: Do we need x and y?
@@ -65,7 +65,7 @@ export default class RenderTarget {
     const x = 0
     const y = 0
     projectionMatrix.tx = -1 - x * projectionMatrix.a
-    projectionMatrix.ty = -1 - y * projectionMatrix.d
+    projectionMatrix.ty = 1 - y * projectionMatrix.d
   }
 
   getProjectionMatrix () { return this._projectionMatrix }
