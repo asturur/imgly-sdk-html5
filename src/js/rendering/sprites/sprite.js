@@ -61,9 +61,15 @@ export default class Sprite extends Container {
   getTexture () { return this._texture }
   setShader (shader) { this._shader = shader }
   getShader () { return this._shader }
-  setWidth (width) { this._width = width }
+  setWidth (width) {
+    this._scale.x = width / this._texture.getFrame().width
+    this._width = width
+  }
   getWidth () { return this._width }
-  setHeight (height) { this._height = height }
+  setHeight (height) {
+    this._scale.y = height / this._texture.getFrame().height
+    this._height = height
+  }
   getHeight () { return this._height }
   getAnchor () { return this._anchor }
   setAnchor (anchor, y) {
