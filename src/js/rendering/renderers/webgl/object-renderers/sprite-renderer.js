@@ -116,15 +116,6 @@ export default class SpriteRenderer extends ObjectRenderer {
     uvCoords = uvs.getUVs(3)
     positions[index + 17] = uvCoords.x
     positions[index + 18] = uvCoords.y
-
-    positions[index + 2] = 0
-    positions[index + 3] = 0
-    positions[index + 7] = 1
-    positions[index + 8] = 0
-    positions[index + 12] = 1
-    positions[index + 13] = 1
-    positions[index + 17] = 0
-    positions[index + 18] = 1
   }
 
   /**

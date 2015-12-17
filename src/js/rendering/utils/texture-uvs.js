@@ -35,7 +35,7 @@ export default class TextureUVs {
     // Upper right
     uv = this._uvs[1]
     uv.x = (frame.x + frame.width) / baseFrame.width
-    uv.y = frame.y + baseFrame.height
+    uv.y = frame.y / baseFrame.height
 
     // Lower right
     uv = this._uvs[2]
