@@ -31,8 +31,9 @@ export default class ImageResizer {
         const maxPixelsDimensions = this._getDimensionsByMaxPixels()
         let dimensions = maxPixelsDimensions.clone()
 
-        if (dimensions.x > maxDimensions ||
-            dimensions.y > maxDimensions) {
+        if (maxDimensions !== null &&
+            (dimensions.x > maxDimensions ||
+            dimensions.y > maxDimensions)) {
           let scale = Math.min(
             maxDimensions / dimensions.x,
             maxDimensions / dimensions.y
