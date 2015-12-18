@@ -533,11 +533,12 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _getStickerDimensions (sticker) {
-    const { editor } = this.props
+    const { kit } = this.context
     const image = sticker.getImage()
+    const parentScale = kit.getRenderer().getScale()
     return new Vector2(image.width, image.height)
       .clone()
       .multiply(sticker.getScale())
-      .multiply(editor.getZoom())
+      .multiply(parentScale)
   }
 }
