@@ -519,8 +519,8 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _getAbsoluteStickerPosition (sticker) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.props
+    const canvasDimensions = editor.getCanvasDimensions()
     return sticker.getPosition()
       .clone()
       .multiply(canvasDimensions)
@@ -536,8 +536,8 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     const { kit } = this.context
     const image = sticker.getImage()
     const parentScale = kit.getRenderer().getScale()
+
     return new Vector2(image.width, image.height)
-      .clone()
       .multiply(sticker.getScale())
       .multiply(parentScale)
   }
