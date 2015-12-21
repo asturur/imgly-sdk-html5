@@ -1,4 +1,3 @@
-/* global PhotoEditorRendering */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -13,7 +12,9 @@ import CanvasRenderer from './renderers/canvas/canvas-renderer'
 import WebGLRenderer from './renderers/webgl/webgl-renderer'
 import DisplayObject from './display/display-object'
 import Container from './display/container'
+import BaseTexture from './textures/base-texture'
 import Texture from './textures/texture'
+import RenderTexture from './textures/render-texture'
 import Sprite from './sprites/sprite'
 import Shader from './shaders/shader'
 
@@ -22,7 +23,9 @@ window.PhotoEditorRendering = {
   CanvasRenderer,
   DisplayObject,
   Container,
+  BaseTexture,
   Texture,
+  RenderTexture,
   Sprite,
   Shader
 }
@@ -38,7 +41,8 @@ image.src = 'test.jpg'
 function run () {
   const canvas = document.querySelector('canvas')
   const renderer = new WebGLRenderer(800, 600, {
-    canvas
+    canvas,
+    pixelRatio: window.devicePixelRatio ? window.devicePixelRatio : 1
   })
 
   const container = new Container()

@@ -20,12 +20,13 @@ export default class BaseTexture extends EventEmitter {
     this._glTextures = {}
     this._source = source
 
+    this._resolution = 1
     this._loaded = false
-    this._width = 1
-    this._height = 1
-    this._frame = new Rectangle(0, 0, this._width, this._height)
+    this._frame = new Rectangle(0, 0, 100, 100)
 
-    this._loadSource()
+    if (source) {
+      this._loadSource()
+    }
   }
 
   /**
@@ -56,11 +57,7 @@ export default class BaseTexture extends EventEmitter {
    * @private
    */
   _update () {
-    this._width = this._source.width
-    this._height = this._source.height
-
-    this._frame = new Rectangle(0, 0, this._width, this._height)
-
+    this._frame = new Rectangle(0, 0, this._source.width, this._source.height)
     this.emit('update')
   }
 
@@ -71,4 +68,6 @@ export default class BaseTexture extends EventEmitter {
   getGLTextureForId (id) { return this._glTextures[id] }
   getFrame () { return this._frame }
   setFrame (frame) { this._frame = frame }
+  getResolution () { return this._resolution }
+  setResolution (resolution) { this._resolution = resolution }
 }

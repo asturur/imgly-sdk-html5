@@ -64,4 +64,6 @@ export default class Container extends DisplayObject {
   _renderWebGL (renderer) {
 
   }
+
+  getChildren () { return this._children }
 }

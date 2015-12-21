@@ -15,18 +15,15 @@ import BaseTexture from './base-texture'
 import TextureUVs from '../utils/texture-uvs'
 
 export default class Texture extends EventEmitter {
-  constructor (baseTexture) {
+  constructor (baseTexture, frame) {
     super()
 
     if (!(baseTexture instanceof BaseTexture)) {
       throw new Error('\`baseTexture\` should be an instance of BaseTexture')
     }
     this._baseTexture = baseTexture
-
-    this._frame = null
     this._uvs = new TextureUVs()
-    this._width = 0
-    this._height = 0
+    this._frame = frame ? frame.clone() : null
 
     // Bind event handlers
     this._onBaseTextureLoaded = this._onBaseTextureLoaded.bind(this)
@@ -82,12 +79,9 @@ export default class Texture extends EventEmitter {
   setFrame (frame) {
     this._frame = frame
 
-    this._width = frame.width
-    this._height = frame.height
-
     this._updateUVs()
   }
-  getWidth () { return this._width }
-  getHeight () { return this._height }
+  getWidth () { return this._frame.width }
+  getHeight () { return this._frame.height }
   getUVs () { return this._uvs }
 }

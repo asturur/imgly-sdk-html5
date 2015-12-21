@@ -26,7 +26,7 @@ export default class Sprite extends Container {
     this._width = 0
     this._height = 0
 
-    this._anchor = new Vector2(0.5, 0.5)
+    this._anchor = new Vector2(0, 0)
 
     this.setTexture(texture)
   }

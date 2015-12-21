@@ -105,10 +105,11 @@ export default class WebGLRenderer extends BaseRenderer {
     gl.disable(gl.CULL_FACE)
     gl.enable(gl.BLEND)
 
-    this._defaultRenderTarget = new RenderTarget(gl,
+    this._defaultRenderTarget = new RenderTarget(this,
       this._width,
       this._height,
-      this._options.pixelRatio)
+      this._options.pixelRatio,
+      true)
     this._setRenderTarget(this._defaultRenderTarget)
 
     this.resizeTo(new Vector2(this._width, this._height))
@@ -145,12 +146,12 @@ export default class WebGLRenderer extends BaseRenderer {
   }
 
   /**
-   * Renders the given displayObject
+   * Renders the given DisplayObject
    * @param  {DisplayObject} displayObject
    */
   render (displayObject) {
     this._setRenderTarget(this._defaultRenderTarget)
-    this._currentRenderTarget.clear()
+    this._defaultRenderTarget.clear()
 
     // Since the given displayObject is the "root" object
     // right now, we need to give it a dummy / fake object
@@ -160,11 +161,21 @@ export default class WebGLRenderer extends BaseRenderer {
 
     // Update transforms and render this object
     displayObject.updateTransform()
-    displayObject.renderWebGL(this)
 
     // Reset parent
     displayObject.setParent(originalParent)
 
+    this.renderDisplayObject(displayObject, this._defaultRenderTarget)
+  }
+
+  /**
+   * Renders the given DisplayObject
+   * @param  {DisplayObject} displayObject
+   * @param  {RenderTarget} renderTarget
+   */
+  renderDisplayObject (displayObject, renderTarget) {
+    this._setRenderTarget(renderTarget)
+    displayObject.renderWebGL(this)
     this._currentObjectRenderer.flush()
   }
 
@@ -186,22 +197,30 @@ export default class WebGLRenderer extends BaseRenderer {
   getOrCreateGLTexture (texture) {
     const gl = this._context
 
+    // We need a BaseTexture with a source to create a WebGLTexture out of it.
+    // RenderTextures, for example, don't have a BaseTexture
+    // if (!texture.baseTexture) {
+    //   return
+    // }
+
     // Make sure we have a WebGLTexture for this context
     let glTexture = texture.getGLTextureForId(gl.id)
     if (!glTexture) {
       glTexture = gl.createTexture()
       texture.setGLTextureForId(glTexture, gl.id)
+
+      gl.bindTexture(gl.TEXTURE_2D, glTexture)
+
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.getSource())
+
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+    } else {
+      gl.bindTexture(gl.TEXTURE_2D, glTexture)
     }
-
-    gl.bindTexture(gl.TEXTURE_2D, glTexture)
-
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.getSource())
-
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
 
     return glTexture
   }

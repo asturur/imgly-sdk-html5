@@ -9,11 +9,12 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Matrix } = PhotoEditorSDK
+const { Vector2, Matrix } = PhotoEditorSDK
 
 export default class RenderTarget {
-  constructor (gl, width, height, pixelRatio, isRoot = true) {
-    this._gl = gl
+  constructor (renderer, width, height, pixelRatio, isRoot = false) {
+    this._renderer = renderer
+    this._gl = renderer.getContext()
     this._width = width
     this._height = height
     this._pixelRatio = pixelRatio
@@ -36,7 +37,28 @@ export default class RenderTarget {
   resizeTo (dimensions) {
     this._width = dimensions.x | 0 // rounded
     this._height = dimensions.y | 0 // rounded
+
+    if (!this._isRoot) {
+      this._resizeTexture(dimensions)
+    }
+
     this._calculateProjectionMatrix()
+  }
+
+  /**
+   * Resizes the FBO's texture to the given dimensions
+   * @param  {Vector2} dimensions
+   * @private
+   */
+  _resizeTexture (dimensions) {
+    const gl = this._gl
+    gl.bindTexture(gl.TEXTURE_2D, this._texture)
+
+    const realWidth = this._width * this._pixelRatio
+    const realHeight = this._height * this._pixelRatio
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,
+      realWidth, realHeight,
+      0, gl.RGBA, gl.UNSIGNED_BYTE, null)
   }
 
   /**
@@ -72,17 +94,51 @@ export default class RenderTarget {
   _calculateProjectionMatrix () {
     const projectionMatrix = this._projectionMatrix
     projectionMatrix.reset()
-    projectionMatrix.a = 1 / this._width * 2
-    projectionMatrix.d = -1 / this._height * 2
 
-    /**
-     * @TODO: Do we need x and y?
-     */
     const x = 0
     const y = 0
-    projectionMatrix.tx = -1 - x * projectionMatrix.a
-    projectionMatrix.ty = 1 - y * projectionMatrix.d
+    if (!this._isRoot) {
+      projectionMatrix.a = 1 / this._width * 2
+      projectionMatrix.d = 1 / this._height * 2
+
+      projectionMatrix.tx = -1 - x * projectionMatrix.a
+      projectionMatrix.ty = -1 - y * projectionMatrix.d
+    } else {
+      projectionMatrix.a = 1 / this._width * 2
+      projectionMatrix.d = -1 / this._height * 2
+
+      projectionMatrix.tx = -1 - x * projectionMatrix.a
+      projectionMatrix.ty = 1 - y * projectionMatrix.d
+    }
+  }
+
+  /**
+   * Initializes the WebGL FBO and Texture for this RenderTarget
+   * @private
+   */
+  _initFrameBuffer () {
+    const gl = this._gl
+
+    // Init the FBO
+    this._framebuffer = gl.createFramebuffer()
+
+    // Create the texture
+    this._texture = gl.createTexture()
+    gl.bindTexture(gl.TEXTURE_2D, this._texture)
+
+    // Set scale and repeat parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+
+    // Bind texture to FBO
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this._framebuffer)
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this._texture, 0)
+
+    this.resizeTo(new Vector2(this._width, this._height))
   }
 
   getProjectionMatrix () { return this._projectionMatrix }
+  getTexture () { return this._texture }
 }
