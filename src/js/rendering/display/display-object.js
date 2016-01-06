@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Matrix, Vector2 } = PhotoEditorSDK
+const { Matrix, Vector2, Rectangle } = PhotoEditorSDK
 
 export default class DisplayObject {
   constructor () {
@@ -21,6 +21,8 @@ export default class DisplayObject {
     this._alpha = 1
     this._worldTransform = new Matrix()
     this._parent = null
+    this._shaders = []
+    this._bounds = new Rectangle(0, 0, 1, 1)
   }
 
   /**
@@ -62,6 +64,51 @@ export default class DisplayObject {
     worldTransform.multiply(parentTransform)
   }
 
+  // -------------------------------------------------------------------------- SHADERS
+
+  /**
+   * Pushes the given shader to the list of shaders
+   * @param {Shader} shader
+   */
+  addShader (shader) {
+    this._shaders.push(shader)
+  }
+
+  /**
+   * Removes the given shader from the list of shaders
+   * @param  {Shader} shader
+   * @return {Boolean}
+   */
+  removeShader (shader) {
+    const index = this._shaders.indexOf(shader)
+    if (index !== -1) {
+      this._shaders.splice(index, 1)
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Removes the shader at the given index from the list of shaders
+   * @param  {Number} index
+   * @return {Boolean}
+   */
+  removeShaderAt (index) {
+    if (!this._shaders[index]) {
+      return false
+    }
+    this._shaders.splice(index, 1)
+    return true
+  }
+
+  /**
+   * Returns the bounds for this DisplayObject
+   * @return {Rectangle}
+   */
+  getBounds () {
+    return this._bounds
+  }
+
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
   getPosition () { return this._position }
@@ -95,4 +142,5 @@ export default class DisplayObject {
   getWorldTransform () { return this._worldTransform }
   getParent () { return this._parent }
   setParent (parent) { this._parent = parent }
+  getBounds () { return this._currentBounds }
 }
