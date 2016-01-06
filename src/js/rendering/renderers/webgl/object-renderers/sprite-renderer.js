@@ -8,24 +8,21 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const BATCH_SIZE = 2000
-const VERTEX_SIZE = 5
-const VERTEX_BYTE_SIZE = VERTEX_SIZE * 4
-
+import Globals from '../../../globals'
 import ObjectRenderer from './object-renderer'
 
 export default class SpriteRenderer extends ObjectRenderer {
   constructor (...args) {
     super(...args)
 
-    this._maxBatchSize = BATCH_SIZE
-    this._vertices = new ArrayBuffer(BATCH_SIZE * 4 * VERTEX_BYTE_SIZE)
+    this._maxBatchSize = Globals.BATCH_SIZE
+    this._vertices = new ArrayBuffer(Globals.BATCH_SIZE * 4 * Globals.VERTEX_BYTE_SIZE)
     this._positions = new Float32Array(this._vertices)
     this._colors = new Uint32Array(this._vertices)
-    this._indices = new Uint16Array(BATCH_SIZE * 6)
+    this._indices = new Uint16Array(Globals.BATCH_SIZE * 6)
 
     // Fill vertex position indices
-    for (var i = 0, j = 0; i < BATCH_SIZE * 6; i += 6, j += 4) {
+    for (var i = 0, j = 0; i < Globals.BATCH_SIZE * 6; i += 6, j += 4) {
       this._indices[i + 0] = j + 0
       this._indices[i + 1] = j + 1
       this._indices[i + 2] = j + 2
@@ -64,7 +61,7 @@ export default class SpriteRenderer extends ObjectRenderer {
     if (!uvs) { return }
 
     // Fill positions array
-    const index = this._currentBatchSize * VERTEX_BYTE_SIZE
+    const index = this._currentBatchSize * Globals.VERTEX_BYTE_SIZE
     this._addVertexCoordinates(sprite, index, textureFrame)
     this._addTextureUVs(sprite, index, uvs)
     this._addColors(sprite, index)
@@ -196,15 +193,7 @@ export default class SpriteRenderer extends ObjectRenderer {
    * Gets called when this object renderer is activated
    */
   start () {
-    const gl = this._renderer.getContext()
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this._vertexBuffer)
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer)
-
-    const attributeLocations = this._shader.getAttributeLocations()
-    gl.vertexAttribPointer(attributeLocations.a_position, 2, gl.FLOAT, false, VERTEX_BYTE_SIZE, 0)
-    gl.vertexAttribPointer(attributeLocations.a_texCoord, 2, gl.FLOAT, false, VERTEX_BYTE_SIZE, 2 * 4)
-    gl.vertexAttribPointer(attributeLocations.a_color, 4, gl.UNSIGNED_BYTE, true, VERTEX_BYTE_SIZE, 4 * 4)
+    this._shader.setupBuffers(this._vertexBuffer, this._indexBuffer)
   }
 
   /**
@@ -215,12 +204,14 @@ export default class SpriteRenderer extends ObjectRenderer {
     const renderer = this._renderer
     const gl = renderer.getContext()
 
-    if (this._currentBatchSize > BATCH_SIZE * 0.5) {
+    if (this._currentBatchSize === 0) return
+
+    if (this._currentBatchSize > Globals.BATCH_SIZE * 0.5) {
       // Upload whole ArrayBuffer
       gl.bufferSubData(gl.ARRAY_BUFFER, 0, this._vertices)
     } else {
       // Only upload sub array
-      const subArray = this._positions.subarray(0, this._currentBatchSize * VERTEX_BYTE_SIZE)
+      const subArray = this._positions.subarray(0, this._currentBatchSize * Globals.VERTEX_BYTE_SIZE)
       gl.bufferSubData(gl.ARRAY_BUFFER, 0, subArray)
     }
 

@@ -15,6 +15,7 @@ import ObjectRenderer from './object-renderers/object-renderer'
 import SpriteRenderer from './object-renderers/sprite-renderer'
 import TextureShader from '../../shaders/texture-shader'
 import DisplayObject from '../../display/display-object'
+import FilterManager from '../../managers/filter-manager'
 
 const { Vector2 } = PhotoEditorSDK
 
@@ -26,7 +27,14 @@ export default class WebGLRenderer extends BaseRenderer {
 
     this.shaders = this._initShaders()
     this.renderers = this._initRenderers()
+  }
 
+  /**
+   * Gets called before the context has been set up
+   * @private
+   */
+  _onBeforeContext () {
+    this._filterManager = new FilterManager(this)
     this._currentObjectRenderer = new ObjectRenderer(this)
   }
 
@@ -84,8 +92,17 @@ export default class WebGLRenderer extends BaseRenderer {
    */
   _createContext () {
     const canvas = this._canvas
-    const gl = canvas.getContext('webgl') ||
+    let gl = canvas.getContext('webgl') ||
       canvas.getContext('experimental-webgl')
+
+    if (window.WebGLDebugUtils) {
+      const logGL = (functionName, args) => {
+        console.error('gl.' + functionName + '(' +
+          window.WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ')')
+      }
+      // gl = window.WebGLDebugUtils.makeDebugContext(gl, null, logGL)
+    }
+
     this.id = gl.id = WebGLRenderer.contextId++
     gl.renderer = this
 
@@ -110,7 +127,7 @@ export default class WebGLRenderer extends BaseRenderer {
       this._height,
       this._options.pixelRatio,
       true)
-    this._setRenderTarget(this._defaultRenderTarget)
+    this.setRenderTarget(this._defaultRenderTarget)
 
     this.resizeTo(new Vector2(this._width, this._height))
   }
@@ -128,9 +145,8 @@ export default class WebGLRenderer extends BaseRenderer {
    * Sets the current render target to the passed one and activates
    * it for rendering
    * @param {RenderTarget} renderTarget
-   * @private
    */
-  _setRenderTarget (renderTarget) {
+  setRenderTarget (renderTarget) {
     this._currentRenderTarget = renderTarget
     this._currentRenderTarget.activate()
   }
@@ -150,7 +166,7 @@ export default class WebGLRenderer extends BaseRenderer {
    * @param  {DisplayObject} displayObject
    */
   render (displayObject) {
-    this._setRenderTarget(this._defaultRenderTarget)
+    this.setRenderTarget(this._defaultRenderTarget)
     this._defaultRenderTarget.clear()
 
     // Since the given displayObject is the "root" object
@@ -174,7 +190,8 @@ export default class WebGLRenderer extends BaseRenderer {
    * @param  {RenderTarget} renderTarget
    */
   renderDisplayObject (displayObject, renderTarget) {
-    this._setRenderTarget(renderTarget)
+    this.setRenderTarget(renderTarget)
+    this._filterManager.setFilterStack(renderTarget.getFilterStack())
     displayObject.renderWebGL(this)
     this._currentObjectRenderer.flush()
   }
@@ -185,7 +202,7 @@ export default class WebGLRenderer extends BaseRenderer {
   clear () {
     const gl = this._context
 
-    gl.clearColor(0, 0, 0, 0)
+    gl.clearColor(0, 0, 0, 1)
     gl.clear(gl.COLOR_BUFFER_BIT)
   }
 
@@ -226,6 +243,8 @@ export default class WebGLRenderer extends BaseRenderer {
   }
 
   getCurrentRenderTarget () { return this._currentRenderTarget }
+  getCurrentObjectRenderer () { return this._currentObjectRenderer }
+  getFilterManager () { return this._filterManager }
 }
 
 WebGLRenderer.contextId = 0

@@ -42,6 +42,21 @@ export default class Sprite extends Container {
   }
 
   /**
+   * Returns the bounds for this DisplayObject
+   * @return {Rectangle}
+   */
+  getBounds () {
+    if (this._boundsNeedUpdate) {
+      const bounds = this._bounds
+      const textureFrame = this._texture.getFrame()
+      bounds.width = textureFrame.width
+      bounds.height = textureFrame.height
+      this._boundsNeedUpdate = false
+    }
+    return this._bounds
+  }
+
+  /**
    * Gets called when this sprite's texture has been updated
    * @private
    */

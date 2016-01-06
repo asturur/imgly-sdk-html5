@@ -19,6 +19,7 @@ export default class BaseRenderer extends EventEmitter {
 
     this._width = width || 800
     this._height = height || 600
+    this._dimensions = new Vector2(this._width, this._height)
 
     this._canvas = options.canvas || document.createElement('canvas')
 
@@ -27,7 +28,16 @@ export default class BaseRenderer extends EventEmitter {
     })
 
     this._context = this._createContext()
+    this._onBeforeContext()
     this._setupContext()
+  }
+
+  /**
+   * Gets called before the context has been set up
+   * @private
+   */
+  _onBeforeContext () {
+
   }
 
   /**
@@ -80,4 +90,5 @@ export default class BaseRenderer extends EventEmitter {
   getContext () { return this._context }
   getWidth () { return this._dimensions.x }
   getHeight () { return this._dimensions.y }
+  getPixelRatio () { return this._options.pixelRatio }
 }

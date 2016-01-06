@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Vector2, Matrix } = PhotoEditorSDK
+const { Vector2, Rectangle, Matrix } = PhotoEditorSDK
 
 export default class RenderTarget {
   constructor (renderer, width, height, pixelRatio, isRoot = false) {
@@ -17,13 +17,19 @@ export default class RenderTarget {
     this._gl = renderer.getContext()
     this._width = width
     this._height = height
+    this._frame = null
     this._pixelRatio = pixelRatio
     this._projectionMatrix = new Matrix()
 
     // `null` means render to canvas directly
     this._framebuffer = null
-
     this._isRoot = isRoot
+    this._filterStack = [
+      {
+        renderTarget: this,
+        filter: []
+      }
+    ]
 
     if (!isRoot) {
       this._initFrameBuffer()
@@ -74,6 +80,7 @@ export default class RenderTarget {
       0,
       this._width * this._pixelRatio,
       this._height * this._pixelRatio)
+    gl.disable(gl.STENCIL_TEST)
   }
 
   /**
@@ -83,7 +90,7 @@ export default class RenderTarget {
     const gl = this._gl
     gl.bindFramebuffer(gl.FRAMEBUFFER, this._framebuffer)
 
-    gl.clearColor(0, 0, 0, 0)
+    gl.clearColor(0, 0, 0, 1)
     gl.clear(gl.COLOR_BUFFER_BIT)
   }
 
@@ -141,4 +148,7 @@ export default class RenderTarget {
 
   getProjectionMatrix () { return this._projectionMatrix }
   getTexture () { return this._texture }
+  getFrame () { return this._frame }
+  setFrame (frame) { this._frame = frame }
+  getFilterStack () { return this._filterStack }
 }

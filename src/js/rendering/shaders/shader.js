@@ -8,9 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-/**
- * @TODO Add support for multiple GL contexts
- */
+import Globals from '../globals'
 
 export default class Shader {
   constructor (renderer, vertexSource, fragmentSource, uniforms, attributes) {
@@ -18,6 +16,7 @@ export default class Shader {
     this._vertexSource = vertexSource
     this._fragmentSource = fragmentSource
     this._uniforms = uniforms || {}
+    this._uniformLocations = {}
     this._attributes = attributes || []
     this._attributeLocations = {}
 
@@ -38,6 +37,21 @@ export default class Shader {
   }
 
   /**
+   * Binds the given buffers for this shader
+   * @param {WebGLBuffer} vertexBuffer
+   * @param {WebGLBuffer} indexBuffer
+   */
+  setupBuffers (vertexBuffer, indexBuffer) {
+    const gl = this._renderer.getContext()
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
+
+    gl.vertexAttribPointer(this._attributeLocations.a_position, 2, gl.FLOAT, false, Globals.VERTEX_BYTE_SIZE, 0)
+    gl.vertexAttribPointer(this._attributeLocations.a_texCoord, 2, gl.FLOAT, false, Globals.VERTEX_BYTE_SIZE, 2 * 4)
+    gl.vertexAttribPointer(this._attributeLocations.a_color, 4, gl.UNSIGNED_BYTE, true, Globals.VERTEX_BYTE_SIZE, 4 * 4)
+  }
+
+  /**
    * Synchronizes all uniforms with WebGL
    */
   syncUniforms () {
@@ -54,7 +68,7 @@ export default class Shader {
   syncUniform (name) {
     const gl = this._renderer.getContext()
     const uniform = this._uniforms[name]
-    const location = uniform._location
+    const location = this._uniformLocations[name]
 
     switch (uniform.type) {
       case 'sampler2d':
@@ -106,8 +120,7 @@ export default class Shader {
     const gl = this._renderer.getContext()
     const keys = Object.keys(this._uniforms)
     keys.forEach((key) => {
-      const uniform = this._uniforms[key]
-      uniform._location = gl.getUniformLocation(this._program, key)
+      this._uniformLocations[key] = gl.getUniformLocation(this._program, key)
     })
   }
 

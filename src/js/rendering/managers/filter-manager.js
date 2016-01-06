@@ -1,0 +1,172 @@
+/* global PhotoEditorSDK */
+/*
+ * Photo Editor SDK - photoeditorsdk.com
+ * Copyright (c) 2013-2016 9elements GmbH
+ *
+ * Released under Attribution-NonCommercial 3.0 Unported
+ * http://creativecommons.org/licenses/by-nc/3.0/
+ *
+ * For commercial use, please contact us at contact@9elements.com
+ */
+
+// @TODO
+const { Rectangle } = PhotoEditorSDK
+import RenderTarget from '../utils/render-target'
+import Quad from '../utils/quad'
+
+export default class FilterManager {
+  constructor (renderer) {
+    this._renderer = renderer
+    this._filterStack = [{
+      renderTarget: renderer.getCurrentRenderTarget(),
+      filters: []
+    }]
+
+    this._currentFrame = null
+    this._textures = []
+    this._textureFrame = new Rectangle(0, 0, renderer.getWidth(), renderer.getHeight())
+
+    this._onContextChange = this._onContextChange.bind(this)
+    this._renderer.on('context', this._onContextChange)
+
+    // Initial context
+    this._onContextChange()
+  }
+
+  /**
+   * Sets the filter stack to the given stack
+   * @param {Array.<Object>} filterStack
+   */
+  setFilterStack (filterStack) {
+    this._filterStack = filterStack
+  }
+
+  /**
+   * Returns a render target from the pool or creates a new one
+   * @param  {Boolean} clear
+   * @return {RenderTarget}
+   * @private
+   */
+  _getOrCreateRenderTarget (clear) {
+    let renderTarget = this._textures.pop()
+    if (!renderTarget) {
+      renderTarget = new RenderTarget(this._renderer,
+        this._textureFrame.width,
+        this._textureFrame.height,
+        this._renderer.getPixelRatio())
+    }
+    renderTarget.setFrame(this._currentFrame)
+
+    if (clear) {
+      renderTarget.clear()
+    }
+
+    return renderTarget
+  }
+
+  /**
+   * Pushes the given filters to the
+   * @param  {RenderTarget} target
+   * @param  {Array.<Filter>} filters
+   */
+  pushFilters (target, filters) {
+    const bounds = target.getBounds()
+    this._currentFrame = bounds
+
+    const renderTexture = this._getOrCreateRenderTarget()
+    this._renderer.setRenderTarget(renderTexture)
+    renderTexture.clear()
+
+    this._filterStack.push({
+      renderTarget: renderTexture,
+      filters
+    })
+  }
+
+  /**
+   * Removes, applies and returns the last filters from the stack
+   * @return {Object}
+   */
+  popFilters () {
+    const { filters, renderTarget } = this._filterStack.pop()
+    const lastFilter = this._filterStack[this._filterStack.length - 1]
+
+    const inputRenderTarget = renderTarget
+    const outputRenderTarget = lastFilter.renderTarget
+
+    // Update the Quad's buffers
+    this._quad.map(this._textureFrame, inputRenderTarget.getFrame())
+
+    const shader = filters[0].getShaderForRenderer(this._renderer)
+    const vertexBuffer = this._quad.getVertexBuffer()
+    const indexBuffer = this._quad.getIndexBuffer()
+
+    const gl = this._renderer.getContext()
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
+
+    const attributeLocations = shader.getAttributeLocations()
+    gl.vertexAttribPointer(attributeLocations.a_position, 2, gl.FLOAT, false, 0, 0)
+    gl.vertexAttribPointer(attributeLocations.a_texCoord, 2, gl.FLOAT, false, 0, 2 * 4 * 4)
+    gl.vertexAttribPointer(attributeLocations.a_color, 4, gl.FLOAT, false, 0, 4 * 4 * 4)
+
+    if (filters.length === 1) {
+      filters[0].apply(this._renderer, inputRenderTarget, outputRenderTarget)
+      this._textures.push(inputRenderTarget)
+    } else {
+      this._applyFilters(filters, inputRenderTarget, outputRenderTarget)
+    }
+
+    return filters
+  }
+
+  /**
+   * Applies the given filters to the given inputRenderTarget and outputs
+   * the filtered content to the outputRenderTarget
+   * @param  {Array.<Filter>} filters
+   * @param  {RenderTarget} inputRenderTarget
+   * @param  {RenderTarget} outputRenderTarget
+   */
+  _applyFilters (filters, inputRenderTarget, outputRenderTarget) {
+    let flipTexture = inputRenderTarget
+    let flopTexture = this._getOrCreateRenderTarget(true)
+
+    const lastFilter = filters[filters.length - 1]
+    filters.forEach((filter, i) => {
+      const isLastFilter = filter === lastFilter
+
+      if (!isLastFilter) {
+        // Render from flip to flop with filter
+        filter.apply(this._renderer, flipTexture, flopTexture)
+
+        // Flip the render targets
+        let temp = flipTexture
+        flipTexture = flopTexture
+        flopTexture = temp
+      } else {
+        // Render to output
+        filter.apply(this._renderer, flipTexture, outputRenderTarget)
+      }
+    })
+
+    // Push the textures back into the texture pool to use them again later
+    this._textures.push(flipTexture)
+    this._textures.push(flopTexture)
+  }
+
+  /**
+   * Gets called when the WebGL context has been changed
+   * @private
+   */
+  _onContextChange () {
+    this._textures.length = 0
+    this._quad = new Quad(this._renderer)
+  }
+
+  /**
+   * Cleans up
+   */
+  dispose () {
+    this._renderer.off('context', this._onContextChange)
+  }
+}

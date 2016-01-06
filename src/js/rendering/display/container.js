@@ -15,6 +15,38 @@ export default class Container extends DisplayObject {
     super(...args)
 
     this._children = []
+    this._filters = []
+    this._boundsNeedUpdate = true
+  }
+
+  /**
+   * Adds the given filter to the filter stack
+   * @param {Filter} filter
+   */
+  addFilter (filter) {
+    this._filters.push(filter)
+  }
+
+  /**
+   * Removes the given filter from the filter stack
+   * @param  {Filter} filter
+   * @return {Boolean} Has the filter been removed?
+   */
+  removeFilter (filter) {
+    const index = this._filters.indexOf(filter)
+    if (index !== -1) {
+      this._filters.splice(index, 1)
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Sets the filters
+   * @param {Array.<Filter>} filters
+   */
+  setFilters (filters) {
+    this._filters = filters
   }
 
   /**
@@ -38,11 +70,25 @@ export default class Container extends DisplayObject {
    * @override
    */
   renderWebGL (renderer) {
+    const filterManager = renderer.getFilterManager()
+    if (this._filters && this._filters.length) {
+      filterManager.pushFilters(this, this._filters)
+    }
+
+    renderer.getCurrentObjectRenderer().start()
+
     this._renderWebGL(renderer)
 
     this._children.forEach((child) => {
       child.renderWebGL(renderer)
     })
+
+    renderer.getCurrentObjectRenderer().flush()
+
+    if (this._filters && this._filters.length) {
+      filterManager.popFilters()
+    }
+    renderer.getCurrentObjectRenderer().start()
   }
 
   /**
@@ -63,6 +109,18 @@ export default class Container extends DisplayObject {
    */
   _renderWebGL (renderer) {
 
+  }
+
+  /**
+   * Returns the bounds for this DisplayObject
+   * @return {Rectangle}
+   */
+  getBounds () {
+    if (this._boundsNeedUpdate) {
+      // @TODO Calculate bounds by looking at children
+      this._boundsNeedUpdate = false
+    }
+    return this._bounds
   }
 
   getChildren () { return this._children }
