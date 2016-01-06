@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -9,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Vector2, Rectangle, Matrix } = PhotoEditorSDK
+import { Vector2, Matrix } from '../globals'
 
 export default class RenderTarget {
   constructor (renderer, width, height, pixelRatio, isRoot = false) {

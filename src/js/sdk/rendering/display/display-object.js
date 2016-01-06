@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -9,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Matrix, Vector2, Rectangle } = PhotoEditorSDK
+import { Matrix, Vector2, Rectangle } from '../globals'
 
 export default class DisplayObject {
   constructor () {
@@ -142,5 +141,4 @@ export default class DisplayObject {
   getWorldTransform () { return this._worldTransform }
   getParent () { return this._parent }
   setParent (parent) { this._parent = parent }
-  getBounds () { return this._currentBounds }
 }

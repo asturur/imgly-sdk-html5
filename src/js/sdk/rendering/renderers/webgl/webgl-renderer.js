@@ -9,6 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Vector2 } from '../../globals'
 import BaseRenderer from '../base-renderer'
 import RenderTarget from '../../utils/render-target'
 import ObjectRenderer from './object-renderers/object-renderer'
@@ -16,8 +17,6 @@ import SpriteRenderer from './object-renderers/sprite-renderer'
 import TextureShader from '../../shaders/texture-shader'
 import DisplayObject from '../../display/display-object'
 import FilterManager from '../../managers/filter-manager'
-
-const { Vector2 } = PhotoEditorSDK
 
 export default class WebGLRenderer extends BaseRenderer {
   constructor (...args) {

@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2016 9elements GmbH
@@ -9,7 +8,6 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Matrix } = PhotoEditorSDK
 import Shader from '../shaders/shader'
 import TextureShader from '../shaders/texture-shader'
 

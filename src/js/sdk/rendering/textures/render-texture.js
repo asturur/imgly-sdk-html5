@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -9,11 +8,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Rectangle } = PhotoEditorSDK
+import { Rectangle } from '../globals'
 import Texture from './texture'
 import BaseTexture from './base-texture'
 import WebGLRenderer from '../renderers/webgl/webgl-renderer'
-// import CanvasRenderer from '../renderers/canvas-renderer'
 import RenderTarget from '../utils/render-target'
 
 export default class RenderTexture extends Texture {

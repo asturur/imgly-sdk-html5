@@ -12,6 +12,7 @@ import { RenderType, ImageFormat } from './constants'
 
 let PhotoEditorSDK = {}
 
+PhotoEditorSDK.Rendering = require('./rendering')
 PhotoEditorSDK.Renderer = require('./lib/renderer')
 
 /**

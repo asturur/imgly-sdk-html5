@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -9,8 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { EventEmitter } = PhotoEditorSDK
-
+import { EventEmitter } from '../globals'
 import BaseTexture from './base-texture'
 import TextureUVs from '../utils/texture-uvs'
 

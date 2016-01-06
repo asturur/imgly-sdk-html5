@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2016 9elements GmbH
@@ -9,8 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-// @TODO
-const { Rectangle } = PhotoEditorSDK
+import { Rectangle } from '../globals'
 import RenderTarget from '../utils/render-target'
 import Quad from '../utils/quad'
 

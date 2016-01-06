@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -9,9 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Vector2, EventEmitter } from '../globals'
 import Utils from '../utils/utils'
-
-const { Vector2, EventEmitter } = PhotoEditorSDK
 
 export default class BaseRenderer extends EventEmitter {
   constructor (width, height, options) {
