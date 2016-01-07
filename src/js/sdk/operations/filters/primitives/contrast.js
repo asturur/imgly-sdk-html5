@@ -53,34 +53,6 @@ class Contrast extends Primitive {
   }
 
   /**
-   * Renders the primitive (WebGL)
-   * @param  {WebGLRenderer} renderer
-   * @param  {WebGLTexture} inputTexture
-   * @param  {WebGLFramebuffer} outputFBO
-   * @param  {WebGLTexture} outputTexture
-   * @return {Promise}
-   */
-  /* istanbul ignore next */
-  renderWebGL (renderer, inputTexture, outputFBO, outputTexture) {
-    if (!this._glslPrograms[renderer.id]) {
-      this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-        null,
-        this._fragmentShader
-      )
-    }
-
-    renderer.runProgram(this._glslPrograms[renderer.id], {
-      inputTexture,
-      outputFBO,
-      outputTexture,
-      switchBuffer: false,
-      uniforms: {
-        u_contrast: { type: 'f', value: this._options.contrast }
-      }
-    })
-  }
-
-  /**
    * Renders the primitive (Canvas)
    * @param  {Canvas} canvas
    */
