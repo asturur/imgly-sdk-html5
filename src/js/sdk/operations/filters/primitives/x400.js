@@ -8,7 +8,15 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Engine from '../../../engine'
 import Primitive from './primitive'
+
+class X400Filter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../../../shaders/primitives/x400.frag')
+    super(null, fragmentSource)
+  }
+}
 
 /**
  * X400 primitive
@@ -17,33 +25,15 @@ import Primitive from './primitive'
  * @extends {PhotoEditorSDK.Filter.Primitive}
  */
 class X400 extends Primitive {
-  constructor (...args) {
-    super(...args)
-
-    /**
-     * The fragment shader for this primitive
-     * @return {String}
-     * @private
-     */
-    this._fragmentShader = require('raw!../../../shaders/primitives/x400.frag')
-  }
-
   /**
-   * Renders the primitive (WebGL)
-   * @param  {WebGLRenderer} renderer
-   * @param  {WebGLTexture} inputTexture
-   * @param  {WebGLFramebuffer} outputFBO
-   * @param  {WebGLTexture} outputTexture
-   * @return {Promise}
+   * Returns the `Engine.Filter` for this Primitive
+   * @return {Engine.Filter}
    */
-  /* istanbul ignore next */
-  renderWebGL (renderer, inputTexture, outputFBO, outputTexture) {
-    renderer.runShader(null, this._fragmentShader, {
-      inputTexture,
-      outputFBO,
-      outputTexture,
-      switchBuffer: false
-    })
+  getFilter () {
+    if (!this._filter) {
+      this._filter = new X400Filter()
+    }
+    return this._filter
   }
 
   /**

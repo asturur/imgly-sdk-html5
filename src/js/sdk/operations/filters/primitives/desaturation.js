@@ -8,8 +8,22 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Engine from '../../../engine/'
 import Utils from '../../../lib/utils'
 import Primitive from './primitive'
+
+class DesaturationFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../../../shaders/primitives/desaturation.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_desaturation: {
+        type: 'f',
+        value: 1
+      }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * Desaturation primitive
@@ -22,36 +36,20 @@ class Desaturation extends Primitive {
     super(...args)
 
     this._options = Utils.defaults(this._options, {
-      desaturation: 1.0
+      desaturation: 1
     })
-
-    /**
-     * The fragment shader for this primitive
-     * @return {String}
-     * @private
-     */
-    this._fragmentShader = require('raw!../../../shaders/primitives/desaturation.frag')
   }
 
   /**
-   * Renders the primitive (WebGL)
-   * @param  {WebGLRenderer} renderer
-   * @param  {WebGLTexture} inputTexture
-   * @param  {WebGLFramebuffer} outputFBO
-   * @param  {WebGLTexture} outputTexture
-   * @return {Promise}
+   * Returns the `Engine.Filter` for this Primitive
+   * @return {Engine.Filter}
    */
-  /* istanbul ignore next */
-  renderWebGL (renderer, inputTexture, outputFBO, outputTexture) {
-    renderer.runShader(null, this._fragmentShader, {
-      inputTexture,
-      outputFBO,
-      outputTexture,
-      switchBuffer: false,
-      uniforms: {
-        u_desaturation: { type: 'f', value: this._options.desaturation }
-      }
-    })
+  getFilter () {
+    if (!this._filter) {
+      this._filter = new DesaturationFilter()
+    }
+    this._filter.setUniform('u_desaturation', this._options.desaturation)
+    return this._filter
   }
 
   /**
