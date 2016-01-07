@@ -56,6 +56,7 @@ class PrimitivesStack {
 
       const tempFilters = outputSprite.getFilters()
 
+      this._stack.forEach((primitive) => primitive.update(renderer))
       const newFilters = this._stack.map((primitive) => primitive.getFilter())
       outputSprite.setFilters(newFilters)
 
@@ -67,60 +68,18 @@ class PrimitivesStack {
 
     this._dirty = false
     return Promise.resolve()
-    // if (!this._fbosAvailable) this._createFramebuffers(renderer)
-    //
-    // if (this._dirty) {
-    //   this._resizeAllTextures(renderer)
-    //   let inputTexture = renderer.getLastTexture()
-    //   let texture, fbo
-    //   for (var i = 0; i < this._stack.length; i++) {
-    //     texture = this._getCurrentTexture()
-    //     fbo = this._getCurrentFramebuffer()
-    //
-    //     var primitive = this._stack[i]
-    //     primitive.render(renderer, inputTexture, fbo, texture)
-    //     inputTexture = texture
-    //     this._lastTexture = texture
-    //     this._bufferIndex++
-    //   }
-    //   this._dirty = false
-    // }
-    //
-    // const gl = renderer.getContext()
-    // gl.activeTexture(gl.TEXTURE1)
-    // gl.bindTexture(gl.TEXTURE_2D, this._lastTexture)
-    // gl.activeTexture(gl.TEXTURE0)
-    //
-    // if (!this._glslPrograms[renderer.id]) {
-    //   this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-    //     null,
-    //     this._blendFragmentShader
-    //   )
-    // }
-    //
-    // renderer.runProgram(this._glslPrograms[renderer.id], {
-    //   uniforms: {
-    //     u_intensity: { type: 'f', value: this._intensity },
-    //     u_filteredImage: { type: 'i', value: 1 }
-    //   }
-    // })
-    //
-    // return Promise.resolve()
   }
 
+  /**
+   * Creates and returns a render texture
+   * @param  {Renderer} renderer
+   * @return {RenderTexture}
+   */
   _getRenderTexture (renderer) {
     if (!this._renderTexture) {
       this._renderTexture = renderer.createRenderTexture()
     }
     return this._renderTexture
-  }
-
-  _getCurrentTexture () {
-    return this._textures[this._bufferIndex % this._textures.length]
-  }
-
-  _getCurrentFramebuffer () {
-    return this._framebuffers[this._bufferIndex % this._framebuffers.length]
   }
 
   renderCanvas (renderer) {

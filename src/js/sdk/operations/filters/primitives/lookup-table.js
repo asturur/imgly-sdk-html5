@@ -8,7 +8,24 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+const TEXTURE_GL_UNIT = 3
+
+import Engine from '../../../engine/'
+import Utils from '../../../lib/utils'
 import Primitive from './primitive'
+
+class LookupTableFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../../../shaders/primitives/lookup-table.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_lookupTable: {
+        type: 'i',
+        value: TEXTURE_GL_UNIT
+      }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * Stores a 256 byte long lookup table in a 2d texture which will be
@@ -21,37 +38,25 @@ class LookupTable extends Primitive {
   constructor (...args) {
     super(...args)
 
-    this._textureIndex = 3
-
-    /**
-     * The fragment shader for this primitive
-     * @return {String}
-     * @private
-     */
-    this._fragmentShader = require('raw!../../../shaders/primitives/lookup-table.frag')
+    this._textures = []
   }
 
   /**
-   * Renders the primitive (WebGL)
-   * @param  {WebGLRenderer} renderer
-   * @param  {WebGLTexture} inputTexture
-   * @param  {WebGLFramebuffer} outputFBO
-   * @param  {WebGLTexture} outputTexture
-   * @return {Promise}
+   * Returns the `Engine.Filter` for this Primitive
+   * @return {Engine.Filter}
    */
-  /* istanbul ignore next */
-  renderWebGL (renderer, inputTexture, outputFBO, outputTexture) {
-    this._updateTexture(renderer)
+  getFilter () {
+    if (!this._filter) {
+      this._filter = new LookupTableFilter()
+    }
+    return this._filter
+  }
 
-    renderer.runShader(null, this._fragmentShader, {
-      inputTexture,
-      outputFBO,
-      outputTexture,
-      switchBuffer: false,
-      uniforms: {
-        u_lookupTable: { type: 'i', value: 3 }
-      }
-    })
+  /**
+   * Gets called before this primitive's filter is being applied
+   */
+  update (renderer) {
+    this._updateTexture(renderer)
   }
 
   /**
@@ -83,31 +88,28 @@ class LookupTable extends Primitive {
 
   /**
    * Updates the lookup table texture (WebGL only)
+   * @param {SDK} sdk
    * @private
    */
   /* istanbul ignore next */
-  _updateTexture (renderer) {
-    var gl = renderer.getContext()
-
+  _updateTexture (sdk) {
     if (typeof this._options.data === 'undefined') {
       throw new Error('LookupTable: No data specified.')
     }
 
-    var dataTypedArray = new Uint8Array(this._options.data)
+    const data = new Uint8Array(this._options.data)
 
-    gl.activeTexture(gl.TEXTURE0 + this._textureIndex)
-    if (!this._texture) {
-      this._texture = gl.createTexture()
+    const renderer = sdk.getRenderer()
+    const { id } = renderer
+    if (!this._textures[id]) {
+      this._textures[id] = new Engine.BaseTexture()
     }
-    gl.bindTexture(gl.TEXTURE_2D, this._texture)
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    const texture = this._textures[id]
+    texture.setSource(data)
+    texture.setGLUnit(TEXTURE_GL_UNIT)
 
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, dataTypedArray)
-    gl.activeTexture(gl.TEXTURE0)
+    renderer.updateTexture(texture)
   }
 }
 

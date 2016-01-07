@@ -31,6 +31,13 @@ class Primitive {
   }
 
   /**
+   * Gets called before this primitive's filter is being applied
+   */
+  update () {
+
+  }
+
+  /**
    * Renders the primitive
    * @param  {Renderer} renderer
    * @param  {WebGLTexture} inputTexture
