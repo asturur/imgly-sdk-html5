@@ -10,6 +10,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Engine from '../engine/'
 import Utils from '../lib/utils'
 import Vector2 from '../lib/math/vector2'
 import Configurable from '../lib/configurable'
@@ -55,7 +56,7 @@ class Operation extends Configurable {
     }
 
     let renderFn
-    if (renderer.identifier === 'webgl') {
+    if (renderer.getRenderer() instanceof Engine.WebGLRenderer) {
       /* istanbul ignore next */
       renderFn = this._renderWebGL.bind(this)
     } else {
@@ -66,7 +67,7 @@ class Operation extends Configurable {
     if (this._dirty) {
       return renderFn(renderer)
         .then(() => {
-          renderer.cache(this._uuid)
+          // renderer.cache(this._uuid)
           this._dirty = false
         })
     } else {

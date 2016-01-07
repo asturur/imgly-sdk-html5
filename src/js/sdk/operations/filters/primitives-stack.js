@@ -8,6 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Vector2 from '../../lib/math/vector2'
+import Engine from '../../engine/'
 import Promise from '../../vendor/promise'
 
 /**
@@ -16,36 +18,18 @@ import Promise from '../../vendor/promise'
  * @class
  * @alias PhotoEditorSDK.Filter.PrimitivesStack
  */
+
+/**
+ * @TODO
+ * Add a dirtiness hash for each renderer, have a RenderTexture for each renderer
+ * to make this Stack renderer independent.
+ */
 class PrimitivesStack {
   constructor (intensity = 1) {
     this._intensity = intensity
 
     this._stack = []
-
-    this._glslPrograms = {}
     this._dirty = true
-    this._bufferIndex = 0
-    this._textures = []
-    this._framebuffers = []
-    this._fbosAvailable = false
-
-    this._blendFragmentShader = require('raw!../../shaders/generic/blend.frag')
-  }
-
-  /**
-   * Creates two textures and framebuffers that are used for the stack
-   * rendering
-   * @param {WebGLRenderer} renderer
-   * @private
-   */
-  /* istanbul ignore next */
-  _createFramebuffers (renderer) {
-    for (var i = 0; i < 2; i++) {
-      let { fbo, texture } = renderer.createFramebuffer()
-      this._textures.push(texture)
-      this._framebuffers.push(fbo)
-    }
-    this._fbosAvailable = true
   }
 
   /**
@@ -56,52 +40,79 @@ class PrimitivesStack {
     this._stack.push(primitive)
   }
 
-  _resizeAllTextures (renderer) {
-    this._textures.forEach((texture) => {
-      renderer.resizeTexture(texture)
-    })
+  renderWebGL (renderer) {
+    if (this._stack.length === 0) return Promise.resolve()
+
+    const outputSprite = renderer.getSprite()
+    const renderTexture = this._getRenderTexture(renderer)
+
+    if (!this._dirty) {
+      outputSprite.setTexture(renderTexture)
+      return Promise.resolve()
+    } else {
+      const spriteBounds = outputSprite.getBounds()
+      const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+      renderTexture.resizeTo(spriteDimensions)
+
+      const tempFilters = outputSprite.getFilters()
+
+      const newFilters = this._stack.map((primitive) => primitive.getFilter())
+      outputSprite.setFilters(newFilters)
+
+      renderTexture.render(outputSprite)
+
+      outputSprite.setFilters(tempFilters)
+      outputSprite.setTexture(renderTexture)
+    }
+
+    this._dirty = false
+    return Promise.resolve()
+    // if (!this._fbosAvailable) this._createFramebuffers(renderer)
+    //
+    // if (this._dirty) {
+    //   this._resizeAllTextures(renderer)
+    //   let inputTexture = renderer.getLastTexture()
+    //   let texture, fbo
+    //   for (var i = 0; i < this._stack.length; i++) {
+    //     texture = this._getCurrentTexture()
+    //     fbo = this._getCurrentFramebuffer()
+    //
+    //     var primitive = this._stack[i]
+    //     primitive.render(renderer, inputTexture, fbo, texture)
+    //     inputTexture = texture
+    //     this._lastTexture = texture
+    //     this._bufferIndex++
+    //   }
+    //   this._dirty = false
+    // }
+    //
+    // const gl = renderer.getContext()
+    // gl.activeTexture(gl.TEXTURE1)
+    // gl.bindTexture(gl.TEXTURE_2D, this._lastTexture)
+    // gl.activeTexture(gl.TEXTURE0)
+    //
+    // if (!this._glslPrograms[renderer.id]) {
+    //   this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
+    //     null,
+    //     this._blendFragmentShader
+    //   )
+    // }
+    //
+    // renderer.runProgram(this._glslPrograms[renderer.id], {
+    //   uniforms: {
+    //     u_intensity: { type: 'f', value: this._intensity },
+    //     u_filteredImage: { type: 'i', value: 1 }
+    //   }
+    // })
+    //
+    // return Promise.resolve()
   }
 
-  renderWebGL (renderer) {
-    if (!this._fbosAvailable) this._createFramebuffers(renderer)
-
-    if (this._dirty) {
-      this._resizeAllTextures(renderer)
-      let inputTexture = renderer.getLastTexture()
-      let texture, fbo
-      for (var i = 0; i < this._stack.length; i++) {
-        texture = this._getCurrentTexture()
-        fbo = this._getCurrentFramebuffer()
-
-        var primitive = this._stack[i]
-        primitive.render(renderer, inputTexture, fbo, texture)
-        inputTexture = texture
-        this._lastTexture = texture
-        this._bufferIndex++
-      }
-      this._dirty = false
+  _getRenderTexture (renderer) {
+    if (!this._renderTexture) {
+      this._renderTexture = renderer.createRenderTexture()
     }
-
-    const gl = renderer.getContext()
-    gl.activeTexture(gl.TEXTURE1)
-    gl.bindTexture(gl.TEXTURE_2D, this._lastTexture)
-    gl.activeTexture(gl.TEXTURE0)
-
-    if (!this._glslPrograms[renderer.id]) {
-      this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-        null,
-        this._blendFragmentShader
-      )
-    }
-
-    renderer.runProgram(this._glslPrograms[renderer.id], {
-      uniforms: {
-        u_intensity: { type: 'f', value: this._intensity },
-        u_filteredImage: { type: 'i', value: 1 }
-      }
-    })
-
-    return Promise.resolve()
+    return this._renderTexture
   }
 
   _getCurrentTexture () {
@@ -141,7 +152,7 @@ class PrimitivesStack {
    * @param  {Renderer} renderer
    */
   render (renderer) {
-    if (renderer.identifier === 'webgl') {
+    if (renderer.getRenderer() instanceof Engine.WebGLRenderer) {
       return this.renderWebGL(renderer)
     } else {
       return this.renderCanvas(renderer)

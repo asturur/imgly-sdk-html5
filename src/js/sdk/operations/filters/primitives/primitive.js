@@ -23,6 +23,14 @@ class Primitive {
   }
 
   /**
+   * Returns the `Engine.Filter` for this Primitive
+   * @return {Engine.Filter}
+   */
+  getFilter () {
+    throw new Error('Primitive#getFilter is abstract and not implemented in inherited class.')
+  }
+
+  /**
    * Renders the primitive
    * @param  {Renderer} renderer
    * @param  {WebGLTexture} inputTexture

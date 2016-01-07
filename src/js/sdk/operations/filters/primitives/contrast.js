@@ -8,8 +8,22 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Engine from '../../../engine/'
 import Utils from '../../../lib/utils'
 import Primitive from './primitive'
+
+class ContrastFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../../../shaders/primitives/contrast.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_contrast: {
+        type: '1f',
+        value: 1
+      }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * Contrast primitive
@@ -24,13 +38,18 @@ class Contrast extends Primitive {
     this._options = Utils.defaults(this._options, {
       contrast: 1.0
     })
+  }
 
-    /**
-     * The fragment shader for this primitive
-     * @return {String}
-     * @private
-     */
-    this._fragmentShader = require('raw!../../../shaders/primitives/contrast.frag')
+  /**
+   * Returns the `Engine.Filter` for this Primitive
+   * @return {Engine.Filter}
+   */
+  getFilter () {
+    if (!this._filter) {
+      this._filter = new ContrastFilter()
+    }
+    this._filter.setUniform('u_contrast', this._options.contrast)
+    return this._filter
   }
 
   /**

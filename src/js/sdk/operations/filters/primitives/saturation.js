@@ -8,8 +8,22 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Engine from '../../../engine/'
 import Utils from '../../../lib/utils'
 import Primitive from './primitive'
+
+class SaturationFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../../../shaders/primitives/saturation.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_saturation: {
+        type: 'f',
+        value: 0
+      }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * Saturation primitive
@@ -24,13 +38,18 @@ class Saturation extends Primitive {
     this._options = Utils.defaults(this._options, {
       saturation: 0
     })
+  }
 
-    /**
-     * The fragment shader for this primitive
-     * @return {String}
-     * @private
-     */
-    this._fragmentShader = require('raw!../../../shaders/primitives/saturation.frag')
+  /**
+   * Returns the `Engine.Filter` for this Primitive
+   * @return {Engine.Filter}
+   */
+  getFilter () {
+    if (!this._filter) {
+      this._filter = new SaturationFilter()
+    }
+    this._filter.setUniform('u_saturation', this._options.saturation)
+    return this._filter
   }
 
   /**
