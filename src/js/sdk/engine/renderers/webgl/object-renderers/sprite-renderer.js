@@ -279,6 +279,7 @@ export default class SpriteRenderer extends ObjectRenderer {
     const gl = renderer.getContext()
 
     const glTexture = renderer.getOrCreateGLTexture(baseTexture)
+    renderer.updateTexture(baseTexture)
     gl.bindTexture(gl.TEXTURE_2D, glTexture)
 
     const verticesCount = batchSize * 6

@@ -99,7 +99,7 @@ export default class WebGLRenderer extends BaseRenderer {
         console.error('gl.' + functionName + '(' +
           window.WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ')')
       }
-      // gl = window.WebGLDebugUtils.makeDebugContext(gl, null, logGL)
+      gl = window.WebGLDebugUtils.makeDebugContext(gl, null, null)
     }
 
     this.id = gl.id = WebGLRenderer.contextId++
@@ -206,39 +206,50 @@ export default class WebGLRenderer extends BaseRenderer {
   }
 
   /**
-   * Returns and/or creates a WebGLTexture for the given Texture object
-   * @param  {Texture} texture
+   * Returns and/or creates a WebGLTexture for the given BaseTexture object
+   * @param  {BaseTexture} texture
    * @return {WebGLTexture}
    */
   getOrCreateGLTexture (texture) {
     const gl = this._context
 
-    // We need a BaseTexture with a source to create a WebGLTexture out of it.
-    // RenderTextures, for example, don't have a BaseTexture
-    // if (!texture.baseTexture) {
-    //   return
-    // }
-
-    // Make sure we have a WebGLTexture for this context
     let glTexture = texture.getGLTextureForId(gl.id)
     if (!glTexture) {
       glTexture = gl.createTexture()
       texture.setGLTextureForId(glTexture, gl.id)
-
-      gl.bindTexture(gl.TEXTURE_2D, glTexture)
-
-      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.getSource())
-
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-    } else {
-      gl.bindTexture(gl.TEXTURE_2D, glTexture)
     }
 
     return glTexture
+  }
+
+  /**
+   * Updates the given texture
+   * @param  {BaseTexture} texture
+   */
+  updateTexture (texture) {
+    const source = texture.getSource()
+    if (!source) return
+
+    const gl = this._context
+    const glUnit = texture.getGLUnit()
+    const glTexture = this.getOrCreateGLTexture(texture)
+
+    gl.activeTexture(gl.TEXTURE0 + glUnit)
+    gl.bindTexture(gl.TEXTURE_2D, glTexture)
+
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
+
+    if (source instanceof Uint8Array) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, source)
+    } else {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source)
+    }
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+    gl.activeTexture(gl.TEXTURE0)
   }
 
   getCurrentRenderTarget () { return this._currentRenderTarget }
