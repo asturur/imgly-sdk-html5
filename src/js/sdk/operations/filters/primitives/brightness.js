@@ -8,8 +8,22 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Engine from '../../../engine/'
 import Utils from '../../../lib/utils'
 import Primitive from './primitive'
+
+class BrightnessFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../../../shaders/primitives/brightness.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_brightness: {
+        type: 'f',
+        value: 1.0
+      }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * Brightness primitive
@@ -24,41 +38,18 @@ class Brightness extends Primitive {
     this._options = Utils.defaults(this._options, {
       brightness: 1.0
     })
-
-    /**
-     * The fragment shader for this primitive
-     * @return {String}
-     * @private
-     */
-    this._fragmentShader = require('raw!../../../shaders/primitives/brightness.frag')
   }
 
   /**
-   * Renders the primitive (WebGL)
-   * @param  {WebGLRenderer} renderer
-   * @param  {WebGLTexture} inputTexture
-   * @param  {WebGLFramebuffer} outputFBO
-   * @param  {WebGLTexture} outputTexture
-   * @return {Promise}
+   * Returns the `Engine.Filter` for this Primitive
+   * @return {Engine.Filter}
    */
-  /* istanbul ignore next */
-  renderWebGL (renderer, inputTexture, outputFBO, outputTexture) {
-    if (!this._glslPrograms[renderer.id]) {
-      this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-        null,
-        this._fragmentShader
-      )
+  getFilter () {
+    if (!this._filter) {
+      this._filter = new BrightnessFilter()
     }
-
-    renderer.runProgram(this._glslPrograms[renderer.id], {
-      inputTexture,
-      outputFBO,
-      outputTexture,
-      switchBuffer: false,
-      uniforms: {
-        u_brightness: { type: 'f', value: this._options.brightness }
-      }
-    })
+    this._filter.setUniform('u_brightness', this._options.brightness)
+    return this._filter
   }
 
   /**
