@@ -12,7 +12,7 @@ import { RenderType, ImageFormat } from './constants'
 
 let PhotoEditorSDK = {}
 
-PhotoEditorSDK.Rendering = require('./rendering')
+PhotoEditorSDK.Engine = require('./engine')
 PhotoEditorSDK.Renderer = require('./lib/renderer')
 
 /**
@@ -26,8 +26,6 @@ PhotoEditorSDK.version = require('../../../package.json').version
 PhotoEditorSDK.Color = require('./lib/color')
 PhotoEditorSDK.Filter = require('./operations/filters/filter')
 PhotoEditorSDK.Operation = require('./operations/operation')
-PhotoEditorSDK.WebGLRenderer = require('./renderers/webgl-renderer')
-PhotoEditorSDK.CanvasRenderer = require('./renderers/canvas-renderer')
 PhotoEditorSDK.Vector2 = require('./lib/math/vector2')
 PhotoEditorSDK.Matrix = require('./lib/math/matrix')
 PhotoEditorSDK.Rectangle = require('./lib/math/rectangle')
@@ -35,10 +33,8 @@ PhotoEditorSDK.EventEmitter = require('./lib/event-emitter')
 PhotoEditorSDK.Utils = require('./lib/utils')
 PhotoEditorSDK.OperationsStack = require('./lib/operations-stack')
 PhotoEditorSDK.EXIF = require('./lib/exif')
-
 PhotoEditorSDK.Operations = require('./operations/')
 PhotoEditorSDK.Filters = require('./operations/filters/')
-
 PhotoEditorSDK.Promise = require('./vendor/promise')
 
 // Exposed constants

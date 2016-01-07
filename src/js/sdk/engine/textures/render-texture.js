@@ -55,6 +55,20 @@ export default class RenderTexture extends Texture {
   }
 
   /**
+   * Resizes this RenderTexture to the given dimensions
+   * @param  {Vector2} dimensions
+   */
+  resizeTo (dimensions) {
+    if (this._width === dimensions.x && this._height === dimensions.y) return
+
+    this._width = dimensions.x
+    this._height = dimensions.y
+
+    this._baseTexture.resizeTo(dimensions)
+    this._buffer.resizeTo(dimensions)
+  }
+
+  /**
    * Renders the given DisplayObject
    * @param  {DisplayObject} displayObject
    */

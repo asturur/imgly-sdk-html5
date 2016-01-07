@@ -184,9 +184,13 @@ export default class Shader {
    * Sets the given uniform to the given value
    * @param {String} name
    * @param {*} value
+   * @param {Boolean} sync = false
    */
-  setUniform (name, value) {
+  setUniform (name, value, sync = false) {
     this._uniforms[name].value = value
+    if (sync) {
+      this.syncUniform(name)
+    }
   }
 
   getUniforms () { return this._uniforms }

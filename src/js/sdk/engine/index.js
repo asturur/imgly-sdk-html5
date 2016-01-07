@@ -20,7 +20,7 @@ import Shaders from './shaders/'
 import Shader from './shaders/shader'
 import Filter from './filters/filter'
 
-window.PhotoEditorRendering = {
+export default {
   WebGLRenderer,
   CanvasRenderer,
   DisplayObject,

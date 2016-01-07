@@ -62,7 +62,13 @@ export default class Sprite extends Container {
 
   }
 
+  /**
+   * Sets the texture to the given texture
+   * @param {Texture} texture
+   */
   setTexture (texture) {
+    if (!texture) return
+
     this._texture = texture
     if (texture.getBaseTexture().isLoaded()) {
       this._onTextureUpdate()

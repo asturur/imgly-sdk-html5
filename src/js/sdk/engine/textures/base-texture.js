@@ -29,6 +29,15 @@ export default class BaseTexture extends EventEmitter {
   }
 
   /**
+   * Resizes this BaseTexture to the given dimensions
+   * @param  {Vector2} dimensions
+   */
+  resizeTo (dimensions) {
+    this._frame.width = dimensions.x
+    this._frame.height = dimensions.y
+  }
+
+  /**
    * Loads the source
    * @private
    */

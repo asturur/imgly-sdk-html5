@@ -21,6 +21,35 @@ export default class Filter {
   }
 
   /**
+   * Sets the given uniform to the given value
+   * @param {String} name
+   * @param {*} value
+   * @param {Boolean} sync = false
+   */
+  setUniform (name, value, sync = false) {
+    this._uniforms[name].value = value
+  }
+
+  /**
+   * Synchronizes the uniform with the given name
+   * @param  {String} name
+   */
+  syncUniform (name) {
+    this._shaders.forEach((shader) => {
+      shader.syncUniform(name)
+    })
+  }
+
+  /**
+   * Synchronizes all uniforms with WebGL
+   */
+  syncUniforms () {
+    this._shaders.forEach((shader) => {
+      shader.syncUniforms()
+    })
+  }
+
+  /**
    * Returns the shader for the given renderer
    * @param  {WebGLRenderer} renderer
    * @return {Shader}
@@ -64,7 +93,7 @@ export default class Filter {
 
     const projectionMatrix = renderer.getCurrentRenderTarget().getProjectionMatrix().toArray()
     shader.setUniform('u_projMatrix', projectionMatrix)
-    shader.syncUniform('u_projMatrix')
+    shader.syncUniforms()
 
     // Render!
     gl.activeTexture(gl.TEXTURE0)

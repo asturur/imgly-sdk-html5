@@ -11,6 +11,7 @@
 import Matrix from '../lib/math/matrix'
 import Rectangle from '../lib/math/rectangle'
 import Vector2 from '../lib/math/vector2'
+import EventEmitter from '../lib/event-emitter'
 
 let Globals = {}
 
@@ -21,5 +22,6 @@ Globals.VERTEX_BYTE_SIZE = Globals.VERTEX_SIZE * 4
 Globals.Matrix = Matrix
 Globals.Vector2 = Vector2
 Globals.Rectangle = Rectangle
+Globals.EventEmitter = EventEmitter
 
 export default Globals
