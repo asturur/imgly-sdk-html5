@@ -129,45 +129,13 @@ export default class SpriteRenderer extends ObjectRenderer {
 
     // Transform sprite coords with anchor in mind
     const anchor = sprite.getAnchor()
+    const rectPositions = worldTransform.rectangleToCoordinates(textureFrame, anchor)
 
-    // Anchor offsets (w0 = right, w1 = left, h0 = up, h1 = down)
-    const w0 = textureFrame.width * (1 - anchor.x)
-    const w1 = textureFrame.width * -anchor.x
-    const h0 = textureFrame.height * (1 - anchor.y)
-    const h1 = textureFrame.height * -anchor.y
-
-    // Add vertex coordinates
-    // Bottom Left (X/Y)
-    positions[index] = worldTransform.a * w1 +
-      worldTransform.c * h1 +
-      worldTransform.tx
-    positions[index + 1] = worldTransform.d * h1 +
-      worldTransform.b * w1 +
-      worldTransform.ty
-
-    // Bottom Right (X/Y)
-    positions[index + 5] = worldTransform.a * w0 +
-      worldTransform.c * h1 +
-      worldTransform.tx
-    positions[index + 6] = worldTransform.d * h1 +
-      worldTransform.b * w0 +
-      worldTransform.ty
-
-    // Top Right (X/Y)
-    positions[index + 10] = worldTransform.a * w0 +
-      worldTransform.c * h0 +
-      worldTransform.tx
-    positions[index + 11] = worldTransform.d * h0 +
-      worldTransform.b * w0 +
-      worldTransform.ty
-
-    // Top Left (X/Y)
-    positions[index + 15] = worldTransform.a * w1 +
-      worldTransform.c * h0 +
-      worldTransform.tx
-    positions[index + 16] = worldTransform.d * h0 +
-      worldTransform.b * w1 +
-      worldTransform.ty
+    const stride = 5
+    for (var i = 0; i < 4; i++) {
+      positions[index + i * stride] = rectPositions[i].x
+      positions[index + i * stride + 1] = rectPositions[i].y
+    }
   }
 
   /**

@@ -8,6 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Vector2 from './vector2'
+
 /**
  * Represents a 3-dimensional matrix
  * @class
@@ -40,6 +42,48 @@ export default class Matrix {
     this.tx = tx
     this.ty = ty
     return this
+  }
+
+  /**
+   * Turns the given rectangle into vector coordinates by applying this Matrix
+   * @param  {Rectangle}  rectangle
+   * @param  {Vector2} anchor
+   * @return {Array.<Vector2>}
+   */
+  rectangleToCoordinates (rectangle, anchor = new Vector2(0, 0)) {
+    // Anchor offsets (w0 = right, w1 = left, h0 = up, h1 = down)
+    const w0 = rectangle.width * (1 - anchor.x)
+    const w1 = rectangle.width * -anchor.x
+    const h0 = rectangle.height * (1 - anchor.y)
+    const h1 = rectangle.height * -anchor.y
+
+    let positions = []
+
+    // Bottom Left
+    positions.push(new Vector2(
+      this.a * w1 + this.c * h1 + this.tx,
+      this.d * h1 + this.b * w1 + this.ty
+    ))
+
+    // Bottom Right
+    positions.push(new Vector2(
+      this.a * w0 + this.c * h1 + this.tx,
+      this.d * h1 + this.b * w0 + this.ty
+    ))
+
+    // Top Right
+    positions.push(new Vector2(
+      this.a * w0 + this.c * h0 + this.tx,
+      this.d * h0 + this.b * w0 + this.ty
+    ))
+
+    // Top Left
+    positions.push(new Vector2(
+      this.a * w1 + this.c * h0 + this.tx,
+      this.d * h0 + this.b * w1 + this.ty
+    ))
+
+    return positions
   }
 
   /**

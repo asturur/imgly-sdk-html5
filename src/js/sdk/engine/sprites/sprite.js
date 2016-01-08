@@ -47,8 +47,30 @@ export default class Sprite extends Container {
     if (this._boundsNeedUpdate) {
       const bounds = this._bounds
       const textureFrame = this._texture.getFrame()
-      bounds.width = textureFrame.width
-      bounds.height = textureFrame.height
+
+      // @TODO Optimize this (if necessary). We could skip matrix application
+      //       when there's no rotation
+      const worldTransform = this._worldTransform
+      const anchor = this._anchor
+      const positions = worldTransform.rectangleToCoordinates(textureFrame, anchor)
+
+      let minX = positions[0].x
+      let minY = positions[0].y
+      let maxX = minX
+      let maxY = minY
+
+      positions.forEach(({x, y}) => {
+        minX = Math.min(minX, x)
+        minY = Math.min(minY, y)
+        maxX = Math.max(maxX, x)
+        maxY = Math.max(maxY, y)
+      })
+
+      bounds.x = minX
+      bounds.width = maxX - minX
+      bounds.y = minY
+      bounds.height = maxY - minY
+
       this._boundsNeedUpdate = false
     }
     return this._bounds
