@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2, Matrix } from '../globals'
+import { Color, Vector2, Matrix } from '../globals'
 
 export default class RenderTarget {
   constructor (renderer, width, height, pixelRatio, isRoot = false) {
@@ -85,11 +85,11 @@ export default class RenderTarget {
   /**
    * Clears the framebuffer
    */
-  clear () {
+  clear (color = Color.TRANSPARENT) {
     const gl = this._gl
     gl.bindFramebuffer(gl.FRAMEBUFFER, this._framebuffer)
 
-    gl.clearColor(0, 0, 0, 1)
+    gl.clearColor(color.r, color.g, color.b, color.a)
     gl.clear(gl.COLOR_BUFFER_BIT)
   }
 

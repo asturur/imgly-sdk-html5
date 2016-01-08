@@ -204,6 +204,7 @@ class Color {
 
   static get TRANSPARENT () { return new Color(0, 0, 0, 0) }
   static get WHITE () { return new Color(1, 1, 1, 1) }
+  static get BLACK () { return new Color(0, 0, 0, 1) }
 }
 
 export default Color

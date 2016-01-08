@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2 } from '../../globals'
+import { Color, Vector2 } from '../../globals'
 import BaseRenderer from '../base-renderer'
 import RenderTarget from '../../utils/render-target'
 import ObjectRenderer from './object-renderers/object-renderer'
@@ -120,6 +120,7 @@ export default class WebGLRenderer extends BaseRenderer {
     gl.disable(gl.DEPTH_TEST)
     gl.disable(gl.CULL_FACE)
     gl.enable(gl.BLEND)
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
 
     this._defaultRenderTarget = new RenderTarget(this,
       this._width,
@@ -166,7 +167,7 @@ export default class WebGLRenderer extends BaseRenderer {
    */
   render (displayObject) {
     this.setRenderTarget(this._defaultRenderTarget)
-    this._defaultRenderTarget.clear()
+    this._defaultRenderTarget.clear(Color.BLACK)
 
     // Since the given displayObject is the "root" object
     // right now, we need to give it a dummy / fake object

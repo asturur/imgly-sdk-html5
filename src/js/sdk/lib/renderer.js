@@ -42,7 +42,11 @@ export default class Renderer extends EventEmitter {
     this.setOperationsStack(new OperationsStack())
 
     // Engine stuff
+    this._container = new Engine.Container()
     this._sprite = new Engine.Sprite()
+    this._sprite.setAnchor(0.5, 0.5)
+    this._container.addChild(this._sprite)
+
     this._inputBaseTexture = null
     this._inputTexture = null
 
@@ -52,6 +56,8 @@ export default class Renderer extends EventEmitter {
 
   render () {
     if (!this._renderer) this._initRenderer()
+
+    this._sprite.setPosition(this._renderer.getWidth() / 2, this._renderer.getHeight() / 2)
 
     const stack = this._operationsStack
     stack.updateDirtiness()
@@ -66,7 +72,7 @@ export default class Renderer extends EventEmitter {
         return stack.render(this, this._sprite)
       })
       .then(() => {
-        this._renderer.render(this._sprite)
+        this._renderer.render(this._container)
       })
   }
 

@@ -112,4 +112,6 @@ export default class RenderTexture extends Texture {
 
     this._renderer.setFilterManager(tempFilterManager)
   }
+
+  getRenderTarget () { return this._renderTarget }
 }
