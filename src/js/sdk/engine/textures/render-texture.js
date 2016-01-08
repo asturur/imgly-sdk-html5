@@ -8,11 +8,12 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Rectangle } from '../globals'
+import { Vector2, Rectangle } from '../globals'
 import Texture from './texture'
 import BaseTexture from './base-texture'
 import WebGLRenderer from '../renderers/webgl/webgl-renderer'
 import RenderTarget from '../utils/render-target'
+import FilterManager from '../managers/filter-manager'
 
 export default class RenderTexture extends Texture {
   constructor (renderer, width = 100, height = 100, resolution = 1) {
@@ -28,8 +29,18 @@ export default class RenderTexture extends Texture {
     this._resolution = resolution
     this._renderer = renderer
 
+    this._setupFilterManager()
     this._setupBuffer()
     this._updateUVs()
+  }
+
+  /**
+   * Sets up the filter manager
+   * @private
+   */
+  _setupFilterManager () {
+    this._filterManager = new FilterManager(this._renderer)
+    this._filterManager.resizeTo(new Vector2(this._width, this._height))
   }
 
   /**
@@ -50,8 +61,8 @@ export default class RenderTexture extends Texture {
    * @private
    */
   _setupWebGLBuffer () {
-    this._buffer = new RenderTarget(this._renderer, this._width, this._height, this._resolution)
-    this._baseTexture.setGLTextureForId(this._buffer.getTexture(), this._renderer.getContext().id)
+    this._renderTarget = new RenderTarget(this._renderer, this._width, this._height, this._resolution)
+    this._baseTexture.setGLTextureForId(this._renderTarget.getTexture(), this._renderer.getContext().id)
   }
 
   /**
@@ -65,7 +76,8 @@ export default class RenderTexture extends Texture {
     this._height = dimensions.y
 
     this._baseTexture.resizeTo(dimensions)
-    this._buffer.resizeTo(dimensions)
+    this._renderTarget.resizeTo(dimensions)
+    this._filterManager.resizeTo(dimensions)
   }
 
   /**
@@ -86,13 +98,18 @@ export default class RenderTexture extends Texture {
    * @private
    */
   _renderWebGL (displayObject) {
-    this._buffer.activate()
+    this._renderTarget.activate()
 
     displayObject.getWorldTransform().reset()
     displayObject.getChildren().forEach((child) => {
       child.updateTransform()
     })
 
-    this._renderer.renderDisplayObject(displayObject, this._buffer)
+    const tempFilterManager = this._renderer.getFilterManager()
+    this._renderer.setFilterManager(this._filterManager)
+
+    this._renderer.renderDisplayObject(displayObject, this._renderTarget)
+
+    this._renderer.setFilterManager(tempFilterManager)
   }
 }

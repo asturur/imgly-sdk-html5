@@ -32,6 +32,17 @@ export default class FilterManager {
   }
 
   /**
+   * Resizes this FilterManager and its textures to the given dimensions
+   * @param  {Vector2} dimensions
+   */
+  resizeTo (dimensions) {
+    this._textureFrame.width = dimensions.x
+    this._textureFrame.height = dimensions.y
+
+    this._textures.forEach((texture) => texture.resizeTo(dimensions))
+  }
+
+  /**
    * Sets the filter stack to the given stack
    * @param {Array.<Object>} filterStack
    */

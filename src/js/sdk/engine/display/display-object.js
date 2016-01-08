@@ -21,6 +21,7 @@ export default class DisplayObject {
     this._worldTransform = new Matrix()
     this._parent = null
     this._shaders = []
+    this._boundsNeedUpdate = true
     this._bounds = new Rectangle(0, 0, 1, 1)
   }
 
@@ -61,6 +62,8 @@ export default class DisplayObject {
     }
 
     worldTransform.multiply(parentTransform)
+
+    this._boundsNeedUpdate = true
   }
 
   // -------------------------------------------------------------------------- SHADERS

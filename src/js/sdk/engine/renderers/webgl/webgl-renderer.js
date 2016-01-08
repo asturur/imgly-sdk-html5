@@ -255,6 +255,7 @@ export default class WebGLRenderer extends BaseRenderer {
   getCurrentRenderTarget () { return this._currentRenderTarget }
   getCurrentObjectRenderer () { return this._currentObjectRenderer }
   getFilterManager () { return this._filterManager }
+  setFilterManager (filterManager) { this._filterManager = filterManager }
 }
 
 WebGLRenderer.contextId = 0

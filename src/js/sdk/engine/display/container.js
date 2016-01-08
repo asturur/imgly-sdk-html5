@@ -16,7 +16,6 @@ export default class Container extends DisplayObject {
 
     this._children = []
     this._filters = []
-    this._boundsNeedUpdate = true
   }
 
   /**
