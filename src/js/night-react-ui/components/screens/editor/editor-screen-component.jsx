@@ -265,6 +265,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _zoom (zoom, callback) {
+    const { sdk } = this.context
     const canvasComponent = this.refs.canvas
 
     let newZoom = zoom
@@ -272,6 +273,8 @@ export default class EditorScreenComponent extends ScreenComponent {
       newZoom = canvasComponent.getDefaultZoom()
       this._lastDefaultZoom = newZoom
     }
+
+    sdk.setZoom(newZoom)
 
     this._previousZoomState = SDKUtils.extend({
       zoom: this.state.zoom,

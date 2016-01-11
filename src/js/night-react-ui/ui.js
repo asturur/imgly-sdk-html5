@@ -15,51 +15,39 @@ import {
 } from './globals'
 
 import EditorComponent from './components/editor-component'
-import OverviewControlsComponent from './components/controls/overview/overview-controls-component'
 import ScrollbarComponent from './components/scrollbar-component'
 import ControlsComponent from './components/controls/controls-component'
 import Exporter from './lib/exporter'
 import ModalManager from './lib/modal-manager'
 
 export default class NightReactUI extends EventEmitter {
-  constructor (kit, options) {
+  constructor (options) {
     super()
 
     this._mediator = new EventEmitter()
-    this._kit = kit
     this._options = options
-    this._operationsMap = {}
-    this._operationsStack = this._kit.operationsStack
-
-    this._preferredOperationOrder = [
-      // First, all operations that affect the image dimensions
-      'orientation',
-      'crop',
-
-      // Then color operations (first filter, then fine-tuning)
-      'filter',
-      'contrast',
-      'brightness',
-      'saturation',
-
-      // Then post-processing
-      'radial-blur',
-      'tilt-shift',
-      'frame',
-      'sticker',
-      'text',
-      'watermark'
-    ]
-
-    this._handleRendererErrors()
     this._initOptions()
-    this._initLanguage()
-    this._initOperations()
-    this._initControls()
 
+    this._initLanguage()
+    // this._initOperations()
+    // this._initControls()
+
+    this._operationsMap = {}
     this._initWatermarkOperation()
 
     this.run()
+  }
+
+  /**
+   * Initializes the PhotoEditorSDK.Renderer instance
+   * @private
+   */
+  _initRenderer () {
+    const rendererOptions = {
+      image: this._options.image
+    }
+
+    this._renderer = new PhotoEditorSDK.Renderer(this._options.preferredRenderer, rendererOptions)
   }
 
   /**
@@ -68,10 +56,10 @@ export default class NightReactUI extends EventEmitter {
    * @param {EXIF} exif = null
    */
   setImage (image, exif = null) {
-    this._kit.reset()
-    this._kit.operationsStack.clear()
+    this._renderer.reset()
+    this._renderer.operationsStack.clear()
     this._operationsMap = {}
-    this._kit.setImage(image, exif)
+    this._renderer.setImage(image, exif)
 
     this.fixOperationsStack()
     this._initWatermarkOperation()
@@ -106,7 +94,7 @@ export default class NightReactUI extends EventEmitter {
    * @private
    */
   _handleRendererErrors () {
-    this._kit.on('error', (e) => {
+    this._renderer.on('error', (e) => {
       ModalManager.instance.displayError(
         this.translate(`errors.${e}.title`),
         this.translate(`errors.${e}.text`)
@@ -133,9 +121,7 @@ export default class NightReactUI extends EventEmitter {
   _render () {
     const component = (<EditorComponent
       ui={this}
-      kit={this._kit}
       mediator={this._mediator}
-      operationsStack={this._operationsStack}
       options={this._options} />)
 
     if (this._options.renderReturnsComponent) {
@@ -157,7 +143,7 @@ export default class NightReactUI extends EventEmitter {
     }
 
     const options = this._options.export
-    const exporter = new Exporter(this._kit, options, download)
+    const exporter = new Exporter(this._renderer, options, download)
     return exporter.export()
       .then((output) => {
         this.emit('export', output)
@@ -165,7 +151,7 @@ export default class NightReactUI extends EventEmitter {
         if (this._watermarkOperation) {
           this._watermarkOperation.setEnabled(true)
         }
-        this._kit.operationsStack.setAllToDirty()
+        this._renderer.operationsStack.setAllToDirty()
 
         return output
       })
@@ -174,70 +160,12 @@ export default class NightReactUI extends EventEmitter {
   // -------------------------------------------------------------------------- INITIALIZATION
 
   /**
-   * Initializes the available and enabled controls
-   * @private
-   */
-  _initOperations () {
-    this._availableOperations = this._kit.getOperations()
-    this._enabledOperations = []
-
-    let operationIdentifiers = this._options.operations
-    if (!(operationIdentifiers instanceof Array)) {
-      operationIdentifiers = operationIdentifiers
-        .replace(/\s+?/ig, '')
-        .split(',')
-    }
-
-    for (let identifier in this._availableOperations) {
-      if (this._options.operations === 'all' ||
-          operationIdentifiers.indexOf(identifier) !== -1) {
-        this._enabledOperations.push(identifier)
-      }
-    }
-  }
-
-  /**
-   * Initializes the available and enabled controls
-   * @private
-   */
-  _initControls () {
-    this._overviewControls = OverviewControlsComponent
-    this._availableControls = SDKUtils.extend({
-      filters: require('./components/controls/filters/'),
-      orientation: require('./components/controls/orientation/'),
-      adjustments: require('./components/controls/adjustments/'),
-      crop: require('./components/controls/crop/'),
-      focus: require('./components/controls/focus/'),
-      frame: require('./components/controls/frame/'),
-      stickers: require('./components/controls/stickers/'),
-      text: require('./components/controls/text/')
-    }, this._options.additionalControls)
-
-    this._enabledControls = []
-    for (let identifier in this._availableControls) {
-      const controls = this._availableControls[identifier]
-      if (!controls.isSelectable || controls.isSelectable(this)) {
-        this._enabledControls.push(controls)
-      }
-    }
-
-    this._enabledControls.sort((a, b) => {
-      let sortA = this._options.controlsOrder.indexOf(a.identifier)
-      let sortB = this._options.controlsOrder.indexOf(b.identifier)
-      if (sortA === -1) return 1
-      if (sortB === -1) return -1
-      if (sortA < sortB) return -1
-      if (sortA > sortB) return 1
-      return 0
-    })
-  }
-
-  /**
    * Initializes the default options
    * @private
    */
   _initOptions () {
     this._options = SDKUtils.defaults(this._options, {
+      preferredRenderer: 'webgl',
       language: 'en',
       operations: 'all',
       title: 'PhotoEditor SDK',
@@ -245,9 +173,27 @@ export default class NightReactUI extends EventEmitter {
       responsive: false,
       webcam: true,
       assets: {},
-      extensions: {},
       controlsOrder: [
         'filters', 'orientation', 'adjustments', 'crop', 'focus', 'frame', 'sticker', 'text'
+      ],
+      operationsOrder: [
+        // First, all operations that affect the image dimensions
+        'orientation',
+        'crop',
+
+        // Then color operations (first filter, then fine-tuning)
+        'filter',
+        'contrast',
+        'brightness',
+        'saturation',
+
+        // Then post-processing
+        'radial-blur',
+        'tilt-shift',
+        'frame',
+        'sticker',
+        'text',
+        'watermark'
       ],
       controlsOptions: {},
       showNewButton: true
@@ -260,6 +206,7 @@ export default class NightReactUI extends EventEmitter {
       })
     }
 
+    // @TODO Move `additionalControls` to `extensions.controls`
     this._options.extensions = SDKUtils.defaults(this._options.extensions || {}, {
       languages: [],
       operations: [],
@@ -351,7 +298,7 @@ export default class NightReactUI extends EventEmitter {
       return this._operationsMap[identifier]
     } else {
       const Operation = this._availableOperations[identifier]
-      const operation = new Operation(this._kit, options)
+      const operation = new Operation(this._renderer, options)
       this.addOperation(operation)
       return operation
     }
@@ -408,33 +355,14 @@ export default class NightReactUI extends EventEmitter {
     return this._operationsMap[identifier]
   }
 
-  /**
-   * Checks whether an operation with the given identifier exists
-   * @param {String} identifier
-   * @return {Boolean}
-   */
-  operationExists (identifier) {
-    return !!this._operationsMap[identifier]
-  }
-
-  /**
-   * Checks whether the operation with the given identifier is enabled
-   * @param  {String}  name
-   * @return {Boolean}
-   */
-  isOperationEnabled (name) {
-    return this._enabledOperations.indexOf(name) !== -1
-  }
-
   getEnabledOperations () { return this._enabledOperations }
-  getEnabledControls () { return this._enabledControls }
   getAvailableControls () { return this._availableControls }
 
   /**
    * Checks whether the kit has an image
    * @return {Boolean}
    */
-  hasImage () { return this._kit.hasImage() }
+  hasImage () { return this._renderer.hasImage() }
 
   /**
    * Returns the resolved asset path for the given asset name
@@ -479,11 +407,11 @@ NightReactUI.Component = class extends React.Component {
   constructor (...args) {
     super(...args)
 
-    this._kit = new PhotoEditorSDK.Renderer('webgl', {
+    this._renderer = new PhotoEditorSDK.Renderer('webgl', {
       image: this.props.image
     })
 
-    this._ui = new NightReactUI(this._kit, this.props)
+    this._ui = new NightReactUI(this._renderer, this.props)
   }
 
   /**

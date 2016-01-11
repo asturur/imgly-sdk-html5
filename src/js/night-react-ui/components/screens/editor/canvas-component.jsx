@@ -48,7 +48,7 @@ export default class CanvasComponent extends BaseComponent {
    */
   componentWillReceiveProps (props) {
     if (props.zoom !== this.props.zoom) {
-      this.context.kit.setAllOperationsToDirty()
+      this.context.sdk.setAllOperationsToDirty()
       this._onCanvasUpdate(props.zoom)
     }
   }
@@ -59,9 +59,13 @@ export default class CanvasComponent extends BaseComponent {
   componentDidMount () {
     super.componentDidMount()
 
-    const { kit } = this.context
+    const { sdk } = this.context
+    const renderer = sdk.getRenderer()
     const { canvas } = this.refs
-    kit.setCanvas(canvas)
+    const width = canvas.offsetWidth
+    const height = canvas.offsetHeight
+    renderer.setCanvas(canvas)
+    renderer.resizeTo(new Vector2(width, height))
 
     this._updateDimensions()
 
@@ -171,6 +175,7 @@ export default class CanvasComponent extends BaseComponent {
    * @return {Number}
    */
   getDefaultZoom (updateDimensions = false) {
+    return 0.5
     if (updateDimensions) {
       this._updateDimensions()
     }
@@ -205,30 +210,31 @@ export default class CanvasComponent extends BaseComponent {
    * @private
    */
   _onCanvasUpdate (zoom = this.props.zoom, callback) {
-    const { kit } = this.context
-
-    let rendererDimensions = kit.getInitialDimensions()
-    if (zoom !== null) {
-      rendererDimensions
-        .multiply(zoom)
-        .floor()
-    }
-    kit.setDimensions(`${rendererDimensions.x}x${rendererDimensions.y}`)
-
-    return this._renderCanvas()
-      .then(() => {
-        this._updateDimensions()
-        this._repositionCanvas()
-        this.updateOffset()
-        callback && callback()
-      })
-      .catch((e) => {
-        ModalManager.instance.displayError(
-          this._t('errors.renderingError.title'),
-          this._t('errors.renderingError.text', { error: e.message })
-        )
-        console && console.error && console.error(e)
-      })
+    const { sdk } = this.context
+    return sdk.render()
+    //
+    // let rendererDimensions = kit.getInitialDimensions()
+    // if (zoom !== null) {
+    //   rendererDimensions
+    //     .multiply(zoom)
+    //     .floor()
+    // }
+    // kit.setDimensions(`${rendererDimensions.x}x${rendererDimensions.y}`)
+    //
+    // return this._renderCanvas()
+    //   .then(() => {
+    //     this._updateDimensions()
+    //     this._repositionCanvas()
+    //     this.updateOffset()
+    //     callback && callback()
+    //   })
+    //   .catch((e) => {
+    //     ModalManager.instance.displayError(
+    //       this._t('errors.renderingError.title'),
+    //       this._t('errors.renderingError.text', { error: e.message })
+    //     )
+    //     console && console.error && console.error(e)
+    //   })
   }
 
   // -------------------------------------------------------------------------- GETTERS
@@ -341,12 +347,14 @@ export default class CanvasComponent extends BaseComponent {
       <div bem='$b:canvas e:container e:row'>
         <div bem='e:container e:cell' ref='canvasCell'>
           <div
-            bem='$e:canvas'
+            bem='e:innerContainer'
             className={this.props.dragEnabled ? 'is-draggable' : null}
             onTouchStart={this._onDragStart}
             onMouseDown={this._onDragStart}
             style={this._getDraggableStyle()}>
-            <canvas ref='canvas' />
+            <canvas
+              bem='e:canvas'
+              ref='canvas' />
             {canvasContent}
           </div>
           {containerContent}

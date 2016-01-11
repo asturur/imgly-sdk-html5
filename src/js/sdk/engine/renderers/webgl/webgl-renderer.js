@@ -1,4 +1,3 @@
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -9,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Color, Vector2 } from '../../globals'
+import { Vector2 } from '../../globals'
 import BaseRenderer from '../base-renderer'
 import RenderTarget from '../../utils/render-target'
 import ObjectRenderer from './object-renderers/object-renderer'
@@ -103,6 +102,7 @@ export default class WebGLRenderer extends BaseRenderer {
     }
 
     this.id = gl.id = WebGLRenderer.contextId++
+    this._context = gl
     gl.renderer = this
 
     this.emit('context', gl)
@@ -138,7 +138,9 @@ export default class WebGLRenderer extends BaseRenderer {
    */
   resizeTo (dimensions) {
     super.resizeTo(dimensions)
-    this._currentRenderTarget.resizeTo(dimensions)
+    if (this._currentRenderTarget) {
+      this._currentRenderTarget.resizeTo(dimensions)
+    }
   }
 
   /**

@@ -10,10 +10,9 @@
 
 import { RenderType, ImageFormat } from './constants'
 
-let PhotoEditorSDK = {}
+let PhotoEditorSDK = require('./sdk')
 
 PhotoEditorSDK.Engine = require('./engine')
-PhotoEditorSDK.Renderer = require('./lib/renderer')
 
 /**
  * The current version of the SDK
@@ -43,8 +42,5 @@ PhotoEditorSDK.ImageFormat = ImageFormat
 
 // Exposed libs
 PhotoEditorSDK.Base64 = require('./lib/base64')
-
-// Exposed helpers
-PhotoEditorSDK.extend = require('./lib/extend')
 
 export default PhotoEditorSDK

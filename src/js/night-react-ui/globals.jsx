@@ -28,9 +28,10 @@ const EventEmitter = PhotoEditorSDK.EventEmitter
 const Base64 = PhotoEditorSDK.Base64
 const RenderType = PhotoEditorSDK.RenderType
 const EXIF = PhotoEditorSDK.EXIF
+const SDK = PhotoEditorSDK
 
 export {
   Promise, Utils, React, BEM, Classnames, BaseComponent, ReactBEM, Vector2,
   SDKUtils, EventEmitter, Constants, SharedState, Color, Base64, RenderType,
-  ReactDOM, EXIF
+  ReactDOM, EXIF, SDK
 }

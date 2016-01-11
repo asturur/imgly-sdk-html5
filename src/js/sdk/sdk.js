@@ -8,13 +8,14 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import Engine from '../engine/'
-import EventEmitter from './event-emitter'
-import Utils from './utils'
-import OperationsStack from './operations-stack'
-import VersionChecker from './version-checker'
-import Operations from '../operations/'
-import Exif from './exif'
+import Engine from './engine/'
+import EventEmitter from './lib/event-emitter'
+import Utils from './lib/utils'
+import Vector2 from './lib/math/vector2'
+import OperationsStack from './lib/operations-stack'
+import VersionChecker from './lib/version-checker'
+import Operations from './operations/'
+import Exif from './lib/exif'
 // import ImageDimensions from './image-dimensions'
 // import ImageExporter from './image-exporter'
 // import Vector2 from './math/vector2'
@@ -30,12 +31,16 @@ export default class Renderer extends EventEmitter {
     this._preferredRenderer = preferredRenderer
     this._options = Utils.defaults(options, {
       additionalOperations: {},
+      renderMode: 'dynamic',
       versionCheck: true,
       image: null,
       dimensions: null,
-      canvas: null
+      canvas: null,
+      zoom: 1
     })
 
+    this._offset = new Vector2()
+    this._zoom = this._options.zoom
     this._operations = {}
     this._image = this._options.image
     this._operationsStack = null
@@ -44,7 +49,6 @@ export default class Renderer extends EventEmitter {
     // Engine stuff
     this._container = new Engine.Container()
     this._sprite = new Engine.Sprite()
-    this._sprite.setAnchor(0.5, 0.5)
     this._container.addChild(this._sprite)
 
     this._inputBaseTexture = null
@@ -57,7 +61,9 @@ export default class Renderer extends EventEmitter {
   render () {
     if (!this._renderer) this._initRenderer()
 
-    this._sprite.setPosition(this._renderer.getWidth() / 2, this._renderer.getHeight() / 2)
+    this._sprite.setAnchor(0, 0)
+    this._sprite.setPosition(0, 0)
+    this._sprite.setScale(1, 1)
 
     const stack = this._operationsStack
     stack.updateDirtiness()
@@ -72,8 +78,19 @@ export default class Renderer extends EventEmitter {
         return stack.render(this, this._sprite)
       })
       .then(() => {
+        const position = this._renderer.getDimensions()
+          .clone()
+          .subtract(this._offset)
+          .divide(2)
+        this._sprite.setAnchor(0.5, 0.5)
+        this._sprite.setScale(this._zoom, this._zoom)
+        this._sprite.setPosition(position)
         this._renderer.render(this._container)
       })
+  }
+
+  setAllOperationsToDirty () {
+    this._operationsStack.setAllToDirty()
   }
 
   /**
@@ -109,9 +126,20 @@ export default class Renderer extends EventEmitter {
       pixelRatio: (window && window.devicePixelRatio) || 1
     }
 
+    let width, height
+    if (this._options.renderMode === 'dynamic' && this._options.canvas) {
+      const { canvas } = this._options
+      width = canvas.width
+      height = canvas.height
+    } else if (this._image) {
+      // @TODO Final dimensions go here
+      width = this._image.width
+      height = this._image.height
+    }
+
     switch (this._preferredRenderer) {
       case 'webgl':
-        this._renderer = new Engine.WebGLRenderer(null, null, rendererOptions)
+        this._renderer = new Engine.WebGLRenderer(width, height, rendererOptions)
         break
       default:
         console && console.error && console.error(`
@@ -137,6 +165,8 @@ export default class Renderer extends EventEmitter {
 
   setCanvas (canvas) {
     if (!this._renderer) this._initRenderer()
+
+    this._renderer.setCanvas(canvas)
   }
 
   /**
@@ -180,7 +210,7 @@ export default class Renderer extends EventEmitter {
    */
   _checkForUpdates () {
     if (typeof window !== 'undefined' && this._options.versionCheck) {
-      const { version } = require('../../../../package.json')
+      const { version } = require('../../../package.json')
       this._versionChecker = new VersionChecker(version)
     }
   }
@@ -281,7 +311,20 @@ export default class Renderer extends EventEmitter {
   getOperations () { return this._operations }
   getImage () { return this._image }
   hasImage () { return this._image !== null && typeof this._image !== 'undefined' }
-  getRenderer () { return this._renderer }
+  getRenderer () {
+    if (!this._renderer) this._initRenderer()
+    return this._renderer
+  }
+  getOffset () { return this._offset }
+  setOffset (offset, y) {
+    if (offset instanceof Vector2) {
+      this._offset.copy(offset)
+    } else {
+      this._offset.set(offset, y)
+    }
+  }
+  getZoom () { return this._zoom }
+  setZoom (zoom) { this._zoom = zoom }
 }
 
 // /**

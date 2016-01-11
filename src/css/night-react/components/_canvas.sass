@@ -20,9 +20,10 @@
         display: table-cell
         overflow: hidden
 
-    +element(canvas)
+    +elements(innerContainer, canvas)
       position: absolute
+      width: 100%
+      height: 100%
 
       +flag(draggable)
-        position: absolute
         cursor: move

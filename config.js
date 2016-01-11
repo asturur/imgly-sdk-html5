@@ -90,7 +90,7 @@ module.exports = {
       path: 'empty'
     },
     entry: {
-      SDK: './sdk/photoeditorsdk',
+      SDK: './sdk/index',
       NightUI: './night-ui/ui',
       NightReactUI: './night-react-ui/ui'
     },

@@ -20,6 +20,9 @@ export default class Shader {
     this._attributes = attributes || []
     this._attributeLocations = {}
 
+    this._onContextChange = this._onContextChange.bind(this)
+    this._renderer.on('context', this._onContextChange)
+
     this.init()
   }
 
@@ -34,6 +37,14 @@ export default class Shader {
 
     this._cacheUniformLocations()
     this._cacheAttributeLocations()
+  }
+
+  /**
+   * Gets called when the attached Renderer changes its context
+   * @private
+   */
+  _onContextChange () {
+    this.init()
   }
 
   /**
@@ -191,6 +202,21 @@ export default class Shader {
     if (sync) {
       this.syncUniform(name)
     }
+  }
+
+  /**
+   * Cleans up this shader
+   */
+  dispose () {
+    const gl = this._renderer.getContext()
+    gl.deleteProgram(this._program)
+
+    this._uniforms = null
+    this._uniformLocations = null
+    this._attributes = null
+    this._attributeLocations = null
+
+    this._renderer.off('context', this._onContextChange)
   }
 
   getUniforms () { return this._uniforms }
