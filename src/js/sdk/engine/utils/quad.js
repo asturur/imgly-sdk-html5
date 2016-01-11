@@ -47,18 +47,27 @@ export default class Quad {
    * @param  {Rectangle} rect2
    */
   map (rect1, rect2) {
+    const { x, y } = rect2
+
     // Update the UVs
     // We don't have any translation, so these four
-    // coordinates are all we need
+    // values are all we need
     this._uvs[2] = rect2.width / rect1.width
     this._uvs[4] = this._uvs[2]
     this._uvs[5] = rect2.height / rect1.height
     this._uvs[7] = this._uvs[5]
 
     // Update the vertices
-    this._vertices[2] = rect2.width
+    this._vertices[0] = x
+    this._vertices[1] = y
+
+    this._vertices[2] = x + rect2.width
+    this._vertices[3] = y
+
     this._vertices[4] = this._vertices[2]
-    this._vertices[5] = rect2.height
+    this._vertices[5] = y + rect2.height
+
+    this._vertices[6] = x
     this._vertices[7] = this._vertices[5]
 
     this._uploadBuffers()

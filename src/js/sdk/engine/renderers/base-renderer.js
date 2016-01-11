@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2, EventEmitter } from '../globals'
+import { Vector2, EventEmitter, Color } from '../globals'
 import Utils from '../utils/utils'
 
 export default class BaseRenderer extends EventEmitter {
@@ -22,7 +22,8 @@ export default class BaseRenderer extends EventEmitter {
     this._canvas = options.canvas || document.createElement('canvas')
 
     this._options = Utils.defaults(options, {
-      pixelRatio: 1
+      pixelRatio: 1,
+      clearColor: Color.TRANSPARENT
     })
 
     this._context = this._createContext()

@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Color, Vector2, Matrix } from '../globals'
+import { Color, Vector2, Matrix, Rectangle } from '../globals'
 
 export default class RenderTarget {
   constructor (renderer, width, height, pixelRatio, isRoot = false) {
@@ -101,8 +101,9 @@ export default class RenderTarget {
     const projectionMatrix = this._projectionMatrix
     projectionMatrix.reset()
 
-    const x = 0
-    const y = 0
+    const frame = this._frame || new Rectangle(0, 0, this._width, this._height)
+
+    const { x, y } = frame
     if (!this._isRoot) {
       projectionMatrix.a = 1 / this._width * 2
       projectionMatrix.d = 1 / this._height * 2

@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Color from '../lib/color'
 import Matrix from '../lib/math/matrix'
 import Rectangle from '../lib/math/rectangle'
 import Vector2 from '../lib/math/vector2'
@@ -19,6 +20,7 @@ Globals.BATCH_SIZE = 2000
 Globals.VERTEX_SIZE = 5
 Globals.VERTEX_BYTE_SIZE = Globals.VERTEX_SIZE * 4
 
+Globals.Color = Color
 Globals.Matrix = Matrix
 Globals.Vector2 = Vector2
 Globals.Rectangle = Rectangle

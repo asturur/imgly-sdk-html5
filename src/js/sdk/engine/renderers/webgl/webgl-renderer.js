@@ -167,7 +167,7 @@ export default class WebGLRenderer extends BaseRenderer {
    */
   render (displayObject) {
     this.setRenderTarget(this._defaultRenderTarget)
-    this._defaultRenderTarget.clear(Color.BLACK)
+    this._defaultRenderTarget.clear(this._options.clearColor)
 
     // Since the given displayObject is the "root" object
     // right now, we need to give it a dummy / fake object
