@@ -24,7 +24,7 @@ import Exif from './lib/exif'
 // import CanvasRenderer from '../renderers/canvas-renderer'
 // import { RenderType, ImageFormat } from '../constants'
 
-export default class Renderer extends EventEmitter {
+export default class PhotoEditorSDK extends EventEmitter {
   constructor (preferredRenderer, options = {}) {
     super()
 
