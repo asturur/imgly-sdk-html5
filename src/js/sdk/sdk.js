@@ -190,6 +190,10 @@ export default class Renderer extends EventEmitter {
     this.reset()
   }
 
+  resizeTo (dimensions) {
+    this._renderer.resizeTo(dimensions)
+  }
+
   /**
    * Parses the exif data and fixes the orientation if necessary
    * @param {Image} image

@@ -234,10 +234,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _updateZoomToFitNewSize () {
     const canvasComponent = this.refs.canvas
-    const defaultZoom = canvasComponent.getDefaultZoom(true)
-    if (defaultZoom > this._lastDefaultZoom) {
-      this._zoom('auto')
-    }
+    canvasComponent.onResize()
     canvasComponent.updateOffset()
   }
 

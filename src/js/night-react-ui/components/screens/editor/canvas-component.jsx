@@ -280,6 +280,13 @@ export default class CanvasComponent extends BaseComponent {
 
   // -------------------------------------------------------------------------- RENDERING
 
+  onResize () {
+    this._cacheDimensions()
+    const { sdk } = this.context
+    sdk.resizeTo(this._containerDimensions)
+    this._onCanvasUpdate()
+  }
+
   /**
    * Renders the canvas. Avoids multiple render processes at the same time.
    * @return {Promise}
