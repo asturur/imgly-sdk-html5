@@ -67,7 +67,7 @@ export default class CanvasComponent extends BaseComponent {
     renderer.setCanvas(canvas)
     renderer.resizeTo(new Vector2(width, height))
 
-    this._updateDimensions()
+    this._cacheDimensions()
 
     this._onCanvasUpdate()
       .then(() => {
@@ -79,7 +79,7 @@ export default class CanvasComponent extends BaseComponent {
    * Gets called after this component has been updated
    */
   componentDidUpdate (prevProps, newProps) {
-    this._updateDimensions()
+    this._cacheDimensions()
   }
 
   // -------------------------------------------------------------------------- DRAGGING
@@ -92,8 +92,9 @@ export default class CanvasComponent extends BaseComponent {
   _onDragStart (e) {
     if (!this.props.dragEnabled) return
 
+    const { sdk } = this.context
     this._dragStartPosition = Utils.getEventPosition(e.nativeEvent)
-    this._dragInitialOffset = this.state.canvasOffset.clone()
+    this._dragInitialOffset = sdk.getOffset().clone()
     document.addEventListener('mousemove', this._onDragMove)
     document.addEventListener('touchmove', this._onDragMove)
     document.addEventListener('mouseup', this._onDragEnd)
@@ -114,7 +115,35 @@ export default class CanvasComponent extends BaseComponent {
     const newOffset = this._dragInitialOffset
       .clone()
       .add(diffFromStart)
+
     this.updateOffset(newOffset)
+  }
+
+  /**
+   * Sets the offsets to the given one and takes boundaries into account
+   * @param  {Vector2} newOffset
+   */
+  updateOffset (newOffset = this.context.sdk.getOffset().clone()) {
+    const { sdk } = this.context
+    const sprite = sdk.getSprite()
+    const bounds = sprite.getBounds()
+    const dimensions = new Vector2(bounds.width, bounds.height)
+
+    const minOffset = this._containerDimensions
+      .clone()
+      .subtract(dimensions)
+      .divide(2)
+      .clamp(null, new Vector2(0, 0))
+
+    const maxOffset = dimensions
+      .clone()
+      .subtract(this._containerDimensions)
+      .divide(2)
+      .clamp(new Vector2(0, 0), null)
+
+    newOffset.clamp(minOffset, maxOffset)
+    sdk.setOffset(newOffset)
+    this._onCanvasUpdate()
   }
 
   /**
@@ -130,29 +159,6 @@ export default class CanvasComponent extends BaseComponent {
   }
 
   // -------------------------------------------------------------------------- POSITIONING
-
-  /**
-   * Clamps and updates the canvas positioning offset
-   * @param {Vector2} [offset]
-   * @private
-   */
-  updateOffset (offset = this.state.canvasOffset) {
-    this._updateDimensions()
-    this._repositionCanvas()
-    const minOffset = this._containerDimensions
-      .clone()
-      .subtract(this._canvasDimensions)
-      .divide(2)
-    const maxOffset = this._canvasDimensions
-      .clone()
-      .subtract(this._containerDimensions)
-      .divide(2)
-      .clamp(new Vector2(0, 0), null)
-
-    offset.clamp(minOffset, maxOffset)
-
-    this.setState({ canvasOffset: offset })
-  }
 
   /**
    * Repositions the canvas
@@ -175,13 +181,12 @@ export default class CanvasComponent extends BaseComponent {
    * @return {Number}
    */
   getDefaultZoom (updateDimensions = false) {
-    return 0.5
     if (updateDimensions) {
-      this._updateDimensions()
+      this._cacheDimensions()
     }
-    const { kit } = this.context
+    const { sdk } = this.context
 
-    const initialDimensions = kit.getInitialDimensions()
+    const initialDimensions = sdk.getInputDimensions()
     const defaultDimensions = SDKUtils.resizeVectorToFit(initialDimensions, this._containerDimensions)
 
     // Since default and native dimensions have the same ratio, we can take either x or y here
@@ -194,7 +199,7 @@ export default class CanvasComponent extends BaseComponent {
    * Updates the stored canvas and container dimensions
    * @private
    */
-  _updateDimensions () {
+  _cacheDimensions () {
     const { canvas, canvasCell } = this.refs
 
     this._canvasDimensions = new Vector2(canvas.offsetWidth, canvas.offsetHeight)
@@ -223,7 +228,7 @@ export default class CanvasComponent extends BaseComponent {
     //
     // return this._renderCanvas()
     //   .then(() => {
-    //     this._updateDimensions()
+    //     this._cacheDimensions()
     //     this._repositionCanvas()
     //     this.updateOffset()
     //     callback && callback()

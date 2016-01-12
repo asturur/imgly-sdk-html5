@@ -120,6 +120,7 @@ export default class DisplayObject {
     } else {
       this._position.set(position, y)
     }
+    this._boundsNeedUpdate = true
   }
   getScale () { return this._scale }
   setScale (scale, y) {
@@ -128,6 +129,7 @@ export default class DisplayObject {
     } else {
       this._scale.set(scale, y)
     }
+    this._boundsNeedUpdate = true
   }
   getPivot () { return this._pivot }
   setPivot (pivot, y) {
@@ -136,6 +138,7 @@ export default class DisplayObject {
     } else {
       this._pivot.set(pivot, y)
     }
+    this._boundsNeedUpdate = true
   }
   getRotation () { return this._rotation }
   setRotation (rotation) { this._rotation = rotation }

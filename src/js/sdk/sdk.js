@@ -80,8 +80,8 @@ export default class Renderer extends EventEmitter {
       .then(() => {
         const position = this._renderer.getDimensions()
           .clone()
-          .subtract(this._offset)
           .divide(2)
+          .add(this._offset)
         this._sprite.setAnchor(0.5, 0.5)
         this._sprite.setScale(this._zoom, this._zoom)
         this._sprite.setPosition(position)
@@ -91,6 +91,10 @@ export default class Renderer extends EventEmitter {
 
   setAllOperationsToDirty () {
     this._operationsStack.setAllToDirty()
+  }
+
+  getInputDimensions () {
+    return new Vector2(this._image.width, this._image.height)
   }
 
   /**
@@ -324,7 +328,10 @@ export default class Renderer extends EventEmitter {
     }
   }
   getZoom () { return this._zoom }
-  setZoom (zoom) { this._zoom = zoom }
+  setZoom (zoom) {
+    this._zoom = zoom
+    this._sprite.setScale(this._zoom, this._zoom)
+  }
 }
 
 // /**

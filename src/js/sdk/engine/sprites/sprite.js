@@ -45,6 +45,8 @@ export default class Sprite extends Container {
    */
   getBounds () {
     if (this._boundsNeedUpdate) {
+      this.updateTransform()
+
       const bounds = this._bounds
       const textureFrame = this._texture.getFrame()
 

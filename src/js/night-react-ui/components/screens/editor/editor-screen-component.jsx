@@ -275,6 +275,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     }
 
     sdk.setZoom(newZoom)
+    canvasComponent.updateOffset()
 
     this._previousZoomState = SDKUtils.extend({
       zoom: this.state.zoom,
@@ -312,6 +313,8 @@ export default class EditorScreenComponent extends ScreenComponent {
     let newZoom = this.state.zoom
     newZoom -= 0.1
     newZoom = Math.max(Math.min(defaultZoom, 1), newZoom)
+
+    console.log('newZoom', newZoom)
 
     this._zoom(newZoom)
   }
