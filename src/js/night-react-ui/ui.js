@@ -64,6 +64,7 @@ export default class NightReactUI extends EventEmitter {
   /**
    * Creates the watermark operation if it doesn't exist yet
    * @private
+   *  @todo Does this belong here?
    */
   _initWatermarkOperation () {
     if (this._options.watermark) {
@@ -76,6 +77,7 @@ export default class NightReactUI extends EventEmitter {
   /**
    * Handles error events emitted by the renderer
    * @private
+   *  @todo Does this belong here?
    */
   _handleRendererErrors () {
     this._renderer.on('error', (e) => {
@@ -89,6 +91,7 @@ export default class NightReactUI extends EventEmitter {
   /**
    * Fixes the operation stack by moving the existing operations to
    * the preferred index
+   * @todo Does this belong here?
    */
   fixOperationsStack () {
     const stack = this._operationsStack.clone()
@@ -119,6 +122,7 @@ export default class NightReactUI extends EventEmitter {
    * Exports an image
    * @param {Boolean} download = false
    * @return {Promise}
+   *  @todo Does this belong here?
    */
   export (download = false) {
     if (this._watermarkOperation) {
@@ -267,8 +271,6 @@ export default class NightReactUI extends EventEmitter {
   translate (key, interpolationOptions) {
     return Utils.translate(this._language, key, interpolationOptions)
   }
-
-  getAvailableControls () { return this._availableControls }
 
   /**
    * Returns the resolved asset path for the given asset name

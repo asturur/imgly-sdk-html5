@@ -18,9 +18,9 @@ export default {
   identifier: 'filters',
   icon: 'controls/overview/filters@2x.png',
   label: 'controls.overview.filters',
-  getInitialSharedState: (context) => {
-    const operationExistedBefore = context.ui.operationExists('filter')
-    const operation = context.ui.getOrCreateOperation('filter')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('filter')
+    const operation = editor.getOrCreateOperation('filter')
     const initialOptions = {
       filter: operation.getFilter(),
       intensity: operation.getIntensity()

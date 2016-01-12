@@ -28,6 +28,8 @@ export default class PhotoEditorSDK extends EventEmitter {
   constructor (preferredRenderer, options = {}) {
     super()
 
+    this._onOperationUpdate = this._onOperationUpdate.bind(this)
+
     this._preferredRenderer = preferredRenderer
     this._options = Utils.defaults(options, {
       additionalOperations: {},

@@ -71,6 +71,7 @@ export default class BaseTexture extends EventEmitter {
   }
 
   isLoaded () { return this._loaded }
+  setLoaded (loaded) { this._loaded = loaded }
   getSource () { return this._source }
   setSource (source) { this._source = source }
   setGLTextureForId (texture, id) { this._glTextures[id] = texture }

@@ -25,7 +25,7 @@ export default class EditorScreenComponent extends ScreenComponent {
   constructor (...args) {
     super(...args)
 
-    this._editor = new Editor(this.context.options)
+    this._editor = new Editor(this.context.options, this.context.mediator)
     this._overviewControls = OverviewControlsComponent
 
     this._bindAll(
@@ -92,79 +92,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._fileLoader.off('file', this._onNewFile)
     this._fileLoader.dispose()
   }
-
-  // -------------------------------------------------------------------------- PUBLIC OPERATIONS API
-
-  /**
-   * If the operation with the given identifier already exists, it returns
-   * the existing operation. Otherwise, it creates and returns a new one.
-   * @param  {String} identifier
-   * @param  {Object} options
-   * @return {PhotoEditorSDK.Operation}
-   */
-  getOrCreateOperation (identifier, options = {}) {
-    if (this._operationsMap[identifier]) {
-      return this._operationsMap[identifier]
-    } else {
-      const Operation = this._availableOperations[identifier]
-      const operation = new Operation(this._renderer, options)
-      this.addOperation(operation)
-      return operation
-    }
-  }
-
-  /**
-   * Adds the given operation to the stack
-   * @param {Operation} operation
-   */
-  addOperation (operation) {
-    const identifier = operation.constructor.identifier
-    operation.on('updated', () => {
-      this._mediator.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
-    })
-    const index = this._preferredOperationOrder.indexOf(identifier)
-    this._operationsStack.set(index, operation)
-    this._operationsMap[identifier] = operation
-  }
-
-  /**
-   * Removes the given operation from the stack
-   * @param  {Operation} operation
-   */
-  removeOperation (operation) {
-    const identifier = operation.constructor.identifier
-    const stack = this._operationsStack.getStack()
-
-    // Remove operation from map
-    if (this._operationsMap[identifier] === operation) {
-      delete this._operationsMap[identifier]
-    }
-
-    // Remove operation from stack
-    const index = stack.indexOf(operation)
-    if (index !== -1) {
-      this._operationsStack.removeAt(index)
-
-      // Set all following operations to dirty, since they might
-      // have cached stuff drawn by the removed operation
-      for (let i = index + 1; i < stack.length; i++) {
-        const operation = stack[i]
-        if (!operation) continue
-        operation.setDirty(true)
-      }
-    }
-  }
-
-  /**
-   * Returns the operation with the given identifier
-   * @param  {String} identifier
-   * @return {PhotoEditorSDK.Operation}
-   */
-  getOperation (identifier) {
-    return this._operationsMap[identifier]
-  }
-
-  getEnabledOperations () { return this._enabledOperations }
 
   // -------------------------------------------------------------------------- FILE LOADING
 
@@ -448,7 +375,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     }
 
     const initialState = newControls.getInitialSharedState &&
-      newControls.getInitialSharedState(this.context, state)
+      newControls.getInitialSharedState(this._editor, state)
     const sharedState = new SharedState(initialState)
 
     // If the controls have an `onExit` method, call it

@@ -22,8 +22,11 @@ export default class RenderTexture extends Texture {
     frame.width = width
     frame.height = height
     baseTexture.setResolution(resolution)
+    baseTexture.setLoaded(true)
     super(baseTexture, new Rectangle(0, 0, width, height))
 
+    // RenderTexture is always loaded!
+    this._loaded = true
     this._width = width
     this._height = height
     this._resolution = resolution

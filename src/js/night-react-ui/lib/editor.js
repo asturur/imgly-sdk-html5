@@ -8,19 +8,42 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDK, SDKUtils } from '../globals'
+import { SDK, SDKUtils, Constants } from '../globals'
 
 /**
  * The Editor class is an interface to the SDK, managing operations, rendering,
  * history, zoom etc.
  */
 export default class Editor {
-  constructor (options) {
+  constructor (options, mediator) {
     this._options = options
+    this._mediator = mediator
 
     this._initSDK()
     this._initOperations()
     this._initControls()
+
+    this._operationsMap = {}
+    this._operationsStack = this._sdk.getOperationsStack()
+    this._preferredOperationOrder = [
+      // First, all operations that affect the image dimensions
+      'orientation',
+      'crop',
+
+      // Then color operations (first filter, then fine-tuning)
+      'filter',
+      'contrast',
+      'brightness',
+      'saturation',
+
+      // Then post-processing
+      'radial-blur',
+      'tilt-shift',
+      'frame',
+      'sticker',
+      'text',
+      'watermark'
+    ]
   }
 
   // -------------------------------------------------------------------------- INITIALIZATION
@@ -116,6 +139,86 @@ export default class Editor {
    */
   isOperationEnabled (name) {
     return this._enabledOperations.indexOf(name) !== -1
+  }
+
+  /**
+   * If the operation with the given identifier already exists, it returns
+   * the existing operation. Otherwise, it creates and returns a new one.
+   * @param  {String} identifier
+   * @param  {Object} options
+   * @return {PhotoEditorSDK.Operation}
+   */
+  getOrCreateOperation (identifier, options = {}) {
+    if (this._operationsMap[identifier]) {
+      return this._operationsMap[identifier]
+    } else {
+      const Operation = this._availableOperations[identifier]
+      const operation = new Operation(this._renderer, options)
+      this.addOperation(operation)
+      return operation
+    }
+  }
+
+  /**
+   * Adds the given operation to the stack
+   * @param {Operation} operation
+   */
+  addOperation (operation) {
+    const identifier = operation.constructor.identifier
+    operation.on('updated', () => {
+      this._mediator.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
+    })
+    const index = this._preferredOperationOrder.indexOf(identifier)
+    this._operationsStack.set(index, operation)
+    this._operationsMap[identifier] = operation
+  }
+
+  /**
+   * Removes the given operation from the stack
+   * @param  {Operation} operation
+   */
+  removeOperation (operation) {
+    const identifier = operation.constructor.identifier
+    const stack = this._operationsStack.getStack()
+
+    // Remove operation from map
+    if (this._operationsMap[identifier] === operation) {
+      delete this._operationsMap[identifier]
+    }
+
+    // Remove operation from stack
+    const index = stack.indexOf(operation)
+    if (index !== -1) {
+      this._operationsStack.removeAt(index)
+
+      // Set all following operations to dirty, since they might
+      // have cached stuff drawn by the removed operation
+      for (let i = index + 1; i < stack.length; i++) {
+        const operation = stack[i]
+        if (!operation) continue
+        operation.setDirty(true)
+      }
+    }
+  }
+
+  /**
+   * Returns the operation with the given identifier
+   * @param  {String} identifier
+   * @return {PhotoEditorSDK.Operation}
+   */
+  getOperation (identifier) {
+    return this._operationsMap[identifier]
+  }
+
+  getEnabledOperations () { return this._enabledOperations }
+
+  /**
+   * Checks whether an operation with the given identifier exists
+   * @param {String} identifier
+   * @return {Boolean}
+   */
+  operationExists (identifier) {
+    return !!this._operationsMap[identifier]
   }
 
   // -------------------------------------------------------------------------- MISC PUBLIC API

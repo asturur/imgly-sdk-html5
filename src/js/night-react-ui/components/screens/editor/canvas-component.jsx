@@ -48,7 +48,9 @@ export default class CanvasComponent extends BaseComponent {
    */
   componentWillReceiveProps (props) {
     if (props.zoom !== this.props.zoom) {
-      this.context.sdk.setAllOperationsToDirty()
+      const { editor } = this.context
+      const sdk = editor.getSDK()
+      sdk.setAllOperationsToDirty()
       this._onCanvasUpdate(props.zoom)
     }
   }
@@ -292,7 +294,8 @@ export default class CanvasComponent extends BaseComponent {
 
   onResize () {
     this._cacheDimensions()
-    const { sdk } = this.context
+    const { editor } = this.context
+    const sdk = editor.getSDK()
     sdk.resizeTo(this._containerDimensions)
     this._onCanvasUpdate()
   }

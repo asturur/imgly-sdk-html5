@@ -81,16 +81,6 @@ export default class AppComponent extends React.Component {
   }
 
   /**
-   * Checks whether an operation with the given identifier exists
-   * @param {String} identifier
-   * @return {Boolean}
-   * @todo Move this to a separate Editor class
-   */
-  operationExists (identifier) {
-    return !!this._operationsMap[identifier]
-  }
-
-  /**
    * Gets called when an image is ready for editing
    * @param {Image} image
    * @todo Move this to a separate Editor class
@@ -182,6 +172,7 @@ export default class AppComponent extends React.Component {
    * Returns the maximum megapixels for the current device
    * @return {Number}
    * @private
+   * @todo  This belongs to the Editor class
    */
   _getMaxMegapixels () {
     const { maxMegaPixels } = this.props.options
