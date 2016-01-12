@@ -173,9 +173,7 @@ export default class BaseComponent extends React.Component {
 BaseComponent.contextTypes = {
   editor: React.PropTypes.object,
   ui: React.PropTypes.object,
-  sdk: React.PropTypes.object,
   options: React.PropTypes.object,
-  operationsStack: React.PropTypes.object,
   mediator: React.PropTypes.object
 }
 

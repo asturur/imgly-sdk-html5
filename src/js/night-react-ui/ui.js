@@ -27,27 +27,11 @@ export default class NightReactUI extends EventEmitter {
     this._mediator = new EventEmitter()
     this._options = options
     this._initOptions()
-
     this._initLanguage()
-    // this._initOperations()
-    // this._initControls()
 
-    this._operationsMap = {}
     this._initWatermarkOperation()
 
     this.run()
-  }
-
-  /**
-   * Initializes the PhotoEditorSDK.Renderer instance
-   * @private
-   */
-  _initRenderer () {
-    const rendererOptions = {
-      image: this._options.image
-    }
-
-    this._renderer = new PhotoEditorSDK.Renderer(this._options.preferredRenderer, rendererOptions)
   }
 
   /**
@@ -284,85 +268,7 @@ export default class NightReactUI extends EventEmitter {
     return Utils.translate(this._language, key, interpolationOptions)
   }
 
-  // -------------------------------------------------------------------------- PUBLIC OPERATIONS API
-
-  /**
-   * If the operation with the given identifier already exists, it returns
-   * the existing operation. Otherwise, it creates and returns a new one.
-   * @param  {String} identifier
-   * @param  {Object} options
-   * @return {PhotoEditorSDK.Operation}
-   */
-  getOrCreateOperation (identifier, options = {}) {
-    if (this._operationsMap[identifier]) {
-      return this._operationsMap[identifier]
-    } else {
-      const Operation = this._availableOperations[identifier]
-      const operation = new Operation(this._renderer, options)
-      this.addOperation(operation)
-      return operation
-    }
-  }
-
-  /**
-   * Adds the given operation to the stack
-   * @param {Operation} operation
-   */
-  addOperation (operation) {
-    const identifier = operation.constructor.identifier
-    operation.on('updated', () => {
-      this._mediator.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
-    })
-    const index = this._preferredOperationOrder.indexOf(identifier)
-    this._operationsStack.set(index, operation)
-    this._operationsMap[identifier] = operation
-  }
-
-  /**
-   * Removes the given operation from the stack
-   * @param  {Operation} operation
-   */
-  removeOperation (operation) {
-    const identifier = operation.constructor.identifier
-    const stack = this._operationsStack.getStack()
-
-    // Remove operation from map
-    if (this._operationsMap[identifier] === operation) {
-      delete this._operationsMap[identifier]
-    }
-
-    // Remove operation from stack
-    const index = stack.indexOf(operation)
-    if (index !== -1) {
-      this._operationsStack.removeAt(index)
-
-      // Set all following operations to dirty, since they might
-      // have cached stuff drawn by the removed operation
-      for (let i = index + 1; i < stack.length; i++) {
-        const operation = stack[i]
-        if (!operation) continue
-        operation.setDirty(true)
-      }
-    }
-  }
-
-  /**
-   * Returns the operation with the given identifier
-   * @param  {String} identifier
-   * @return {PhotoEditorSDK.Operation}
-   */
-  getOperation (identifier) {
-    return this._operationsMap[identifier]
-  }
-
-  getEnabledOperations () { return this._enabledOperations }
   getAvailableControls () { return this._availableControls }
-
-  /**
-   * Checks whether the kit has an image
-   * @return {Boolean}
-   */
-  hasImage () { return this._renderer.hasImage() }
 
   /**
    * Returns the resolved asset path for the given asset name

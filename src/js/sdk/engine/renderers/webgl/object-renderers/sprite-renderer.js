@@ -36,6 +36,8 @@ export default class SpriteRenderer extends ObjectRenderer {
 
     this._currentBatchSize = 0
     this._currentBaseTexture = null
+
+    this._onContextChange()
   }
 
   /**

@@ -59,8 +59,9 @@ export default class CanvasComponent extends BaseComponent {
   componentDidMount () {
     super.componentDidMount()
 
-    const { sdk } = this.context
-    const renderer = sdk.getRenderer()
+    const { editor } = this.context
+    const renderer = editor.getRenderer()
+
     const { canvas } = this.refs
     const width = canvas.offsetWidth
     const height = canvas.offsetHeight
@@ -92,7 +93,8 @@ export default class CanvasComponent extends BaseComponent {
   _onDragStart (e) {
     if (!this.props.dragEnabled) return
 
-    const { sdk } = this.context
+    const { editor } = this.context
+    const sdk = editor.getSDK()
     this._dragStartPosition = Utils.getEventPosition(e.nativeEvent)
     this._dragInitialOffset = sdk.getOffset().clone()
     document.addEventListener('mousemove', this._onDragMove)
@@ -123,8 +125,14 @@ export default class CanvasComponent extends BaseComponent {
    * Sets the offsets to the given one and takes boundaries into account
    * @param  {Vector2} newOffset
    */
-  updateOffset (newOffset = this.context.sdk.getOffset().clone()) {
-    const { sdk } = this.context
+  updateOffset (newOffset) {
+    const { editor } = this.context
+    const sdk = editor.getSDK()
+
+    if (!newOffset) {
+      newOffset = sdk.getOffset().clone()
+    }
+
     const sprite = sdk.getSprite()
     const bounds = sprite.getBounds()
     const dimensions = new Vector2(bounds.width, bounds.height)
@@ -184,7 +192,9 @@ export default class CanvasComponent extends BaseComponent {
     if (updateDimensions) {
       this._cacheDimensions()
     }
-    const { sdk } = this.context
+
+    const { editor } = this.context
+    const sdk = editor.getSDK()
 
     const initialDimensions = sdk.getInputDimensions()
     const defaultDimensions = SDKUtils.resizeVectorToFit(initialDimensions, this._containerDimensions)
@@ -215,8 +225,8 @@ export default class CanvasComponent extends BaseComponent {
    * @private
    */
   _onCanvasUpdate (zoom = this.props.zoom, callback) {
-    const { sdk } = this.context
-    return sdk.render()
+    const { editor } = this.context
+    return editor.render()
     //
     // let rendererDimensions = kit.getInitialDimensions()
     // if (zoom !== null) {

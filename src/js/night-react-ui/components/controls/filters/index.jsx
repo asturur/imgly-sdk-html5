@@ -31,7 +31,7 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('filter')
+  isSelectable: function (editor) {
+    return editor.isOperationEnabled('filter')
   }
 }

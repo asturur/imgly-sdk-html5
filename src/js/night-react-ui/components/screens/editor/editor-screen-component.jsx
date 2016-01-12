@@ -8,7 +8,8 @@
  *
  * For commercial use, please contact us at contact@9elements.com
  */
-import { ReactBEM, Constants, SDKUtils, SharedState } from '../../../globals'
+import { React, ReactBEM, Constants, SDKUtils, SharedState } from '../../../globals'
+import OverviewControlsComponent from '../../controls/overview/overview-controls-component'
 import FileLoader from '../../../lib/file-loader'
 import ScreenComponent from '../screen-component'
 import HeaderComponent from '../../header-component'
@@ -18,10 +19,14 @@ import CanvasComponent from './canvas-component'
 import ZoomComponent from './zoom-component'
 import ModalManager from '../../../lib/modal-manager'
 import OverviewControls from '../../controls/overview/'
+import Editor from '../../../lib/editor'
 
 export default class EditorScreenComponent extends ScreenComponent {
   constructor (...args) {
     super(...args)
+
+    this._editor = new Editor(this.context.options)
+    this._overviewControls = OverviewControlsComponent
 
     this._bindAll(
       'switchToControls',
@@ -87,6 +92,79 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._fileLoader.off('file', this._onNewFile)
     this._fileLoader.dispose()
   }
+
+  // -------------------------------------------------------------------------- PUBLIC OPERATIONS API
+
+  /**
+   * If the operation with the given identifier already exists, it returns
+   * the existing operation. Otherwise, it creates and returns a new one.
+   * @param  {String} identifier
+   * @param  {Object} options
+   * @return {PhotoEditorSDK.Operation}
+   */
+  getOrCreateOperation (identifier, options = {}) {
+    if (this._operationsMap[identifier]) {
+      return this._operationsMap[identifier]
+    } else {
+      const Operation = this._availableOperations[identifier]
+      const operation = new Operation(this._renderer, options)
+      this.addOperation(operation)
+      return operation
+    }
+  }
+
+  /**
+   * Adds the given operation to the stack
+   * @param {Operation} operation
+   */
+  addOperation (operation) {
+    const identifier = operation.constructor.identifier
+    operation.on('updated', () => {
+      this._mediator.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
+    })
+    const index = this._preferredOperationOrder.indexOf(identifier)
+    this._operationsStack.set(index, operation)
+    this._operationsMap[identifier] = operation
+  }
+
+  /**
+   * Removes the given operation from the stack
+   * @param  {Operation} operation
+   */
+  removeOperation (operation) {
+    const identifier = operation.constructor.identifier
+    const stack = this._operationsStack.getStack()
+
+    // Remove operation from map
+    if (this._operationsMap[identifier] === operation) {
+      delete this._operationsMap[identifier]
+    }
+
+    // Remove operation from stack
+    const index = stack.indexOf(operation)
+    if (index !== -1) {
+      this._operationsStack.removeAt(index)
+
+      // Set all following operations to dirty, since they might
+      // have cached stuff drawn by the removed operation
+      for (let i = index + 1; i < stack.length; i++) {
+        const operation = stack[i]
+        if (!operation) continue
+        operation.setDirty(true)
+      }
+    }
+  }
+
+  /**
+   * Returns the operation with the given identifier
+   * @param  {String} identifier
+   * @return {PhotoEditorSDK.Operation}
+   */
+  getOperation (identifier) {
+    return this._operationsMap[identifier]
+  }
+
+  getEnabledOperations () { return this._enabledOperations }
 
   // -------------------------------------------------------------------------- FILE LOADING
 
@@ -262,7 +340,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _zoom (zoom, callback) {
-    const { sdk } = this.context
+    const sdk = this._editor.getSDK()
     const canvasComponent = this.refs.canvas
 
     let newZoom = zoom
@@ -415,6 +493,19 @@ export default class EditorScreenComponent extends ScreenComponent {
   }
 
   /**
+   * Returns the context passed to all children
+   * @return {Object}
+   */
+  getChildContext () {
+    return {
+      editor: this._editor,
+      ui: this.context.ui,
+      options: this.context.options,
+      mediator: this.context.mediator
+    }
+  }
+
+  /**
    * Renders this component
    * @return {ReactBEM.Element}
    */
@@ -514,3 +605,11 @@ export default class EditorScreenComponent extends ScreenComponent {
     </div>)
   }
 }
+
+EditorScreenComponent.childContextTypes = {
+  ui: React.PropTypes.object.isRequired,
+  editor: React.PropTypes.object.isRequired,
+  mediator: React.PropTypes.object.isRequired,
+  options: React.PropTypes.object.isRequired
+}
+

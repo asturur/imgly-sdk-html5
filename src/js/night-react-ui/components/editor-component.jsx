@@ -9,9 +9,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDK, React, ReactBEM, SDKUtils, EXIF } from '../globals'
+import { React, ReactBEM, SDKUtils, EXIF } from '../globals'
 import ImageResizer from '../lib/image-resizer'
-import OverviewControlsComponent from './controls/overview/overview-controls-component'
 import SplashScreenComponent from './screens/splash/splash-screen-component'
 import WebcamScreenComponent from './screens/webcam/webcam-screen-component'
 import EditorScreenComponent from './screens/editor/editor-screen-component'
@@ -32,19 +31,14 @@ class EditorComponent extends React.Component {
 
     this._onModalManagerUpdate = this._onModalManagerUpdate.bind(this)
 
-    this._initSDK()
-
     let initialScreen
-    if (this._sdk.hasImage()) {
+    if (this.props.options.image) {
       initialScreen = this._screens.editor
     } else {
       initialScreen = this._screens.splash
     }
 
     this.state = { screen: initialScreen }
-
-    this._initOperations()
-    this._initControls()
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -53,27 +47,13 @@ class EditorComponent extends React.Component {
    * Gets called when this component has been mounted
    */
   componentDidMount () {
-    const renderer = this._sdk
-    if (renderer.hasImage()) {
-      const image = renderer.getImage()
-      renderer.setImage(null)
-      this.setImage(image)
-    }
-  }
-
-  // -------------------------------------------------------------------------- RENDERING
-
-  /**
-   * Initializes the SDK
-   * @private
-   * @todo Move this to a separate Editor class
-   */
-  _initSDK () {
-    const { image, preferredRenderer } = this.props.options
-    const rendererOptions = {
-      image
-    }
-    this._sdk = new SDK(preferredRenderer, rendererOptions)
+    // @TODO Deprecated code - move this to editor
+    // const renderer = this._sdk
+    // if (renderer.hasImage()) {
+    //   const image = renderer.getImage()
+    //   renderer.setImage(null)
+    //   this.setImage(image)
+    // }
   }
 
   // -------------------------------------------------------------------------- EVENTS
@@ -101,71 +81,6 @@ class EditorComponent extends React.Component {
   }
 
   /**
-   * Initializes the available and enabled controls
-   * @private
-   * @TODO Move this to a separate Editor class
-   */
-  _initOperations () {
-    this._availableOperations = this._sdk.getOperations()
-    this._enabledOperations = []
-
-    const { options } = this.props
-
-    let operationIdentifiers = options.operations
-    if (!(operationIdentifiers instanceof Array)) {
-      operationIdentifiers = operationIdentifiers
-        .replace(/\s+?/ig, '')
-        .split(',')
-    }
-
-    for (let identifier in this._availableOperations) {
-      if (options.operations === 'all' ||
-          operationIdentifiers.indexOf(identifier) !== -1) {
-        this._enabledOperations.push(identifier)
-      }
-    }
-  }
-
-  /**
-   * Initializes the available and enabled controls
-   * @private
-   * @todo Move this to a separate Editor class
-   */
-  _initControls () {
-    this._overviewControls = OverviewControlsComponent
-    // @TODO Use `options.extensions.controls` instead of `options.additionalControls`.
-    //       Same goes for operations and languages.
-    this._availableControls = SDKUtils.extend({
-      filters: require('./controls/filters/'),
-      orientation: require('./controls/orientation/'),
-      adjustments: require('./controls/adjustments/'),
-      crop: require('./controls/crop/'),
-      focus: require('./controls/focus/'),
-      frame: require('./controls/frame/'),
-      stickers: require('./controls/stickers/'),
-      text: require('./controls/text/')
-    }, this.props.options.additionalControls)
-
-    this._enabledControls = []
-    for (let identifier in this._availableControls) {
-      const controls = this._availableControls[identifier]
-      if (!controls.isSelectable || controls.isSelectable(this)) {
-        this._enabledControls.push(controls)
-      }
-    }
-
-    this._enabledControls.sort((a, b) => {
-      let sortA = this.props.options.controlsOrder.indexOf(a.identifier)
-      let sortB = this.props.options.controlsOrder.indexOf(b.identifier)
-      if (sortA === -1) return 1
-      if (sortB === -1) return -1
-      if (sortA < sortB) return -1
-      if (sortA > sortB) return 1
-      return 0
-    })
-  }
-
-  /**
    * Checks whether an operation with the given identifier exists
    * @param {String} identifier
    * @return {Boolean}
@@ -173,25 +88,6 @@ class EditorComponent extends React.Component {
    */
   operationExists (identifier) {
     return !!this._operationsMap[identifier]
-  }
-
-  /**
-   * Checks whether the operation with the given identifier is enabled
-   * @param  {String}  name
-   * @return {Boolean}
-   * @todo Move this to a separate Editor class
-   */
-  isOperationEnabled (name) {
-    return this._enabledOperations.indexOf(name) !== -1
-  }
-
-  /**
-   * Returns the enabled controls
-   * @return {Array.<Object>}
-   * @todo Move this to a separate Editor class
-   */
-  getEnabledControls () {
-    return this._enabledControls
   }
 
   /**
@@ -259,11 +155,8 @@ class EditorComponent extends React.Component {
    */
   getChildContext () {
     return {
-      editor: this,
       ui: this.props.ui,
-      sdk: this._sdk,
       options: this.props.options,
-      operationsStack: this._sdk.getOperationsStack(),
       mediator: this.props.mediator
     }
   }
@@ -302,10 +195,7 @@ class EditorComponent extends React.Component {
 }
 
 EditorComponent.childContextTypes = {
-  editor: React.PropTypes.object.isRequired,
   ui: React.PropTypes.object.isRequired,
-  sdk: React.PropTypes.object.isRequired,
-  operationsStack: React.PropTypes.object.isRequired,
   mediator: React.PropTypes.object.isRequired,
   options: React.PropTypes.object.isRequired
 }
