@@ -28,7 +28,7 @@ class Operation extends Configurable {
     })
 
     this._kit = kit
-    this._dirty = true
+    this._dirtiness = {}
 
     this._glslPrograms = {}
     this._uuid = Utils.getUUID()
@@ -124,21 +124,27 @@ class Operation extends Configurable {
     this._glslPrograms = {}
   }
 
+  // -------------------------------------------------------------------------- DIRTINESS
+
   /**
-   * Sets this operation to dirty, so that it will re-render next time
-   * @param {Boolean} dirty
+   * Checks if this operation is dirty for the given renderer
+   * @param  {BaseRenderer}  renderer
+   * @return {Boolean}
    */
-  setDirty (dirty) {
-    this._dirty = dirty
-    this._onDirty && this._onDirty()
+  isDirtyForRenderer (renderer) {
+    if (!(renderer.id in this._dirtiness)) {
+      this._dirtiness[renderer.id] = true
+    }
+    return this._dirtiness[renderer.id]
   }
 
   /**
-   * Returns the dirty state
-   * @type {Boolean}
+   * Sets the dirtiness for the given renderer
+   * @param {Boolean} dirty
+   * @param {BaseRenderer} renderer
    */
-  isDirty () {
-    return this._dirty
+  setDirtyForRenderer (dirty, renderer) {
+    this._dirtiness[renderer.id] = dirty
   }
 
   getOptions () { return this._options }

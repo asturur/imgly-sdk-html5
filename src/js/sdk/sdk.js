@@ -66,7 +66,7 @@ export default class Renderer extends EventEmitter {
     this._sprite.setScale(1, 1)
 
     const stack = this._operationsStack
-    stack.updateDirtiness()
+    stack.updateDirtinessForRenderer(this._renderer)
 
     if (!this._inputTexture) {
       this._inputTexture = Engine.Texture.fromImage(this._image)

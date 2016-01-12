@@ -93,18 +93,19 @@ export default class OperationsStack extends EventEmitter {
   /**
    * Finds the first dirty operation and sets all following operations
    * to dirty
+   * @param {BaseRenderer} renderer
    */
-  updateDirtiness () {
+  updateDirtinessForRenderer (renderer) {
     let dirtyFound = false
     for (let i = 0; i < this._stack.length; i++) {
       let operation = this._stack[i]
       if (!operation) continue
-      if (operation.isDirty()) {
+      if (operation.isDirtyForRenderer(renderer)) {
         dirtyFound = true
       }
 
       if (dirtyFound) {
-        operation.setDirty(true)
+        operation.setDirtyForRenderer(true, renderer)
       }
     }
   }
