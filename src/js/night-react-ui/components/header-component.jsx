@@ -10,7 +10,7 @@
  */
 import { ReactBEM, BaseComponent } from '../globals'
 
-export default class SplashScreenComponent extends BaseComponent {
+export default class HeaderComponent extends BaseComponent {
   /**
    * Renders this component
    * @return {ReactBEM.Element}
