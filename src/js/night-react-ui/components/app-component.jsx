@@ -18,7 +18,7 @@ import EmptyScreenComponent from './screens/screen-component'
 import ModalContainerComponent from './modal-container-component'
 import ModalManager from '../lib/modal-manager'
 
-class EditorComponent extends React.Component {
+export default class AppComponent extends React.Component {
   constructor (...args) {
     super(...args)
 
@@ -194,16 +194,14 @@ class EditorComponent extends React.Component {
   }
 }
 
-EditorComponent.childContextTypes = {
+AppComponent.childContextTypes = {
   ui: React.PropTypes.object.isRequired,
   mediator: React.PropTypes.object.isRequired,
   options: React.PropTypes.object.isRequired
 }
 
-EditorComponent.propTypes = {
+AppComponent.propTypes = {
   ui: React.PropTypes.object.isRequired,
   mediator: React.PropTypes.object.isRequired,
   options: React.PropTypes.object.isRequired
 }
-
-export default EditorComponent

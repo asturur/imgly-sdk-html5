@@ -14,7 +14,7 @@ import {
   React, ReactDOM, ReactBEM, SharedState
 } from './globals'
 
-import EditorComponent from './components/editor-component'
+import AppComponent from './components/app-component'
 import ScrollbarComponent from './components/scrollbar-component'
 import ControlsComponent from './components/controls/controls-component'
 import Exporter from './lib/exporter'
@@ -103,7 +103,7 @@ export default class NightReactUI extends EventEmitter {
    * @private
    */
   _render () {
-    const component = (<EditorComponent
+    const component = (<AppComponent
       ui={this}
       mediator={this._mediator}
       options={this._options} />)
