@@ -40,6 +40,10 @@ export default class BaseRenderer extends EventEmitter {
     this._setupContext()
   }
 
+  getCanvas () {
+    return this._canvas
+  }
+
   /**
    * Gets called before the context has been set up
    * @private

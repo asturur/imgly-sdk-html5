@@ -169,8 +169,12 @@ export default class Renderer extends EventEmitter {
 
   setCanvas (canvas) {
     if (!this._renderer) this._initRenderer()
-
     this._renderer.setCanvas(canvas)
+  }
+
+  getCanvas () {
+    if (!this._renderer) this._initRenderer()
+    return this._renderer.getCanvas()
   }
 
   /**

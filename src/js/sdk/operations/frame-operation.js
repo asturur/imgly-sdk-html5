@@ -8,8 +8,25 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Engine, Vector2, Utils, Color } from '../globals'
 import Operation from './operation'
-import Color from '../lib/color'
+
+class FrameFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../shaders/operations/frame.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_color: {
+        type: '4f',
+        value: Color.TRANSPARENT
+      },
+      u_thickness: {
+        type: '2f',
+        value: 0
+      }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * An operation that can draw a frame on the canvas
@@ -18,23 +35,7 @@ import Color from '../lib/color'
  * @alias PhotoEditorSDK.Operations.FrameOperation
  * @extends PhotoEditorSDK.Operation
  */
-class FrameOperation extends Operation {
-  constructor (...args) {
-    super(...args)
-
-    /**
-     * The texture index used for the frame
-     * @type {Number}
-     * @private
-     */
-    this._textureIndex = 1
-
-    /**
-     * The fragment shader used for this operation
-     */
-    this._fragmentShader = require('raw!../shaders/operations/frame.frag')
-  }
-
+export default class FrameOperation extends Operation {
   /**
    * Crops this image using WebGL
    * @param  {WebGLRenderer} renderer
@@ -42,29 +43,58 @@ class FrameOperation extends Operation {
    */
   /* istanbul ignore next */
   _renderWebGL (renderer) {
-    return new Promise((resolve, reject) => {
-      var canvas = renderer.getCanvas()
+    const outputSprite = renderer.getSprite()
+    const spriteBounds = outputSprite.getBounds()
+    const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+    const filter = this._getFilter()
 
-      var color = this._options.color
-      var thickness = this._options.thickness * Math.min(canvas.height, canvas.width)
-      var thicknessVec2 = [thickness / canvas.width, thickness / canvas.height]
+    const thickness = this._options.thickness *
+      Math.min(spriteDimensions.x, spriteDimensions.y)
+    const thicknessVec2 = [thickness / spriteDimensions.x, thickness / spriteDimensions.y]
 
-      let uniforms = {
-        u_color: { type: '4f', value: color.toGLColor() },
-        u_thickness: { type: '2f', value: thicknessVec2 }
-      }
+    filter.setUniform('u_color', this._options.color.toGLColor())
+    filter.setUniform('u_thickness', thicknessVec2)
 
-      if (!this._glslPrograms[renderer.id]) {
-        this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-          null,
-          this._fragmentShader
-        )
-      }
+    const renderTexture = this._getRenderTexture(renderer)
 
-      renderer.runProgram(this._glslPrograms[renderer.id], { uniforms })
+    // Re-render to RenderTexture if dirty
+    if (this.isDirtyForRenderer(renderer)) {
+      renderTexture.resizeTo(spriteDimensions)
 
-      resolve()
-    })
+      const tempFilters = outputSprite.getFilters()
+      outputSprite.setFilters([filter])
+      renderTexture.render(outputSprite)
+
+      outputSprite.setFilters(tempFilters)
+    }
+
+    outputSprite.setTexture(renderTexture)
+
+    return Promise.resolve()
+  }
+
+  /**
+   * Creates and/or returns the Filter
+   * @return {FrameFilter}
+   * @private
+   */
+  _getFilter () {
+    if (!this._filter) {
+      this._filter = new FrameFilter()
+    }
+    return this._filter
+  }
+
+  /**
+   * Creates and returns a render texture
+   * @param  {Renderer} renderer
+   * @return {RenderTexture}
+   */
+  _getRenderTexture (renderer) {
+    if (!this._renderTexture) {
+      this._renderTexture = renderer.createRenderTexture()
+    }
+    return this._renderTexture
   }
 
   /**
@@ -110,4 +140,3 @@ FrameOperation.prototype.availableOptions = {
   thickness: { type: 'number', default: 0.05 }
 }
 
-export default FrameOperation
