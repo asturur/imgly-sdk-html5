@@ -22,7 +22,7 @@ export default class ContrastControlsComponent extends ControlsComponent {
       '_onOperationUpdated',
       '_onOperationRemoved'
     )
-    this._operation = this.context.ui.getOrCreateOperation('contrast')
+    this._operation = this.context.editor.getOrCreateOperation('contrast')
 
     this._events = {
       [Constants.EVENTS.OPERATION_UPDATED]: this._onOperationUpdated,
@@ -60,8 +60,8 @@ export default class ContrastControlsComponent extends ControlsComponent {
     // Operation can be removed by the undo button. We need
     // to make sure we re-create the operation for the lifetime
     // of this control
-    const { ui } = this.context
-    const newOperation = ui.getOrCreateOperation('contrast')
+    const { editor } = this.context
+    const newOperation = editor.getOrCreateOperation('contrast')
     this._operation = newOperation
     this._historyItem = null
     this.state.value = this._operation.getContrast()
@@ -81,8 +81,8 @@ export default class ContrastControlsComponent extends ControlsComponent {
     super._onBackClick(e)
 
     if (this._operation.getContrast() === this._operation.getOptionDefault('contrast')) {
-      const { ui } = this.context
-      ui.removeOperation(this._operation)
+      const { editor } = this.context
+      editor.removeOperation(this._operation)
     }
   }
 

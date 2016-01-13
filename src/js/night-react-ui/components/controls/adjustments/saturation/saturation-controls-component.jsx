@@ -22,7 +22,7 @@ export default class SaturationControlsComponent extends ControlsComponent {
       '_onOperationUpdated',
       '_onOperationRemoved'
     )
-    this._operation = this.context.ui.getOrCreateOperation('saturation')
+    this._operation = this.context.editor.getOrCreateOperation('saturation')
 
     this._events = {
       [Constants.EVENTS.OPERATION_UPDATED]: this._onOperationUpdated,
@@ -60,8 +60,8 @@ export default class SaturationControlsComponent extends ControlsComponent {
     // Operation can be removed by the undo button. We need
     // to make sure we re-create the operation for the lifetime
     // of this control
-    const { ui } = this.context
-    const newOperation = ui.getOrCreateOperation('saturation')
+    const { editor } = this.context
+    const newOperation = editor.getOrCreateOperation('saturation')
     this._operation = newOperation
     this._historyItem = null
     this.state.value = this._operation.getSaturation()
@@ -81,8 +81,8 @@ export default class SaturationControlsComponent extends ControlsComponent {
     super._onBackClick(e)
 
     if (this._operation.getSaturation() === this._operation.getOptionDefault('saturation')) {
-      const { ui } = this.context
-      ui.removeOperation(this._operation)
+      const { editor } = this.context
+      editor.removeOperation(this._operation)
     }
   }
 

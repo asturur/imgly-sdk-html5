@@ -16,9 +16,9 @@ export default {
   identifier: 'saturation',
   icon: 'controls/adjustments/saturation@2x.png',
   label: 'controls.adjustments.saturation',
-  getInitialSharedState: (context) => {
-    const operationExistedBefore = context.ui.operationExists('saturation')
-    const operation = context.ui.getOrCreateOperation('saturation')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('saturation')
+    const operation = editor.getOrCreateOperation('saturation')
     const initialOptions = {
       saturation: operation.getSaturation()
     }
@@ -28,7 +28,7 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('saturation')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('saturation')
   }
 }

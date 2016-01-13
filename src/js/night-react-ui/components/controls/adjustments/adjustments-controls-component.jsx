@@ -45,7 +45,7 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
    */
   _renderListItems () {
     return ITEMS
-      .filter((item) => item.isSelectable(this.context.ui))
+      .filter((item) => item.isSelectable(this.context.editor))
       .map((item) => {
         return (<li
           bem='e:item'

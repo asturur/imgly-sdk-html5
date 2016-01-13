@@ -16,9 +16,9 @@ export default {
   identifier: 'brightness',
   icon: 'controls/adjustments/brightness@2x.png',
   label: 'controls.adjustments.brightness',
-  getInitialSharedState: (context) => {
-    const operationExistedBefore = context.ui.operationExists('brightness')
-    const operation = context.ui.getOrCreateOperation('brightness')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('brightness')
+    const operation = editor.getOrCreateOperation('brightness')
     const initialOptions = {
       brightness: operation.getBrightness()
     }
@@ -28,7 +28,7 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('brightness')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('brightness')
   }
 }

@@ -16,9 +16,9 @@ export default {
   identifier: 'contrast',
   icon: 'controls/adjustments/contrast@2x.png',
   label: 'controls.adjustments.contrast',
-  getInitialSharedState: (context) => {
-    const operationExistedBefore = context.ui.operationExists('contrast')
-    const operation = context.ui.getOrCreateOperation('contrast')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('contrast')
+    const operation = editor.getOrCreateOperation('contrast')
     const initialOptions = {
       contrast: operation.getContrast()
     }
@@ -28,7 +28,7 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('contrast')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('contrast')
   }
 }
