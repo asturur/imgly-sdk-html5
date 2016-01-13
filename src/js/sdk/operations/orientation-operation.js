@@ -21,15 +21,6 @@ import Operation from './operation'
  * @extends PhotoEditorSDK.Operation
  */
 class OrientationOperation extends Operation {
-  constructor (...args) {
-    super(...args)
-
-    /**
-     * The vertex shader used for this operation
-     */
-    this.vertexShader = require('raw!../shaders/generic/sprite.vert')
-  }
-
   /**
    * Rotates the image using WebGL
    * @param  {WebGLRenderer} renderer
