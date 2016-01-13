@@ -85,6 +85,18 @@ export default class Rectangle {
   }
 
   /**
+   * Rounds this rectangle's values
+   * @return {Rectangle}
+   */
+  round () {
+    this.x = Math.round(this.x)
+    this.y = Math.round(this.y)
+    this.width = Math.round(this.width)
+    this.height = Math.round(this.height)
+    return this
+  }
+
+  /**
    * Returns a string representation of this rectangle
    * @return {String}
    */

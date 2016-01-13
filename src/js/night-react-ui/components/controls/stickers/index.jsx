@@ -46,11 +46,11 @@ export default {
    * @param  {Object} context
    * @return {*}
    */
-  clickAtPosition: (position, context) => {
-    if (!context.ui.operationExists('sticker')) return false
-    const renderer = context.kit.getRenderer()
-    const operation = context.ui.getOrCreateOperation('sticker')
-    const sticker = operation.getStickerAtPosition(renderer, position)
+  clickAtPosition: (position, editor) => {
+    if (!editor.operationExists('sticker')) return false
+    const sdk = editor.getSDK()
+    const operation = editor.getOrCreateOperation('sticker')
+    const sticker = operation.getStickerAtPosition(sdk, position)
     if (!sticker) {
       return false
     } else {

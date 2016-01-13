@@ -16,11 +16,9 @@ export default {
   identifier: 'orientation',
   icon: 'controls/overview/orientation@2x.png',
   label: 'controls.overview.orientation',
-  getInitialSharedState: (context) => {
-    const { ui } = context
-
-    const operationExistedBefore = ui.operationExists('orientation')
-    const operation = ui.getOrCreateOperation('orientation')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('orientation')
+    const operation = editor.getOrCreateOperation('orientation')
     const initialOptions = operation.serializeOptions()
 
     return {
@@ -29,7 +27,7 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('orientation')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('orientation')
   }
 }

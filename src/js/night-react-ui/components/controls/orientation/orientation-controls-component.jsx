@@ -24,7 +24,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
       '_onOperationRemoved'
     )
     this._operation = this.getSharedState('operation')
-    this._cropOperation = this.context.ui.getOperation('crop')
+    this._cropOperation = this.context.editor.getOperation('crop')
     this._operationExistedBefore = this.getSharedState('operationExistedBefore')
 
     this._events = {

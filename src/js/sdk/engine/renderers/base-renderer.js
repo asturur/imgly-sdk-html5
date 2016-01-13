@@ -12,7 +12,7 @@ import { Vector2, EventEmitter, Color } from '../globals'
 import Utils from '../utils/utils'
 
 export default class BaseRenderer extends EventEmitter {
-  constructor (width, height, options) {
+  constructor (width, height, options = {}) {
     super()
 
     this._width = width || 800

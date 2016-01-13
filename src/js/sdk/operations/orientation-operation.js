@@ -8,8 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Engine } from '../globals'
 import Promise from '../vendor/promise'
-import Matrix from '../lib/math/matrix'
 import Vector2 from '../lib/math/vector2'
 import Operation from './operation'
 
@@ -23,61 +23,72 @@ import Operation from './operation'
 class OrientationOperation extends Operation {
   /**
    * Rotates the image using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return new Promise((resolve, reject) => {
-      const actualDegrees = this._options.rotation % 360
-      const radians = actualDegrees * (Math.PI / 180)
+  _renderWebGL (sdk) {
+    const actualDegrees = this._options.rotation % 360
+    const radians = actualDegrees * (Math.PI / 180)
 
-      // Apply rotation
-      const c = Math.cos(radians)
-      const s = Math.sin(radians)
-      let rotationMatrix = new Matrix()
-      rotationMatrix.a = c
-      rotationMatrix.b = -s
-      rotationMatrix.c = s
-      rotationMatrix.d = c
+    const outputSprite = sdk.getSprite()
+    const outputContainer = sdk.getContainer()
+    let renderTexture = this._getRenderTexture(sdk)
 
-      // Apply flip
-      let flipMatrix = new Matrix()
-      flipMatrix.a = this._options.flipHorizontally ? -1 : 1
-      flipMatrix.d = this._options.flipVertically ? -1 : 1
+    if (this.isDirtyForRenderer(sdk.getRenderer())) {
+      const tempAnchor = outputSprite.getAnchor().clone()
+      const tempPosition = outputSprite.getPosition().clone()
+      const tempScale = outputSprite.getScale().clone()
 
-      const matrix = flipMatrix.multiply(rotationMatrix)
+      outputSprite.setScale(
+        this._options.flipHorizontally ? -1 : 1,
+        this._options.flipVertically ? -1 : 1
+      )
+      outputSprite.setRotation(radians)
+      outputSprite.setAnchor(0.5, 0.5)
+      outputSprite.updateTransform()
 
-      // Run the shader
-      renderer.setTextureDimensions(this.getNewDimensions(renderer, renderer.getTextureDimensions()))
-      renderer.runShader(this.vertexShader, null, {
-        uniforms: {
-          u_projMatrix: { type: 'mat3fv', value: matrix.toArray() }
-        }
-      })
-      resolve()
-    })
+      // Resize output texture
+      const bounds = outputSprite.getBounds()
+      const textureDimensions = new Vector2(bounds.width, bounds.height)
+      renderTexture.resizeTo(textureDimensions)
+
+      // Make sure we're rendering to top left corner
+      outputSprite.setPosition(renderTexture.getWidth() / 2, renderTexture.getHeight() / 2)
+
+      // Draw
+      renderTexture.render(outputContainer)
+
+      // Reset sprite
+      outputSprite.setRotation(0)
+      outputSprite.setAnchor(tempAnchor)
+      outputSprite.setPosition(tempPosition)
+      outputSprite.setScale(tempScale)
+    }
+
+    outputSprite.setTexture(renderTexture)
+    return Promise.resolve()
   }
 
   /**
    * Crops the image using Canvas2D
-   * @param  {CanvasRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
    * @private
    */
-  _renderCanvas (renderer) {
+  _renderCanvas (sdk) {
     return new Promise((resolve, reject) => {
-      const canvas = renderer.getCanvas()
-      const context = renderer.getContext()
+      const canvas = sdk.getCanvas()
+      const context = sdk.getContext()
       const actualDegrees = this._options.rotation % 360
       const radians = actualDegrees * Math.PI / 180
 
       const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
       const canvasDimensions = new Vector2(canvas.width, canvas.height)
         .divide(pixelRatio)
-      const newDimensions = this.getNewDimensions(renderer, canvasDimensions)
+      const newDimensions = this.getNewDimensions(sdk, canvasDimensions)
 
       // Clone the canvas
-      const tempCanvas = renderer.cloneCanvas()
+      const tempCanvas = sdk.cloneCanvas()
 
       let scaleX = 1
       let scaleY = 1
@@ -94,7 +105,7 @@ class OrientationOperation extends Operation {
         translateY = canvas.height
       }
 
-      renderer.resizeTo(newDimensions)
+      sdk.resizeTo(newDimensions)
       context.save()
       context.translate(canvas.width / 2, canvas.height / 2)
       context.rotate(radians)
@@ -104,23 +115,6 @@ class OrientationOperation extends Operation {
 
       resolve()
     })
-  }
-
-  /**
-   * Gets the new dimensions
-   * @param {Renderer} renderer
-   * @param {Vector2} [dimensions]
-   * @return {Vector2}
-   */
-  getNewDimensions (renderer, dimensions) {
-    dimensions = dimensions || renderer.getSize()
-
-    let actualDegrees = this._options.rotation % 360
-    if (actualDegrees % 180 !== 0) {
-      dimensions.flip()
-    }
-
-    return dimensions
   }
 }
 

@@ -59,6 +59,7 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     this._checkForUpdates()
     this._registerOperations()
+    this._initRenderer()
   }
 
   /**
@@ -102,13 +103,11 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._sprite.setAnchor(0, 0)
     this._sprite.setPosition(0, 0)
     this._sprite.setScale(1, 1)
+    this._sprite.setRotation(0)
 
     const stack = this._operationsStack
     stack.updateDirtinessForRenderer(this._renderer)
 
-    if (!this._inputTexture) {
-      this._inputTexture = Engine.Texture.fromImage(this._image)
-    }
     this._sprite.setTexture(this._inputTexture)
 
     return stack.validateSettings()
@@ -172,7 +171,7 @@ export default class PhotoEditorSDK extends EventEmitter {
     }
 
     let width, height
-    if (this._rendeMode === 'dynamic' && this._options.canvas) {
+    if (this._renderMode === 'dynamic' && this._options.canvas) {
       const { canvas } = this._options
       width = canvas.width
       height = canvas.height
@@ -193,6 +192,9 @@ export default class PhotoEditorSDK extends EventEmitter {
         `)
         this._renderer = Engine.autoDetectRenderer(100, 100, rendererOptions)
     }
+
+    this._inputTexture = Engine.Texture.fromImage(this._image)
+    this._sprite.setTexture(this._inputTexture)
   }
 
   _getFinalDimensions () {
@@ -200,6 +202,7 @@ export default class PhotoEditorSDK extends EventEmitter {
   }
 
   getSprite () { return this._sprite }
+  getContainer () { return this._container }
 
   /**
    * Resets all custom and selected operations

@@ -141,7 +141,10 @@ export default class DisplayObject {
     this._boundsNeedUpdate = true
   }
   getRotation () { return this._rotation }
-  setRotation (rotation) { this._rotation = rotation }
+  setRotation (rotation) {
+    this._rotation = rotation
+    this._boundsNeedUpdate = true
+  }
   getAlpha () { return this._alpha }
   setAlpha (alpha) { this._alpha = alpha }
   getWorldTransform () { return this._worldTransform }

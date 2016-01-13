@@ -131,8 +131,9 @@ export default class CanvasComponent extends BaseComponent {
     const { editor } = this.context
     const sdk = editor.getSDK()
 
+    const initialOffset = sdk.getOffset()
     if (!newOffset) {
-      newOffset = sdk.getOffset().clone()
+      newOffset = initialOffset.clone()
     }
 
     const sprite = sdk.getSprite()
@@ -151,9 +152,11 @@ export default class CanvasComponent extends BaseComponent {
       .divide(2)
       .clamp(new Vector2(0, 0), null)
 
-    newOffset.clamp(minOffset, maxOffset)
-    sdk.setOffset(newOffset)
-    this._onCanvasUpdate()
+    newOffset.clamp(minOffset, maxOffset).round()
+    if (!initialOffset.equals(newOffset)) {
+      sdk.setOffset(newOffset)
+      this._onCanvasUpdate()
+    }
   }
 
   /**
@@ -227,31 +230,18 @@ export default class CanvasComponent extends BaseComponent {
    * @private
    */
   _onCanvasUpdate (zoom = this.props.zoom, callback) {
-    const { editor } = this.context
-    return editor.render()
-    //
-    // let rendererDimensions = kit.getInitialDimensions()
-    // if (zoom !== null) {
-    //   rendererDimensions
-    //     .multiply(zoom)
-    //     .floor()
-    // }
-    // kit.setDimensions(`${rendererDimensions.x}x${rendererDimensions.y}`)
-    //
-    // return this._renderCanvas()
-    //   .then(() => {
-    //     this._cacheDimensions()
-    //     this._repositionCanvas()
-    //     this.updateOffset()
-    //     callback && callback()
-    //   })
-    //   .catch((e) => {
-    //     ModalManager.instance.displayError(
-    //       this._t('errors.renderingError.title'),
-    //       this._t('errors.renderingError.text', { error: e.message })
-    //     )
-    //     console && console.error && console.error(e)
-    //   })
+    return this._renderCanvas()
+      .then(() => {
+        callback && callback()
+        this.updateOffset()
+      })
+      .catch((e) => {
+        ModalManager.instance.displayError(
+          this._t('errors.renderingError.title'),
+          this._t('errors.renderingError.text', { error: e.message })
+        )
+        console && console.error && console.error(e)
+      })
   }
 
   // -------------------------------------------------------------------------- GETTERS
@@ -330,8 +320,8 @@ export default class CanvasComponent extends BaseComponent {
 
     this._rendering = true
 
-    const { kit } = this.context
-    kit.render()
+    const { editor } = this.context
+    editor.render()
       .then(() => {
         scheduledRendering.emit('done')
         this._rendering = false

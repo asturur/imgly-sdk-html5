@@ -132,6 +132,14 @@ export default class Editor extends EventEmitter {
     return this._enabledControls
   }
 
+  /**
+   * Returns the available controls
+   * @return {Array.<Object>}
+   */
+  getAvailableControls () {
+    return this._availableControls
+  }
+
   // -------------------------------------------------------------------------- PUBLIC OPERATIONS API
 
   /**

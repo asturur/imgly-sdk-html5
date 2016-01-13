@@ -43,14 +43,14 @@ export default {
    * Checks if there is something at the given position that
    * would cause the UI to switch to this control on click
    * @param  {Vector2} position
-   * @param  {Object} context
+   * @param  {Editor} editor
    * @return {*}
    */
-  clickAtPosition: (position, context) => {
-    if (!context.ui.operationExists('text')) return false
-    const renderer = context.kit.getRenderer()
-    const operation = context.ui.getOrCreateOperation('text')
-    const text = operation.getTextAtPosition(renderer, position)
+  clickAtPosition: (position, editor) => {
+    if (!editor.operationExists('text')) return false
+    const sdk = editor.getSDK()
+    const operation = editor.getOrCreateOperation('text')
+    const text = operation.getTextAtPosition(sdk, position)
     if (!text) {
       return false
     } else {

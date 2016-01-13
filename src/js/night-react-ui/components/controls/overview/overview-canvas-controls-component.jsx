@@ -34,15 +34,15 @@ export default class OverviewCanvasControlsComponent extends BaseComponent {
     const position = Utils.getEventPosition(e)
       .subtract(containerPosition)
 
-    const { ui } = this.context
-    const controls = ui.getAvailableControls()
+    const { editor } = this.context
+    const controls = editor.getAvailableControls()
 
     // Check if any of the controls responds to a click
     // at the given position
     for (let identifier in controls) {
       const control = controls[identifier]
       const clickResponse = control.clickAtPosition &&
-        control.clickAtPosition(position, this.context)
+        control.clickAtPosition(position, editor)
       if (clickResponse) {
         // Responds to click, switch to the controls
         return this.props.onSwitchControls(control, clickResponse)

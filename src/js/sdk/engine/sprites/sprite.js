@@ -107,11 +107,13 @@ export default class Sprite extends Container {
   setWidth (width) {
     this._scale.x = width / this._texture.getFrame().width
     this._width = width
+    this._boundsNeedUpdate = true
   }
   getWidth () { return this._width }
   setHeight (height) {
     this._scale.y = height / this._texture.getFrame().height
     this._height = height
+    this._boundsNeedUpdate = true
   }
   getHeight () { return this._height }
   getAnchor () { return this._anchor }
@@ -121,5 +123,6 @@ export default class Sprite extends Container {
     } else {
       this._anchor.set(anchor, y)
     }
+    this._boundsNeedUpdate = true
   }
 }
