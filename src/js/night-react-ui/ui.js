@@ -17,7 +17,6 @@ import {
 import AppComponent from './components/app-component'
 import ScrollbarComponent from './components/scrollbar-component'
 import ControlsComponent from './components/controls/controls-component'
-import Exporter from './lib/exporter'
 import ModalManager from './lib/modal-manager'
 
 export default class NightReactUI extends EventEmitter {
@@ -116,33 +115,6 @@ export default class NightReactUI extends EventEmitter {
     } else {
       ReactDOM.render(component, this._options.container)
     }
-  }
-
-  /**
-   * Exports an image
-   * @param {Boolean} download = false
-   * @return {Promise}
-   *  @todo Does this belong here?
-   */
-  export (download = false) {
-    if (this._watermarkOperation) {
-      this._watermarkOperation = this.getOperation('watermark')
-      this._watermarkOperation.setEnabled(false)
-    }
-
-    const options = this._options.export
-    const exporter = new Exporter(this._renderer, options, download)
-    return exporter.export()
-      .then((output) => {
-        this.emit('export', output)
-
-        if (this._watermarkOperation) {
-          this._watermarkOperation.setEnabled(true)
-        }
-        this._renderer.operationsStack.setAllToDirty()
-
-        return output
-      })
   }
 
   // -------------------------------------------------------------------------- INITIALIZATION

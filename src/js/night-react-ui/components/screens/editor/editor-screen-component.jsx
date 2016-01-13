@@ -135,7 +135,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _onExportClick () {
-    const { ui, options } = this.context
+    const { options } = this.context
     const exportOptions = options.export
 
     this.switchToControls(OverviewControls, null, () => {
@@ -143,7 +143,7 @@ export default class EditorScreenComponent extends ScreenComponent {
 
       // Give it some time to display the loading modal
       setTimeout(() => {
-        ui.export(exportOptions.download)
+        this._editor.export(exportOptions.download)
           .then(() => {
             loadingModal.close()
           })

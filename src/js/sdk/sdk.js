@@ -16,13 +16,13 @@ import OperationsStack from './lib/operations-stack'
 import VersionChecker from './lib/version-checker'
 import Operations from './operations/'
 import Exif from './lib/exif'
+import ImageExporter from './lib/image-exporter'
 // import ImageDimensions from './image-dimensions'
-// import ImageExporter from './image-exporter'
 // import Vector2 from './math/vector2'
 
 // import WebGLRenderer from '../renderers/webgl-renderer'
 // import CanvasRenderer from '../renderers/canvas-renderer'
-// import { RenderType, ImageFormat } from '../constants'
+import { RenderType, ImageFormat } from './constants'
 
 export default class PhotoEditorSDK extends EventEmitter {
   constructor (preferredRenderer, options = {}) {
@@ -45,6 +45,7 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._zoom = this._options.zoom
     this._operations = {}
     this._image = this._options.image
+    this._renderMode = this._options.renderMode
     this._operationsStack = null
     this.setOperationsStack(new OperationsStack())
 
@@ -58,6 +59,41 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     this._checkForUpdates()
     this._registerOperations()
+  }
+
+  /**
+   * Exports the image
+   * @param  {PhotoEditorSDK.RenderType} [renderType=PhotoEditorSDK.RenderType.DATAURL] - The output type
+   * @param  {PhotoEditorSDK.ImageFormat} [imageFormat=PhotoEditorSDK.ImageFormat.PNG] - The output image format
+   * @param  {Number} [quality=0.8] - The image quality, between 0 and 1
+   * @return {Promise}
+   */
+  export (renderType = RenderType.DATAURL, imageFormat = ImageFormat.PNG, quality = 0.8) {
+    if (!this._renderer) this._initRenderer()
+
+    this._renderMode = 'export'
+    const tempDimensions = this._renderer.getDimensions()
+    this._renderer.resizeTo(this._getFinalDimensions())
+
+    return ImageExporter.validateSettings(renderType, imageFormat)
+      .then(() => {
+        return this.render()
+      })
+      .then(() => {
+        return ImageExporter.export(
+          this,
+          this._image,
+          this._renderer.getCanvas(),
+          renderType,
+          imageFormat,
+          quality)
+      })
+      .then((data) => {
+        this._renderer.resizeTo(tempDimensions)
+        this._renderMode = 'dynamic'
+        this.render()
+        return data
+      })
   }
 
   render () {
@@ -80,13 +116,16 @@ export default class PhotoEditorSDK extends EventEmitter {
         return stack.render(this, this._sprite)
       })
       .then(() => {
-        const position = this._renderer.getDimensions()
-          .clone()
-          .divide(2)
-          .add(this._offset)
-        this._sprite.setAnchor(0.5, 0.5)
-        this._sprite.setScale(this._zoom, this._zoom)
-        this._sprite.setPosition(position)
+        if (this._renderMode === 'dynamic') {
+          const position = this._renderer.getDimensions()
+            .clone()
+            .divide(2)
+            .add(this._offset)
+          this._sprite.setAnchor(0.5, 0.5)
+          this._sprite.setScale(this._zoom, this._zoom)
+          this._sprite.setPosition(position)
+        }
+
         this._renderer.render(this._container)
       })
   }
@@ -133,14 +172,14 @@ export default class PhotoEditorSDK extends EventEmitter {
     }
 
     let width, height
-    if (this._options.renderMode === 'dynamic' && this._options.canvas) {
+    if (this._rendeMode === 'dynamic' && this._options.canvas) {
       const { canvas } = this._options
       width = canvas.width
       height = canvas.height
     } else if (this._image) {
-      // @TODO Final dimensions go here
-      width = this._image.width
-      height = this._image.height
+      const dimensions = this._getFinalDimensions()
+      width = dimensions.x
+      height = dimensions.y
     }
 
     switch (this._preferredRenderer) {
@@ -154,6 +193,10 @@ export default class PhotoEditorSDK extends EventEmitter {
         `)
         this._renderer = Engine.autoDetectRenderer(100, 100, rendererOptions)
     }
+  }
+
+  _getFinalDimensions () {
+    return new Vector2(this._image.width, this._image.height)
   }
 
   getSprite () { return this._sprite }

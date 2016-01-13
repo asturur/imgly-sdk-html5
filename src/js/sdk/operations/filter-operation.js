@@ -48,13 +48,15 @@ class FilterOperation extends Operation {
   }
 
   /**
-   * Sets this operation to dirty, so that it will re-render next time
+   * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
+   * @param {BaseRenderer} renderer
    */
-  setDirty (dirty) {
-    super.setDirty(dirty)
+  setDirtyForRenderer (dirty, renderer) {
+    super.setDirtyForRenderer(dirty, renderer)
+
     if (dirty) {
-      this._selectedFilter.setDirty(dirty)
+      this._selectedFilter.setDirty(dirty, renderer)
     }
   }
 }

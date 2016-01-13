@@ -12,8 +12,8 @@ import { RenderType, Utils } from '../globals'
 import FileDownloader from './file-downloader'
 
 export default class Exporter {
-  constructor (kit, options, download) {
-    this._kit = kit
+  constructor (sdk, options, download) {
+    this._sdk = sdk
     this._options = options
     this._download = download
   }
@@ -25,25 +25,12 @@ export default class Exporter {
   export () {
     const renderType = this._getRenderType()
 
-    // Let the SDK render the whole image (don't limit dimensions)
-    const previousDimensions = this._kit.getDimensions()
-    this._kit.setDimensions(null)
-
-    // Let the SDK render
-    return this._kit.export(renderType, this._options.format)
+    return this._sdk.export(renderType, this._options.format)
       .then((data) => {
         if (this._download) {
           this._downloadData(renderType, data)
         }
         return data
-      })
-      .then((output) => {
-        // Reset renderer
-        this._kit.reset()
-        this._kit.setDimensions(previousDimensions)
-        this._kit.render()
-
-        return output
       })
   }
 

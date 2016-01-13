@@ -8,14 +8,16 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDK, SDKUtils, Constants } from '../globals'
+import { EventEmitter, SDK, SDKUtils, Constants } from '../globals'
+import Exporter from './exporter'
 
 /**
  * The Editor class is an interface to the SDK, managing operations, rendering,
  * history, zoom etc.
  */
-export default class Editor {
+export default class Editor extends EventEmitter {
   constructor (options, mediator) {
+    super()
     this._options = options
     this._mediator = mediator
 
@@ -228,6 +230,38 @@ export default class Editor {
    */
   render () {
     return this._sdk.render()
+  }
+
+  /**
+   * Exports an image
+   * @param {Boolean} download = false
+   * @return {Promise}
+   *  @todo Does this belong here?
+   */
+  export (download = false) {
+    // if (this._watermarkOperation) {
+    //   this._watermarkOperation = this.getOperation('watermark')
+    //   this._watermarkOperation.setEnabled(false)
+    // }
+
+    // Invalidate caches
+    this._sdk.setAllOperationsToDirty()
+
+    const options = this._options.export
+    const exporter = new Exporter(this._sdk, options, download)
+    return exporter.export()
+      .then((output) => {
+        this.emit('export', output)
+
+        // if (this._watermarkOperation) {
+        //   this._watermarkOperation.setEnabled(true)
+        // }
+
+        // Invalidate caches
+        this._sdk.setAllOperationsToDirty()
+
+        return output
+      })
   }
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS

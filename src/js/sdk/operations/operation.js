@@ -64,15 +64,15 @@ class Operation extends Configurable {
     }
 
     // Handle caching
-    if (this._dirty) {
+    // if (this._dirty) {
       return renderFn(renderer)
         .then(() => {
           // renderer.cache(this._uuid)
           this._dirty = false
         })
-    } else {
-      return renderer.drawCached(this._uuid)
-    }
+    // } else {
+    //   return renderer.drawCached(this._uuid)
+    // }
   }
 
   /**
@@ -145,6 +145,16 @@ class Operation extends Configurable {
    */
   setDirtyForRenderer (dirty, renderer) {
     this._dirtiness[renderer.id] = dirty
+  }
+
+  /**
+   * Sets the dirtiness for all renderers
+   * @param {Boolean} dirty
+   */
+  setDirty (dirty) {
+    for (let rendererId in this._dirtiness) {
+      this._dirtiness[rendererId] = dirty
+    }
   }
 
   getOptions () { return this._options }
