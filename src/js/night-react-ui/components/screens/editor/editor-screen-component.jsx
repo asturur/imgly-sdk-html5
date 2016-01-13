@@ -316,8 +316,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     newZoom -= 0.1
     newZoom = Math.max(Math.min(defaultZoom, 1), newZoom)
 
-    console.log('newZoom', newZoom)
-
     this._zoom(newZoom)
   }
 
