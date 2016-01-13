@@ -44,6 +44,20 @@ class Operation extends Configurable {
     this._dirty = true
   }
 
+  // -------------------------------------------------------------------------- RENDERING
+
+  /**
+   * Creates and returns a render texture
+   * @param  {Renderer} renderer
+   * @return {RenderTexture}
+   */
+  _getRenderTexture (renderer) {
+    if (!this._renderTexture) {
+      this._renderTexture = renderer.createRenderTexture()
+    }
+    return this._renderTexture
+  }
+
   /**
    * Applies this operation
    * @param  {Renderer} renderer

@@ -86,18 +86,6 @@ export default class FrameOperation extends Operation {
   }
 
   /**
-   * Creates and returns a render texture
-   * @param  {Renderer} renderer
-   * @return {RenderTexture}
-   */
-  _getRenderTexture (renderer) {
-    if (!this._renderTexture) {
-      this._renderTexture = renderer.createRenderTexture()
-    }
-    return this._renderTexture
-  }
-
-  /**
    * Crops the image using Canvas2D
    * @param  {CanvasRenderer} renderer
    * @return {Promise}
