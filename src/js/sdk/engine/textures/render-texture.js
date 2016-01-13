@@ -77,6 +77,8 @@ export default class RenderTexture extends Texture {
 
     this._width = dimensions.x
     this._height = dimensions.y
+    this._frame.width = dimensions.x
+    this._frame.height = dimensions.y
 
     this._baseTexture.resizeTo(dimensions)
     this._renderTarget.resizeTo(dimensions)
