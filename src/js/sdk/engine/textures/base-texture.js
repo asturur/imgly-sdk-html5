@@ -20,7 +20,7 @@ export default class BaseTexture extends EventEmitter {
     this._source = source
 
     this._glUnit = 0
-    this._resolution = 1
+    this._pixelRatio = 1
     this._loaded = false
     this._frame = new Rectangle(0, 0, 100, 100)
 
@@ -78,8 +78,8 @@ export default class BaseTexture extends EventEmitter {
   getGLTextureForId (id) { return this._glTextures[id] }
   getFrame () { return this._frame }
   setFrame (frame) { this._frame = frame }
-  getResolution () { return this._resolution }
-  setResolution (resolution) { this._resolution = resolution }
+  getPixelRatio () { return this._pixelRatio }
+  setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
   getGLUnit () { return this._glUnit }
   setGLUnit (glUnit) { this._glUnit = glUnit }
 }

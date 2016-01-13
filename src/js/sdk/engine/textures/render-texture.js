@@ -16,12 +16,12 @@ import RenderTarget from '../utils/render-target'
 import FilterManager from '../managers/filter-manager'
 
 export default class RenderTexture extends Texture {
-  constructor (renderer, width = 100, height = 100, resolution = 1) {
+  constructor (renderer, width = 100, height = 100, pixelRatio = 1) {
     const baseTexture = new BaseTexture()
     const frame = baseTexture.getFrame()
     frame.width = width
     frame.height = height
-    baseTexture.setResolution(resolution)
+    baseTexture.setPixelRatio(pixelRatio)
     baseTexture.setLoaded(true)
     super(baseTexture, new Rectangle(0, 0, width, height))
 
@@ -29,7 +29,7 @@ export default class RenderTexture extends Texture {
     this._loaded = true
     this._width = width
     this._height = height
-    this._resolution = resolution
+    this._pixelRatio = pixelRatio
     this._renderer = renderer
 
     this._setupFilterManager()
@@ -64,7 +64,7 @@ export default class RenderTexture extends Texture {
    * @private
    */
   _setupWebGLBuffer () {
-    this._renderTarget = new RenderTarget(this._renderer, this._width, this._height, this._resolution)
+    this._renderTarget = new RenderTarget(this._renderer, this._width, this._height, this._pixelRatio)
     this._baseTexture.setGLTextureForId(this._renderTarget.getTexture(), this._renderer.getContext().id)
   }
 
