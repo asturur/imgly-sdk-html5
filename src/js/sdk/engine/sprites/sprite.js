@@ -45,8 +45,6 @@ export default class Sprite extends Container {
    */
   getBounds () {
     if (this._boundsNeedUpdate) {
-      this.updateTransform()
-
       const bounds = this._bounds
       const textureFrame = this._texture.getFrame()
 
@@ -83,7 +81,7 @@ export default class Sprite extends Container {
    * @private
    */
   _onTextureUpdate () {
-
+    this._boundsNeedUpdate = true
   }
 
   /**
@@ -93,12 +91,15 @@ export default class Sprite extends Container {
   setTexture (texture) {
     if (!texture) return
 
+    if (this._texture) {
+      this._texture.off('update', this._onTextureUpdate)
+    }
+
     this._texture = texture
     if (texture.getBaseTexture().isLoaded()) {
       this._onTextureUpdate()
-    } else {
-      texture.once('update', this._onTextureUpdate)
     }
+    texture.on('update', this._onTextureUpdate)
   }
 
   getTexture () { return this._texture }

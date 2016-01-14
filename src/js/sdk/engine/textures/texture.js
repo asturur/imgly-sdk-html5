@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { EventEmitter } from '../globals'
+import { Rectangle, EventEmitter } from '../globals'
 import BaseTexture from './base-texture'
 import TextureUVs from '../utils/texture-uvs'
 
@@ -25,10 +25,13 @@ export default class Texture extends EventEmitter {
 
     // Bind event handlers
     this._onBaseTextureLoaded = this._onBaseTextureLoaded.bind(this)
+    this._onBaseTextureUpdated = this._onBaseTextureUpdated.bind(this)
 
     if (!this._baseTexture.isLoaded()) {
       this._baseTexture.once('loaded', this._onBaseTextureLoaded)
     } else {
+      const { width, height } = baseTexture.getFrame()
+      this._frame = new Rectangle(0, 0, width, height)
       this._onBaseTextureLoaded()
     }
   }
@@ -58,6 +61,19 @@ export default class Texture extends EventEmitter {
   _onBaseTextureLoaded () {
     const frame = this._baseTexture.getFrame().clone()
     this.setFrame(frame)
+
+    this._baseTexture.on('update', this._onBaseTextureUpdated)
+  }
+
+  /**
+   * Gets called when the base texture has been updated
+   * @private
+   */
+  _onBaseTextureUpdated () {
+    const { width, height } = this._baseTexture.getFrame()
+    this._frame.width = width
+    this._frame.height = height
+    this.emit('update')
   }
 
   /**

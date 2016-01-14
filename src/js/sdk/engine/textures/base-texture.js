@@ -44,7 +44,10 @@ export default class BaseTexture extends EventEmitter {
    */
   _loadSource () {
     const source = this._source
-    if (source.complete) {
+
+    const sourceLoaded = source.complete
+    const sourceIsCanvas = source.tagName && source.tagName === 'CANVAS'
+    if (sourceLoaded || sourceIsCanvas) {
       return this._onSourceLoaded()
     }
 
@@ -58,14 +61,13 @@ export default class BaseTexture extends EventEmitter {
   _onSourceLoaded () {
     this._loaded = true
     this.emit('loaded')
-    this._update()
+    this.update()
   }
 
   /**
    * Updates the cached dimensions of this BaseTexture's source
-   * @private
    */
-  _update () {
+  update () {
     this._frame = new Rectangle(0, 0, this._source.width, this._source.height)
     this.emit('update')
   }
