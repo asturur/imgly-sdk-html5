@@ -64,6 +64,27 @@ export default class Container extends DisplayObject {
   }
 
   /**
+   * Checks whether this container has the given child
+   * @param  {DisplayObject}  child
+   * @return {Boolean}
+   */
+  hasChild (child) {
+    const index = this._children.indexOf(child)
+    return index !== -1
+  }
+
+  /**
+   * Removes the given object from the list of children
+   * @param  {DisplayObject} child
+   */
+  removeChild (child) {
+    const index = this._children.indexOf(child)
+    if (index !== -1) {
+      this._children.splice(index, 1)
+    }
+  }
+
+  /**
    * Renders this DisplayObject using the given WebGLRenderer
    * @param  {WebGLRenderer} renderer
    * @override
