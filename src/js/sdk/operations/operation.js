@@ -21,13 +21,13 @@ import Configurable from '../lib/configurable'
  * @alias PhotoEditorSDK.Operation
  */
 class Operation extends Configurable {
-  constructor (kit, options) {
+  constructor (sdk, options) {
     super(options, {
       numberFormat: { type: 'string', default: 'relative', available: ['absolute', 'relative'] },
       enabled: { type: 'boolean', default: true }
     })
 
-    this._kit = kit
+    this._sdk = sdk
     this._dirtiness = {}
 
     this._glslPrograms = {}
@@ -48,12 +48,12 @@ class Operation extends Configurable {
 
   /**
    * Creates and returns a render texture
-   * @param  {Renderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @return {RenderTexture}
    */
-  _getRenderTexture (renderer) {
+  _getRenderTexture (sdk) {
     if (!this._renderTexture) {
-      this._renderTexture = renderer.createRenderTexture()
+      this._renderTexture = sdk.createRenderTexture()
     }
     return this._renderTexture
   }

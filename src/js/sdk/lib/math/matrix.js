@@ -111,4 +111,6 @@ export default class Matrix {
       ]
     )
   }
+
+  static get IDENTITY () { return new Matrix() }
 }

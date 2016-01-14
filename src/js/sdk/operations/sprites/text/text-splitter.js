@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-export default class CanvasTextSplitter {
+export default class TextSplitter {
   constructor (context) {
     this._context = context
     this._lastFontStyle = {}
