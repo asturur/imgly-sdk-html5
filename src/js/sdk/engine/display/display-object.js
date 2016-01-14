@@ -38,7 +38,7 @@ export default class DisplayObject {
    * Updates the world transform for this DisplayObject
    */
   updateTransform () {
-    const parentTransform = this._parent.getWorldTransform()
+    const parentTransform = this._parent ? this._parent.getWorldTransform() : Matrix.IDENTITY
     const worldTransform = this._worldTransform
 
     // Only build rotation matrix if rotation has changed since last update
