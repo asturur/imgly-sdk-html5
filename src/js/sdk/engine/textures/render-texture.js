@@ -69,6 +69,14 @@ export default class RenderTexture extends Texture {
   }
 
   /**
+   * Clears this texture's RenderTarget
+   * @param {SDK.Color} color
+   */
+  clear (color) {
+    this._renderTarget.clear(color)
+  }
+
+  /**
    * Resizes this RenderTexture to the given dimensions
    * @param  {Vector2} dimensions
    */
