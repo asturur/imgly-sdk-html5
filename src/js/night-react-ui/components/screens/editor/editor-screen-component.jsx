@@ -448,7 +448,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     if (Controls) {
       controls = (<Controls
         onSwitchControls={this.switchToControls}
-        editor={this}
         sharedState={this.state.sharedState}
         options={controlsOptions}
         ref='controls' />)
@@ -457,7 +456,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     if (CanvasControls) {
       canvasControls = (<CanvasControls
         onSwitchControls={this.switchToControls}
-        editor={this}
         sharedState={this.state.sharedState}
         ref='canvasControls' />)
     }

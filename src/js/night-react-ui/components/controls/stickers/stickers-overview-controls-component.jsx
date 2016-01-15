@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Constants, Vector2 } from '../../../globals'
+import { SDK, ReactBEM, Constants, Vector2 } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ModalManager from '../../../lib/modal-manager'
@@ -24,6 +24,7 @@ export default class StickersOverviewControlsComponent extends ControlsComponent
     )
 
     this._operation = this.getSharedState('operation')
+    this._sprites = this.getSharedState('sprites')
     this._stickers = this.getSharedState('stickers')
 
     this._availableStickers = []
@@ -207,15 +208,17 @@ export default class StickersOverviewControlsComponent extends ControlsComponent
         scale: new Vector2(1.0, 1.0),
         rotation: 0
       })
+      this._sprites.push(sticker)
       this._stickers.push(sticker)
       this._operation.setDirty(true)
 
-      this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
-
-      // Broadcast new state
-      this.setSharedState({
-        selectedSticker: sticker,
-        stickers: this._stickers
+      this._emitEvent(Constants.EVENTS.CANVAS_RENDER, null, () => {
+        // Broadcast new state
+        this.setSharedState({
+          selectedSticker: sticker,
+          sprites: this._sprites,
+          stickers: this._stickers
+        })
       })
     })
 

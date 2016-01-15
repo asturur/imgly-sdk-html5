@@ -8,7 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDKUtils, Constants } from '../../../globals'
+import { SDK, SDKUtils, Constants } from '../../../globals'
+const { Sticker } = SDK
 import StickersControlsComponent from './stickers-controls-component'
 import StickersCanvasControlsComponent from './stickers-canvas-controls-component'
 
@@ -47,37 +48,39 @@ export default {
    * @return {*}
    */
   clickAtPosition: (position, editor) => {
-    if (!editor.operationExists('sticker')) return false
+    if (!editor.operationExists('sprite')) return false
+
     const sdk = editor.getSDK()
-    const operation = editor.getOrCreateOperation('sticker')
-    const sticker = operation.getStickerAtPosition(sdk, position)
-    if (!sticker) {
+    const operation = editor.getOrCreateOperation('sprite')
+    const sprite = operation.getSpriteAtPosition(sdk, position)
+    if (!sprite) {
       return false
-    } else {
-      return { selectedSticker: sticker }
+    } else if (sprite instanceof Sticker) {
+      return { selectedSticker: sprite }
     }
   },
 
   /**
    * Returns the initial state for this control
-   * @param  {Object} context
+   * @param  {Editor} editor
    * @param  {Object} additionalState = {}
    * @return {Object}
    */
-  getInitialSharedState: (context, additionalState = {}) => {
-    const operationExistedBefore = context.ui.operationExists('sticker')
-    const operation = context.ui.getOrCreateOperation('sticker')
-    const stickers = operation.getStickers()
+  getInitialSharedState: (editor, additionalState = {}) => {
+    const operationExistedBefore = editor.operationExists('sprite')
+    const operation = editor.getOrCreateOperation('sprite')
+    const sprites = operation.getSprites()
+    const stickers = operation.getSpritesOfType(Sticker)
     const initialOptions = operation.serializeOptions()
 
     const state = {
-      operationExistedBefore, operation, stickers, initialOptions
+      operationExistedBefore, operation, sprites, stickers, initialOptions
     }
 
     return SDKUtils.extend({}, state, additionalState)
   },
 
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('sticker')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('sprite')
   }
 }

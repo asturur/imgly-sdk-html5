@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { EventEmitter, SDK, SDKUtils, Constants } from '../globals'
+import { EventEmitter, SDK, SDKUtils, Constants, Vector2 } from '../globals'
 import Exporter from './exporter'
 
 /**
@@ -163,7 +163,7 @@ export default class Editor extends EventEmitter {
       return this._operationsMap[identifier]
     } else {
       const Operation = this._availableOperations[identifier]
-      const operation = new Operation(this._renderer, options)
+      const operation = new Operation(this._sdk, options)
       this.addOperation(operation)
       return operation
     }
@@ -238,6 +238,15 @@ export default class Editor extends EventEmitter {
    */
   render () {
     return this._sdk.render()
+  }
+
+  /**
+   * Returns the output sprite's current dimensions
+   * @return {Vector2}
+   */
+  getOutputDimensions () {
+    const spriteBounds = this._sdk.getSprite().getBounds()
+    return new Vector2(spriteBounds.width, spriteBounds.height)
   }
 
   /**

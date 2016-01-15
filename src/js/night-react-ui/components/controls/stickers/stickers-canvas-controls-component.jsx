@@ -6,10 +6,10 @@
  * Released under Attribution-NonCommercial 3.0 Unported
  * http://creativecommons.org/licenses/by-nc/3.0/
  *
- * For commercial use, please contact us at contact@9elements.com
+ * For commercial usf please contact us at contact@9elements.com
  */
 
-import { ColorMatrix, ReactBEM, BaseComponent, Vector2, Constants } from '../../../globals'
+import { SDK, ReactBEM, BaseComponent, Vector2, Constants } from '../../../globals'
 import DraggableComponent from '../../draggable-component.jsx'
 
 export default class StickerCanvasControlsComponent extends BaseComponent {
@@ -23,6 +23,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     )
 
     this._operation = this.getSharedState('operation')
+    this._sprites = this.getSharedState('sprites')
     this._stickers = this.getSharedState('stickers')
     this._selectedSticker = this.getSharedState('selectedSticker')
   }
@@ -64,7 +65,6 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
       this._stickers = stickers
       this._selectedSticker = null
       this._operation.setDirty(true)
-      // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
       this.setSharedState({
         stickers,
         selectedSticker: null
@@ -82,9 +82,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     if (e.target !== this.refs.container) return
     if (!this.getSharedState('selectedSticker')) return
 
-    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
     this.props.onSwitchControls('back')
-    // })
   }
 
   /**
@@ -110,17 +108,17 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onStickerDrag (offset, e) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
-    const relativeOffset = offset.divide(canvasDimensions)
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
+    const relativeOffset = offset
+      .divide(outputDimensions)
     const newPosition = this._initialPosition
       .clone()
       .add(relativeOffset)
 
     this._operation.setDirty(true)
     this._selectedSticker.setPosition(newPosition)
-    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this.forceUpdate()
   }
 
@@ -196,12 +194,24 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
 
     selectedSticker.getScale().set(newScale.x, newScale.x)
     selectedSticker.setRotation(radians)
-    // this._operation.setDirty(true)
-    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this.forceUpdate()
   }
 
   // -------------------------------------------------------------------------- STYLING
+
+  /**
+   * Returns the container style
+   * @return {Object}
+   * @private
+   */
+  _getContainerStyle () {
+    const { x, y, width, height } = this.context.editor.getSDK().getSprite().getBounds()
+    return {
+      left: x,
+      top: y,
+      width, height
+    }
+  }
 
   /**
    * Builds the style object for the given sticker
@@ -356,7 +366,7 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _renderStickerSVGFilters () {
-    const stickers = this._operation.getStickers()
+    const stickers = this._operation.getSpritesOfType(SDK.Sticker)
     const filtersSVG = { __html: stickers.map((sticker, i) => {
       const adjustments = sticker.getAdjustments()
       const brightness = adjustments.getBrightness()
@@ -398,27 +408,26 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    */
   _setInitialStickerScale (sticker) {
     const stickerImage = sticker.getImage()
-    const stickerDimensions = new Vector2(stickerImage.width, stickerImage.height)
 
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
     let scale = sticker.getScale().clone()
 
-    const parentScale = kit.getRenderer().getScale()
+    const maxDimensions = Math.min(outputDimensions.x, outputDimensions.y) * 0.9
+    console.log('maxDimensions', maxDimensions)
 
-    const maxDimensions = Math.min(canvasDimensions.x, canvasDimensions.y) / parentScale * 0.9
-
-    const canvasRatio = canvasDimensions.x / canvasDimensions.y
-    const stickerRatio = stickerDimensions.x / stickerDimensions.y
+    const outputRatio = outputDimensions.x / outputDimensions.y
+    const stickerRatio = stickerImage.width / stickerImage.height
 
     let newScale
-    if (stickerRatio > canvasRatio) {
-      newScale = maxDimensions / stickerDimensions.x
+    if (stickerRatio > outputRatio) {
+      newScale = maxDimensions / stickerImage.width
       scale.set(newScale, newScale)
     } else {
-      newScale = maxDimensions / stickerDimensions.y
+      newScale = maxDimensions / stickerImage.height
       scale.set(newScale, newScale)
     }
+    scale.divide(editor.getSDK().getZoom())
 
     sticker.setScale(scale)
     this._operation.setDirty(true)
@@ -497,8 +506,9 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     }
 
     return (<div
-      bem='b:canvasControls e:container m:full'
+      bem='b:canvasControls e:container'
       ref='root'
+      style={this._getContainerStyle()}
       onClick={this._onCanvasClick}>
         <div
           bem='$b:stickersCanvasControls'
@@ -519,11 +529,13 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _getAbsoluteStickerPosition (sticker) {
-    const { editor } = this.props
-    const canvasDimensions = editor.getCanvasDimensions()
+    const { editor } = this.context
+    const outputSprite = editor.getSDK().getSprite()
+    const outputBounds = outputSprite.getBounds()
+
     return sticker.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputBounds.width, outputBounds.height)
   }
 
   /**
@@ -533,12 +545,12 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _getStickerDimensions (sticker) {
-    const { kit } = this.context
+    const { editor } = this.context
+    const sdk = editor.getSDK()
     const image = sticker.getImage()
-    const parentScale = kit.getRenderer().getScale()
 
     return new Vector2(image.width, image.height)
       .multiply(sticker.getScale())
-      .multiply(parentScale)
+      .multiply(sdk.getZoom())
   }
 }

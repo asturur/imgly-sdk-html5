@@ -8,7 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2, SDKUtils, Constants } from '../../../globals'
+import { SDK, Vector2, SDKUtils, Constants } from '../../../globals'
+const { Text } = SDK
 import TextCanvasControlsComponent from './text-canvas-controls-component'
 import TextControlsComponent from './text-controls-component'
 
@@ -47,33 +48,35 @@ export default {
    * @return {*}
    */
   clickAtPosition: (position, editor) => {
-    if (!editor.operationExists('text')) return false
+    if (!editor.operationExists('sprite')) return false
+
     const sdk = editor.getSDK()
-    const operation = editor.getOrCreateOperation('text')
-    const text = operation.getTextAtPosition(sdk, position)
-    if (!text) {
+    const operation = editor.getOrCreateOperation('sprite')
+    const sprite = operation.getSpriteAtPosition(sdk, position)
+    if (!sprite) {
       return false
-    } else {
-      return { selectedText: text }
+    } else if (sprite instanceof Text) {
+      return { selectedText: sprite }
     }
   },
 
   /**
    * Returns the initial state for this control
-   * @param  {Object} context
+   * @param  {Editor} editor
    * @param  {Object} additionalState = {}
    * @return {Object}
    */
-  getInitialSharedState: (context, additionalState = {}) => {
+  getInitialSharedState: (editor, additionalState = {}) => {
     let state = {}
-    state.operationExistedBefore = context.ui.operationExists('text')
-    state.operation = context.ui.getOrCreateOperation('text')
+    state.operationExistedBefore = editor.operationExists('text')
+    state.operation = editor.getOrCreateOperation('text')
     state.texts = state.operation.getTexts()
     state.initialOptions = state.operation.serializeOptions()
     state.operation.setTexts([])
 
     if (!additionalState.selectedText) {
-      const renderer = context.kit.getRenderer()
+      const sdk = editor.getSDK()
+      const renderer = sdk.getRenderer()
       const text = state.operation.createText({
         text: 'Text',
         maxWidth: 0.5,
@@ -85,11 +88,11 @@ export default {
       state.selectedText = text
     }
 
-    context.kit.render()
+    editor.render()
 
     return SDKUtils.extend({}, state, additionalState)
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('text')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('text')
   }
 }
