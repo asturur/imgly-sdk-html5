@@ -35,8 +35,14 @@ export default class Sprite extends Configurable {
    * @return {Promise}
    */
   update (sdk) {
+    const outputSprite = sdk.getSprite()
+    const outputBounds = outputSprite.getBounds()
+
     this._sprite.setAnchor(this._options.anchor)
-    this._sprite.setPosition(this._options.position)
+    this._sprite.setPosition(this._options.position.clone()
+      .multiply(outputBounds.width, outputBounds.height)
+    )
+
     if (this._options.scale) {
       this._sprite.setScale(this._options.scale)
     }
