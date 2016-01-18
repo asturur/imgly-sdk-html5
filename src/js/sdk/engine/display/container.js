@@ -132,6 +132,18 @@ export default class Container extends DisplayObject {
   }
 
   /**
+   * Returns the non-global bounds of this DisplayObject
+   * @return {Rectangle}
+   */
+  getLocalBounds () {
+    if (this._localBoundsNeedUpdate) {
+      // @TODO Calculate bounds by looking at children
+      this._localBoundsNeedUpdate = false
+    }
+    return this._localBounds
+  }
+
+  /**
    * Returns the bounds for this DisplayObject
    * @return {Rectangle}
    */

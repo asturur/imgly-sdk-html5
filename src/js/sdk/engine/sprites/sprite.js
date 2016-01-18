@@ -40,6 +40,25 @@ export default class Sprite extends Container {
   }
 
   /**
+   * Returns the non-global bounds of this DisplayObject
+   * @return {Rectangle}
+   */
+  getLocalBounds () {
+    if (this._localBoundsNeedUpdate) {
+      const bounds = this._localBounds
+      const textureFrame = this._texture.getFrame()
+
+      bounds.x = -textureFrame.width * this._anchor.x
+      bounds.y = -textureFrame.height * this._anchor.y
+      bounds.width = textureFrame.width
+      bounds.height = textureFrame.height
+
+      this._localBoundsNeedUpdate = false
+    }
+    return this._localBounds
+  }
+
+  /**
    * Returns the bounds for this DisplayObject
    * @return {Rectangle}
    */
@@ -82,6 +101,7 @@ export default class Sprite extends Container {
    */
   _onTextureUpdate () {
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
 
   /**
@@ -109,12 +129,14 @@ export default class Sprite extends Container {
     this._scale.x = width / this._texture.getFrame().width
     this._width = width
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
   getWidth () { return this._width }
   setHeight (height) {
     this._scale.y = height / this._texture.getFrame().height
     this._height = height
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
   getHeight () { return this._height }
   getAnchor () { return this._anchor }
@@ -125,5 +147,6 @@ export default class Sprite extends Container {
       this._anchor.set(anchor, y)
     }
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
 }

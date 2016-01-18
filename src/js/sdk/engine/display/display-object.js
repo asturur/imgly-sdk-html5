@@ -23,6 +23,8 @@ export default class DisplayObject {
     this._shaders = []
     this._boundsNeedUpdate = true
     this._bounds = new Rectangle(0, 0, 1, 1)
+    this._localBoundsNeedUpdate = true
+    this._localBounds = new Rectangle(0, 0, 1, 1)
   }
 
   /**
@@ -64,6 +66,7 @@ export default class DisplayObject {
     worldTransform.multiply(parentTransform)
 
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
 
   // -------------------------------------------------------------------------- SHADERS
@@ -121,6 +124,7 @@ export default class DisplayObject {
       this._position.set(position, y)
     }
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
   getScale () { return this._scale }
   setScale (scale, y) {
@@ -130,6 +134,7 @@ export default class DisplayObject {
       this._scale.set(scale, y)
     }
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
   getPivot () { return this._pivot }
   setPivot (pivot, y) {
@@ -139,11 +144,13 @@ export default class DisplayObject {
       this._pivot.set(pivot, y)
     }
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
   getRotation () { return this._rotation }
   setRotation (rotation) {
     this._rotation = rotation
     this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
   }
   getAlpha () { return this._alpha }
   setAlpha (alpha) { this._alpha = alpha }
