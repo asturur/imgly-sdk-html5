@@ -91,9 +91,7 @@ class StickersControl extends Control {
 
     this._sticker = this._operation.getStickers()[0]
     if (!this._sticker) {
-      this._sticker = this._operation.createSticker({
-        anchor: new Vector2(0, 0)
-      })
+      this._sticker = this._operation.createSticker()
 
       this._scale = this._sticker.getScale().clone()
       this._position = this._sticker.getPosition().clone()

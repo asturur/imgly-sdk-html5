@@ -45,7 +45,6 @@ class PrimitivesStack {
 
     const outputSprite = renderer.getSprite()
     const renderTexture = this._getRenderTexture(renderer)
-
     if (!this._dirty) {
       outputSprite.setTexture(renderTexture)
       return Promise.resolve()
@@ -59,6 +58,9 @@ class PrimitivesStack {
       this._stack.forEach((primitive) => primitive.update(renderer))
       const newFilters = this._stack.map((primitive) => primitive.getFilter())
       outputSprite.setFilters(newFilters)
+
+      outputSprite.setAnchor(0, 0)
+      outputSprite.setPosition(0, 0)
 
       renderTexture.render(outputSprite)
 

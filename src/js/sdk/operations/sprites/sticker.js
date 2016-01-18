@@ -104,7 +104,7 @@ Sticker.prototype.availableOptions = {
   image: { type: 'object', required: true },
   position: { type: 'vector2', default: new Vector2(0.5, 0.5) },
   scale: { type: 'vector2', default: new Vector2(1.0, 1.0) },
-  anchor: { type: 'vector2', default: new Vector2(0.5, 0.5) },
+  anchor: { type: 'vector2', default: new Vector2(0.0, 0.0) },
   pivot: { type: 'vector2', default: new Vector2(0.5, 0.5) },
   rotation: { type: 'number', default: 0 },
   flipHorizontally: { type: 'boolean', default: false },

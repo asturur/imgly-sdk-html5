@@ -109,6 +109,7 @@ export default class PhotoEditorSDK extends EventEmitter {
     stack.updateDirtinessForRenderer(this._renderer)
 
     this._sprite.setTexture(this._inputTexture)
+    this._sprite.updateTransform()
 
     return stack.validateSettings()
       .then(() => {

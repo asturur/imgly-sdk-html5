@@ -48,11 +48,11 @@ export default class Sprite extends Configurable {
     }
     this._sprite.updateTransform()
 
-    const spriteBounds = this._sprite.getBounds()
-    const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+    const frame = this._sprite.getTexture().getFrame()
+    const spriteDimensions = new Vector2(frame.width, frame.height)
 
     this._sprite.setPivot(this._options.pivot.clone().multiply(spriteDimensions))
-    this._sprite.setRotation(this._options.rotation * Math.PI / 180)
+    this._sprite.setRotation(this._options.rotation)
 
     return Promise.resolve()
   }
