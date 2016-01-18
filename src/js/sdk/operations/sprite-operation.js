@@ -262,7 +262,7 @@ class SpriteOperation extends Operation {
 
       const stickerDimensions = new Vector2(
         stickerBounds.width, stickerBounds.height
-      ).multiply(zoom).multiply(stickerScale)
+      ).multiply(zoom).multiply(Math.abs(stickerScale))
 
       if (x > -0.5 * stickerDimensions.x &&
           x < 0.5 * stickerDimensions.x &&

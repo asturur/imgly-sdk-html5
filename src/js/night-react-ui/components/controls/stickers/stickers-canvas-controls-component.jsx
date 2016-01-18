@@ -551,5 +551,6 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     return new Vector2(image.width, image.height)
       .multiply(sticker.getScale())
       .multiply(sdk.getZoom())
+      .abs()
   }
 }

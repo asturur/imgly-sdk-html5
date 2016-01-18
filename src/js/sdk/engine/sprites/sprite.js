@@ -86,9 +86,9 @@ export default class Sprite extends Container {
       })
 
       bounds.x = minX
-      bounds.width = maxX - minX
+      bounds.width = Math.abs(maxX - minX)
       bounds.y = minY
-      bounds.height = maxY - minY
+      bounds.height = Math.abs(maxY - minY)
 
       this._boundsNeedUpdate = false
     }
