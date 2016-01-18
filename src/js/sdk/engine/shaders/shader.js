@@ -205,6 +205,20 @@ export default class Shader {
   }
 
   /**
+   * Sets the given uniforms to their values
+   * @param {Object}  uniforms
+   * @param {Boolean} sync = false
+   */
+  setUniforms (uniforms, sync = false) {
+    for (let name in uniforms) {
+      this._uniforms[name].value = uniforms[name]
+      if (sync) {
+        this.syncUniform(name)
+      }
+    }
+  }
+
+  /**
    * Cleans up this shader
    */
   dispose () {

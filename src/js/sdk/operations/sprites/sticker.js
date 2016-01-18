@@ -8,11 +8,19 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine, Vector2 } from '../../globals'
+import { Engine, Vector2, Utils } from '../../globals'
 import Sprite from './sprite'
 
 class AdjustmentsFilter extends Engine.Filter {
-
+  constructor (...args) {
+    const fragmentSource = require('raw!../../shaders/generic/adjustments.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_brightness: { type: 'f', value: 0 },
+      u_saturation: { type: 'f', value: 1 },
+      u_contrast: { type: 'f', value: 1 }
+    })
+    super(null, fragmentSource, uniforms)
+  }
 }
 
 export default class Sticker extends Sprite {
@@ -46,8 +54,15 @@ export default class Sticker extends Sprite {
       this._identitySprite.setTexture(this._inputTexture)
       this._identitySprite.setFilters(hasAdjustments ? [this._adjustmentsFilter] : [])
 
+      const adjustments = this._options.adjustments
+      this._adjustmentsFilter.setUniforms({
+        u_brightness: adjustments.getBrightness(),
+        u_saturation: adjustments.getSaturation(),
+        u_contrast: adjustments.getContrast()
+      }, true)
+
       const { width, height } = this._options.image
-      renderTexture.resizeTo(width, height)
+      renderTexture.resizeTo(new Vector2(width, height))
       renderTexture.render(this._identitySprite)
 
       this.setDirtyForRenderer(false, renderer)
