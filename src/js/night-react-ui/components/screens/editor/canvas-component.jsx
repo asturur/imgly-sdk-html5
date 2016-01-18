@@ -22,7 +22,8 @@ export default class CanvasComponent extends BaseComponent {
       '_onDragStart',
       '_onDragMove',
       '_onDragEnd',
-      '_onCanvasUpdate'
+      '_render',
+      '_renderCanvas'
     )
 
     this._rendering = false
@@ -35,8 +36,12 @@ export default class CanvasComponent extends BaseComponent {
       canvasOffset: new Vector2()
     }
 
+    const { editor } = this.context
+    editor.on('operation-removed', this._render)
+    editor.on('operation-updated', this._render)
+
     this._events = {
-      [Constants.EVENTS.CANVAS_RENDER]: this._onCanvasUpdate
+      [Constants.EVENTS.CANVAS_RENDER]: this._render
     }
   }
 
@@ -51,7 +56,7 @@ export default class CanvasComponent extends BaseComponent {
       const { editor } = this.context
       const sdk = editor.getSDK()
       sdk.setAllOperationsToDirty()
-      this._onCanvasUpdate(props.zoom)
+      this._render(props.zoom)
     }
   }
 
@@ -72,7 +77,7 @@ export default class CanvasComponent extends BaseComponent {
 
     this._cacheDimensions()
 
-    this._onCanvasUpdate()
+    this._render()
       .then(() => {
         this.props.onFirstRender && this.props.onFirstRender()
       })
@@ -83,6 +88,15 @@ export default class CanvasComponent extends BaseComponent {
    */
   componentDidUpdate (prevProps, newProps) {
     this._cacheDimensions()
+  }
+
+  /**
+   * Called when this component is about to be unmounted
+   */
+  componentWillUnmount () {
+    const { editor } = this.context
+    editor.off('operation-removed', this._render)
+    editor.off('operation-updated', this._render)
   }
 
   // -------------------------------------------------------------------------- DRAGGING
@@ -155,7 +169,7 @@ export default class CanvasComponent extends BaseComponent {
     newOffset.clamp(minOffset, maxOffset).round()
     if (!initialOffset.equals(newOffset)) {
       sdk.setOffset(newOffset)
-      this._onCanvasUpdate()
+      this._render()
     }
   }
 
@@ -229,7 +243,7 @@ export default class CanvasComponent extends BaseComponent {
    * @param {Function} [callback]
    * @private
    */
-  _onCanvasUpdate (zoom = this.props.zoom, callback) {
+  _render (zoom = this.props.zoom, callback) {
     return this._renderCanvas()
       .then(() => {
         callback && callback()
@@ -287,7 +301,7 @@ export default class CanvasComponent extends BaseComponent {
     const { editor } = this.context
     const sdk = editor.getSDK()
     sdk.resizeTo(this._containerDimensions)
-    this._onCanvasUpdate()
+    this._renderCanvas()
   }
 
   /**
