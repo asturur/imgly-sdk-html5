@@ -25,7 +25,7 @@ export default {
    * @this {StickersControlsComponent}
    */
   onExit: function () {
-    const { editor } = this.props
+    const { editor } = this.context
     const operation = this.getSharedState('operation')
 
     editor.addHistory(

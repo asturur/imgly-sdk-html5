@@ -35,6 +35,7 @@ class OrientationOperation extends Operation {
     let renderTexture = this._getRenderTexture(sdk)
 
     if (this.isDirtyForRenderer(sdk.getRenderer())) {
+      // @TODO Use a "raw" sprite to avoid reading and resetting these values
       const tempAnchor = outputSprite.getAnchor().clone()
       const tempPosition = outputSprite.getPosition().clone()
       const tempScale = outputSprite.getScale().clone()

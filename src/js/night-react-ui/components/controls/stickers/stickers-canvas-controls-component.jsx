@@ -414,7 +414,6 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     let scale = sticker.getScale().clone()
 
     const maxDimensions = Math.min(outputDimensions.x, outputDimensions.y) * 0.9
-    console.log('maxDimensions', maxDimensions)
 
     const outputRatio = outputDimensions.x / outputDimensions.y
     const stickerRatio = stickerImage.width / stickerImage.height

@@ -45,7 +45,6 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onNewFile'
     )
 
-    this._history = []
     this._previousControlsStack = []
     this.state = {
       zoom: null,
@@ -156,47 +155,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _onUndoClick () {
-    this.undo()
-  }
-
-  // -------------------------------------------------------------------------- HISTORY
-
-  /**
-   * Reverts the last change
-   */
-  undo () {
-    const lastItem = this._history.pop()
-    if (lastItem) {
-      const { ui } = this.context
-      let { operation, existent, options } = lastItem
-      if (!existent) {
-        ui.removeOperation(operation)
-        this._emitEvent(Constants.EVENTS.OPERATION_REMOVED, operation)
-      } else {
-        operation = ui.getOrCreateOperation(operation.constructor.identifier)
-        operation.set(options)
-        this._emitEvent(Constants.EVENTS.OPERATION_UPDATED, operation)
-      }
-
-      this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
-      this.forceUpdate()
-    }
-  }
-
-  /**
-   * Adds the given data to the history
-   * @param {Operation} operation
-   * @param {Object} options
-   * @param {Boolean} existent
-   * @return {Object}
-   */
-  addHistory (operation, options, existent) {
-    const historyItem = {
-      operation, options, existent
-    }
-    this._history.push(historyItem)
-    this.forceUpdate()
-    return historyItem
+    this._editor.undo()
   }
 
   // -------------------------------------------------------------------------- FEATURES
@@ -322,30 +281,6 @@ export default class EditorScreenComponent extends ScreenComponent {
   // -------------------------------------------------------------------------- MISC
 
   /**
-   * Returns the canvas dimensions
-   * @return {Vector2}
-   */
-  getCanvasDimensions () {
-    return this.refs.canvas.getDimensions()
-  }
-
-  /**
-   * Returns the output dimensions
-   * @return {Vector2}
-   */
-  getOutputDimensions () {
-    return this.refs.canvas.getOutputDimensions()
-  }
-
-  /**
-   * Returns the initial dimensions for the current settings
-   * @return {Vector2}
-   */
-  getInitialDimensions () {
-    return this.refs.canvas.getInitialDimensions()
-  }
-
-  /**
    * We only know the canvas dimensions after the first rendering has been done.
    * On the first render, we should set the initial zoom level
    * @private
@@ -414,7 +349,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _showUndoButton () {
-    return !!this._history.length
+    return this._editor.historyAvailable()
   }
 
   /**

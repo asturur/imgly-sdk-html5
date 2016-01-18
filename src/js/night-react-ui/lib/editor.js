@@ -25,27 +25,10 @@ export default class Editor extends EventEmitter {
     this._initOperations()
     this._initControls()
 
+    this._history = []
     this._operationsMap = {}
     this._operationsStack = this._sdk.getOperationsStack()
-    this._preferredOperationOrder = [
-      // First, all operations that affect the image dimensions
-      'orientation',
-      'crop',
-
-      // Then color operations (first filter, then fine-tuning)
-      'filter',
-      'contrast',
-      'brightness',
-      'saturation',
-
-      // Then post-processing
-      'radial-blur',
-      'tilt-shift',
-      'frame',
-      'sticker',
-      'text',
-      'watermark'
-    ]
+    this._preferredOperationOrder = this._options.operationsOrder
   }
 
   // -------------------------------------------------------------------------- INITIALIZATION
@@ -120,6 +103,52 @@ export default class Editor extends EventEmitter {
       if (sortA > sortB) return 1
       return 0
     })
+  }
+
+  // -------------------------------------------------------------------------- PUBLIC HISTORY API
+
+  /**
+   * Checks if there are any history items available
+   * @return {Boolean}
+   */
+  historyAvailable () {
+    return !!this._history.length
+  }
+
+  /**
+   * Reverts the last change
+   */
+  undo () {
+    const lastItem = this._history.pop()
+    if (lastItem) {
+      let { operation, existent, options } = lastItem
+      if (!existent) {
+        this.removeOperation(operation)
+        this.emit('operation-removed', operation)
+      } else {
+        operation = this.getOrCreateOperation(operation.constructor.identifier)
+        operation.set(options)
+        this.emit('operation-updated', operation)
+      }
+
+      this.emit('history-updated', operation)
+    }
+  }
+
+  /**
+   * Adds the given data to the history
+   * @param {Operation} operation
+   * @param {Object} options
+   * @param {Boolean} existent
+   * @return {Object}
+   */
+  addHistory (operation, options, existent) {
+    const historyItem = {
+      operation, options, existent
+    }
+    this._history.push(historyItem)
+    this.emit('history-updated', operation)
+    return historyItem
   }
 
   // -------------------------------------------------------------------------- PUBLIC CONTROLS API
