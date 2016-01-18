@@ -222,60 +222,56 @@ class SpriteOperation extends Operation {
 
   /**
    * Returns the sprite at the given position on the canvas
-   * @param  {BaseRenderer} renderer
+   * @param  {SDK} sdk
    * @param  {Vector2} position
+   * @param  {Class} [type]
    * @return {Sprite}
    */
-  getSpriteAtPosition (renderer, position) {
-    // @TODO Implement `Sprite#intersectsWithPoint`
-    return null
-    const canvas = renderer.getCanvas()
-    const canvasDimensions = new Vector2(canvas.width, canvas.height)
-    const parentScale = renderer.getScale()
-
+  getSpriteAtPosition (sdk, position, type) {
     let intersectingSprite = null
-    this._options.sprites.slice(0).reverse()
-      .forEach((sprite) => {
-        if (intersectingSprite) return
+    const outputSprite = sdk.getSprite()
+    const outputBounds = outputSprite.getBounds()
+    const zoom = sdk.getZoom()
 
-        const stickerPosition = sticker.getPosition()
-        const stickerRotation = sticker.getRotation()
-        const stickerImage = sticker.getImage()
-        const stickerScale = sticker.getScale()
+    let sprites = this._options.sprites.slice(0).reverse()
+    if (type) {
+      sprites = sprites.filter((s) => s instanceof type)
+    }
+    sprites.forEach((sprite) => {
+      if (intersectingSprite) return
 
-        const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
-        const absoluteStickerPosition = stickerPosition
-          .clone()
-          .multiply(canvasDimensions)
-          .divide(pixelRatio)
-        const relativeClickPosition = position
-          .clone()
-          .subtract(absoluteStickerPosition)
-        const clickDistance = relativeClickPosition.len()
-        const radians = Math.atan2(
-          relativeClickPosition.y,
-          relativeClickPosition.x
-        )
-        const newRadians = radians - stickerRotation
+      const stickerBounds = sprite.getSprite().getLocalBounds()
+      const stickerScale = sprite.getSprite().getScale().x
+      const stickerPosition = sprite.getSprite().getPosition()
+      const stickerRotation = sprite.getRotation()
 
-        const x = Math.cos(newRadians) * clickDistance
-        const y = Math.sin(newRadians) * clickDistance
+      const relativeClickPosition = position
+        .clone()
+        .subtract(stickerPosition.x * zoom, stickerPosition.y * zoom)
+        .subtract(outputBounds.x, outputBounds.y)
 
-        const stickerDimensions = new Vector2(
-            stickerImage.width,
-            stickerImage.height
-          )
-          .multiply(stickerScale)
-          .multiply(parentScale, parentScale)
+      const clickDistance = relativeClickPosition.len()
+      const radians = Math.atan2(
+        relativeClickPosition.y,
+        relativeClickPosition.x
+      )
+      const newRadians = radians - stickerRotation
 
-        if (x > -0.5 * stickerDimensions.x &&
-            x < 0.5 * stickerDimensions.x &&
-            y > -0.5 * stickerDimensions.y &&
-            y < 0.5 * stickerDimensions.y) {
-          intersectingSticker = sticker
-        }
-      })
-    return intersectingSticker
+      const x = Math.cos(newRadians) * clickDistance
+      const y = Math.sin(newRadians) * clickDistance
+
+      const stickerDimensions = new Vector2(
+        stickerBounds.width, stickerBounds.height
+      ).multiply(zoom).multiply(stickerScale)
+
+      if (x > -0.5 * stickerDimensions.x &&
+          x < 0.5 * stickerDimensions.x &&
+          y > -0.5 * stickerDimensions.y &&
+          y < 0.5 * stickerDimensions.y) {
+        intersectingSprite = sprite
+      }
+    })
+    return intersectingSprite
   }
 }
 
