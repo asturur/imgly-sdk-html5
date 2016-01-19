@@ -49,10 +49,10 @@ export default class FrameControlsComponent extends ControlsComponent {
    * @private
    */
   _onThicknessUpdate (thickness) {
-    const { editor } = this.props
-    const canvasDimensions = editor.getInitialDimensions()
+    const { editor } = this.context
+    const finalDimensions = editor.getFinalDimensions()
 
-    const shorterSide = Math.min(canvasDimensions.x, canvasDimensions.y)
+    const shorterSide = Math.min(finalDimensions.x, finalDimensions.y)
     const relativeThickness = thickness / shorterSide
     this._operation.setThickness(relativeThickness)
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -66,9 +66,9 @@ export default class FrameControlsComponent extends ControlsComponent {
   _onBackClick (e) {
     super._onBackClick(e)
 
-    const { ui } = this.context
+    const { editor } = this.context
     if (!this.getSharedState('operationExistedBefore')) {
-      ui.removeOperation(this._operation)
+      editor.removeOperation(this._operation)
     } else {
       this._operation.set(this.getSharedState('initialOptions'))
     }
@@ -84,7 +84,7 @@ export default class FrameControlsComponent extends ControlsComponent {
    * @private
    */
   _onDoneClick (e) {
-    const { editor } = this.props
+    const { editor } = this.context
 
     const operationExistedBefore = this.getSharedState('operationExistedBefore')
     const initialOptions = this.getSharedState('initialOptions')
@@ -117,10 +117,10 @@ export default class FrameControlsComponent extends ControlsComponent {
    * @return {ReactBEM.Element}
    */
   renderControls () {
-    const { editor } = this.props
-    const canvasDimensions = editor.getInitialDimensions()
+    const { editor } = this.context
+    const finalDimensions = editor.getFinalDimensions()
 
-    const shorterSide = Math.min(canvasDimensions.x, canvasDimensions.y)
+    const shorterSide = Math.min(finalDimensions.x, finalDimensions.y)
     const minThickness = 0
     const maxThickness = Math.round(shorterSide / 2)
     const currentWidth = this._operation.getThickness() * shorterSide

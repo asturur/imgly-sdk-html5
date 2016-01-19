@@ -16,10 +16,9 @@ export default {
   identifier: 'frame',
   icon: 'controls/overview/frame@2x.png',
   label: 'controls.overview.frame',
-  getInitialSharedState: (context) => {
-    const { ui } = context
-    const operationExistedBefore = ui.operationExists('frame')
-    const operation = ui.getOrCreateOperation('frame')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('frame')
+    const operation = editor.getOrCreateOperation('frame')
     const initialOptions = {
       color: operation.getColor().clone(),
       thickness: operation.getThickness()
@@ -28,7 +27,7 @@ export default {
       operation, operationExistedBefore, initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('frame')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('frame')
   }
 }
