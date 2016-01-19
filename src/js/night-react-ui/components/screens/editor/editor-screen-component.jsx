@@ -361,6 +361,7 @@ export default class EditorScreenComponent extends ScreenComponent {
       editor: this._editor,
       ui: this.context.ui,
       options: this.context.options,
+      editorScreen: this,
       mediator: this.context.mediator
     }
   }
@@ -468,6 +469,7 @@ EditorScreenComponent.childContextTypes = {
   ui: React.PropTypes.object.isRequired,
   editor: React.PropTypes.object.isRequired,
   mediator: React.PropTypes.object.isRequired,
-  options: React.PropTypes.object.isRequired
+  options: React.PropTypes.object.isRequired,
+  editorScreen: React.PropTypes.object.isRequired
 }
 

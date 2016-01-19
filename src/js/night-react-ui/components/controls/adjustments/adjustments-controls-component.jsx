@@ -33,7 +33,7 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
    * @private
    */
   _onButtonClick (controlsItem, e) {
-    this.props.editor.switchToControls(controlsItem)
+    this.context.editorScreen.switchToControls(controlsItem)
   }
 
   // -------------------------------------------------------------------------- RENDERING

@@ -174,7 +174,8 @@ BaseComponent.contextTypes = {
   editor: React.PropTypes.object,
   ui: React.PropTypes.object,
   options: React.PropTypes.object,
-  mediator: React.PropTypes.object
+  mediator: React.PropTypes.object,
+  editorScreen: React.PropTypes.object
 }
 
 BaseComponent.propTypes = {

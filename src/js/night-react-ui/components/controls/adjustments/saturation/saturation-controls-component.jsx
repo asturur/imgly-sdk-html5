@@ -97,7 +97,7 @@ export default class SaturationControlsComponent extends ControlsComponent {
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
 
     if (!this._historyItem) {
-      const { editor } = this.props
+      const { editor } = this.context
       this._historyItem = editor.addHistory(
         this._operation,
         this.getSharedState('initialOptions'),

@@ -96,7 +96,7 @@ export default class BrightnessControlsComponent extends ControlsComponent {
     this._operation.setBrightness(actualValue)
 
     if (!this._historyItem) {
-      const { editor } = this.props
+      const { editor } = this.context
       this._historyItem = editor.addHistory(
         this._operation,
         this.getSharedState('initialOptions'),
