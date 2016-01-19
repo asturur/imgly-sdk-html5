@@ -21,6 +21,26 @@ export default class Text extends Sprite {
   }
 
   /**
+   * Returns a style object for this text
+   * @param {PhotoEditorSDK} SDK
+   * @param {Vector2} outputDimensions
+   * @return {Object}
+   */
+  getDOMStyle (sdk, outputDimensions) {
+    return this._textRenderer.getDOMStyle(sdk, outputDimensions)
+  }
+
+  /**
+   * Returns the bounding box for this text
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Boolean} considerZoom = false
+   * @return {Vector2}
+   */
+  getBoundingBox (sdk, considerZoom = false) {
+    return this._textRenderer.getBoundingBox(sdk, considerZoom)
+  }
+
+  /**
    * Updates this sprite
    * @param  {SDK} sdk
    * @return {Promise}

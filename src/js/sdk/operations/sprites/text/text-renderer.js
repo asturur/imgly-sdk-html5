@@ -85,6 +85,26 @@ export default class TextRenderer {
   }
 
   /**
+   * Returns a style object for this text when represented in DOM
+   * @param {PhotoEditorSDK} SDK
+   * @param {Vector2} outputDimensions
+   * @return {Object}
+   */
+  getDOMStyle (sdk, outputDimensions) {
+    const textOptions = this._calculateFontSizeAndLineHeight(sdk, true)
+
+    return {
+      fontWeight: this._text.getFontWeight(),
+      fontSize: textOptions.fontSize,
+      fontFamily: this._text.getFontFamily(),
+      lineHeight: textOptions.lineHeight + 'px',
+      color: this._text.getColor().toRGBA(),
+      backgroundColor: this._text.getBackgroundColor().toRGBA(),
+      textAlign: this._text.getAlignment()
+    }
+  }
+
+  /**
    * Renders this sprite
    * @param  {PhotoEditorSDK} sdk
    * @returns {Promise}
@@ -146,16 +166,23 @@ export default class TextRenderer {
   /**
    * Calculates the actual font size and line height
    * @param  {PhotoEditorSDK} sdk
+   * @param  {Boolean} considerZoom
    * @return {Promise}
    * @private
    */
-  _calculateFontSizeAndLineHeight (sdk) {
+  _calculateFontSizeAndLineHeight (sdk, considerZoom = false) {
     // @TODO These should be the sprite dimensions
     const outputCanvas = sdk.getCanvas()
     const outputCanvasDimensions = new Vector2(outputCanvas.width, outputCanvas.height)
 
-    const fontSize = this._text.getFontSize() * outputCanvasDimensions.y
-    const lineHeight = this._text.getLineHeight() * fontSize
+    let fontSize = this._text.getFontSize() * outputCanvasDimensions.y
+    let lineHeight = this._text.getLineHeight() * fontSize
+
+    if (considerZoom) {
+      const zoom = sdk.getZoom()
+      fontSize *= zoom
+      lineHeight *= zoom
+    }
 
     return { fontSize, lineHeight }
   }
@@ -168,14 +195,14 @@ export default class TextRenderer {
    * @private
    */
   _calculateText (sdk, textOptions) {
-    const outputCanvas = sdk.getCanvas()
-    const outputCanvasDimensions = new Vector2(outputCanvas.width, outputCanvas.height)
+    const spriteBounds = sdk.getSprite().getBounds()
+    const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
 
     // Calculate max width
     let maxWidth = this._text.getMaxWidth()
     let numberFormat = this._operation.getNumberFormat()
     if (numberFormat === 'relative') {
-      maxWidth *= outputCanvasDimensions.x
+      maxWidth *= outputDimensions.x
     }
 
     // Apply text options
@@ -207,6 +234,19 @@ export default class TextRenderer {
    */
   getTexture () {
     return this._texture
+  }
+
+  /**
+   * Returns the bounding box for this text
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Boolean} considerZoom = false
+   * @return {Vector2}
+   */
+  getBoundingBox (sdk, considerZoom = false) {
+    const textOptions = this._calculateFontSizeAndLineHeight(sdk, considerZoom)
+    console.log(considerZoom, textOptions)
+    const { boundingBox } = this._calculateText(sdk, textOptions)
+    return boundingBox
   }
 
   // -------------------------------------------------------------------------- DIRTINESS

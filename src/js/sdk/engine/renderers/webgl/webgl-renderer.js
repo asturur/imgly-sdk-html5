@@ -105,6 +105,8 @@ export default class WebGLRenderer extends BaseRenderer {
     this._context = gl
     gl.renderer = this
 
+    this._maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE)
+
     this.emit('context', gl)
 
     return gl

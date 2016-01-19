@@ -27,8 +27,9 @@ export default {
   onExit: function () {
     const initialOptions = this.getSharedState('initialOptions')
     const operation = this.getSharedState('operation')
+    console.log(operation)
     if (!operation.optionsEqual(initialOptions)) {
-      const { editor } = this.props
+      const { editor } = this.context
       editor.addHistory(
         operation,
         initialOptions,
@@ -36,8 +37,10 @@ export default {
       )
     }
 
+    operation.setEnabled(true)
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
   },
 
   /**
@@ -52,7 +55,7 @@ export default {
 
     const sdk = editor.getSDK()
     const operation = editor.getOrCreateOperation('sprite')
-    const sprite = operation.getSpriteAtPosition(sdk, position)
+    const sprite = operation.getSpriteAtPosition(sdk, position, Text)
     if (!sprite) {
       return false
     } else if (sprite instanceof Text) {
@@ -68,11 +71,11 @@ export default {
    */
   getInitialSharedState: (editor, additionalState = {}) => {
     let state = {}
-    state.operationExistedBefore = editor.operationExists('text')
-    state.operation = editor.getOrCreateOperation('text')
-    state.texts = state.operation.getTexts()
+    state.operationExistedBefore = editor.operationExists('sprite')
+    state.operation = editor.getOrCreateOperation('sprite')
+    state.sprites = state.operation.getSprites()
     state.initialOptions = state.operation.serializeOptions()
-    state.operation.setTexts([])
+    state.operation.setEnabled(false)
 
     if (!additionalState.selectedText) {
       const sdk = editor.getSDK()
@@ -80,11 +83,11 @@ export default {
       const text = state.operation.createText({
         text: 'Text',
         maxWidth: 0.5,
-        maxHeight: renderer.getMaxDimensions(),
-        anchor: new Vector2(0.5, 0),
+        maxHeight: renderer.getMaxTextureSize(),
+        anchor: new Vector2(0, 0),
         pivot: new Vector2(0.5, 0)
       })
-      state.texts.push(text)
+      state.sprites.push(text)
       state.selectedText = text
     }
 
@@ -93,6 +96,6 @@ export default {
     return SDKUtils.extend({}, state, additionalState)
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('text')
+    return editor.isOperationEnabled('sprite')
   }
 }

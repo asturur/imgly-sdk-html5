@@ -18,6 +18,7 @@ export default class BaseRenderer extends EventEmitter {
     this._width = width || 800
     this._height = height || 600
     this._dimensions = new Vector2(this._width, this._height)
+    this._maxTextureSize = null
 
     this._options = Utils.defaults(options, {
       pixelRatio: 1,
@@ -104,4 +105,5 @@ export default class BaseRenderer extends EventEmitter {
   getHeight () { return this._dimensions.y }
   getDimensions () { return this._dimensions }
   getPixelRatio () { return this._options.pixelRatio }
+  getMaxTextureSize () { return this._maxTextureSize }
 }

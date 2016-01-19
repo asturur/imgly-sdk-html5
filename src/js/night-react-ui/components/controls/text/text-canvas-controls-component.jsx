@@ -9,8 +9,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent, Constants } from '../../../globals'
+import { SDK, ReactBEM, BaseComponent, Constants } from '../../../globals'
 import DraggableComponent from '../../draggable-component.jsx'
+
+const { Text } = SDK
 
 export default class TextCanvasControlsComponent extends BaseComponent {
   constructor (...args) {
@@ -31,7 +33,7 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     )
 
     this._operation = this.getSharedState('operation')
-    this._texts = this.getSharedState('texts')
+    this._sprites = this.getSharedState('sprites')
     this._selectedTextMoved = false
     this._dragging = false
     this.state = { editMode: false }
@@ -82,20 +84,19 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     const selectedText = this.getSharedState('selectedText')
     if (!selectedText) return
 
-    const texts = this.getSharedState('texts')
-    const index = texts.indexOf(selectedText)
+    const sprites = this.getSharedState('sprites')
+    const index = sprites.indexOf(selectedText)
     if (index !== -1) {
-      texts.splice(index, 1)
-      this._texts = texts
+      sprites.splice(index, 1)
+      this._sprites = sprites
 
-      this._operation.setTexts(this._texts)
-      this._operation.setDirty(true)
+      this._operation.setSprites(this._sprites)
       this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
         this.props.onSwitchControls('back')
       })
 
       this.setSharedState({
-        texts,
+        sprites,
         selectedText: null
       })
     }
@@ -113,7 +114,7 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     if (this.state.editMode) {
       this.setState({ editMode: false })
     } else {
-      this._operation.setTexts(this._texts)
+      this._operation.setSprites(this._sprites)
       this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
         this.props.onSwitchControls('back')
       })
@@ -149,11 +150,11 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     }
 
     const selectedText = this.getSharedState('selectedText')
-    const { kit } = this.context
+    const { editor } = this.context
 
-    const canvasDimensions = kit.getOutputDimensions()
+    const outputDimensions = editor.getOutputDimensions()
     const newPosition = this._initialPosition.clone()
-      .add(offset.clone().divide(canvasDimensions))
+      .add(offset.clone().divide(outputDimensions))
 
     selectedText.setPosition(newPosition)
     this.forceUpdate()
@@ -182,8 +183,8 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     const selectedText = this.getSharedState('selectedText')
     const textRotation = selectedText.getRotation()
 
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     const cos = Math.cos(textRotation)
     const sin = Math.sin(textRotation)
@@ -194,7 +195,7 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     const distanceToPosition = newKnobPosition.clone()
       .subtract(position)
 
-    const newMaxWidth = (distanceToPosition.x * cos + distanceToPosition.y * sin) / canvasDimensions.x * 2
+    const newMaxWidth = (distanceToPosition.x * cos + distanceToPosition.y * sin) / outputDimensions.x * 2
     selectedText.setMaxWidth(newMaxWidth)
     this.forceUpdate()
   }
@@ -232,7 +233,7 @@ export default class TextCanvasControlsComponent extends BaseComponent {
    */
   _onRotationKnobDrag (offset, e) {
     const selectedText = this.getSharedState('selectedText')
-    const { kit } = this.context
+    const { editor } = this.context
 
     const textPosition = this._getAbsoluteTextPosition(selectedText)
     const newKnobPosition = this._initialPosition
@@ -244,7 +245,7 @@ export default class TextCanvasControlsComponent extends BaseComponent {
       .clone()
       .subtract(textPosition)
 
-    const boundingBox = selectedText.getBoundingBox(kit.getRenderer())
+    const boundingBox = selectedText.getBoundingBox(editor.getSDK(), true)
     const radians = Math.atan2(
       knobDistanceFromCenter.y,
       knobDistanceFromCenter.x
@@ -301,17 +302,17 @@ export default class TextCanvasControlsComponent extends BaseComponent {
    */
   _getRemoveKnobStyle () {
     const selectedText = this.getSharedState('selectedText')
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     const sin = Math.sin(selectedText.getRotation())
     const cos = Math.cos(selectedText.getRotation())
 
-    const boundingBox = selectedText.getBoundingBox(kit.getRenderer())
+    const boundingBox = selectedText.getBoundingBox(editor.getSDK(), true)
     const halfDimensions = boundingBox.clone().divide(2)
     const position = selectedText.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
       .add(
         -halfDimensions.x * cos,
         -halfDimensions.x * sin
@@ -330,13 +331,14 @@ export default class TextCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _getTextStyle (text) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
-    let style = text.getStyle(canvasDimensions)
+    const { editor } = this.context
+    const sdk = editor.getSDK()
+    const outputDimensions = editor.getOutputDimensions()
+    let style = text.getDOMStyle(sdk, outputDimensions)
 
     const textPosition = this._getAbsoluteTextPosition(text)
-    const boundingBox = text.getBoundingBox(kit.getRenderer())
-    style.height = Math.min(boundingBox.y, canvasDimensions.y - textPosition.y)
+    const boundingBox = text.getBoundingBox(editor.getSDK(), true)
+    style.height = Math.min(boundingBox.y, outputDimensions.y - textPosition.y)
 
     return style
   }
@@ -347,19 +349,19 @@ export default class TextCanvasControlsComponent extends BaseComponent {
    * @return {Object}
    * @private
    */
-  _getContainerStyle (text) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+  _getTextContainerStyle (text) {
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     const textPosition = text.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
 
     const degrees = text.getRotation() * 180 / Math.PI
     const transform = `rotateZ(${degrees.toFixed(2)}deg)`
     const transformOrigin = '50% 0'
 
-    const maxWidth = text.getMaxWidth() * canvasDimensions.x
+    const maxWidth = text.getMaxWidth() * outputDimensions.x
     return {
       width: maxWidth,
       left: textPosition.x,
@@ -376,6 +378,20 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     }
   }
 
+  /**
+   * Returns the container style
+   * @return {Object}
+   * @private
+   */
+  _getContainerStyle () {
+    const { x, y, width, height } = this.context.editor.getSDK().getSprite().getBounds()
+    return {
+      left: x,
+      top: y,
+      width, height
+    }
+  }
+
   // -------------------------------------------------------------------------- RENDERING
 
   /**
@@ -386,10 +402,11 @@ export default class TextCanvasControlsComponent extends BaseComponent {
   _renderTextItems () {
     const selectedText = this.getSharedState('selectedText')
 
-    return this._texts
+    return this._sprites
+      .filter((s) => s instanceof Text)
       .map((text, i) => {
         const textStyle = this._getTextStyle(text)
-        const containerStyle = this._getContainerStyle(text)
+        const containerStyle = this._getTextContainerStyle(text)
         const isSelected = selectedText === text
         const className = isSelected ? 'is-selected' : null
 
@@ -450,6 +467,7 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     return (<div
       bem='b:canvasControls e:container m:full'
       ref='root'
+      style={this._getContainerStyle()}
       onClick={this._onCanvasClick}>
         <div
           bem='$b:textCanvasControls'
@@ -469,17 +487,17 @@ export default class TextCanvasControlsComponent extends BaseComponent {
    */
   _getRotationKnobPosition () {
     const selectedText = this.getSharedState('selectedText')
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     const sin = Math.sin(selectedText.getRotation())
     const cos = Math.cos(selectedText.getRotation())
 
-    const boundingBox = selectedText.getBoundingBox(kit.getRenderer())
+    const boundingBox = selectedText.getBoundingBox(editor.getSDK(), true)
     const halfDimensions = boundingBox.clone().divide(2)
     const position = selectedText.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
       .add(
         halfDimensions.x * cos - boundingBox.y * sin,
         halfDimensions.x * sin + boundingBox.y * cos
@@ -494,17 +512,17 @@ export default class TextCanvasControlsComponent extends BaseComponent {
    */
   _getResizeKnobPosition () {
     const selectedText = this.getSharedState('selectedText')
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     const sin = Math.sin(selectedText.getRotation())
     const cos = Math.cos(selectedText.getRotation())
 
-    const boundingBox = selectedText.getBoundingBox(kit.getRenderer())
+    const boundingBox = selectedText.getBoundingBox(editor.getSDK(), true)
     const halfDimensions = boundingBox.clone().divide(2)
     const position = selectedText.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
       .add(
         halfDimensions.x * cos,
         halfDimensions.x * sin
@@ -519,11 +537,11 @@ export default class TextCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _getAbsoluteTextPosition (text) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     return text.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
   }
 }

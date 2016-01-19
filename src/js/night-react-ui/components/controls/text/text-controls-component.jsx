@@ -111,11 +111,11 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onFontSizeChange (fontSize) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const getOutputDimensions = editor.getOutputDimensions()
 
     const selectedText = this.getSharedState('selectedText')
-    selectedText.setFontSize(fontSize / canvasDimensions.y)
+    selectedText.setFontSize(fontSize / getOutputDimensions.y)
     this.forceSharedUpdate()
   }
 
@@ -212,10 +212,10 @@ export default class TextControlsComponent extends ControlsComponent {
     const selectedText = this.getSharedState('selectedText')
     if (!selectedText) return
 
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
-    const fontSize = Math.round(selectedText.getFontSize() * canvasDimensions.y)
+    const fontSize = Math.round(selectedText.getFontSize() * outputDimensions.y)
     return (<FontSizeSliderComponent
       value={fontSize}
       onChange={this._onFontSizeChange} />)
@@ -230,10 +230,10 @@ export default class TextControlsComponent extends ControlsComponent {
     const selectedText = this.getSharedState('selectedText')
     if (!selectedText) return
 
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
-    const fontSize = Math.round(selectedText.getFontSize() * canvasDimensions.y)
+    const fontSize = Math.round(selectedText.getFontSize() * outputDimensions.y)
     const className = this.state.mode === 'size' ? 'is-active' : null
 
     return (<li

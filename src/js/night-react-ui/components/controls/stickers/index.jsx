@@ -52,7 +52,7 @@ export default {
 
     const sdk = editor.getSDK()
     const operation = editor.getOrCreateOperation('sprite')
-    const sprite = operation.getSpriteAtPosition(sdk, position)
+    const sprite = operation.getSpriteAtPosition(sdk, position, Sticker)
     if (!sprite) {
       return false
     } else if (sprite instanceof Sticker) {
@@ -72,6 +72,7 @@ export default {
     const sprites = operation.getSprites()
     const stickers = operation.getSpritesOfType(Sticker)
     const initialOptions = operation.serializeOptions()
+    operation.setEnabled(false)
 
     const state = {
       operationExistedBefore, operation, sprites, stickers, initialOptions

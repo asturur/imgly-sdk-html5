@@ -237,6 +237,7 @@ class SpriteOperation extends Operation {
     if (type) {
       sprites = sprites.filter((s) => s instanceof type)
     }
+
     sprites.forEach((sprite) => {
       if (intersectingSprite) return
 

@@ -33,7 +33,6 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
   componentDidMount () {
     super.componentDidMount()
 
-    this._operation.setEnabled(false)
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this._resizeNewStickers()
   }
