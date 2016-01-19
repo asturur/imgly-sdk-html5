@@ -97,7 +97,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
     this._operation.setRotation(newDegrees)
     this._rotateCrop(additionalDegrees)
 
-    const { editor } = this.props
+    const { editor } = this.context
     editor.addHistory(this._operation,
       previousOptions,
       this._operationExistedBefore)
@@ -130,7 +130,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
         break
     }
 
-    const { editor } = this.props
+    const { editor } = this.context
     editor.addHistory(this._operation,
       previousOptions,
       this._operationExistedBefore)
