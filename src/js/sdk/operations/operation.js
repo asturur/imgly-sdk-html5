@@ -109,17 +109,13 @@ class Operation extends Configurable {
   }
 
   /**
-   * Gets the new dimensions
-   * @param {Renderer} renderer
-   * @param {Vector2} [dimensions]
+   * Returns the dimensions that an image with the given `dimensions`
+   * would have after this operation has been applied
+   * @param  {Vector2} dimensions
    * @return {Vector2}
-   * @private
    */
-  getNewDimensions (renderer, dimensions) {
-    let canvas = renderer.getCanvas()
-    dimensions = dimensions || new Vector2(canvas.width, canvas.height)
-
-    return dimensions
+  getNewDimensions (dimensions) {
+    return dimensions.clone()
   }
 
   /**
