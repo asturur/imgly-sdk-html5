@@ -27,7 +27,17 @@ export default class Text extends Sprite {
    * @return {Object}
    */
   getDOMStyle (sdk, outputDimensions) {
-    return this._textRenderer.getDOMStyle(sdk, outputDimensions)
+    const textOptions = this._textRenderer.calculateFontStyles(sdk, true)
+
+    return {
+      fontWeight: this._options.fontWeight,
+      fontSize: textOptions.fontSize,
+      fontFamily: this._options.fontFamily,
+      lineHeight: textOptions.lineHeight + 'px',
+      color: this._options.color.toRGBA(),
+      backgroundColor: this._options.backgroundColor.toRGBA(),
+      textAlign: this._options.alignment
+    }
   }
 
   /**

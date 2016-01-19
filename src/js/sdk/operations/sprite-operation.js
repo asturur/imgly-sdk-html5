@@ -41,6 +41,7 @@ class SpriteOperation extends Operation {
    * Returns the sprites that are instances of the given class
    * @param  {Class} Klass
    * @return {Array.<Sprite>}
+   * @todo   Do we still need this?
    */
   getSpritesOfType (Klass) {
     return this._options.sprites.filter((sprite) =>

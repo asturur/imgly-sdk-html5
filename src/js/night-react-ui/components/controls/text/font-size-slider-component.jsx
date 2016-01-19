@@ -55,10 +55,11 @@ export default class TextControlsComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const zoom = editor.getSDK().getZoom()
+    const outputDimensions = editor.getOutputDimensions()
 
-    const maxFontSize = Math.round(canvasDimensions.y)
+    const maxFontSize = Math.round(outputDimensions.y * zoom)
     const fontSize = this.state.fontSize
 
     return (<div bem='$b:controls e:overlay m:large m:dark'>
