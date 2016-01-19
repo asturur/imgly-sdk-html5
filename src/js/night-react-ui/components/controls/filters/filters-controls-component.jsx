@@ -85,7 +85,7 @@ export default class FiltersControlsComponent extends ControlsComponent {
     const intensity = this._operation.getIntensity()
     if (filter !== initialOptions.filter ||
       intensity !== initialOptions.intensity) {
-      const { editor } = this.props
+      const { editor } = this.context
       editor.addHistory(this._operation,
         initialOptions,
         this.getSharedState('operationExistedBefore'))
