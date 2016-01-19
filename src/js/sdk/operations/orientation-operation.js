@@ -8,7 +8,6 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine } from '../globals'
 import Promise from '../vendor/promise'
 import Vector2 from '../lib/math/vector2'
 import Operation from './operation'
@@ -68,6 +67,20 @@ class OrientationOperation extends Operation {
 
     outputSprite.setTexture(renderTexture)
     return Promise.resolve()
+  }
+
+  /**
+   * Returns the dimensions that an image with the given `dimensions`
+   * would have after this operation has been applied
+   * @param  {Vector2} dimensions
+   * @return {Vector2}
+   */
+  getNewDimensions (dimensions) {
+    dimensions = dimensions.clone()
+    if (this._options.rotation % 180) {
+      dimensions.flip()
+    }
+    return dimensions
   }
 
   /**

@@ -226,16 +226,16 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _zoom (zoom, callback) {
-    const sdk = this._editor.getSDK()
     const canvasComponent = this.refs.canvas
 
     let newZoom = zoom
-    if (zoom === 'auto') {
-      newZoom = canvasComponent.getDefaultZoom()
-      this._lastDefaultZoom = newZoom
+    const defaultZoom = canvasComponent.getDefaultZoom()
+    if (zoom === 'auto' || newZoom === defaultZoom) {
+      newZoom = defaultZoom
+      zoom = 'auto'
     }
 
-    sdk.setZoom(newZoom)
+    this._editor.setZoom(newZoom, zoom === 'auto')
     canvasComponent.updateOffset()
 
     this._previousZoomState = SDKUtils.extend({
@@ -331,14 +331,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   getZoom () {
     return this.state.zoom
-  }
-
-  /**
-   * Checks if the editor is at the default zoom level
-   * @return {Boolean}
-   */
-  isDefaultZoom () {
-    return this.state.zoom === this._lastDefaultZoom
   }
 
   // -------------------------------------------------------------------------- RENDERING

@@ -20,6 +20,7 @@ export default class Editor extends EventEmitter {
     super()
     this._options = options
     this._mediator = mediator
+    this._isDefaultZoom = false
 
     this._initSDK()
     this._initOperations()
@@ -281,6 +282,32 @@ export default class Editor extends EventEmitter {
   }
 
   /**
+   * Returns the final dimensions that the input image would have
+   * after all existing operations have been applied
+   * @return {Vector2}
+   */
+  getFinalDimensions () {
+    let inputDimensions = this._sdk.getInputDimensions()
+    const operationsStack = this._sdk.getOperationsStack()
+
+    operationsStack.forEach((operation) => {
+      inputDimensions = operation.getNewDimensions(inputDimensions)
+    })
+
+    return inputDimensions
+  }
+
+  /**
+   * Sets the given zoom level
+   * @param {Boolean}  zoom
+   * @param {Boolean} isDefault
+   */
+  setZoom (zoom, isDefault = false) {
+    this._isDefaultZoom = isDefault
+    this._sdk.setZoom(zoom)
+  }
+
+  /**
    * Exports an image
    * @param {Boolean} download = false
    * @return {Promise}
@@ -316,4 +343,5 @@ export default class Editor extends EventEmitter {
 
   getRenderer () { return this._sdk.getRenderer() }
   getSDK () { return this._sdk }
+  isDefaultZoom () { return this._isDefaultZoom }
 }

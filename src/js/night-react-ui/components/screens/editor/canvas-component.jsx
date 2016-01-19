@@ -213,14 +213,13 @@ export default class CanvasComponent extends BaseComponent {
     }
 
     const { editor } = this.context
-    const sdk = editor.getSDK()
 
-    const initialDimensions = sdk.getInputDimensions()
-    const defaultDimensions = SDKUtils.resizeVectorToFit(initialDimensions, this._containerDimensions)
+    const finalDimensions = editor.getFinalDimensions()
+    const defaultDimensions = SDKUtils.resizeVectorToFit(finalDimensions, this._containerDimensions)
 
     // Since default and native dimensions have the same ratio, we can take either x or y here
     return defaultDimensions
-      .divide(initialDimensions)
+      .divide(finalDimensions)
       .x
   }
 
