@@ -190,6 +190,9 @@ class SpriteOperation extends Operation {
       const container = this._container
       const sprites = this._options.sprites
 
+      const outputBounds = outputSprite.getBounds()
+      renderTexture.resizeTo(new Vector2(outputBounds.width, outputBounds.height))
+
       sprites.forEach((sprite) => {
         const renderableSprite = sprite.getSprite()
         if (!container.hasChild(renderableSprite)) {
