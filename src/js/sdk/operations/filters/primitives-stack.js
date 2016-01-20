@@ -40,11 +40,16 @@ class PrimitivesStack {
     this._stack.push(primitive)
   }
 
-  renderWebGL (renderer) {
+  /**
+   * Renders this stack using WebGL
+   * @param  {PhotoEditorSDK} sdk
+   * @return {Promise}
+   */
+  renderWebGL (sdk) {
     if (this._stack.length === 0) return Promise.resolve()
 
-    const outputSprite = renderer.getSprite()
-    const renderTexture = this._getRenderTexture(renderer)
+    const outputSprite = sdk.getSprite()
+    const renderTexture = this._getRenderTexture(sdk)
     if (!this._dirty) {
       outputSprite.setTexture(renderTexture)
       return Promise.resolve()
@@ -55,7 +60,7 @@ class PrimitivesStack {
 
       const tempFilters = outputSprite.getFilters()
 
-      this._stack.forEach((primitive) => primitive.update(renderer))
+      this._stack.forEach((primitive) => primitive.update(sdk))
       const newFilters = this._stack.map((primitive) => primitive.getFilter())
       outputSprite.setFilters(newFilters)
 
@@ -84,6 +89,11 @@ class PrimitivesStack {
     return this._renderTexture
   }
 
+  /**
+   * Renders this stack using Canvas2D
+   * @param  {CanvasRenderer} renderer
+   * @return {Promise}
+   */
   renderCanvas (renderer) {
     const outputCanvas = renderer.cloneCanvas()
 

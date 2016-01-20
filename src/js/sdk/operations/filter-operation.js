@@ -21,30 +21,30 @@ import IdentityFilter from './filters/identity-filter'
 class FilterOperation extends Operation {
   /**
    * Renders the filter using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @override
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return this._render(renderer)
+  _renderWebGL (sdk) {
+    return this._render(sdk)
   }
 
   /**
    * Renders the filter using Canvas2D
-   * @param {CanvasRenderer} renderer
+   * @param {PhotoEditorSDK} sdk
    * @override
    */
-  _renderCanvas (renderer) {
-    return this._render(renderer)
+  _renderCanvas (sdk) {
+    return this._render(sdk)
   }
 
   /**
    * Renders the filter (all renderers supported)
-   * @param {Renderer} renderer
+   * @param {PhotoEditorSDK} sdk
    * @private
    */
-  _render (renderer) {
-    return this._selectedFilter.render(renderer)
+  _render (sdk) {
+    return this._selectedFilter.render(sdk)
   }
 
   /**

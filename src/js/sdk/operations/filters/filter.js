@@ -37,11 +37,11 @@ class Filter {
 
   /**
    * Renders the filter
-   * @param  {Renderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
    */
-  render (renderer) {
-    return this._stack.render(renderer)
+  render (sdk) {
+    return this._stack.render(sdk)
   }
 
   /**
@@ -53,6 +53,10 @@ class Filter {
     this._stack.setIntensity(intensity)
   }
 
+  /**
+   * Sets the PrimitiveStack's dirtiness to the given one
+   * @param {Boolean} dirty
+   */
   setDirty (dirty) {
     this._stack.setDirty(dirty)
   }

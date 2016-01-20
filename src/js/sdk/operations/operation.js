@@ -40,10 +40,7 @@ class Operation extends Configurable {
    * @private
    */
   _onOptionsChange () {
-    const dirtiness = this._dirtiness
-    for (let id in dirtiness) {
-      dirtiness[id] = true
-    }
+    this.setDirty(true)
   }
 
   // -------------------------------------------------------------------------- RENDERING
@@ -62,17 +59,18 @@ class Operation extends Configurable {
 
   /**
    * Applies this operation
-   * @param  {Renderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
    * @abstract
    */
-  render (renderer) {
+  render (sdk) {
     if (!this.getEnabled()) {
       return Promise.resolve()
     }
 
+    const renderer = sdk.getRenderer()
     let renderFn
-    if (renderer.getRenderer() instanceof Engine.WebGLRenderer) {
+    if (sdk.getRenderer() instanceof Engine.WebGLRenderer) {
       /* istanbul ignore next */
       renderFn = this._renderWebGL.bind(this)
     } else {
@@ -80,12 +78,11 @@ class Operation extends Configurable {
     }
 
     // Handle caching
-    // if (this._dirty) {
-      return renderFn(renderer)
-        .then(() => {
-          // renderer.cache(this._uuid)
-          this._dirty = false
-        })
+    // if (this.isDirtyForRenderer(renderer)) {
+    return renderFn(sdk)
+      .then(() => {
+        this.setDirtyForRenderer(false, renderer)
+      })
     // } else {
     //   return renderer.drawCached(this._uuid)
     // }
