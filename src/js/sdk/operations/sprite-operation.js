@@ -268,11 +268,12 @@ class SpriteOperation extends Operation {
       const stickerDimensions = new Vector2(
         stickerBounds.width, stickerBounds.height
       ).multiply(zoom).multiply(Math.abs(stickerScale))
+      const pivot = sprite.getPivot()
 
-      if (x > -0.5 * stickerDimensions.x &&
-          x < 0.5 * stickerDimensions.x &&
-          y > -0.5 * stickerDimensions.y &&
-          y < 0.5 * stickerDimensions.y) {
+      if (x > -pivot.x * stickerDimensions.x &&
+          x < (1 - pivot.x) * stickerDimensions.x &&
+          y > -pivot.y * stickerDimensions.y &&
+          y < (1 - pivot.y) * stickerDimensions.y) {
         intersectingSprite = sprite
       }
     })
