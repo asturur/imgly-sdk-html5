@@ -27,7 +27,6 @@ export default {
   onExit: function () {
     const initialOptions = this.getSharedState('initialOptions')
     const operation = this.getSharedState('operation')
-    console.log(operation)
     if (!operation.optionsEqual(initialOptions)) {
       const { editor } = this.context
       editor.addHistory(

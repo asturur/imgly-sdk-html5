@@ -222,7 +222,6 @@ export default class TextRenderer {
    */
   getBoundingBox (sdk, considerZoom = false) {
     const textOptions = this.calculateFontStyles(sdk, considerZoom)
-    console.log(considerZoom, textOptions)
     const { boundingBox } = this._calculateText(sdk, textOptions)
     return boundingBox
   }
