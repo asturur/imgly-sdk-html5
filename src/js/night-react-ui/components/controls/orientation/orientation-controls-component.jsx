@@ -45,8 +45,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
 
     const initialOptions = this.getSharedState('initialOptions')
     if (this._operation.optionsEqual(initialOptions)) {
-      const { ui } = this.context
-      ui.removeOperation(this._operation)
+      const { editor } = this.context
+      editor.removeOperation(this._operation)
     }
   }
 
@@ -72,8 +72,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
     // Operation can be removed by the undo button. We need
     // to make sure we re-create the operation for the lifetime
     // of this control
-    const { ui } = this.context
-    const newOperation = ui.getOrCreateOperation('orientation')
+    const { editor } = this.context
+    const newOperation = editor.getOrCreateOperation('orientation')
     this._operation = newOperation
     this._historyItem = null
     this.setSharedState({
@@ -146,8 +146,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _getFlipOperation () {
-    const { ui } = this.context
-    this._flipOperation = ui.getOrCreateOperation('flip')
+    const { editor } = this.context
+    this._flipOperation = editor.getOrCreateOperation('flip')
     return this._flipOperation
   }
 
@@ -157,8 +157,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _getRotationOperation () {
-    const { ui } = this.context
-    this._rotationOperation = ui.getOrCreateOperation('rotation')
+    const { editor } = this.context
+    this._rotationOperation = editor.getOrCreateOperation('rotation')
     return this._rotationOperation
   }
 
