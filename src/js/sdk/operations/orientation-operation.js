@@ -35,10 +35,11 @@ class OrientationOperation extends Operation {
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
+    const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
-    if (this.isDirtyForRenderer(sdk.getRenderer())) {
+    if (this.isDirtyForRenderer(renderer)) {
       const actualDegrees = this._options.rotation % 360
       const radians = actualDegrees * (Math.PI / 180)
 
@@ -60,6 +61,8 @@ class OrientationOperation extends Operation {
 
       // Draw
       renderTexture.render(this._container)
+
+      this.setDirtyForRenderer(false, renderer)
     }
 
     outputSprite.setTexture(renderTexture)

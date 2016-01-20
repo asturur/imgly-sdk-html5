@@ -204,6 +204,7 @@ class SpriteOperation extends Operation {
 
       renderTexture.clear()
       renderTexture.render(container)
+      this.setDirtyForRenderer(true, renderer)
     }
 
     outputSprite.setTexture(renderTexture)

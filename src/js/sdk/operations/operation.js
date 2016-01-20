@@ -12,7 +12,6 @@
 
 import Engine from '../engine/'
 import Utils from '../lib/utils'
-import Vector2 from '../lib/math/vector2'
 import Configurable from '../lib/configurable'
 
 /**
@@ -41,7 +40,10 @@ class Operation extends Configurable {
    * @private
    */
   _onOptionsChange () {
-    this._dirty = true
+    const dirtiness = this._dirtiness
+    for (let id in dirtiness) {
+      dirtiness[id] = true
+    }
   }
 
   // -------------------------------------------------------------------------- RENDERING

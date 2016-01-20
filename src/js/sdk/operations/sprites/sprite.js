@@ -19,6 +19,24 @@ export default class Sprite extends Configurable {
 
     this._identitySprite = new Engine.Sprite()
     this._sprite = new Engine.Sprite()
+
+    if (this._options.adjustments) {
+      this._onOptionsChange = this._onOptionsChange.bind(this)
+      this._options.adjustments.on('updated', this._onOptionsChange)
+    }
+  }
+
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when options have been changed. Sets this operation to dirty.
+   * @private
+   */
+  _onOptionsChange () {
+    const dirtiness = this._dirtiness
+    for (let id in dirtiness) {
+      dirtiness[id] = true
+    }
   }
 
   /**
@@ -85,6 +103,15 @@ export default class Sprite extends Configurable {
   setDirty (dirty) {
     for (let rendererId in this._dirtiness) {
       this._dirtiness[rendererId] = dirty
+    }
+  }
+
+  /**
+   * Cleans up this Sprite
+   */
+  dispose () {
+    if (this._options.adjustments) {
+      this._options.adjustments.off('updated', this._onOptionsChange)
     }
   }
 }
