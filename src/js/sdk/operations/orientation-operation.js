@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Engine } from '../globals'
 import Promise from '../vendor/promise'
 import Vector2 from '../lib/math/vector2'
 import Operation from './operation'
@@ -20,49 +21,45 @@ import Operation from './operation'
  * @extends PhotoEditorSDK.Operation
  */
 class OrientationOperation extends Operation {
+  constructor (...args) {
+    super(...args)
+
+    this._sprite = new Engine.Sprite()
+    this._container = new Engine.Container()
+    this._container.addChild(this._sprite)
+  }
+
   /**
    * Rotates the image using WebGL
    * @param  {PhotoEditorSDK} sdk
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
-    const actualDegrees = this._options.rotation % 360
-    const radians = actualDegrees * (Math.PI / 180)
-
     const outputSprite = sdk.getSprite()
-    const outputContainer = sdk.getContainer()
-    let renderTexture = this._getRenderTexture(sdk)
+    const renderTexture = this._getRenderTexture(sdk)
 
     if (this.isDirtyForRenderer(sdk.getRenderer())) {
-      // @TODO Use a "raw" sprite to avoid reading and resetting these values
-      const tempAnchor = outputSprite.getAnchor().clone()
-      const tempPosition = outputSprite.getPosition().clone()
-      const tempScale = outputSprite.getScale().clone()
+      const actualDegrees = this._options.rotation % 360
+      const radians = actualDegrees * (Math.PI / 180)
 
-      outputSprite.setScale(
+      this._sprite.setScale(
         this._options.flipHorizontally ? -1 : 1,
         this._options.flipVertically ? -1 : 1
       )
-      outputSprite.setRotation(radians)
-      outputSprite.setAnchor(0.5, 0.5)
-      outputSprite.updateTransform()
+      this._sprite.setRotation(radians)
+      this._sprite.setAnchor(0.5, 0.5)
+      this._sprite.setTexture(outputSprite.getTexture())
+      this._sprite.updateTransform()
 
-      // Resize output texture
-      const bounds = outputSprite.getBounds()
-      const textureDimensions = new Vector2(bounds.width, bounds.height)
-      renderTexture.resizeTo(textureDimensions)
+      const bounds = this._sprite.getBounds()
+      renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
+      renderTexture.render(this._container)
 
       // Make sure we're rendering to top left corner
-      outputSprite.setPosition(renderTexture.getWidth() / 2, renderTexture.getHeight() / 2)
+      this._sprite.setPosition(renderTexture.getWidth() / 2, renderTexture.getHeight() / 2)
 
       // Draw
-      renderTexture.render(outputContainer)
-
-      // Reset sprite
-      outputSprite.setRotation(0)
-      outputSprite.setAnchor(tempAnchor)
-      outputSprite.setPosition(tempPosition)
-      outputSprite.setScale(tempScale)
+      renderTexture.render(this._container)
     }
 
     outputSprite.setTexture(renderTexture)
