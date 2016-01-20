@@ -369,14 +369,24 @@ export default class StickerCanvasControlsComponent extends BaseComponent {
     const filtersSVG = { __html: stickers.map((sticker, i) => {
       const adjustments = sticker.getAdjustments()
       const brightness = adjustments.getBrightness()
+      const saturation = adjustments.getSaturation()
+      const contrast = adjustments.getContrast()
 
-      return (`<filter id='pesdk-sticker-${i}-filter'>
-        <feComponentTransfer>
-          <feFuncR type='linear' intercept='${brightness}' />
-          <feFuncG type='linear' intercept='${brightness}' />
-          <feFuncB type='linear' intercept='${brightness}' />
-        </feComponentTransfer>
-      </filter>`)
+      return (
+        `<filter id='pesdk-sticker-${i}-filter'>
+          <feComponentTransfer>
+            <feFuncR type='linear' intercept='${brightness}' />
+            <feFuncG type='linear' intercept='${brightness}' />
+            <feFuncB type='linear' intercept='${brightness}' />
+          </feComponentTransfer>
+          <feColorMatrix type='saturate' values='${saturation}' />
+          <feComponentTransfer>
+            <feFuncR type='linear' slope='${contrast}' intercept='${-(0.5 * contrast) + 0.5}' />
+            <feFuncG type='linear' slope='${contrast}' intercept='${-(0.5 * contrast) + 0.5}' />
+            <feFuncB type='linear' slope='${contrast}' intercept='${-(0.5 * contrast) + 0.5}' />
+          </feComponentTransfer>
+        </filter>`
+      )
     }).join() }
 
     // We added `key: Math.random()` because in Safari, dangerouslySetInnerHTML
