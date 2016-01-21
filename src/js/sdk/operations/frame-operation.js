@@ -38,27 +38,31 @@ class FrameFilter extends Engine.Filter {
 export default class FrameOperation extends Operation {
   /**
    * Crops this image using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @private
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    const outputSprite = renderer.getSprite()
-    const spriteBounds = outputSprite.getBounds()
-    const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
-    const filter = this._getFilter()
-
-    const thickness = this._options.thickness *
-      Math.min(spriteDimensions.x, spriteDimensions.y)
-    const thicknessVec2 = [thickness / spriteDimensions.x, thickness / spriteDimensions.y]
-
-    filter.setUniform('u_color', this._options.color.toGLColor())
-    filter.setUniform('u_thickness', thicknessVec2)
-
-    const renderTexture = this._getRenderTexture(renderer)
+  _renderWebGL (sdk) {
+    // @TODO Use this operation's sprite for rendering
+    const renderer = sdk.getRenderer()
+    const outputSprite = sdk.getSprite()
+    const renderTexture = this._getRenderTexture(sdk)
 
     // Re-render to RenderTexture if dirty
     if (this.isDirtyForRenderer(renderer)) {
+      const spriteBounds = outputSprite.getBounds()
+      const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+      const filter = this._getFilter()
+
+      const thickness = this._options.thickness *
+        Math.min(spriteDimensions.x, spriteDimensions.y)
+      const thicknessVec2 = [thickness / spriteDimensions.x, thickness / spriteDimensions.y]
+
+      filter.setUniforms({
+        u_color: this._options.color.toGLColor(),
+        u_thickness: thicknessVec2
+      })
+
       renderTexture.resizeTo(spriteDimensions)
 
       const tempFilters = outputSprite.getFilters()
