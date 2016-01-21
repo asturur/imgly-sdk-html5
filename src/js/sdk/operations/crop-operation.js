@@ -8,8 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Vector2 } from '../globals'
 import Operation from './operation'
-import Vector2 from '../lib/math/vector2'
 import Promise from '../vendor/promise'
 
 /**
@@ -20,39 +20,45 @@ import Promise from '../vendor/promise'
  * @extends PhotoEditorSDK.Operation
  */
 class CropOperation extends Operation {
+  constructor (...args) {
+    super(...args)
+
+    this._sprite.setAnchor(0, 0)
+  }
+
   /**
    * Rotates and crops the image using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @override
    * @private
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return new Promise((resolve, reject) => {
+  _renderWebGL (sdk) {
+    const renderer = sdk.getRenderer()
+    const outputSprite = sdk.getSprite()
+    const renderTexture = this._getRenderTexture(sdk)
+
+    this._sprite.setTexture(outputSprite.getTexture())
+    if (this.isDirtyForRenderer(renderer)) {
+      const outputBounds = outputSprite.getBounds()
+      const outputDimensions = new Vector2(outputBounds.width, outputBounds.height)
+
       const start = this._options.start.clone()
+        .multiply(outputDimensions)
       const end = this._options.end.clone()
-      const fragmentShader = null
+        .multiply(outputDimensions)
 
-      if (!this._glslPrograms[renderer.id]) {
-        this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(null, fragmentShader, textureCoordinates)
-      }
+      const newDimensions = end.clone().subtract(start)
+      renderTexture.resizeTo(newDimensions)
 
-      const textureCoordinates = new Float32Array([
-        // First triangle
-        start.x, 1.0 - end.y,
-        end.x, 1.0 - end.y,
-        start.x, 1.0 - start.y,
+      this._sprite.setPosition(-start.x, -start.y)
+      renderTexture.render(this._container)
 
-        // Second triangle
-        start.x, 1.0 - start.y,
-        end.x, 1.0 - end.y,
-        end.x, 1.0 - start.y
-      ])
-      renderer.setTextureDimensions(this.getNewDimensions(renderer, renderer.getTextureDimensions()))
-      renderer.runProgram(this._glslPrograms[renderer.id], { textureCoordinates })
+      this.setDirtyForRenderer(true, renderer)
+    }
+    outputSprite.setTexture(renderTexture)
 
-      resolve()
-    })
+    return Promise.resolve()
   }
 
   /**
