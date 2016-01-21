@@ -8,10 +8,24 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Engine, Vector2, Utils } from '../globals'
 import Operation from './operation'
-import Vector2 from '../lib/math/vector2'
 import StackBlur from '../vendor/stack-blur'
 import Promise from '../vendor/promise'
+
+class RadialBlurFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../shaders/focus/radial-blur.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_blurRadius: { type: 'f', value: 30 },
+      u_gradientRadius: { type: 'f', value: 50 },
+      u_position: { type: '2f', value: [0.5, 0.5] },
+      u_delta: { type: '2f', value: [1, 1] },
+      u_texSize: { type: '2f', value: [100, 100] }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * An operation that can crop out a part of the image
@@ -24,54 +38,60 @@ class RadialBlurOperation extends Operation {
   constructor (...args) {
     super(...args)
 
-    this._fragmentShader = require('raw!../shaders/focus/radial-blur.frag')
-
-    this._cachedBlurredCanvas = null
     this._lastBlurRadius = this._options.blurRadius
     this._lastGradientRadius = this._options.gradientRadius
+
+    this._horizontalFilter = new RadialBlurFilter()
+    this._verticalFilter = new RadialBlurFilter()
+    this._sprite.setFilters([
+      this._horizontalFilter,
+      this._verticalFilter
+    ])
+
+    this._horizontalFilter.setUniform('u_delta', [1, 1])
+    this._verticalFilter.setUniform('u_delta', [-1, 1])
   }
 
   /**
    * Crops this image using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return new Promise((resolve, reject) => {
-      var canvas = renderer.getCanvas()
-      var canvasSize = new Vector2(canvas.width, canvas.height)
+  _renderWebGL (sdk) {
+    const renderer = sdk.getRenderer()
+    const outputSprite = sdk.getSprite()
+    const renderTexture = this._getRenderTexture(sdk)
 
-      var position = this._options.position.clone()
+    this._sprite.setTexture(outputSprite.getTexture())
+    if (this.isDirtyForRenderer(renderer)) {
+      const spriteBounds = outputSprite.getBounds()
+      const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+
+      // Invert Y
+      const position = this._options.position.clone()
       position.y = 1 - position.y
 
       if (this._options.numberFormat === 'relative') {
-        position.multiply(canvasSize)
+        position.multiply(outputDimensions)
       }
 
-      var uniforms = {
-        blurRadius: { type: 'f', value: this._options.blurRadius },
-        gradientRadius: { type: 'f', value: this._options.gradientRadius },
-        position: { type: '2f', value: [position.x, position.y] },
-        texSize: { type: '2f', value: [canvas.width, canvas.height] },
-        delta: { type: '2f', value: [1, 1] }
+      const commonUniforms = {
+        u_blurRadius: this._options.blurRadius,
+        u_gradientRadius: this._options.gradientRadius,
+        u_position: [position.x, position.y],
+        u_texSize: [outputDimensions.x, outputDimensions.y]
       }
 
-      // Setup program
-      if (!this._glslPrograms[renderer.id]) {
-        this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-          null,
-          this._fragmentShader
-        )
-      }
+      this._horizontalFilter.setUniforms(commonUniforms)
+      this._verticalFilter.setUniforms(commonUniforms)
 
-      renderer.runProgram(this._glslPrograms[renderer.id], { uniforms })
+      renderTexture.render(this._container)
+      this.setDirtyForRenderer(false, renderer)
+    }
 
-      // Update delta for second pass
-      uniforms.delta.value = [-1, 1]
+    outputSprite.setTexture(renderTexture)
 
-      renderer.runProgram(this._glslPrograms[renderer.id], { uniforms })
-      resolve()
-    })
+    return Promise.resolve()
   }
 
   /**

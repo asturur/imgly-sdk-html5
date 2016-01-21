@@ -5,11 +5,11 @@
 
 precision mediump float;
 uniform sampler2D u_image;
-uniform float blurRadius;
-uniform float gradientRadius;
-uniform vec2 position;
-uniform vec2 delta;
-uniform vec2 texSize;
+uniform float u_blurRadius;
+uniform float u_gradientRadius;
+uniform vec2 u_position;
+uniform vec2 u_delta;
+uniform vec2 u_texSize;
 varying vec2 v_texCoord;
 
 float random(vec3 scale, float seed) {
@@ -21,11 +21,11 @@ void main() {
     float total = 0.0;
 
     float offset = random(vec3(12.9898, 78.233, 151.7182), 0.0);
-    float radius = smoothstep(0.0, 1.0, abs(distance(v_texCoord * texSize, position)) / (gradientRadius * 2.0)) * blurRadius;
+    float radius = smoothstep(0.0, 1.0, abs(distance(v_texCoord * u_texSize, u_position)) / (u_gradientRadius * 2.0)) * u_blurRadius;
     for (float t = -30.0; t <= 30.0; t++) {
         float percent = (t + offset - 0.5) / 30.0;
         float weight = 1.0 - abs(percent);
-        vec4 sample = texture2D(u_image, v_texCoord + delta * percent * radius / texSize);
+        vec4 sample = texture2D(u_image, v_texCoord + u_delta * percent * radius / u_texSize);
 
         sample.rgb *= sample.a;
 
