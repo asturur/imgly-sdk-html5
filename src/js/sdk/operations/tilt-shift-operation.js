@@ -8,10 +8,25 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Engine, Vector2, Utils } from '../globals'
 import Operation from './operation'
-import Vector2 from '../lib/math/vector2'
 import StackBlur from '../vendor/stack-blur'
 import Promise from '../vendor/promise'
+
+class TiltShiftFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../shaders/focus/tilt-shift.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_blurRadius: { type: 'f', value: 30 },
+      u_gradientRadius: { type: 'f', value: 50 },
+      u_start: { type: '2f', value: [0, 0.5] },
+      u_end: { type: '2f', value: [1, 0.5] },
+      u_delta: { type: '2f', value: [0, 0] },
+      u_texSize: { type: '2f', value: [100, 100] }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * An operation that can crop out a part of the image
@@ -24,61 +39,81 @@ class TiltShiftOperation extends Operation {
   constructor (...args) {
     super(...args)
 
-    this._fragmentShader = require('raw!../shaders/focus/tilt-shift.frag')
-
-    this._cachedBlurredCanvas = null
     this._lastBlurRadius = this._options.blurRadius
     this._lastGradientRadius = this._options.gradientRadius
+
+    this._horizontalFilter = new TiltShiftFilter()
+    this._verticalFilter = new TiltShiftFilter()
+    this._sprite.setFilters([
+      this._horizontalFilter,
+      this._verticalFilter
+    ])
   }
 
   /**
    * Crops this image using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return new Promise((resolve, reject) => {
-      var canvas = renderer.getCanvas()
-      var canvasSize = new Vector2(canvas.width, canvas.height)
+  _renderWebGL (sdk) {
+    const renderer = sdk.getRenderer()
+    const outputSprite = sdk.getSprite()
+    const renderTexture = this._getRenderTexture(sdk)
 
-      var start = this._options.start.clone()
-      var end = this._options.end.clone()
+    this._sprite.setTexture(outputSprite.getTexture())
+    if (this.isDirtyForRenderer(renderer)) {
+      const spriteBounds = outputSprite.getBounds()
+      const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+
+      const start = this._options.start.clone()
+      const end = this._options.end.clone()
 
       if (this._options.numberFormat === 'relative') {
-        start.multiply(canvasSize)
-        end.multiply(canvasSize)
+        start.multiply(outputDimensions)
+        end.multiply(outputDimensions)
       }
 
-      start.y = canvasSize.y - start.y
-      end.y = canvasSize.y - end.y
+      // Flip Y
+      start.y = outputDimensions.y - start.y
+      end.y = outputDimensions.y - end.y
 
-      var delta = end.clone().subtract(start)
-      var d = Math.sqrt(delta.x * delta.x + delta.y * delta.y)
+      // Calculate delta
+      const delta = end.clone().subtract(start)
+      const d = delta.len()
 
-      var uniforms = {
-        blurRadius: { type: 'f', value: this._options.blurRadius },
-        gradientRadius: { type: 'f', value: this._options.gradientRadius },
-        start: { type: '2f', value: [start.x, start.y] },
-        end: { type: '2f', value: [end.x, end.y] },
-        delta: { type: '2f', value: [delta.x / d, delta.y / d] },
-        texSize: { type: '2f', value: [canvas.width, canvas.height] }
+      const commonUniforms = {
+        u_blurRadius: this._options.blurRadius,
+        u_gradientRadius: this._options.gradientRadius,
+        u_start: [start.x, start.y],
+        u_end: [end.x, end.y],
+        u_texSize: [outputDimensions.x, outputDimensions.y]
       }
 
-      if (!this._glslPrograms[renderer.id]) {
-        this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-          null,
-          this._fragmentShader
-        )
-      }
+      this._horizontalFilter.setUniforms(commonUniforms)
+      this._verticalFilter.setUniforms(commonUniforms)
 
-      renderer.runProgram(this._glslPrograms[renderer.id], { uniforms })
+      this._horizontalFilter.setUniform('u_delta', [delta.x / d, delta.y / d])
+      this._verticalFilter.setUniform('u_delta', [-delta.y / d, delta.x / d])
 
-      // Update delta for second pass
-      uniforms.delta.value = [-delta.y / d, delta.x / d]
+      renderTexture.render(this._container)
+      this.setDirtyForRenderer(false, renderer)
+    }
 
-      renderer.runProgram(this._glslPrograms[renderer.id], { uniforms })
-      resolve()
-    })
+    outputSprite.setTexture(renderTexture)
+
+    return Promise.resolve()
+  }
+
+  /**
+   * Creates and/or returns the Filter
+   * @return {TiltShiftFilter}
+   * @private
+   */
+  _getFilter () {
+    if (!this._filter) {
+      this._filter = new TiltShiftFilter()
+    }
+    return this._filter
   }
 
   /**
