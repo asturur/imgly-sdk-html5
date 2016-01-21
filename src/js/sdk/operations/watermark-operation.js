@@ -8,16 +8,16 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import Utils from '../lib/utils'
-import Vector2 from '../lib/math/vector2'
-import Matrix from '../lib/math/matrix'
+import { Engine, Utils, Vector2, Matrix } from '../globals'
 import Operation from './operation'
 
 class WatermarkOperation extends Operation {
   constructor (...args) {
     super(...args)
 
-    this._textures = {}
+    this._watermarkSprite = new Engine.Sprite()
+    this._watermarkSprite.setAnchor(0.5, 0.5)
+    this._container.addChild(this._watermarkSprite)
   }
 
   /**
@@ -52,106 +52,41 @@ class WatermarkOperation extends Operation {
 
   /**
    * Renders the watermark using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @private
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return new Promise((resolve, reject) => {
-      if (!this._glslPrograms[renderer.id]) {
-        this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-          this._vertexShader,
-          null
-        )
-      }
-
-      if (!this._textures[renderer.id]) {
-        this._textures[renderer.id] = renderer.createTexture(this._options.image)
-      }
-
-      if (!this._outputTexture) {
-        const { texture, fbo } = renderer.createFramebuffer()
-        this._outputTexture = texture
-        this._outputFramebuffer = fbo
-      }
-
-      const outputCanvas = renderer.getCanvas()
-      renderer.resizeTexture(this._outputTexture, new Vector2(
-        outputCanvas.width, outputCanvas.height
-      ))
-
-      const program = this._glslPrograms[renderer.id]
-      const projectionMatrix = this._createProjectionMatrix(renderer)
-
-      renderer.runProgram(program, {
-        inputTexture: this._textures[renderer.id],
-        outputTexture: this._outputTexture,
-        outputFBO: this._outputFramebuffer,
-        textureSize: new Vector2(
-          outputCanvas.width, outputCanvas.height
-        ),
-        resizeTextures: false,
-        switchBuffer: false,
-        clear: false,
-        blend: 'normal',
-        uniforms: {
-          u_projMatrix: { type: 'mat3fv', value: projectionMatrix }
-        }
-      })
-
-      // Render last texture to current FBO
-      renderer.runProgram(renderer.getDefaultProgram(), {
-        switchBuffer: false
-      })
-
-      renderer.runProgram(renderer.getDefaultProgram(), {
-        inputTexture: this._outputTexture,
-        resizeTextures: false,
-        clear: false,
-        blend: 'normal'
-      })
-
-      resolve()
-    })
-  }
-
-  /**
-   * Creates the projection matrix
-   * @param  {WebGLRenderer} renderer
-   * @return {Matrix}
-   * @private
-   */
-  _createProjectionMatrix (renderer) {
-    const outputCanvas = renderer.getCanvas()
-    const image = this._options.image
-
-    let scale
-    if (image.width / image.height > outputCanvas.width / outputCanvas.height) {
-      scale = outputCanvas.width / image.width
-    } else {
-      scale = outputCanvas.height / image.height
+  _renderWebGL (sdk) {
+    const renderer = sdk.getRenderer()
+    if (!this._watermarkTexture) {
+      this._watermarkTexture = Engine.Texture.fromImage(this._options.image)
+      this._watermarkSprite.setTexture(this._watermarkTexture)
     }
 
-    // Projection matrix
-    let projectionMatrix = new Matrix()
-    projectionMatrix.a = 2 / outputCanvas.width
-    projectionMatrix.d = -2 / outputCanvas.height
-    projectionMatrix.tx = -1
-    projectionMatrix.ty = 1
+    const outputSprite = sdk.getSprite()
+    const outputBounds = outputSprite.getBounds()
+    const outputDimensions = new Vector2(outputBounds.width, outputBounds.height)
+    const renderTexture = this._getRenderTexture(sdk)
+    this._sprite.setTexture(outputSprite.getTexture())
 
-    // Scale matrix
-    let scaleMatrix = new Matrix()
-    scaleMatrix.a = image.width * 0.5 * scale
-    scaleMatrix.d = -image.height * 0.5 * scale
+    if (this.isDirtyForRenderer(renderer)) {
+      const { width, height } = this._options.image
+      const dimensions = Utils.resizeVectorToFit(
+        new Vector2(width, height),
+        outputDimensions
+      )
+      this._watermarkSprite.setPosition(
+        outputDimensions.x / 2,
+        outputDimensions.y / 2
+      )
+      this._watermarkSprite.setWidth(dimensions.x)
+      this._watermarkSprite.setHeight(dimensions.y)
 
-    // Translation matrix
-    let translationMatrix = new Matrix()
-    translationMatrix.tx = 0.5 * outputCanvas.width
-    translationMatrix.ty = 0.5 * outputCanvas.height
+      renderTexture.render(this._container)
+    }
 
-    let matrix = scaleMatrix.multiply(translationMatrix)
-    matrix.multiply(projectionMatrix)
-    return matrix.toArray()
+    outputSprite.setTexture(renderTexture)
+    return Promise.resolve()
   }
 }
 
