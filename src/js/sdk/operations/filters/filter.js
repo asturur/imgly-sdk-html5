@@ -40,8 +40,8 @@ class Filter {
    * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
    */
-  render (sdk) {
-    return this._stack.render(sdk)
+  render (sdk, renderTexture) {
+    return this._stack.render(sdk, renderTexture)
   }
 
   /**

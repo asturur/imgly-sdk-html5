@@ -29,8 +29,9 @@ class Operation extends Configurable {
     this._sdk = sdk
     this._dirtiness = {}
 
-    this._glslPrograms = {}
-    this._uuid = Utils.getUUID()
+    this._sprite = new Engine.Sprite()
+    this._container = new Engine.Container()
+    this._container.addChild(this._sprite)
   }
 
   // -------------------------------------------------------------------------- EVENTS
@@ -69,6 +70,36 @@ class Operation extends Configurable {
     }
 
     const renderer = sdk.getRenderer()
+
+    // Handle caching
+    if (this.isDirtyForRenderer(renderer)) {
+      return this._render(sdk)
+        .then(() => {
+          this.setDirtyForRenderer(false, renderer)
+        })
+    } else {
+      return this.renderCached(sdk)
+    }
+  }
+
+  /**
+   * Renders the cached version of this operation
+   * @param  {PhotoEditorSDK} sdk
+   * @return {Promise}
+   */
+  renderCached (sdk) {
+    const outputSprite = sdk.getSprite()
+    outputSprite.setTexture(this._getRenderTexture(sdk))
+    return Promise.resolve()
+  }
+
+  /**
+   * Renders this operation
+   * @param  {PhotoEditorSDK} sdk
+   * @return {Promise}
+   * @private
+   */
+  _render (sdk) {
     let renderFn
     if (sdk.getRenderer() instanceof Engine.WebGLRenderer) {
       /* istanbul ignore next */
@@ -77,15 +108,7 @@ class Operation extends Configurable {
       renderFn = this._renderCanvas.bind(this)
     }
 
-    // Handle caching
-    // if (this.isDirtyForRenderer(renderer)) {
     return renderFn(sdk)
-      .then(() => {
-        this.setDirtyForRenderer(false, renderer)
-      })
-    // } else {
-    //   return renderer.drawCached(this._uuid)
-    // }
   }
 
   /**

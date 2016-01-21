@@ -43,13 +43,13 @@ class PrimitivesStack {
   /**
    * Renders this stack using WebGL
    * @param  {PhotoEditorSDK} sdk
+   * @param  {Engine.RenderTexture} renderTexture
    * @return {Promise}
    */
-  renderWebGL (sdk) {
+  renderWebGL (sdk, renderTexture) {
     if (this._stack.length === 0) return Promise.resolve()
 
     const outputSprite = sdk.getSprite()
-    const renderTexture = this._getRenderTexture(sdk)
     if (!this._dirty) {
       outputSprite.setTexture(renderTexture)
       return Promise.resolve()
@@ -79,29 +79,29 @@ class PrimitivesStack {
 
   /**
    * Creates and returns a render texture
-   * @param  {Renderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @return {RenderTexture}
    */
-  _getRenderTexture (renderer) {
+  _getRenderTexture (sdk) {
     if (!this._renderTexture) {
-      this._renderTexture = renderer.createRenderTexture()
+      this._renderTexture = sdk.createRenderTexture()
     }
     return this._renderTexture
   }
 
   /**
    * Renders this stack using Canvas2D
-   * @param  {CanvasRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
    */
-  renderCanvas (renderer) {
-    const outputCanvas = renderer.cloneCanvas()
+  renderCanvas (sdk) {
+    const outputCanvas = sdk.cloneCanvas()
 
     let promise = Promise.resolve()
     if (this._dirty) {
       for (var i = 0; i < this._stack.length; i++) {
         var primitive = this._stack[i]
-        primitive.renderCanvas(renderer, outputCanvas)
+        primitive.renderCanvas(sdk, outputCanvas)
       }
     }
 
@@ -109,7 +109,7 @@ class PrimitivesStack {
       this._dirty = false
     }).then(() => {
       // Render with intensity
-      const context = renderer.getContext()
+      const context = sdk.getContext()
       context.globalAlpha = this._intensity
       context.drawImage(outputCanvas, 0, 0)
       context.globalAlpha = 1.0
@@ -120,13 +120,13 @@ class PrimitivesStack {
 
   /**
    * Renders the stack of primitives on the renderer
-   * @param  {Renderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    */
-  render (renderer) {
-    if (renderer.getRenderer() instanceof Engine.WebGLRenderer) {
-      return this.renderWebGL(renderer)
+  render (sdk, renderTexture) {
+    if (sdk.getRenderer() instanceof Engine.WebGLRenderer) {
+      return this.renderWebGL(sdk, renderTexture)
     } else {
-      return this.renderCanvas(renderer)
+      return this.renderCanvas(sdk, renderTexture)
     }
   }
 
