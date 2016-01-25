@@ -44,8 +44,8 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
     // Operation can be removed by the undo button. We need
     // to make sure we re-create the operation for the lifetime
     // of this control
-    const { ui } = this.context
-    const newOperation = ui.getOrCreateOperation('radial-blur')
+    const { editor } = this.context
+    const newOperation = editor.getOrCreateOperation('radial-blur')
     this._operation = newOperation
     this.setSharedState({
       operation: newOperation,
@@ -62,9 +62,9 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
   _onBackClick (e) {
     super._onBackClick(e)
 
-    const { ui } = this.context
+    const { editor } = this.context
     if (!this.getSharedState('operationExistedBefore')) {
-      ui.removeOperation(this._operation)
+      editor.removeOperation(this._operation)
     } else {
       this._operation.set(this.getSharedState('initialOptions'))
     }
