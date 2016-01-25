@@ -8,7 +8,11 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { EventEmitter, SDK, SDKUtils, Constants, Vector2 } from '../globals'
+import {
+  EventEmitter, SDK, SDKUtils, Constants, Vector2,
+  requestAnimationFrame, cancelAnimationFrame
+} from '../globals'
+import FPSCounter from './fps-counter'
 import Exporter from './exporter'
 
 /**
@@ -21,6 +25,11 @@ export default class Editor extends EventEmitter {
     this._options = options
     this._mediator = mediator
     this._isDefaultZoom = false
+    this._debug = !!this._options.debug
+
+    if (this._debug) {
+      this._fpsCounter = new FPSCounter()
+    }
 
     this._initSDK()
     this._initOperations()
@@ -30,6 +39,17 @@ export default class Editor extends EventEmitter {
     this._operationsMap = {}
     this._operationsStack = this._sdk.getOperationsStack()
     this._preferredOperationOrder = this._options.operationsOrder
+
+    // Rendering
+    this._running = false
+    this._renderRequested = true
+    this._renderCallbacks = []
+    this._animationFrameRequest = null
+
+    this.render = this.render.bind(this)
+    this._tick = this._tick.bind(this)
+
+    this._mediator.on(Constants.EVENTS.CANVAS_RENDER, this.render)
   }
 
   // -------------------------------------------------------------------------- INITIALIZATION
@@ -264,13 +284,6 @@ export default class Editor extends EventEmitter {
   // -------------------------------------------------------------------------- MISC PUBLIC API
 
   /**
-   * Triggers a render
-   */
-  render () {
-    return this._sdk.render()
-  }
-
-  /**
    * Returns the output sprite's current dimensions
    * @return {Vector2}
    */
@@ -339,9 +352,138 @@ export default class Editor extends EventEmitter {
       })
   }
 
+  // -------------------------------------------------------------------------- RENDERING
+
+  /**
+   * Starts the render loop
+   */
+  start () {
+    this._animationFrameRequest = requestAnimationFrame(this._tick)
+  }
+
+  /**
+   * Stops the render loop
+   */
+  stop () {
+    this._running = false
+    if (this._animationFrameRequest) {
+      cancelAnimationFrame(this._animationFrameRequest)
+      this._renderCallbacks = []
+    }
+  }
+
+  /**
+   * Requests a render, adds `callback` to the render callbacks
+   * @param  {Number}   [zoom]
+   * @param  {Function} [callback]
+   */
+  render (zoom, callback) {
+    if (zoom) {
+      this._sdk.setZoom(zoom)
+      this._renderCallbacks.push(() => {
+        this._fixOffset()
+      })
+    }
+
+    this._renderRequested = true
+    if (callback) {
+      this._renderCallbacks.push(callback)
+    }
+  }
+
+  /**
+   * Sets the offset to the given one
+   * @param {Vector2} offset
+   */
+  setOffset (offset) {
+    offset = this._clampOffset(offset)
+
+    const initialOffset = this._sdk.getOffset()
+    if (!initialOffset.equals(offset)) {
+      this._sdk.setOffset(offset)
+      this.render()
+    }
+  }
+
+  /**
+   * Makes sure the image stays inside the viewport
+   * @private
+   */
+  _fixOffset () {
+    this.setOffset(this._sdk.getOffset())
+  }
+
+  /**
+   * Fixes the given offset to make sure the image stays inside the viewport
+   * @private
+   */
+  _clampOffset (offset) {
+    const renderer = this._sdk.getRenderer()
+    const rendererDimensions = new Vector2(renderer.getWidth(), renderer.getHeight())
+    const outputDimensions = this.getOutputDimensions()
+
+    const minOffset = rendererDimensions.clone()
+      .subtract(outputDimensions)
+      .divide(2)
+      .clamp(null, new Vector2(0, 0))
+
+    const maxOffset = outputDimensions.clone()
+      .subtract(rendererDimensions)
+      .divide(2)
+      .clamp(new Vector2(0, 0), null)
+
+    const newOffset = offset.clone()
+      .clamp(minOffset, maxOffset)
+      .round()
+
+    return newOffset
+  }
+
+  /**
+   * Gets called when an animation frame is being processed. Renders the
+   * canvas if necessary, requests another animation frame callbacks
+   * @private
+   */
+  _tick () {
+    if (this._renderRequested) {
+      if (this._debug) this._fpsCounter.startFrame()
+
+      this._render()
+        .then(() => {
+          if (this._debug) this._fpsCounter.endFrame()
+
+          this._renderCallbacks.forEach((r) => r())
+          this._renderCallbacks = []
+        })
+
+      this._renderRequested = false
+    }
+    this._animationFrameRequest = requestAnimationFrame(this._tick)
+  }
+
+  /**
+   * Triggers a render
+   * @internal
+   */
+  _render () {
+    return this._sdk.render()
+      .then(() => {
+        this._lastOutputBounds = this._sdk.getSprite().getBounds()
+      })
+  }
+
+  // -------------------------------------------------------------------------- DISPOSAL
+
+  dispose () {
+    this.stop()
+
+    this._mediator.off(Constants.EVENTS.CANVAS_RENDER, this.render)
+  }
+
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
   getRenderer () { return this._sdk.getRenderer() }
   getSDK () { return this._sdk }
   isDefaultZoom () { return this._isDefaultZoom }
+  getLastOutputBounds () { return this._lastOutputBounds }
 }
