@@ -140,7 +140,7 @@ export default class Container extends DisplayObject {
       // @TODO Calculate bounds by looking at children
       this._localBoundsNeedUpdate = false
     }
-    return this._localBounds
+    return this._localBounds.clone()
   }
 
   /**
@@ -152,7 +152,7 @@ export default class Container extends DisplayObject {
       // @TODO Calculate bounds by looking at children
       this._boundsNeedUpdate = false
     }
-    return this._bounds
+    return this._bounds.clone()
   }
 
   getChildren () { return this._children }

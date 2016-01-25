@@ -111,7 +111,7 @@ export default class DisplayObject {
    * @return {Rectangle}
    */
   getBounds () {
-    return this._bounds
+    return this._bounds.clone()
   }
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS

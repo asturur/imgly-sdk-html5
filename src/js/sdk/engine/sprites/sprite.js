@@ -55,7 +55,7 @@ export default class Sprite extends Container {
 
       this._localBoundsNeedUpdate = false
     }
-    return this._localBounds
+    return this._localBounds.clone()
   }
 
   /**
@@ -92,7 +92,7 @@ export default class Sprite extends Container {
 
       this._boundsNeedUpdate = false
     }
-    return this._bounds
+    return this._bounds.clone()
   }
 
   /**
