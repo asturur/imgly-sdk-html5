@@ -73,10 +73,6 @@ class TiltShiftOperation extends Operation {
         end.multiply(outputDimensions)
       }
 
-      // Flip Y
-      start.y = outputDimensions.y - start.y
-      end.y = outputDimensions.y - end.y
-
       // Calculate delta
       const delta = end.clone().subtract(start)
       const d = delta.len()

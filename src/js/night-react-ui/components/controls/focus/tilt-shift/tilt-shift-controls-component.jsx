@@ -31,20 +31,6 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     }
   }
 
-  // -------------------------------------------------------------------------- LIFECYCLE
-
-  /**
-   * Gets called when this component has been mounted
-   */
-  componentDidMount () {
-    super.componentDidMount()
-
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
-      this.props.sharedState.broadcastUpdate()
-    })
-  }
-
   // -------------------------------------------------------------------------- EVENTS
 
   /**
@@ -58,8 +44,8 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     // Operation can be removed by the undo button. We need
     // to make sure we re-create the operation for the lifetime
     // of this control
-    const { ui } = this.context
-    const newOperation = ui.getOrCreateOperation('tilt-shift')
+    const { editor } = this.context
+    const newOperation = editor.getOrCreateOperation('tilt-shift')
     this._operation = newOperation
     this.setSharedState({
       operation: newOperation,
@@ -76,9 +62,9 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
   _onBackClick (e) {
     super._onBackClick(e)
 
-    const { ui } = this.context
+    const { editor } = this.context
     if (!this.getSharedState('operationExistedBefore')) {
-      ui.removeOperation(this._operation)
+      editor.removeOperation(this._operation)
     } else {
       this._operation.set(this.getSharedState('initialOptions'))
     }
@@ -95,7 +81,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
    * @private
    */
   _onDoneClick (e) {
-    const { editor } = this.props
+    const { editor } = this.context
     const operationExistedBefore = this.getSharedState('operationExistedBefore')
     const initialOptions = this.getSharedState('initialOptions')
     const optionsChanged = !this._operation.optionsEqual(initialOptions)

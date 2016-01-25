@@ -18,10 +18,9 @@ export default {
   identifier: 'tilt-shift',
   icon: 'controls/focus/tilt-shift@2x.png',
   label: 'controls.focus.tilt-shift',
-  getInitialSharedState: (context) => {
-    const { ui } = context
-    const operationExistedBefore = ui.operationExists('tilt-shift')
-    const operation = context.ui.getOrCreateOperation('tilt-shift', {
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('tilt-shift')
+    const operation = editor.getOrCreateOperation('tilt-shift', {
       start: new Vector2(0.49, 0.5),
       end: new Vector2(0.51, 0.5)
     })
@@ -35,7 +34,7 @@ export default {
       operation, operationExistedBefore, initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('tilt-shift')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('tilt-shift')
   }
 }

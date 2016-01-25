@@ -49,7 +49,10 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
    */
   componentDidMount () {
     super.componentDidMount()
-    this._setStylesFromOptions()
+    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
+      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
+      this._setStylesFromOptions()
+    })
   }
 
   // -------------------------------------------------------------------------- CENTER DRAGGING
@@ -71,9 +74,9 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onCenterDrag (offset) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
-    const relativeOffset = offset.clone().divide(canvasDimensions)
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
+    const relativeOffset = offset.clone().divide(outputDimensions)
 
     const newStart = this._initialStart.clone().add(relativeOffset)
       .clamp(
@@ -86,6 +89,7 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
       start: newStart,
       end: newEnd
     })
+
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this._setStylesFromOptions()
     this.forceUpdate()
@@ -107,12 +111,12 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onKnobDrag (offset) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     const newKnobPosition = this._initialKnobPosition.clone()
       .add(offset)
-      .clamp(new Vector2(0, 0), canvasDimensions)
+      .clamp(new Vector2(0, 0), outputDimensions)
 
     const distance = newKnobPosition.clone()
       .subtract(this.state.areaPosition)
@@ -120,10 +124,10 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
 
     let start = this.state.areaPosition.clone()
       .add(-distance.y, distance.x)
-      .divide(canvasDimensions)
+      .divide(outputDimensions)
     let end = this.state.areaPosition.clone()
       .add(distance.y, -distance.x)
-      .divide(canvasDimensions)
+      .divide(outputDimensions)
 
     this._operation.set({
       gradientRadius: newGradientRadius,
@@ -178,15 +182,15 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
   // -------------------------------------------------------------------------- RENDERING
 
   _setStylesFromOptions () {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
     const start = this._operation.getStart()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
     const end = this._operation.getEnd()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
     const gradientRadius = this._operation.getGradientRadius()
 
     const dist = end.clone().subtract(start)
@@ -194,7 +198,7 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
       .add(dist.clone().divide(2))
 
     const areaSize = new Vector2(
-      canvasDimensions.len() * 2,
+      outputDimensions.len() * 2,
       gradientRadius
     )
 
@@ -210,11 +214,25 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
   }
 
   /**
+   * Returns the container style
+   * @return {Object}
+   * @private
+   */
+  _getContainerStyle () {
+    const { x, y, width, height } = this.context.editor.getSDK().getSprite().getBounds()
+    return {
+      left: x,
+      top: y,
+      width, height
+    }
+  }
+
+  /**
    * Renders this component
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    return (<div bem='b:canvasControls e:container m:full' ref='container'>
+    return (<div bem='b:canvasControls e:container m:full' ref='container' style={this._getContainerStyle()}>
       <div bem='$b:tiltShiftCanvasControls'>
         <DraggableComponent
           onStart={this._onCenterDragStart}
