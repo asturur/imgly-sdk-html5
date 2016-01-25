@@ -29,32 +29,32 @@ class BrightnessOperation extends Operation {
   }
   /**
    * Renders the brightness using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @override
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return this._render(renderer)
+  _renderWebGL (sdk) {
+    return this._render(sdk)
   }
 
   /**
    * Renders the brightness using Canvas2D
-   * @param {CanvasRenderer} renderer
+   * @param {PhotoEditorSDK} sdk
    * @override
    */
-  _renderCanvas (renderer) {
-    return this._render(renderer)
+  _renderCanvas (sdk) {
+    return this._render(sdk)
   }
 
   /**
    * Renders the brightness (all renderers supported)
-   * @param {Renderer} renderer
+   * @param {PhotoEditorSDK} sdk
    * @private
    */
-  _render (renderer) {
+  _render (sdk) {
     this._primitive.options.brightness = this._options.brightness
     this._stack.setDirty(true)
-    return this._stack.render(renderer)
+    return this._stack.render(sdk, this._getRenderTexture(sdk))
   }
 }
 

@@ -32,32 +32,33 @@ class ContrastOperation extends Operation {
 
   /**
    * Renders the contrast using WebGL
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @override
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    return this._render(renderer)
+  _renderWebGL (sdk) {
+    return this._render(sdk)
   }
 
   /**
    * Renders the contrast using Canvas2D
-   * @param {CanvasRenderer} renderer
+   * @param {PhotoEditorSDK} sdk
    * @override
    */
-  _renderCanvas (renderer) {
-    return this._render(renderer)
+  _renderCanvas (sdk) {
+    return this._render(sdk)
   }
 
   /**
    * Renders the contrast (all renderers supported)
-   * @param  {Renderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @private
    */
-  _render (renderer) {
+  _render (sdk) {
     this._primitive.options.contrast = this._options.contrast
     this._stack.setDirty(true)
-    return this._stack.render(renderer)
+
+    return this._stack.render(sdk, this._getRenderTexture(sdk))
   }
 }
 
