@@ -34,6 +34,7 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onZoomOut',
       '_zoom',
       '_undoZoom',
+      '_onUndo',
       '_onDisableFeatures',
       '_onEnableFeatures',
       '_onNewClick',
@@ -56,7 +57,8 @@ export default class EditorScreenComponent extends ScreenComponent {
       [Constants.EVENTS.CANVAS_ZOOM]: this._zoom,
       [Constants.EVENTS.CANVAS_UNDO_ZOOM]: this._undoZoom,
       [Constants.EVENTS.EDITOR_DISABLE_FEATURES]: this._onDisableFeatures,
-      [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures
+      [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures,
+      [Constants.EVENTS.HISTORY_UNDO]: this._onUndo
     }
   }
 
@@ -158,6 +160,14 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _onUndoClick () {
     this._editor.undo()
+  }
+
+  /**
+   * Gets called when an action has been undone
+   * @private
+   */
+  _onUndo () {
+    this.forceUpdate()
   }
 
   // -------------------------------------------------------------------------- FEATURES
