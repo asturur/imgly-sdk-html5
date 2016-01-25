@@ -54,7 +54,6 @@ class OrientationOperation extends Operation {
 
       const bounds = this._sprite.getBounds()
       renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
-      renderTexture.render(this._container)
 
       // Make sure we're rendering to top left corner
       this._sprite.setPosition(renderTexture.getWidth() / 2, renderTexture.getHeight() / 2)

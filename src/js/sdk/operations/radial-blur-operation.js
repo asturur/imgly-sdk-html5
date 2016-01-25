@@ -84,6 +84,9 @@ class RadialBlurOperation extends Operation {
       this._horizontalFilter.setUniforms(commonUniforms)
       this._verticalFilter.setUniforms(commonUniforms)
 
+      const bounds = this._sprite.getBounds()
+      renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
+
       renderTexture.render(this._container)
       this.setDirtyForRenderer(false, renderer)
     }

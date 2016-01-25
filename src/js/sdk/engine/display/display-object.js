@@ -25,6 +25,7 @@ export default class DisplayObject {
     this._bounds = new Rectangle(0, 0, 1, 1)
     this._localBoundsNeedUpdate = true
     this._localBounds = new Rectangle(0, 0, 1, 1)
+    this._tint = 0xffffff
   }
 
   /**
@@ -157,4 +158,6 @@ export default class DisplayObject {
   getWorldTransform () { return this._worldTransform }
   getParent () { return this._parent }
   setParent (parent) { this._parent = parent }
+  setTint (tint) { this._tint = tint }
+  getTint () { return this._tint }
 }

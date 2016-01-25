@@ -91,6 +91,9 @@ class TiltShiftOperation extends Operation {
       this._horizontalFilter.setUniform('u_delta', [delta.x / d, delta.y / d])
       this._verticalFilter.setUniform('u_delta', [-delta.y / d, delta.x / d])
 
+      const bounds = this._sprite.getBounds()
+      renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
+
       renderTexture.render(this._container)
       this.setDirtyForRenderer(false, renderer)
     }

@@ -78,7 +78,7 @@ export default class SpriteRenderer extends ObjectRenderer {
    */
   _addColors (sprite, index) {
     const colors = this._colors
-    const tint = 0xffffff
+    const tint = sprite.getTint()
     const color = (tint >> 16) + (tint & 0xff00) + ((tint & 0xff) << 16) + (255 << 24)
     colors[index + 4] =
       colors[index + 9] =

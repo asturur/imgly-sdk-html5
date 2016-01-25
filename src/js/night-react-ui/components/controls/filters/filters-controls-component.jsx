@@ -92,8 +92,8 @@ export default class FiltersControlsComponent extends ControlsComponent {
     }
 
     if (filter.isIdentity) {
-      const { ui } = this.context
-      ui.removeOperation(this._operation)
+      const { editor } = this.context
+      editor.removeOperation(this._operation)
     }
   }
 
