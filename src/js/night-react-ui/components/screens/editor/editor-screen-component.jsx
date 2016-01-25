@@ -30,7 +30,6 @@ export default class EditorScreenComponent extends ScreenComponent {
 
     this._bindAll(
       'switchToControls',
-      '_onFirstCanvasRender',
       '_onZoomIn',
       '_onZoomOut',
       '_zoom',
@@ -76,6 +75,9 @@ export default class EditorScreenComponent extends ScreenComponent {
     if (options.responsive) {
       window.addEventListener('resize', this._onWindowResize)
     }
+
+    this._zoom('auto')
+    this._editor.start()
   }
 
   /**
@@ -199,7 +201,6 @@ export default class EditorScreenComponent extends ScreenComponent {
   _updateZoomToFitNewSize () {
     const canvasComponent = this.refs.canvas
     canvasComponent.onResize()
-    canvasComponent.updateOffset()
   }
 
   /**
@@ -236,7 +237,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     }
 
     this._editor.setZoom(newZoom, zoom === 'auto')
-    canvasComponent.updateOffset()
 
     this._previousZoomState = SDKUtils.extend({
       zoom: this.state.zoom,
@@ -279,15 +279,6 @@ export default class EditorScreenComponent extends ScreenComponent {
   }
 
   // -------------------------------------------------------------------------- MISC
-
-  /**
-   * We only know the canvas dimensions after the first rendering has been done.
-   * On the first render, we should set the initial zoom level
-   * @private
-   */
-  _onFirstCanvasRender () {
-    this._zoom('auto')
-  }
 
   /**
    * Switches to the given controls
@@ -440,7 +431,6 @@ export default class EditorScreenComponent extends ScreenComponent {
 
         <CanvasComponent
           ref='canvas'
-          onFirstRender={this._onFirstCanvasRender}
           zoom={this.state.zoom}
           dragEnabled={this.state.dragEnabled}
           largeControls={this.state.controls.largeCanvasControls}>

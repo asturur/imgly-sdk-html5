@@ -288,10 +288,7 @@ export default class Editor extends EventEmitter {
    * @return {Vector2}
    */
   getOutputDimensions () {
-    this._sdk.getSprite().updateTransform()
-
-    const spriteBounds = this._sdk.getSprite().getBounds()
-    return new Vector2(spriteBounds.width, spriteBounds.height)
+    return new Vector2(this._lastOutputBounds.width, this._lastOutputBounds.height)
   }
 
   /**

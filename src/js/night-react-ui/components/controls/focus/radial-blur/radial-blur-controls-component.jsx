@@ -31,20 +31,6 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
     }
   }
 
-  // -------------------------------------------------------------------------- LIFECYCLE
-
-  /**
-   * Gets called when this component has been mounted
-   */
-  componentDidMount () {
-    super.componentDidMount()
-
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
-      this.props.sharedState.broadcastUpdate()
-    })
-  }
-
   // -------------------------------------------------------------------------- EVENTS
 
   /**
@@ -94,7 +80,7 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
    * @private
    */
   _onDoneClick (e) {
-    const { editor } = this.props
+    const { editor } = this.context
     const operationExistedBefore = this.getSharedState('operationExistedBefore')
     const initialOptions = this.getSharedState('initialOptions')
     const optionsChanged = !this._operation.optionsEqual(initialOptions)

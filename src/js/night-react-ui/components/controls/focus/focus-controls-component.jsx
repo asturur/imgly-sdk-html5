@@ -31,7 +31,7 @@ export default class FocusControlsComponent extends ControlsComponent {
    * @private
    */
   _onButtonClick (controlsItem, e) {
-    this.props.editor.switchToControls(controlsItem)
+    this.context.editorScreen.switchToControls(controlsItem)
   }
 
   // -------------------------------------------------------------------------- RENDERING
@@ -43,7 +43,7 @@ export default class FocusControlsComponent extends ControlsComponent {
    */
   _renderListItems () {
     return ITEMS
-      .filter((item) => item.isSelectable(this.context.ui))
+      .filter((item) => item.isSelectable(this.context.editor))
       .map((item) => {
         return (<li
           bem='e:item'

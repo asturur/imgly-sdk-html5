@@ -10,9 +10,8 @@
  */
 
 import {
-  Utils, SDKUtils, ReactBEM, Vector2, BaseComponent, Constants, EventEmitter
+  Utils, SDKUtils, ReactBEM, Vector2, BaseComponent
 } from '../../../globals'
-import ModalManager from '../../../lib/modal-manager'
 
 export default class CanvasComponent extends BaseComponent {
   constructor (...args) {
@@ -21,27 +20,14 @@ export default class CanvasComponent extends BaseComponent {
     this._bindAll(
       '_onDragStart',
       '_onDragMove',
-      '_onDragEnd',
-      '_render',
-      '_renderCanvas'
+      '_onDragEnd'
     )
 
-    this._rendering = false
-    this._scheduledRenderings = []
-    this._canvasDimensions = new Vector2()
-    this._containerDimensions = new Vector2()
+    this._initialRenderDone = false
 
     this.state = {
       canvasPosition: new Vector2(),
       canvasOffset: new Vector2()
-    }
-
-    const { editor } = this.context
-    editor.on('operation-removed', this._render)
-    editor.on('operation-updated', this._render)
-
-    this._events = {
-      [Constants.EVENTS.CANVAS_RENDER]: this._render
     }
   }
 
@@ -56,7 +42,7 @@ export default class CanvasComponent extends BaseComponent {
       const { editor } = this.context
       const sdk = editor.getSDK()
       sdk.setAllOperationsToDirty()
-      this._render(props.zoom)
+      editor.render(props.zoom)
     }
   }
 
@@ -74,29 +60,6 @@ export default class CanvasComponent extends BaseComponent {
     const height = canvas.offsetHeight
     renderer.setCanvas(canvas)
     renderer.resizeTo(new Vector2(width, height))
-
-    this._cacheDimensions()
-
-    this._render()
-      .then(() => {
-        this.props.onFirstRender && this.props.onFirstRender()
-      })
-  }
-
-  /**
-   * Gets called after this component has been updated
-   */
-  componentDidUpdate (prevProps, newProps) {
-    this._cacheDimensions()
-  }
-
-  /**
-   * Called when this component is about to be unmounted
-   */
-  componentWillUnmount () {
-    const { editor } = this.context
-    editor.off('operation-removed', this._render)
-    editor.off('operation-updated', this._render)
   }
 
   // -------------------------------------------------------------------------- DRAGGING
@@ -134,43 +97,8 @@ export default class CanvasComponent extends BaseComponent {
       .clone()
       .add(diffFromStart)
 
-    this.updateOffset(newOffset)
-  }
-
-  /**
-   * Sets the offsets to the given one and takes boundaries into account
-   * @param  {Vector2} newOffset
-   */
-  updateOffset (newOffset) {
     const { editor } = this.context
-    const sdk = editor.getSDK()
-
-    const initialOffset = sdk.getOffset()
-    if (!newOffset) {
-      newOffset = initialOffset.clone()
-    }
-
-    const sprite = sdk.getSprite()
-    const bounds = sprite.getBounds()
-    const dimensions = new Vector2(bounds.width, bounds.height)
-
-    const minOffset = this._containerDimensions
-      .clone()
-      .subtract(dimensions)
-      .divide(2)
-      .clamp(null, new Vector2(0, 0))
-
-    const maxOffset = dimensions
-      .clone()
-      .subtract(this._containerDimensions)
-      .divide(2)
-      .clamp(new Vector2(0, 0), null)
-
-    newOffset.clamp(minOffset, maxOffset).round()
-    if (!initialOffset.equals(newOffset)) {
-      sdk.setOffset(newOffset)
-      this._render()
-    }
+    editor.setOffset(newOffset)
   }
 
   /**
@@ -185,21 +113,6 @@ export default class CanvasComponent extends BaseComponent {
     document.removeEventListener('touchend', this._onDragEnd)
   }
 
-  // -------------------------------------------------------------------------- POSITIONING
-
-  /**
-   * Repositions the canvas
-   * @private
-   */
-  _repositionCanvas () {
-    const canvasPosition = this._containerDimensions
-      .clone()
-      .divide(2)
-      .subtract(this._canvasDimensions.divide(2))
-
-    this.setState({ canvasPosition })
-  }
-
   // -------------------------------------------------------------------------- MISC
 
   /**
@@ -208,14 +121,10 @@ export default class CanvasComponent extends BaseComponent {
    * @return {Number}
    */
   getDefaultZoom (updateDimensions = false) {
-    if (updateDimensions) {
-      this._cacheDimensions()
-    }
-
     const { editor } = this.context
 
     const finalDimensions = editor.getFinalDimensions()
-    const defaultDimensions = SDKUtils.resizeVectorToFit(finalDimensions, this._containerDimensions)
+    const defaultDimensions = SDKUtils.resizeVectorToFit(finalDimensions, this._getContainerDimensions())
 
     // Since default and native dimensions have the same ratio, we can take either x or y here
     return defaultDimensions
@@ -224,127 +133,22 @@ export default class CanvasComponent extends BaseComponent {
   }
 
   /**
-   * Updates the stored canvas and container dimensions
+   * Returns the container's dimensions
+   * @return {Vector2}
    * @private
    */
-  _cacheDimensions () {
-    const { canvas, canvasCell } = this.refs
-
-    this._canvasDimensions = new Vector2(canvas.offsetWidth, canvas.offsetHeight)
-    this._containerDimensions = new Vector2(canvasCell.offsetWidth, canvasCell.offsetHeight)
-  }
-
-  // -------------------------------------------------------------------------- EVENTS
-
-  /**
-   * Gets called when the dimensions or zoom has been changed
-   * @param {Number} zoom = this.props.zoom
-   * @param {Function} [callback]
-   * @private
-   */
-  _render (zoom = this.props.zoom, callback) {
-    return this._renderCanvas()
-      .then(() => {
-        callback && callback()
-        this.updateOffset()
-      })
-      .catch((e) => {
-        ModalManager.instance.displayError(
-          this._t('errors.renderingError.title'),
-          this._t('errors.renderingError.text', { error: e.message })
-        )
-        console && console.error && console.error(e)
-      })
-  }
-
-  // -------------------------------------------------------------------------- GETTERS
-
-  /**
-   * Returns the current output dimensions
-   * @return {Vector2}
-   */
-  getOutputDimensions () {
-    const { kit } = this.context
-    return kit.getOutputDimensions()
-  }
-
-  /**
-   * Returns the initial dimensions for the current settings
-   * @return {Vector2}
-   */
-  getInitialDimensions () {
-    const { kit } = this.context
-    return kit.getInitialDimensions()
-  }
-
-  /**
-   * Returns the current canvas dimensions
-   * @return {Vector2}
-   */
-  getDimensions () {
-    return this._canvasDimensions
-  }
-
-  /**
-   * Returns the current canvas container dimensions
-   * @return {Vector2}
-   */
-  getContainerDimensions () {
-    return this._containerDimensions
+  _getContainerDimensions () {
+    const { canvasCell } = this.refs
+    return new Vector2(canvasCell.offsetWidth, canvasCell.offsetHeight)
   }
 
   // -------------------------------------------------------------------------- RENDERING
 
   onResize () {
-    this._cacheDimensions()
     const { editor } = this.context
     const sdk = editor.getSDK()
-    sdk.resizeTo(this._containerDimensions)
-    this._renderCanvas()
-  }
-
-  /**
-   * Renders the canvas. Avoids multiple render processes at the same time.
-   * @return {Promise}
-   * @private
-   */
-  _renderCanvas () {
-    const scheduledRendering = new EventEmitter()
-    const promise = new Promise((resolve, reject) => {
-      scheduledRendering.on('done', () => resolve())
-      scheduledRendering.on('error', (e) => reject(e))
-    })
-    this._scheduledRenderings.push(scheduledRendering)
-    this._runScheduledRenderings()
-    return promise
-  }
-
-  /**
-   * Runs the queued renderings
-   * @private
-   */
-  _runScheduledRenderings () {
-    if (this._rendering) return
-    const scheduledRendering = this._scheduledRenderings[0]
-    if (!scheduledRendering) return
-
-    // Remove scheduled rendering from queue
-    this._scheduledRenderings.splice(0, 1)
-
-    this._rendering = true
-
-    const { editor } = this.context
+    sdk.resizeTo(this._getContainerDimensions())
     editor.render()
-      .then(() => {
-        scheduledRendering.emit('done')
-        this._rendering = false
-        this._runScheduledRenderings()
-      })
-      .catch((e) => {
-        scheduledRendering.emit('error', e)
-        this._rendering = false
-        this._runScheduledRenderings()
-      })
   }
 
   /**

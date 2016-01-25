@@ -16,8 +16,8 @@ export default {
   identifier: 'focus',
   icon: 'controls/overview/focus@2x.png',
   label: 'controls.overview.focus',
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('radial-blur') ||
-      ui.isOperationEnabled('tilt-shift')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('radial-blur') ||
+      editor.isOperationEnabled('tilt-shift')
   }
 }

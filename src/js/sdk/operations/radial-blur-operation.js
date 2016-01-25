@@ -69,7 +69,6 @@ class RadialBlurOperation extends Operation {
 
       // Invert Y
       const position = this._options.position.clone()
-      position.y = 1 - position.y
 
       if (this._options.numberFormat === 'relative') {
         position.multiply(outputDimensions)

@@ -50,8 +50,10 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
    */
   componentDidMount () {
     super.componentDidMount()
-
-    this._setStylesFromOptions()
+    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
+      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
+      this._setStylesFromOptions()
+    })
   }
 
   // -------------------------------------------------------------------------- CENTER DRAGGING
@@ -71,19 +73,22 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onCenterDrag (offset) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
-    const relativeOffset = offset.clone().divide(canvasDimensions)
+    const { editor } = this.context
+    const relativeOffset = offset.clone().divide(editor.getOutputDimensions())
+    const outputDimensions = editor.getOutputDimensions()
+
     const newPosition = this._initialPosition
       .clone()
       .add(relativeOffset)
-    const newKnobPosition = this._initialKnobPosition
-      .clone()
+
+    const newKnobPosition = this._initialKnobPosition.clone()
       .add(offset)
+      .clamp(new Vector2(0, 0), outputDimensions)
 
     this._operation.set({
       position: newPosition
     })
+
     this.state.knobPosition = newKnobPosition
 
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -107,16 +112,17 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onKnobDrag (offset) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const zoom = editor.getSDK().getZoom()
+    const outputDimensions = editor.getOutputDimensions()
 
     const newKnobPosition = this._initialKnobPosition.clone()
       .add(offset)
-      .clamp(new Vector2(0, 0), canvasDimensions)
+      .clamp(new Vector2(0, 0), outputDimensions)
 
     const absolutePosition = this._operation.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
 
     const newGradientRadius = newKnobPosition
       .clone()
@@ -131,7 +137,7 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
         newGradientRadius * 2
       )
     })
-    this._operation.setGradientRadius(newGradientRadius)
+    this._operation.setGradientRadius(newGradientRadius / zoom)
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
   }
 
@@ -168,17 +174,20 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
   // -------------------------------------------------------------------------- RENDERING
 
   _setStylesFromOptions () {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const zoom = editor.getSDK().getZoom()
+
+    const outputDimensions = this.context.editor.getOutputDimensions()
 
     const position = this._operation.getPosition()
       .clone()
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
+
     const gradientRadius = this._operation.getGradientRadius()
 
     const areaSize = new Vector2(
-      gradientRadius * 2,
-      gradientRadius * 2
+      gradientRadius * 2 * zoom,
+      gradientRadius * 2 * zoom
     )
 
     let newState = {
@@ -188,10 +197,25 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
 
     if (!this._knobChangedManually) {
       newState.knobPosition = position.clone()
-        .add(gradientRadius, 0)
+        .add(gradientRadius * zoom, 0)
     }
 
     this.setState(newState)
+  }
+
+  /**
+   * Returns the container style
+   * @return {Object}
+   * @private
+   */
+  _getContainerStyle () {
+    const { editor } = this.context
+    const { x, y, width, height } = editor.getLastOutputBounds()
+    return {
+      left: x,
+      top: y,
+      width, height
+    }
   }
 
   /**
@@ -199,7 +223,7 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    return (<div bem='b:canvasControls e:container m:full' ref='container'>
+    return (<div bem='b:canvasControls e:container m:full' ref='container' style={this._getContainerStyle()}>
       <div bem='$b:radialBlurCanvasControls'>
         <DraggableComponent
           onStart={this._onCenterDragStart}

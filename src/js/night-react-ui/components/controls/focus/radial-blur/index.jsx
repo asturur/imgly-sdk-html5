@@ -17,10 +17,9 @@ export default {
   identifier: 'radial-blur',
   icon: 'controls/focus/radial-blur@2x.png',
   label: 'controls.focus.radial-blur',
-  getInitialSharedState: (context) => {
-    const { ui } = context
-    const operationExistedBefore = ui.operationExists('radial-blur')
-    const operation = ui.getOrCreateOperation('radial-blur')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('radial-blur')
+    const operation = editor.getOrCreateOperation('radial-blur')
     const initialOptions = {
       position: operation.getPosition().clone(),
       gradientRadius: operation.getGradientRadius(),
@@ -30,7 +29,7 @@ export default {
       operation, operationExistedBefore, initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('radial-blur')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('radial-blur')
   }
 }
