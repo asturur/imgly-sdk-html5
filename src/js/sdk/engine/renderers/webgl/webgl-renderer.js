@@ -230,10 +230,11 @@ export default class WebGLRenderer extends BaseRenderer {
   /**
    * Updates the given texture
    * @param  {BaseTexture} texture
+   * @param  {Boolean} upload = true
    */
-  updateTexture (texture) {
+  updateTexture (texture, upload = true) {
     const source = texture.getSource()
-    if (!source) return
+    const hasSource = !!source
 
     const gl = this._context
     const glUnit = texture.getGLUnit()
@@ -244,10 +245,12 @@ export default class WebGLRenderer extends BaseRenderer {
 
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
 
-    if (source instanceof Uint8Array) {
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, source)
-    } else {
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source)
+    if (upload && hasSource) {
+      if (source instanceof Uint8Array) {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, source)
+      } else {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source)
+      }
     }
 
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
