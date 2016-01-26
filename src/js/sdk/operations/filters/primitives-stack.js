@@ -8,9 +8,25 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import Vector2 from '../../lib/math/vector2'
-import Engine from '../../engine/'
+import { Vector2, Engine, Utils } from '../../globals'
 import Promise from '../../vendor/promise'
+
+class BlendFilter extends Engine.Filter {
+  constructor () {
+    const fragmentSource = require('raw!../../shaders/generic/blend.frag')
+    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
+      u_filteredImage: {
+        type: 'i',
+        value: 1
+      },
+      u_intensity: {
+        type: 'f',
+        value: 1.0
+      }
+    })
+    super(null, fragmentSource, uniforms)
+  }
+}
 
 /**
  * A helper class that can collect {@link Primitive} instances and render
@@ -29,7 +45,12 @@ class PrimitivesStack {
     this._intensity = intensity
 
     this._stack = []
-    this._dirty = true
+    this._dirtiness = {}
+    this._container = new Engine.Container()
+    this._sprite = new Engine.Sprite()
+    this._container.addChild(this._sprite)
+
+    this._blendFilter = new BlendFilter()
   }
 
   /**
@@ -43,37 +64,54 @@ class PrimitivesStack {
   /**
    * Renders this stack using WebGL
    * @param  {PhotoEditorSDK} sdk
-   * @param  {Engine.RenderTexture} renderTexture
+   * @param  {Engine.RenderTexture} outputTexture
    * @return {Promise}
+   * @internal This takes the output sprite's current texture and renders
+   *           it to this stack's internal render texture. It then uses the
+   *           internal texture as a uniform for a blend shader and renders
+   *           the sprite with the original texture and the blend shader to
+   *           the outputTexture
    */
-  renderWebGL (sdk, renderTexture) {
+  renderWebGL (sdk, outputTexture) {
     if (this._stack.length === 0) return Promise.resolve()
 
+    const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
-    if (!this._dirty) {
-      outputSprite.setTexture(renderTexture)
-      return Promise.resolve()
-    } else {
+    const renderTexture = this._getRenderTexture(sdk)
+    if (this.isDirtyForRenderer(renderer)) {
+      this._sprite.setTexture(outputSprite.getTexture())
+
+      // Resize both the output and temp texture
       const spriteBounds = outputSprite.getBounds()
       const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+      outputTexture.resizeTo(spriteDimensions)
       renderTexture.resizeTo(spriteDimensions)
 
-      const tempFilters = outputSprite.getFilters()
+      // Update primitives
+      this._stack.forEach((p) => p.update(sdk))
 
-      this._stack.forEach((primitive) => primitive.update(sdk))
-      const newFilters = this._stack.map((primitive) => primitive.getFilter())
-      outputSprite.setFilters(newFilters)
+      // Set filters
+      const filters = this._stack.map((p) => p.getFilter())
+      this._sprite.setFilters(filters)
 
-      outputSprite.setAnchor(0, 0)
-      outputSprite.setPosition(0, 0)
+      // Render to RenderTexture
+      renderTexture.render(this._container)
 
-      renderTexture.render(outputSprite)
+      // Use renderTexture as uniform for blend shader, blend the two
+      // to achieve intensity
+      this._blendFilter.setUniform('u_intensity', this._intensity)
+      this._sprite.setFilters([
+        this._blendFilter
+      ])
 
-      outputSprite.setFilters(tempFilters)
-      outputSprite.setTexture(renderTexture)
+      const baseTexture = renderTexture.getBaseTexture()
+      baseTexture.setGLUnit(1)
+      renderer.updateTexture(baseTexture, false)
+
+      outputTexture.render(this._container)
     }
 
-    this._dirty = false
+    outputSprite.setTexture(outputTexture)
     return Promise.resolve()
   }
 
@@ -130,8 +168,50 @@ class PrimitivesStack {
     }
   }
 
-  setDirty (dirty) { this._dirty = dirty }
   setIntensity (intensity) { this._intensity = intensity }
+
+  /**
+   * Checks if this operation is dirty for the given renderer
+   * @param  {BaseRenderer}  renderer
+   * @return {Boolean}
+   */
+  isDirtyForRenderer (renderer) {
+    if (!(renderer.id in this._dirtiness)) {
+      this._dirtiness[renderer.id] = true
+    }
+    return this._dirtiness[renderer.id]
+  }
+
+  /**
+   * Sets the dirtiness for the given renderer
+   * @param {Boolean} dirty
+   * @param {BaseRenderer} renderer
+   */
+  setDirtyForRenderer (dirty, renderer) {
+    this._dirtiness[renderer.id] = dirty
+  }
+
+  /**
+   * Sets the dirtiness for all renderers
+   * @param {Boolean} dirty
+   */
+  setDirty (dirty) {
+    for (let rendererId in this._dirtiness) {
+      this._dirtiness[rendererId] = dirty
+    }
+  }
+
+  /**
+   * Creates and returns a render texture
+   * @param  {PhotoEditorSDK} sdk
+   * @return {RenderTexture}
+   */
+  _getRenderTexture (sdk) {
+    if (!this._renderTexture) {
+      this._renderTexture = sdk.createRenderTexture()
+    }
+    return this._renderTexture
+  }
 }
 
 export default PrimitivesStack
