@@ -36,6 +36,13 @@ class FrameFilter extends Engine.Filter {
  * @extends PhotoEditorSDK.Operation
  */
 export default class FrameOperation extends Operation {
+  constructor (...args) {
+    super(...args)
+
+    this._filter = new FrameFilter()
+    this._sprite.setFilters([this._filter])
+  }
+
   /**
    * Crops this image using WebGL
    * @param  {PhotoEditorSDK} sdk
@@ -43,50 +50,34 @@ export default class FrameOperation extends Operation {
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
-    // @TODO Use this operation's sprite for rendering
     const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
     // Re-render to RenderTexture if dirty
     if (this.isDirtyForRenderer(renderer)) {
+      this._sprite.setTexture(outputSprite.getTexture())
+
       const spriteBounds = outputSprite.getBounds()
       const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
-      const filter = this._getFilter()
 
+      renderTexture.resizeTo(spriteDimensions)
+
+      // Update uniforms
       const thickness = this._options.thickness *
         Math.min(spriteDimensions.x, spriteDimensions.y)
       const thicknessVec2 = [thickness / spriteDimensions.x, thickness / spriteDimensions.y]
-
-      filter.setUniforms({
+      this._filter.setUniforms({
         u_color: this._options.color.toGLColor(),
         u_thickness: thicknessVec2
       })
 
-      renderTexture.resizeTo(spriteDimensions)
-
-      const tempFilters = outputSprite.getFilters()
-      outputSprite.setFilters([filter])
-      renderTexture.render(outputSprite)
-
-      outputSprite.setFilters(tempFilters)
+      renderTexture.render(this._container)
     }
 
     outputSprite.setTexture(renderTexture)
 
     return Promise.resolve()
-  }
-
-  /**
-   * Creates and/or returns the Filter
-   * @return {FrameFilter}
-   * @private
-   */
-  _getFilter () {
-    if (!this._filter) {
-      this._filter = new FrameFilter()
-    }
-    return this._filter
   }
 
   /**
