@@ -40,10 +40,10 @@ export default class Sprite extends Configurable {
   }
 
   /**
-   * Returns the renderable Sprite of this Sprite
+   * Returns the DisplayObject of this Sprite
    * @return {Engine.Sprite}
    */
-  getSprite () {
+  getDisplayObject () {
     return this._sprite
   }
 

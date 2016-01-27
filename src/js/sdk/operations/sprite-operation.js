@@ -190,6 +190,7 @@ class SpriteOperation extends Operation {
    */
   addSprite (sprite) {
     this._options.sprites.push(sprite)
+    this._container.addChild(sprite.getDisplayObject())
 
     // This operation needs to be rerendered
     this.setDirty(true)
@@ -207,6 +208,7 @@ class SpriteOperation extends Operation {
     const index = sprites.indexOf(sprite)
     if (index !== -1) {
       sprite.off('update', this._onSpriteUpdate)
+      this._container.removeChild(sprite.getDisplayObject())
 
       sprites.splice(index, 1)
       return true
@@ -235,11 +237,6 @@ class SpriteOperation extends Operation {
       renderTexture.resizeTo(new Vector2(outputBounds.width, outputBounds.height))
 
       sprites.forEach((sprite) => {
-        const renderableSprite = sprite.getSprite()
-        if (!container.hasChild(renderableSprite)) {
-          container.addChild(renderableSprite)
-        }
-
         sprite.update(sdk)
       })
 
@@ -287,9 +284,10 @@ class SpriteOperation extends Operation {
     sprites.forEach((sprite) => {
       if (intersectingSprite) return
 
-      const stickerBounds = sprite.getSprite().getLocalBounds()
-      const stickerScale = sprite.getSprite().getScale().x
-      const stickerPosition = sprite.getSprite().getPosition()
+      const displayObject = sprite.getDisplayObject()
+      const stickerBounds = displayObject.getLocalBounds()
+      const stickerScale = displayObject.getScale().x
+      const stickerPosition = displayObject.getPosition()
       const stickerRotation = sprite.getRotation()
 
       const relativeClickPosition = position
