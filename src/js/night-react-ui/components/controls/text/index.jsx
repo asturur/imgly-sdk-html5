@@ -36,7 +36,9 @@ export default {
       )
     }
 
-    operation.setEnabled(true)
+    // Disable filtering, render all sprites
+    operation.setFilter([])
+
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -69,29 +71,35 @@ export default {
    * @return {Object}
    */
   getInitialSharedState: (editor, additionalState = {}) => {
-    let state = {}
-    state.operationExistedBefore = editor.operationExists('sprite')
-    state.operation = editor.getOrCreateOperation('sprite')
-    state.initialOptions = state.operation.serializeOptions()
-    state.operation.setEnabled(false)
+    const operationExistedBefore = editor.operationExists('sprite')
+    const operation = editor.getOrCreateOperation('sprite')
+    const sprites = operation.getSprites()
+    const initialOptions = operation.serializeOptions()
+    let selectedText = null
+
+    // Enable filtering, don't render Text objects on canvas as they'll
+    // be rendered using the DOM
+    operation.setFilter([Text])
 
     if (!additionalState.selectedText) {
       const sdk = editor.getSDK()
       const renderer = sdk.getRenderer()
-      const text = state.operation.createText({
+      const text = operation.createText({
         text: 'Text',
         maxWidth: 0.5,
         maxHeight: renderer.getMaxTextureSize(),
         anchor: new Vector2(0, 0),
         pivot: new Vector2(0.5, 0)
       })
-      state.operation.addSprite(text)
-      state.selectedText = text
+      operation.addSprite(text)
+      selectedText = text
     }
 
-    state.sprites = state.operation.getSprites()
-
     editor.render()
+
+    const state = {
+      operationExistedBefore, operation, sprites, initialOptions, selectedText
+    }
 
     return SDKUtils.extend({}, state, additionalState)
   },

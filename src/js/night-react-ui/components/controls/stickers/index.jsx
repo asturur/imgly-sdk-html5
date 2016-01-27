@@ -34,7 +34,9 @@ export default {
       this.getSharedState('operationExistedBefore')
     )
 
-    operation.setEnabled(true)
+    // Disable filtering, render all sprites
+    operation.setFilter([])
+
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -72,7 +74,10 @@ export default {
     const sprites = operation.getSprites()
     const stickers = operation.getSpritesOfType(Sticker)
     const initialOptions = operation.serializeOptions()
-    operation.setEnabled(false)
+
+    // Enable filtering, don't render Sticker objects on canvas as they'll
+    // be rendered using the DOM
+    operation.setFilter([Sticker])
 
     const state = {
       operationExistedBefore, operation, sprites, stickers, initialOptions
