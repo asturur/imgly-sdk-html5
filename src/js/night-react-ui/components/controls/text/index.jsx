@@ -72,7 +72,6 @@ export default {
     let state = {}
     state.operationExistedBefore = editor.operationExists('sprite')
     state.operation = editor.getOrCreateOperation('sprite')
-    state.sprites = state.operation.getSprites()
     state.initialOptions = state.operation.serializeOptions()
     state.operation.setEnabled(false)
 
@@ -86,9 +85,11 @@ export default {
         anchor: new Vector2(0, 0),
         pivot: new Vector2(0.5, 0)
       })
-      state.sprites.push(text)
+      state.operation.addSprite(text)
       state.selectedText = text
     }
+
+    state.sprites = state.operation.getSprites()
 
     editor.render()
 

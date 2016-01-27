@@ -16,8 +16,6 @@ export default class TextRenderer {
     this._text = text
     this._operation = operation
 
-    this._dirtiness = {}
-
     this._createCanvas()
     this._createTexture()
   }
@@ -90,15 +88,9 @@ export default class TextRenderer {
    * @returns {Promise}
    */
   update (sdk) {
-    const renderer = sdk.getRenderer()
-    if (this.isDirtyForRenderer(renderer)) {
-      const textOptions = this.calculateFontStyles(sdk)
-      const { boundingBox, lines } = this._calculateText(sdk, textOptions)
-      return this._renderText(sdk, boundingBox, lines, textOptions)
-        .then(() => {
-          this.setDirtyForRenderer(false, renderer)
-        })
-    }
+    const textOptions = this.calculateFontStyles(sdk)
+    const { boundingBox, lines } = this._calculateText(sdk, textOptions)
+    return this._renderText(sdk, boundingBox, lines, textOptions)
   }
 
   /**
@@ -224,38 +216,5 @@ export default class TextRenderer {
     const textOptions = this.calculateFontStyles(sdk, considerZoom)
     const { boundingBox } = this._calculateText(sdk, textOptions)
     return boundingBox
-  }
-
-  // -------------------------------------------------------------------------- DIRTINESS
-
-  /**
-   * Checks if this operation is dirty for the given renderer
-   * @param  {BaseRenderer}  renderer
-   * @return {Boolean}
-   */
-  isDirtyForRenderer (renderer) {
-    if (!(renderer.id in this._dirtiness)) {
-      this._dirtiness[renderer.id] = true
-    }
-    return this._dirtiness[renderer.id]
-  }
-
-  /**
-   * Sets the dirtiness for the given renderer
-   * @param {Boolean} dirty
-   * @param {BaseRenderer} renderer
-   */
-  setDirtyForRenderer (dirty, renderer) {
-    this._dirtiness[renderer.id] = dirty
-  }
-
-  /**
-   * Sets the dirtiness for all renderers
-   * @param {Boolean} dirty
-   */
-  setDirty (dirty) {
-    for (let rendererId in this._dirtiness) {
-      this._dirtiness[rendererId] = dirty
-    }
   }
 }

@@ -30,6 +30,7 @@ class SpriteOperation extends Operation {
     this._renderers = {}
 
     this._onOperationUpdate = this._onOperationUpdate.bind(this)
+    this._onSpriteUpdate = this._onSpriteUpdate.bind(this)
     this._sdk.on('operation-update', this._onOperationUpdate)
 
     this._container = new Engine.Container()
@@ -70,6 +71,16 @@ class SpriteOperation extends Operation {
         'degrees' in options) {
       this._applyRotation(operation, options)
     }
+  }
+
+  /**
+   * Gets called when a sprite is flagged as dirty / its options changed
+   * @param  {Sprite} sprite
+   * @param  {Object} options
+   * @private
+   */
+  _onSpriteUpdate (sprite, options) {
+    this.setDirty(true)
   }
 
   /**
@@ -171,6 +182,36 @@ class SpriteOperation extends Operation {
    */
   createText (options) {
     return new Text(this, options)
+  }
+
+  /**
+   * Gets called when a sprite has been added
+   * @param {Sprite} sprite
+   */
+  addSprite (sprite) {
+    this._options.sprites.push(sprite)
+
+    // This operation needs to be rerendered
+    this.setDirty(true)
+
+    sprite.on('update', this._onSpriteUpdate)
+  }
+
+  /**
+   * Removes the given sprite from the list of sprites
+   * @param  {Sprite} sprite
+   * @return {Boolean}
+   */
+  removeSprite (sprite) {
+    const sprites = this._options.sprites
+    const index = sprites.indexOf(sprite)
+    if (index !== -1) {
+      sprite.off('update', this._onSpriteUpdate)
+
+      sprites.splice(index, 1)
+      return true
+    }
+    return false
   }
 
   /**

@@ -90,7 +90,6 @@ export default class TextCanvasControlsComponent extends BaseComponent {
       sprites.splice(index, 1)
       this._sprites = sprites
 
-      this._operation.setSprites(this._sprites)
       this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
         this.props.onSwitchControls('back')
       })
@@ -114,7 +113,6 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     if (this.state.editMode) {
       this.setState({ editMode: false })
     } else {
-      this._operation.setSprites(this._sprites)
       this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
         this.props.onSwitchControls('back')
       })

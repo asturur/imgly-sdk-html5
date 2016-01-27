@@ -98,7 +98,7 @@ export default class WebGLRenderer extends BaseRenderer {
         console.error('gl.' + functionName + '(' +
           window.WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ')')
       }
-      gl = window.WebGLDebugUtils.makeDebugContext(gl, null, null)
+      // gl = window.WebGLDebugUtils.makeDebugContext(gl, null, null)
     }
 
     this.id = gl.id = WebGLRenderer.contextId++
