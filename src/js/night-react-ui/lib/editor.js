@@ -484,4 +484,5 @@ export default class Editor extends EventEmitter {
   getSDK () { return this._sdk }
   isDefaultZoom () { return this._isDefaultZoom }
   getLastOutputBounds () { return this._lastOutputBounds }
+  getInputDimensions () { return this._sdk.getInputDimensions() }
 }
