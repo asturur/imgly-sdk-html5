@@ -90,6 +90,8 @@ export default class Container extends DisplayObject {
    * @override
    */
   renderWebGL (renderer) {
+    if (!this._visible) return
+
     const filterManager = renderer.getFilterManager()
     if (this._filters && this._filters.length) {
       filterManager.pushFilters(this, this._filters)

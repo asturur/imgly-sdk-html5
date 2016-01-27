@@ -18,6 +18,7 @@ export default class DisplayObject {
     this._rotation = 0
     this._lastRotation = null
     this._alpha = 1
+    this._visible = true
     this._worldTransform = new Matrix()
     this._parent = null
     this._shaders = []
@@ -160,4 +161,6 @@ export default class DisplayObject {
   setParent (parent) { this._parent = parent }
   setTint (tint) { this._tint = tint }
   getTint () { return this._tint }
+  setVisible (visible) { this._visible = visible }
+  isVisible () { return this._visible }
 }
