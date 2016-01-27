@@ -208,9 +208,8 @@ export default class StickersOverviewControlsComponent extends ControlsComponent
         scale: new Vector2(1.0, 1.0),
         rotation: 0
       })
-      this._sprites.push(sticker)
+      this._operation.addSprite(sticker)
       this._stickers.push(sticker)
-      this._operation.setDirty(true)
 
       this._emitEvent(Constants.EVENTS.CANVAS_RENDER, null, () => {
         // Broadcast new state

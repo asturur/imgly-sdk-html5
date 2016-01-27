@@ -74,6 +74,16 @@ export default class Sticker extends Sprite {
       this._sprite.setTexture(this._inputTexture)
     }
 
+    // Flip
+    const scale = this._sprite.getScale()
+    if (this._options.flipVertically) {
+      scale.y *= -1
+    }
+    if (this._options.flipHorizontally) {
+      scale.x *= -1
+    }
+    this._sprite.setScale(scale)
+
     return Promise.resolve()
   }
 
