@@ -51,9 +51,9 @@ export default class CropCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onCenterDrag (offset) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
-    const cropDifference = offset.clone().divide(canvasDimensions)
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
+    const cropDifference = offset.clone().divide(outputDimensions)
 
     const minStart = new Vector2(0, 0)
     const maxStart = new Vector2(1, 1)
@@ -91,25 +91,25 @@ export default class CropCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onKnobDrag (optionName, offset) {
-    const { kit } = this.context
-    const canvasDimensions = kit.getOutputDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
     const ratio = this._operation._ratio || '*'
 
     const newSize = this._initialValues.end.clone()
       .subtract(this._initialValues.start)
-      .multiply(canvasDimensions)
+      .multiply(outputDimensions)
 
     // Calculate max size and new size
     let maxSize
     if (optionName === 'start') {
       newSize.subtract(offset)
       maxSize = this._initialValues.end.clone()
-        .multiply(canvasDimensions)
+        .multiply(outputDimensions)
     } else if (optionName === 'end') {
       newSize.add(offset)
       maxSize = new Vector2(1, 1)
         .subtract(this._initialValues.start)
-        .multiply(canvasDimensions)
+        .multiply(outputDimensions)
     }
 
     if (newSize.x > maxSize.x) {
@@ -134,7 +134,7 @@ export default class CropCanvasControlsComponent extends BaseComponent {
         .subtract(
           newSize
             .clone()
-            .divide(canvasDimensions)
+            .divide(outputDimensions)
         )
       this.setSharedState({ start: newStart })
     } else if (optionName === 'end') {
@@ -142,7 +142,7 @@ export default class CropCanvasControlsComponent extends BaseComponent {
         .add(
           newSize
             .clone()
-            .divide(canvasDimensions)
+            .divide(outputDimensions)
         )
       this.setSharedState({ end: newEnd })
     }
@@ -151,20 +151,35 @@ export default class CropCanvasControlsComponent extends BaseComponent {
   // -------------------------------------------------------------------------- MISC
 
   /**
-   * Returns the dimensions according to the currentcrop dimensions
+   * Returns the dimensions according to the current crop dimensions
    * @private
    */
   _calculateDimensions () {
+    const { editor } = this.context
     const start = this.getSharedState('start')
     const end = this.getSharedState('end')
 
     return end.clone()
       .subtract(start)
-      .multiply(this.props.editor.getInitialDimensions())
+      .multiply(editor.getInputDimensions())
       .round()
   }
 
   // -------------------------------------------------------------------------- RESIZING / STYLING
+
+  /**
+   * Returns the container style
+   * @return {Object}
+   * @private
+   */
+  _getContainerStyle () {
+    const { x, y, width, height } = this.context.editor.getSDK().getSprite().getBounds()
+    return {
+      left: x,
+      top: y,
+      width, height
+    }
+  }
 
   /**
    * Returns the styles (width / height) for the crop areas that define the
@@ -173,10 +188,11 @@ export default class CropCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _getAreaStyles () {
-    const canvasDimensions = this.props.editor.getCanvasDimensions()
+    const { editor } = this.context
+    const outputDimensions = editor.getOutputDimensions()
 
-    const start = this.getSharedState('start').clone().multiply(canvasDimensions).floor()
-    const end = this.getSharedState('end').clone().multiply(canvasDimensions).ceil()
+    const start = this.getSharedState('start').clone().multiply(outputDimensions).floor()
+    const end = this.getSharedState('end').clone().multiply(outputDimensions).ceil()
     const size = end.clone().subtract(start)
 
     return {
@@ -210,7 +226,7 @@ export default class CropCanvasControlsComponent extends BaseComponent {
     const areaStyles = this._getAreaStyles()
     const dimensions = this._calculateDimensions()
 
-    return (<div bem='b:canvasControls e:container m:full' ref='container'>
+    return (<div bem='b:canvasControls e:container m:full' ref='container' style={this._getContainerStyle()}>
       <div bem='$b:cropCanvasControls'>
         <div bem='e:row'>
           <div bem='e:cell m:dark' style={areaStyles.topLeft}>&nbsp;</div>

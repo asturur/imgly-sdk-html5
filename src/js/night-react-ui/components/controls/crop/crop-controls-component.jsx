@@ -103,8 +103,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
     if (this.getSharedState('operationExistedBefore')) {
       this._operation.set(this._initialOptions)
     } else {
-      const { ui } = this.context
-      ui.removeOperation(this._operation)
+      const { editor } = this.context
+      editor.removeOperation(this._operation)
     }
 
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
@@ -130,7 +130,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
     this._operation.set(newOptions)
 
     if (optionsChanged) {
-      const { editor } = this.props
+      const { editor } = this.context
       editor.addHistory(this._operation,
         this.getSharedState('initialOptions'),
         this.getSharedState('operationExistedBefore'))
@@ -141,8 +141,6 @@ export default class OrientationControlsComponent extends ControlsComponent {
 
     // Zoom to auto again
     this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto')
-
-    this.context.kit.reset()
 
     super._onDoneClick(e)
   }
@@ -179,6 +177,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _setDefaultOptionsForRatio ({ ratio, identifier }) {
+    const { editor } = this.context
     let start = new Vector2()
     let end = new Vector2()
 
@@ -186,14 +185,14 @@ export default class OrientationControlsComponent extends ControlsComponent {
       start = new Vector2(PADDING, PADDING)
       end = new Vector2(1, 1).subtract(PADDING)
     } else {
-      const canvasDimensions = this.props.editor.getCanvasDimensions()
-      const canvasRatio = canvasDimensions.x / canvasDimensions.y
+      const outputDimensions = editor.getOutputDimensions()
+      const canvasRatio = outputDimensions.x / outputDimensions.y
       if (canvasRatio <= ratio) {
-        const height = 1 / canvasDimensions.y * (canvasDimensions.x / ratio * (1.0 - PADDING * 2))
+        const height = 1 / outputDimensions.y * (outputDimensions.x / ratio * (1.0 - PADDING * 2))
         start.set(PADDING, (1.0 - height) / 2)
         end.set(1.0 - PADDING, 1 - start.y)
       } else {
-        const width = 1 / canvasDimensions.x * (ratio * canvasDimensions.y * (1.0 - PADDING * 2))
+        const width = 1 / outputDimensions.x * (ratio * outputDimensions.y * (1.0 - PADDING * 2))
         start.set((1 - width) / 2, PADDING)
         end.set(1 - start.x, 1.0 - PADDING)
       }

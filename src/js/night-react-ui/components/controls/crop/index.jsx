@@ -17,9 +17,9 @@ export default {
   identifier: 'crop',
   icon: 'controls/overview/crop@2x.png',
   label: 'controls.overview.crop',
-  getInitialSharedState: (context) => {
-    const operationExistedBefore = context.ui.operationExists('crop')
-    const operation = context.ui.getOrCreateOperation('crop')
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('crop')
+    const operation = editor.getOrCreateOperation('crop')
     const initialOptions = {
       start: operation.getStart().clone(),
       end: operation.getEnd().clone()
@@ -30,7 +30,7 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (ui) => {
-    return ui.isOperationEnabled('crop')
+  isSelectable: (editor) => {
+    return editor.isOperationEnabled('crop')
   }
 }
