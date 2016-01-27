@@ -98,13 +98,11 @@ class CropOperation extends Operation {
 
   /**
    * Gets the new dimensions
-   * @param {Renderer} renderer
    * @param {Vector2} [dimensions]
    * @return {Vector2}
    */
-  getNewDimensions (renderer, dimensions) {
-    let canvas = renderer.getCanvas()
-    dimensions = dimensions || new Vector2(canvas.width, canvas.height)
+  getNewDimensions (dimensions) {
+    dimensions = dimensions.clone()
 
     let newDimensions = this._options.end
       .clone()
