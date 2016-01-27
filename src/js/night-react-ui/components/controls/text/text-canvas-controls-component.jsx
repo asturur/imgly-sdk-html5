@@ -84,21 +84,14 @@ export default class TextCanvasControlsComponent extends BaseComponent {
     const selectedText = this.getSharedState('selectedText')
     if (!selectedText) return
 
-    const sprites = this.getSharedState('sprites')
-    const index = sprites.indexOf(selectedText)
-    if (index !== -1) {
-      sprites.splice(index, 1)
-      this._sprites = sprites
+    this._operation.removeSprite(selectedText)
+    this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
+      this.props.onSwitchControls('back')
+    })
 
-      this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
-        this.props.onSwitchControls('back')
-      })
-
-      this.setSharedState({
-        sprites,
-        selectedText: null
-      })
-    }
+    this.setSharedState({
+      selectedText: null
+    })
   }
 
   /**
