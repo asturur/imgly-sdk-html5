@@ -50,6 +50,22 @@ export default class OverviewCanvasControlsComponent extends BaseComponent {
     }
   }
 
+  // -------------------------------------------------------------------------- STYLING
+
+  /**
+   * Returns the container style
+   * @return {Object}
+   * @private
+   */
+  _getContainerStyle () {
+    const { x, y, width, height } = this.context.editor.getSDK().getSprite().getBounds()
+    return {
+      left: x,
+      top: y,
+      width, height
+    }
+  }
+
   // -------------------------------------------------------------------------- RENDERING
 
   /**
@@ -60,6 +76,7 @@ export default class OverviewCanvasControlsComponent extends BaseComponent {
     return (<div
       bem='$b:canvasControls e:container m:full'
       ref='container'
+      style={this._getContainerStyle()}
       onMouseDown={this._onClick}
       onTouchStart={this._onClick} />)
   }

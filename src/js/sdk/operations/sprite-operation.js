@@ -293,7 +293,6 @@ class SpriteOperation extends Operation {
       const relativeClickPosition = position
         .clone()
         .subtract(stickerPosition.x * zoom, stickerPosition.y * zoom)
-        .subtract(outputBounds.x, outputBounds.y)
 
       const clickDistance = relativeClickPosition.len()
       const radians = Math.atan2(
