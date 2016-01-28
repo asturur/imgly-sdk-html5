@@ -9,7 +9,7 @@
  * For commercial usf please contact us at contact@9elements.com
  */
 
-import { SDK, ReactBEM, BaseComponent } from '../../../globals'
+import { Utils, Vector2, SDK, ReactBEM, BaseComponent } from '../../../globals'
 import TextItemComponent from './items/text-item-component'
 import StickerItemComponent from './items/sticker-item-component'
 const { Sticker, Text } = SDK
@@ -28,6 +28,50 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
     this._operation = this.getSharedState('operation')
   }
 
+  // -------------------------------------------------------------------------- HITTEST
+
+  /**
+   * Checks if any other control reacts to a click at the given position
+   * @param  {Vector2} clickPosition
+   * @private
+   * @todo Move this to a BaseCanvasControlsComponent class
+   */
+  _performHitTest (clickPosition) {
+    const { container } = this.refs
+    const containerRect = container.getBoundingClientRect()
+    const containerPosition = new Vector2(
+      containerRect.left,
+      containerRect.top
+    )
+
+    const position = clickPosition
+      .subtract(containerPosition)
+
+    const { editor } = this.context
+    const controls = editor.getAvailableControls()
+
+    // Check if any of the controls responds to a click
+    // at the given position
+    for (let identifier in controls) {
+      const control = controls[identifier]
+      const clickResponse = control.clickAtPosition &&
+        control.clickAtPosition(position, editor)
+
+      if (clickResponse) {
+        // Don't re-select an already selected item
+        if (clickResponse.selectedSprite === this.getSharedState('selectedSprite')) {
+          continue
+        }
+
+        // Responds to click, switch to the controls
+        this.props.onSwitchControls(control, clickResponse)
+        return true
+      }
+    }
+
+    return false
+  }
+
   // -------------------------------------------------------------------------- EVENTS
 
   /**
@@ -37,10 +81,12 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
    */
   _onCanvasClick (e) {
     if (this._canvasClickDisabled) return
-    if (e.target !== this.refs.container) return
     if (!this.getSharedState('selectedSprite')) return
 
-    this.props.onSwitchControls('back')
+    const hitTest = this._performHitTest(Utils.getEventPosition(e))
+    if (!hitTest) {
+      this.props.onSwitchControls('home')
+    }
   }
 
   /**
@@ -115,8 +161,8 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
           operation={this._operation}
           sprite={s}
           selected={isSelected}
-          onDragStart={this._onSpriteDragStart.bind(this)}
-          onDragStop={this._onSpriteDragStop.bind(this)}
+          onDragStart={this._onSpriteDragStart}
+          onDragStop={this._onSpriteDragStop}
           onRemove={this._onSpriteRemove.bind(this, s)} />)
       })
   }
