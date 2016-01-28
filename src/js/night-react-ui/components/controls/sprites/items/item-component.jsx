@@ -18,6 +18,7 @@ export default class ItemComponent extends BaseComponent {
     this._bindAll(
       '_onRemoveClick',
       '_onItemDragStart',
+      '_onItemDragStop',
       '_onItemDrag'
     )
   }
@@ -47,6 +48,8 @@ export default class ItemComponent extends BaseComponent {
   _onItemDragStart () {
     const { sprite } = this.props
     this._initialPosition = sprite.getPosition()
+
+    this.props.onDragStart && this.props.onDragStart()
   }
 
   /**
@@ -64,6 +67,14 @@ export default class ItemComponent extends BaseComponent {
 
     sprite.setPosition(newPosition)
     this.forceUpdate()
+  }
+
+  /**
+   * Gets called when the user stops dragging this item
+   * @private
+   */
+  _onItemDragStop () {
+    this.props.onDragStop && this.props.onDragStop()
   }
 
   /**

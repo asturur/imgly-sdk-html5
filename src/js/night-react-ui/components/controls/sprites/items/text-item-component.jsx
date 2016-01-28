@@ -391,6 +391,7 @@ export default class TextItemComponent extends ItemComponent {
 
     return (<DraggableComponent
       onStart={this._onItemDragStart}
+      onStop={this._onItemDragStop}
       onDrag={this._onItemDrag}
       disabled={!this.props.selected || (this.props.selected && this.state.editMode)}>
         <div

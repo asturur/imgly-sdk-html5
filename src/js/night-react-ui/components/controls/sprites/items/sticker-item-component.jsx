@@ -41,6 +41,8 @@ export default class StickerItemComponent extends ItemComponent {
     }
 
     this._initialScale = sprite.getScale().clone()
+
+    this.props.onDragStart && this.props.onDragStart()
   }
 
   /**
@@ -95,6 +97,14 @@ export default class StickerItemComponent extends ItemComponent {
     sprite.getScale().set(newScale.x, newScale.x)
     sprite.setRotation(radians)
     this.forceUpdate()
+  }
+
+  /**
+   * Gets called when the user stops dragging a knob
+   * @private
+   */
+  _onKnobDragStop () {
+    this.props.onDragStop && this.props.onDragStop()
   }
 
   // -------------------------------------------------------------------------- STYLING
@@ -278,6 +288,7 @@ export default class StickerItemComponent extends ItemComponent {
       knobs = [
         (<DraggableComponent
           onStart={this._onKnobDragStart.bind(this, 'bottom')}
+          onStop={this._onKnobDragStop.bind(this, 'bottom')}
           onDrag={this._onKnobDrag.bind(this, 'bottom')}>
           <div bem='e:knob $b:knob' style={this._getBottomDragKnobStyle()}>
             <img bem='e:icon' src={this._getAssetPath('controls/knobs/resize-diagonal-down@2x.png', true)} />
@@ -285,6 +296,7 @@ export default class StickerItemComponent extends ItemComponent {
         </DraggableComponent>),
         (<DraggableComponent
           onStart={this._onKnobDragStart.bind(this, 'top')}
+          onStop={this._onKnobDragStop.bind(this, 'top')}
           onDrag={this._onKnobDrag.bind(this, 'top')}>
           <div bem='e:knob $b:knob' style={this._getTopDragKnobStyle()}>
             <img bem='e:icon' src={this._getAssetPath('controls/knobs/resize-diagonal-up@2x.png', true)} />
@@ -347,7 +359,8 @@ export default class StickerItemComponent extends ItemComponent {
     const stickerImageStyle = { filter: `url("#pesdk-sticker-${this._id}-filter")` }
 
     return (<DraggableComponent
-      onStart={this._onItemDragStart.bind(this)}
+      onStart={this._onItemDragStart}
+      onStop={this._onItemDragStop}
       onDrag={this._onItemDrag}
       disabled={!this.props.selected}>
       <div
