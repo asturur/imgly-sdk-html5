@@ -48,18 +48,18 @@ export default {
    * @param  {Object} context
    * @return {*}
    */
-  clickAtPosition: (position, editor) => {
-    if (!editor.operationExists('sprite')) return false
+   clickAtPosition: (position, editor) => {
+     if (!editor.operationExists('sprite')) return false
 
-    const sdk = editor.getSDK()
-    const operation = editor.getOrCreateOperation('sprite')
-    const sprite = operation.getSpriteAtPosition(sdk, position, Sticker)
-    if (!sprite) {
-      return false
-    } else if (sprite instanceof Sticker) {
-      return { selectedSprite: sprite }
-    }
-  },
+     const sdk = editor.getSDK()
+     const operation = editor.getOrCreateOperation('sprite')
+     const sprite = operation.getSpriteAtPosition(sdk, position)
+     if (sprite && sprite instanceof Sticker) {
+       return { selectedSprite: sprite }
+     } else {
+       return false
+     }
+   },
 
   /**
    * Returns the initial state for this control

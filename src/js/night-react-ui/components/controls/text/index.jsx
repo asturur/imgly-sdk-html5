@@ -55,11 +55,11 @@ export default {
 
     const sdk = editor.getSDK()
     const operation = editor.getOrCreateOperation('sprite')
-    const sprite = operation.getSpriteAtPosition(sdk, position, Text)
-    if (!sprite) {
-      return false
-    } else if (sprite instanceof Text) {
+    const sprite = operation.getSpriteAtPosition(sdk, position)
+    if (sprite && sprite instanceof Text) {
       return { selectedSprite: sprite }
+    } else {
+      return false
     }
   },
 
