@@ -300,6 +300,9 @@ export default class EditorScreenComponent extends ScreenComponent {
     let newControls = null
     if (controls === 'back') {
       newControls = this._previousControlsStack.pop()
+    } else if (controls === 'home') {
+      newControls = OverviewControls
+      this._previousControlsStack = []
     } else if (typeof controls === 'string') {
       const allControls = this.context.ui.getAvailableControls()
       newControls = allControls[controls]
@@ -464,4 +467,3 @@ EditorScreenComponent.childContextTypes = {
   options: React.PropTypes.object.isRequired,
   editorScreen: React.PropTypes.object.isRequired
 }
-
