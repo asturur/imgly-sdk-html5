@@ -34,6 +34,8 @@ export default {
       this.getSharedState('operationExistedBefore')
     )
 
+    operation.setEnabled(true)
+
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -55,7 +57,7 @@ export default {
     if (!sprite) {
       return false
     } else if (sprite instanceof Sticker) {
-      return { selectedSticker: sprite }
+      return { selectedSprite: sprite }
     }
   },
 
@@ -71,6 +73,8 @@ export default {
     const sprites = operation.getSprites()
     const stickers = operation.getSpritesOfType(Sticker)
     const initialOptions = operation.serializeOptions()
+
+    operation.setEnabled(false)
 
     const state = {
       operationExistedBefore, operation, sprites, stickers, initialOptions

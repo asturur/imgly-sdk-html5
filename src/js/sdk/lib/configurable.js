@@ -188,7 +188,7 @@ export default class Configurable extends EventEmitter {
       case 'color':
         return value.equals(currentValue)
       case 'configurable':
-        return value.optionsEqual(value)
+        return currentValue.optionsEqual(value)
       case 'array':
         return this._arrayOptionEquals(optionName, value)
     }

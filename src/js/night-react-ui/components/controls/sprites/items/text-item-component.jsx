@@ -392,8 +392,11 @@ export default class TextItemComponent extends ItemComponent {
     return (<DraggableComponent
       onStart={this._onItemDragStart}
       onDrag={this._onItemDrag}
-      disabled={this.state.editMode}>
-        <div bem={textBEM} style={this._getItemContainerStyle()} className='is-selected'>
+      disabled={!this.props.selected || (this.props.selected && this.state.editMode)}>
+        <div
+          bem='$e:text'
+          style={this._getItemContainerStyle()}
+          className={this.props.selected ? 'is-selected' : null}>
           {content}
         </div>
     </DraggableComponent>)

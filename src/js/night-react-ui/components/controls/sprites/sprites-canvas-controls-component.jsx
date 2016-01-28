@@ -11,6 +11,7 @@
 
 import { SDK, ReactBEM, BaseComponent } from '../../../globals'
 import TextItemComponent from './items/text-item-component'
+import StickerItemComponent from './items/sticker-item-component'
 const { Sticker, Text } = SDK
 
 export default class SpritesCanvasControlsComponent extends BaseComponent {

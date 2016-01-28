@@ -22,7 +22,7 @@ export default class StickersControlsComponent extends BaseComponent {
       '_onSubComponentBack'
     )
     this._operation = this.getSharedState('operation')
-    this._initiallyHadSticker = this.getSharedState('selectedSticker')
+    this._initiallyHadSticker = this.getSharedState('selectedSprite')
 
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
   }
@@ -58,9 +58,9 @@ export default class StickersControlsComponent extends BaseComponent {
    * @private
    */
   _onSubComponentBack () {
-    const selectedSticker = this.getSharedState('selectedSticker')
-    if (selectedSticker && !this._initiallyHadSticker) {
-      this.setSharedState({ selectedSticker: null })
+    const selectedSprite = this.getSharedState('selectedSprite')
+    if (selectedSprite && !this._initiallyHadSticker) {
+      this.setSharedState({ selectedSprite: null })
     } else {
       this._switchBack()
     }
@@ -71,7 +71,7 @@ export default class StickersControlsComponent extends BaseComponent {
    * @param  {Object} newState
    */
   sharedStateDidChange (newState) {
-    if ('selectedSticker' in newState) {
+    if ('selectedSprite' in newState) {
       this.forceUpdate()
     }
   }
@@ -93,15 +93,15 @@ export default class StickersControlsComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const selectedSticker = this.getSharedState('selectedSticker')
+    const selectedSprite = this.getSharedState('selectedSprite')
 
     let ControlsComponent = StickersOverviewControlsComponent
-    if (selectedSticker) {
+    if (selectedSprite) {
       ControlsComponent = StickersEditControlsComponent
     }
 
     return (<ControlsComponent
-      selectedSticker={selectedSticker}
+      selectedSprite={selectedSprite}
       onBack={this._onSubComponentBack}
       options={this.props.options}
       sharedState={this.props.sharedState}

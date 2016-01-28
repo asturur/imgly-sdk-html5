@@ -214,7 +214,7 @@ export default class StickersOverviewControlsComponent extends ControlsComponent
       this._emitEvent(Constants.EVENTS.CANVAS_RENDER, null, () => {
         // Broadcast new state
         this.setSharedState({
-          selectedSticker: sticker,
+          selectedSprite: sticker,
           sprites: this._sprites,
           stickers: this._stickers
         })
