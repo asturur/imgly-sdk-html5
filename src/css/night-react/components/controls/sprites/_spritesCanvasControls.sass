@@ -30,16 +30,15 @@
         position: absolute
 
       +elements(text, sticker)
+        background: rgba(black, 0.5)
+        cursor: pointer
+
         +flag(selected)
           @include box-shadow(0px 1px 2px 0px black)
-          z-index: 2
           outline: 1px solid white
           cursor: move
-          pointer-events: auto
 
       +element(text)
-        pointer-events: none
-
         +element(content)
           overflow: hidden
           width: 100%
