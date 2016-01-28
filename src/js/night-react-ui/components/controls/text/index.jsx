@@ -10,11 +10,11 @@
 
 import { SDK, Vector2, SDKUtils, Constants } from '../../../globals'
 const { Text } = SDK
-import TextCanvasControlsComponent from './text-canvas-controls-component'
+import SpritesCanvasControlsComponent from '../sprites/sprites-canvas-controls-component'
 import TextControlsComponent from './text-controls-component'
 
 export default {
-  canvasControls: TextCanvasControlsComponent,
+  canvasControls: SpritesCanvasControlsComponent,
   controls: TextControlsComponent,
   identifier: 'text',
   icon: 'controls/overview/text@2x.png',
@@ -36,8 +36,7 @@ export default {
       )
     }
 
-    // Disable filtering, render all sprites
-    operation.setFilter([])
+    operation.setEnabled(true)
 
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
@@ -60,7 +59,7 @@ export default {
     if (!sprite) {
       return false
     } else if (sprite instanceof Text) {
-      return { selectedText: sprite }
+      return { selectedSprite: sprite }
     }
   },
 
@@ -75,13 +74,9 @@ export default {
     const operation = editor.getOrCreateOperation('sprite')
     const sprites = operation.getSprites()
     const initialOptions = operation.serializeOptions()
-    let selectedText = null
+    let selectedSprite = null
 
-    // Enable filtering, don't render Text objects on canvas as they'll
-    // be rendered using the DOM
-    operation.setFilter([Text])
-
-    if (!additionalState.selectedText) {
+    if (!additionalState.selectedSprite) {
       const sdk = editor.getSDK()
       const renderer = sdk.getRenderer()
       const text = operation.createText({
@@ -92,13 +87,15 @@ export default {
         pivot: new Vector2(0.5, 0)
       })
       operation.addSprite(text)
-      selectedText = text
+      selectedSprite = text
     }
+
+    operation.setEnabled(false)
 
     editor.render()
 
     const state = {
-      operationExistedBefore, operation, sprites, initialOptions, selectedText
+      operationExistedBefore, operation, sprites, initialOptions, selectedSprite
     }
 
     return SDKUtils.extend({}, state, additionalState)

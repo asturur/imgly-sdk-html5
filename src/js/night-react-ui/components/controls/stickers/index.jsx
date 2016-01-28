@@ -11,10 +11,10 @@
 import { SDK, SDKUtils, Constants } from '../../../globals'
 const { Sticker } = SDK
 import StickersControlsComponent from './stickers-controls-component'
-import StickersCanvasControlsComponent from './stickers-canvas-controls-component'
+import SpriteCanvasControlsComponent from '../sprites/sprites-canvas-controls-component'
 
 export default {
-  canvasControls: StickersCanvasControlsComponent,
+  canvasControls: SpriteCanvasControlsComponent,
   controls: StickersControlsComponent,
   identifier: 'stickers',
   icon: 'controls/overview/stickers@2x.png',
@@ -33,9 +33,6 @@ export default {
       this.getSharedState('initialOptions'),
       this.getSharedState('operationExistedBefore')
     )
-
-    // Disable filtering, render all sprites
-    operation.setFilter([])
 
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
@@ -74,10 +71,6 @@ export default {
     const sprites = operation.getSprites()
     const stickers = operation.getSpritesOfType(Sticker)
     const initialOptions = operation.serializeOptions()
-
-    // Enable filtering, don't render Sticker objects on canvas as they'll
-    // be rendered using the DOM
-    operation.setFilter([Sticker])
 
     const state = {
       operationExistedBefore, operation, sprites, stickers, initialOptions

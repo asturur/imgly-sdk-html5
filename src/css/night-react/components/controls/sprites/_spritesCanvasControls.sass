@@ -9,7 +9,7 @@
  */
 
 +block(editor)
-  +block(stickersCanvasControls)
+  +block(spritesCanvasControls)
     position: absolute
     top: 0
     left: 0
@@ -22,7 +22,19 @@
       position: absolute
       z-index: 3
 
-    +element(sticker)
+    +element(item)
+      +element(container)
+        position: absolute
+
+      +elements(text, sticker, knob)
+        position: absolute
+
+      +element(text)
+        +element(content)
+          overflow: hidden
+          width: 100%
+
+    +element(sprite)
       position: absolute
 
       +flag(selected)
