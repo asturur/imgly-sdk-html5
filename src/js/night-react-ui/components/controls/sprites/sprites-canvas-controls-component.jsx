@@ -18,9 +18,12 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
     super(...args)
 
     this._bindAll(
-      '_onCanvasClick'
+      '_onCanvasClick',
+      '_onSpriteDragStart',
+      '_onSpriteDragStop'
     )
 
+    this._canvasClickDisabled = false
     this._operation = this.getSharedState('operation')
   }
 
@@ -32,6 +35,7 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
    * @private
    */
   _onCanvasClick (e) {
+    if (this._canvasClickDisabled) return
     if (e.target !== this.refs.container) return
     if (!this.getSharedState('selectedSprite')) return
 
@@ -45,6 +49,28 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
    */
   _onSpriteRemove (sprite) {
     this.props.onSwitchControls('back')
+  }
+
+  // -------------------------------------------------------------------------- DRAGGING
+
+  /**
+   * Gets called when a sprite has received a dragging event. Blocks the `_onCanvasClick`
+   * handler until `_onSpriteDragStop`
+   * @private
+   */
+  _onSpriteDragStart () {
+    this._canvasClickDisabled = true
+  }
+
+  /**
+   * Since `_onCanvasClick` is triggered right after the drag end event for knobs is triggered,
+   * we need to wait a short amount of time until we re-enabale the canvas click
+   * @private
+   */
+  _onSpriteDragStop () {
+    setTimeout(() => {
+      this._canvasClickDisabled = false
+    }, 100)
   }
 
   // -------------------------------------------------------------------------- STYLING
@@ -75,7 +101,6 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
     const selectedSprite = this.getSharedState('selectedSprite')
 
     return sprites
-      .filter((s) => s.getVisible())
       .map((s) => {
         const isSelected = s === selectedSprite
         let ComponentClass = null
@@ -89,6 +114,8 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
           operation={this._operation}
           sprite={s}
           selected={isSelected}
+          onDragStart={this._onSpriteDragStart.bind(this)}
+          onDragStop={this._onSpriteDragStop.bind(this)}
           onRemove={this._onSpriteRemove.bind(this, s)} />)
       })
   }

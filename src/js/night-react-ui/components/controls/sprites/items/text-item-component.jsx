@@ -19,7 +19,7 @@ export default class TextItemComponent extends ItemComponent {
 
     this._bindAll(
       '_onTextChange',
-      '_onItemClick',
+      '_onItemDoubleClick',
       '_onResizeKnobDragStart',
       '_onResizeKnobDrag',
       '_onResizeKnobDragStop',
@@ -37,18 +37,25 @@ export default class TextItemComponent extends ItemComponent {
 
   /**
    * Gets called when the user has changed the text
+   * @param  {Event} e
    * @private
    */
-  _onTextChange () {
-
+  _onTextChange (e) {
+    const { sprite } = this.props
+    sprite.setText(e.target.value)
+    this.forceUpdate()
   }
 
   /**
-   * Gets called when the user has clicked this item
+   * Gets called when the user double clicks the text. Turns the sprite into
+   * editing mode.
    * @private
    */
-  _onItemClick () {
-
+  _onItemDoubleClick () {
+    this.setState({ editMode: true }, () => {
+      this.refs.textarea.focus()
+      this.refs.textarea.select()
+    })
   }
 
   // -------------------------------------------------------------------------- ROTATION DRAGGING
@@ -62,6 +69,8 @@ export default class TextItemComponent extends ItemComponent {
   _onRotationKnobDragStart (position, e) {
     this._dragging = true
     this._initialPosition = this._getRotationKnobPosition()
+
+    this.props.onDragStart && this.props.onDragStart()
   }
 
   /**
@@ -100,10 +109,7 @@ export default class TextItemComponent extends ItemComponent {
    * @private
    */
   _onRotationKnobDragStop (e) {
-    // Allow clicks on canvas 100ms after dragging has stopped
-    setTimeout(() => {
-      this._dragging = false
-    }, 100)
+    this.props.onDragStop && this.props.onDragStop()
   }
 
   // -------------------------------------------------------------------------- RESIZE DRAGGING
@@ -115,8 +121,9 @@ export default class TextItemComponent extends ItemComponent {
    * @private
    */
   _onResizeKnobDragStart (position, e) {
-    this._dragging = true
     this._initialPosition = this._getResizeKnobPosition()
+
+    this.props.onDragStart && this.props.onDragStart()
   }
 
   /**
@@ -152,10 +159,7 @@ export default class TextItemComponent extends ItemComponent {
    * @private
    */
   _onResizeKnobDragStop (e) {
-    // Allow clicks on canvas 100ms after dragging has stopped
-    setTimeout(() => {
-      this._dragging = false
-    }, 100)
+    this.props.onDragStop && this.props.onDragStop()
   }
 
   // -------------------------------------------------------------------------- STYLING
@@ -330,7 +334,7 @@ export default class TextItemComponent extends ItemComponent {
    */
   _renderKnobs () {
     let knobs = []
-    if (this.props.selected) {
+    if (this.props.selected && !this.state.editMode) {
       knobs = [
         (<DraggableComponent
           onStart={this._onRotationKnobDragStart}
@@ -363,18 +367,34 @@ export default class TextItemComponent extends ItemComponent {
    */
   _renderItem () {
     const { sprite } = this.props
+
+    let content = null
+    if (this.state.editMode) {
+      content = (<textarea
+        bem='e:content'
+        ref='textarea'
+        style={this._getTextStyle()}
+        defaultValue={sprite.getText()}
+        onChange={this._onTextChange} />)
+    } else {
+      content = (<div
+        bem='e:content'
+        className='is-draggable'
+        style={this._getTextStyle()}
+        onDoubleClick={this._onItemDoubleClick}>{sprite.getText()}</div>)
+    }
+
+    let textBEM = '$e:text'
+    if (this.props.selected) {
+      textBEM += ' m:selected'
+    }
+
     return (<DraggableComponent
       onStart={this._onItemDragStart}
       onDrag={this._onItemDrag}
       disabled={this.state.editMode}>
-        <div bem='$e:text' style={this._getItemContainerStyle()} className='is-selected'>
-          <textarea
-            bem='e:content'
-            className={this.state.editMode ? null : 'is-draggable'}
-            style={this._getTextStyle()}
-            defaultValue={sprite.getText()}
-            onChange={this._onTextChange}
-            onClick={this._onItemClick} />
+        <div bem={textBEM} style={this._getItemContainerStyle()} className='is-selected'>
+          {content}
         </div>
     </DraggableComponent>)
   }

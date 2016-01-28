@@ -45,15 +45,25 @@ export default class ItemComponent extends BaseComponent {
    * @private
    */
   _onItemDragStart () {
-
+    const { sprite } = this.props
+    this._initialPosition = sprite.getPosition()
   }
 
   /**
    * Gets called while the user drags this item
+   * @param  {Vector2} offset
    * @private
    */
-  _onItemDrag () {
+  _onItemDrag (offset) {
+    const { sprite } = this.props
+    const { editor } = this.context
 
+    const outputDimensions = editor.getOutputDimensions()
+    const newPosition = this._initialPosition.clone()
+      .add(offset.clone().divide(outputDimensions))
+
+    sprite.setPosition(newPosition)
+    this.forceUpdate()
   }
 
   /**
