@@ -311,10 +311,6 @@ export default class EditorScreenComponent extends ScreenComponent {
       this._previousControlsStack.push(this.state.controls)
     }
 
-    const initialState = newControls.getInitialSharedState &&
-      newControls.getInitialSharedState(this._editor, state)
-    const sharedState = new SharedState(initialState)
-
     // If the controls have an `onExit` method, call it
     // with the controls as `this`
     if (this.state.controls.onExit) {
@@ -322,6 +318,10 @@ export default class EditorScreenComponent extends ScreenComponent {
         this.refs.controls
       )
     }
+
+    const initialState = newControls.getInitialSharedState &&
+      newControls.getInitialSharedState(this._editor, state)
+    const sharedState = new SharedState(initialState)
 
     this.setState({
       controls: newControls,
