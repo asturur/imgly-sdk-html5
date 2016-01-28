@@ -8,14 +8,14 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-let kit, image
-
-beforeEach(function () {
-  kit = SpecHelpers.initRenderer()
-  image = kit.getImage()
-})
-
 describe('CropOperation', function () {
+  let kit, image
+
+  beforeEach(function () {
+    kit = SpecHelpers.initRenderer()
+    image = kit.getImage()
+  })
+
   describe('#render', function () {
     describe('with both start and end set', function () {
       it('should correctly resize the canvas', function (done) {

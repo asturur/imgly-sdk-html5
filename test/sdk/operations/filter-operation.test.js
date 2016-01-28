@@ -8,13 +8,13 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-let kit
-
-beforeEach(function () {
-  kit = SpecHelpers.initRenderer()
-})
-
 describe('FilterOperation', function () {
+  let kit
+
+  beforeEach(function () {
+    kit = SpecHelpers.initRenderer()
+  })
+
   describe('with no selected filter', function () {
     it('rendering should pass (default filter is identity)', function () {
       return kit.render()

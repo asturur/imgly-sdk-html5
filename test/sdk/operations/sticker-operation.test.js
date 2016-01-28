@@ -12,17 +12,17 @@ import fs from 'fs'
 import path from 'path'
 import { Image } from 'canvas'
 
-let kit, stickerImage
-beforeEach(function () {
-  kit = SpecHelpers.initRenderer()
-
-  const stickerPath = path.resolve(__dirname, '../assets/sticker.png')
-  const stickerImageBuffer = fs.readFileSync(stickerPath)
-  stickerImage = new Image()
-  stickerImage.src = stickerImageBuffer
-})
-
 describe('StickerOperation', function () {
+  let kit, stickerImage
+  beforeEach(function () {
+    kit = SpecHelpers.initRenderer()
+
+    const stickerPath = path.resolve(__dirname, '../assets/sticker.png')
+    const stickerImageBuffer = fs.readFileSync(stickerPath)
+    stickerImage = new Image()
+    stickerImage.src = stickerImageBuffer
+  })
+
   describe('#render', function () {
     it('should succeed', function () {
       const operation = kit.createOperation('sticker', {

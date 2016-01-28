@@ -8,34 +8,34 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-let kit, TestOperation
-beforeEach(function () {
-  kit = SpecHelpers.initRenderer()
-  TestOperation = PhotoEditorSDK.Operation.extend({
-    availableOptions: {
-      vec: { type: 'vector2', default: new PhotoEditorSDK.Vector2(100, 200) },
-      col: { type: 'color', default: new PhotoEditorSDK.Color(0, 0, 0, 1) },
-      str: { type: 'string', default: 'center', available: ['left', 'center', 'right'] },
-      num: { type: 'number', default: 1 },
-      bool: { type: 'boolean', default: false },
-      req: { type: 'string', required: true },
-      notReq: { type: 'vector2' },
-      setterValue: { type: 'string', setter: function (value) {
-        return 'customized ' + value
-      }},
-      val: { type: 'string', validation: function (value) {
-        if (value !== 'test') {
-          throw new Error('Validation error')
-        }
-      }}
-    }
-  })
-  operation = new TestOperation(kit)
-})
-
-var operation
-
 describe('Operation', function () {
+  let kit, TestOperation
+  beforeEach(function () {
+    kit = SpecHelpers.initRenderer()
+    TestOperation = PhotoEditorSDK.Operation.extend({
+      availableOptions: {
+        vec: { type: 'vector2', default: new PhotoEditorSDK.Vector2(100, 200) },
+        col: { type: 'color', default: new PhotoEditorSDK.Color(0, 0, 0, 1) },
+        str: { type: 'string', default: 'center', available: ['left', 'center', 'right'] },
+        num: { type: 'number', default: 1 },
+        bool: { type: 'boolean', default: false },
+        req: { type: 'string', required: true },
+        notReq: { type: 'vector2' },
+        setterValue: { type: 'string', setter: function (value) {
+          return 'customized ' + value
+        }},
+        val: { type: 'string', validation: function (value) {
+          if (value !== 'test') {
+            throw new Error('Validation error')
+          }
+        }}
+      }
+    })
+    operation = new TestOperation(kit)
+  })
+
+  var operation
+
   describe('options', function () {
     describe('Vector2', function () {
       describe('#getVec()', function () {

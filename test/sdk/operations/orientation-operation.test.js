@@ -8,13 +8,14 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-let kit, image
-beforeEach(function () {
-  kit = SpecHelpers.initRenderer()
-  image = kit.getImage()
-})
-
 describe('OrientationOperation', function () {
+  let kit, image
+
+  beforeEach(function () {
+    kit = SpecHelpers.initRenderer()
+    image = kit.getImage()
+  })
+
   describe('with a rotation that\'s not divisible by 90', function () {
     it('should fail', function () {
       const throwable = () => {

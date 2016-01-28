@@ -8,13 +8,13 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-let kit
-
-beforeEach(function () {
-  kit = SpecHelpers.initRenderer()
-})
-
 describe('BrightnessOperation', function () {
+  let kit
+
+  beforeEach(function () {
+    kit = SpecHelpers.initRenderer()
+  })
+
   describe('#render', function () {
     it('should succeed', function () {
       const operation = kit.createOperation('brightness')

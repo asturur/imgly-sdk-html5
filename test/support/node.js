@@ -14,9 +14,6 @@ global.AssertionError = chai.AssertionError
 global.Assertion = chai.Assertion
 global.assert = chai.assert
 
-var PhotoEditorSDK = require('../../src/js/sdk/photoeditorsdk')
-global.PhotoEditorSDK = PhotoEditorSDK
-
 global.SpecHelpers = {
   initRenderer () {
     let image = new canvas.Image()
@@ -24,7 +21,7 @@ global.SpecHelpers = {
     let buffer = fs.readFileSync(imagePath)
     image.src = buffer
 
-    return new PhotoEditorSDK.Renderer('canvas', {
+    return new PhotoEditorSDK('canvas', {
       image: image
     })
   }
@@ -52,3 +49,6 @@ EXTENSIONS.forEach(function (extension) {
     return fs.readFileSync(filename)
   }
 })
+
+var PhotoEditorSDK = require('../../src/js/sdk')
+global.PhotoEditorSDK = PhotoEditorSDK

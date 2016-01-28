@@ -8,12 +8,12 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-let kit
-beforeEach(function () {
-  kit = SpecHelpers.initRenderer()
-})
-
 describe('RadialBlurOperation', function () {
+  let kit
+  beforeEach(function () {
+    kit = SpecHelpers.initRenderer()
+  })
+
   // This operation takes some time on canvas...
   this.timeout(10000)
 
