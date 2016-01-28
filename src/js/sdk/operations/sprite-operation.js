@@ -233,19 +233,6 @@ class SpriteOperation extends Operation {
       const container = this._container
       const sprites = this._options.sprites
 
-      // Update sprite visibility by filter
-      sprites.forEach((sprite) => {
-        let visible = true
-        this._options.filter.forEach((klass) => {
-          if (sprite instanceof klass) {
-            visible = false
-          }
-        })
-
-        const displayObject = sprite.getDisplayObject()
-        displayObject.setVisible(visible)
-      })
-
       const outputBounds = outputSprite.getBounds()
       renderTexture.resizeTo(new Vector2(outputBounds.width, outputBounds.height))
 
@@ -346,7 +333,6 @@ SpriteOperation.identifier = 'sprite'
  * @type {Object}
  */
 SpriteOperation.prototype.availableOptions = {
-  filter: { type: 'array', default: [] },
   sprites: {
     type: 'array', default: [],
     setter: function (sprites) {
