@@ -27,7 +27,7 @@ export default class StickersFlipControlsComponent extends ControlsComponent {
    * @private
    */
   _onItemClick (direction) {
-    const selectedSticker = this.getSharedState('selectedSticker')
+    const selectedSticker = this.getSharedState('selectedSprite')
     switch (direction) {
       case 'h':
         selectedSticker.setFlipHorizontally(!selectedSticker.getFlipHorizontally())
@@ -36,7 +36,6 @@ export default class StickersFlipControlsComponent extends ControlsComponent {
         selectedSticker.setFlipVertically(!selectedSticker.getFlipVertically())
         break
     }
-    this._operation.setDirty(true)
     this.forceSharedUpdate()
   }
 

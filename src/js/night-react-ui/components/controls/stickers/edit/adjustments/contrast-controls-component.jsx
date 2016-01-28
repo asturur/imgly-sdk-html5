@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Constants } from '../../../../../globals'
+import { ReactBEM } from '../../../../../globals'
 import ControlsComponent from '../../../controls-component'
 import SliderComponent from '../../../../slider-component'
 
@@ -31,11 +31,9 @@ export default class StickersContrastControlsComponent extends ControlsComponent
    * @private
    */
   _onSliderValueChange (value) {
-    const selectedSticker = this.getSharedState('selectedSticker')
+    const selectedSticker = this.getSharedState('selectedSprite')
     let stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setContrast((value + 100) / 100)
-    this._operation.setDirty(true)
-    // this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     this.forceSharedUpdate()
   }
 
@@ -46,7 +44,7 @@ export default class StickersContrastControlsComponent extends ControlsComponent
    * @return {ReactBEM.Element}
    */
   renderControls () {
-    const selectedSticker = this.getSharedState('selectedSticker')
+    const selectedSticker = this.getSharedState('selectedSprite')
     const adjustments = selectedSticker.getAdjustments()
     const contrast = adjustments.getContrast()
 
