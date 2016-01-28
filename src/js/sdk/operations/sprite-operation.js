@@ -272,8 +272,6 @@ class SpriteOperation extends Operation {
    */
   getSpriteAtPosition (sdk, position, type) {
     let intersectingSprite = null
-    const outputSprite = sdk.getSprite()
-    const outputBounds = outputSprite.getBounds()
     const zoom = sdk.getZoom()
 
     let sprites = this._options.sprites.slice(0).reverse()
