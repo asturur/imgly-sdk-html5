@@ -17,7 +17,6 @@ const ALIGNMENTS = [
 
 import { ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
-import BackButtonComponent from '../../back-button-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'
 import FontSizeSliderComponent from './font-size-slider-component'
@@ -186,11 +185,10 @@ export default class TextControlsComponent extends ControlsComponent {
   // -------------------------------------------------------------------------- RENDERING
 
   /**
-   * Renders the overlay control depending on the currentm ode
+   * Renders the overlay controls of this component
    * @return {ReactBEM.Element}
-   * @private
    */
-  _renderOverlayControl () {
+  renderOverlayControls () {
     switch (this.state.mode) {
       case 'size':
         return this._renderFontSizeOverlayControl()
@@ -325,45 +323,40 @@ export default class TextControlsComponent extends ControlsComponent {
 
   /**
    * Renders this component
-   * @return {ReactBEM.Element}
+   * @return {Array.<ReactBEM.Element>}
    */
-  renderWithBEM () {
+  renderControls () {
     const listItems = [
       this._renderSizeItem(),
       this._renderFontItem(),
       this._renderAlignmentItem()
     ]
 
-    const overlayControl = this._renderOverlayControl()
     const selectedText = this.getSharedState('selectedSprite')
 
     const foregroundColor = selectedText.getColor().clone()
     const backgroundColor = selectedText.getBackgroundColor().clone()
 
-    return (<div bem='$b:controls'>
-      {overlayControl}
-      <div bem='e:table'>
-        <BackButtonComponent onClick={this._onBackClick} />
-        <div bem='e:cell m:list'>
-          <ScrollbarComponent ref='scrollbar'>
-            <ul bem='$e:list'>
-              {listItems}
-            </ul>
-          </ScrollbarComponent>
-        </div>
-        <div bem='e:cell m:colorPicker'>
-          <ColorPickerComponent
-            initialValue={foregroundColor}
-            label={this._t('controls.text.foreground')}
-            onChange={this._onForegroundColorChange} />
-        </div>
-        <div bem='e:cell m:colorPicker'>
-          <ColorPickerComponent
-            initialValue={backgroundColor}
-            label={this._t('controls.text.background')}
-            onChange={this._onBackgroundColorChange} />
-        </div>
-      </div>
-    </div>)
+    return [
+      (<div bem='e:cell m:list'>
+        <ScrollbarComponent ref='scrollbar'>
+          <ul bem='$e:list'>
+            {listItems}
+          </ul>
+        </ScrollbarComponent>
+      </div>),
+      (<div bem='e:cell m:colorPicker'>
+        <ColorPickerComponent
+          initialValue={foregroundColor}
+          label={this._t('controls.text.foreground')}
+          onChange={this._onForegroundColorChange} />
+      </div>),
+      (<div bem='e:cell m:colorPicker'>
+        <ColorPickerComponent
+          initialValue={backgroundColor}
+          label={this._t('controls.text.background')}
+          onChange={this._onBackgroundColorChange} />
+      </div>)
+    ]
   }
 }
