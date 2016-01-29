@@ -34,7 +34,6 @@ export default class TextControlsComponent extends ControlsComponent {
       '_onForegroundColorChange',
       '_onBackgroundColorChange'
     )
-    this._texts = this.getSharedState('texts')
     this._operation = this.getSharedState('operation')
 
     this.state = { mode: null }
@@ -89,7 +88,6 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onBackClick (e) {
-    this._operation.setTexts(this._texts)
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
     super._onBackClick()
   }
