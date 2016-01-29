@@ -143,9 +143,7 @@ export default class NightReactUI extends EventEmitter {
 
         // Then color operations (first filter, then fine-tuning)
         'filter',
-        'contrast',
-        'brightness',
-        'saturation',
+        'adjustments',
 
         // Then post-processing
         'radial-blur',

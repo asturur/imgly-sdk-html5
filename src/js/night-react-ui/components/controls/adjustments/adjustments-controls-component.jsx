@@ -18,21 +18,21 @@ import MiniSliderComponent from '../mini-slider-component'
 const ITEMS = [
   {
     identifier: 'brightness',
-    isSelectable: (editor) => editor.isOperationEnabled('brightness'),
+    isSelectable: (editor) => editor.isOperationEnabled('adjustments'),
     defaultValue: 0,
     valueMultiplier: 100,
     valueOffset: 0
   },
   {
     identifier: 'saturation',
-    isSelectable: (editor) => editor.isOperationEnabled('saturation'),
+    isSelectable: (editor) => editor.isOperationEnabled('adjustments'),
     defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100
   },
   {
     identifier: 'contrast',
-    isSelectable: (editor) => editor.isOperationEnabled('contrast'),
+    isSelectable: (editor) => editor.isOperationEnabled('adjustments'),
     defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100
@@ -47,10 +47,23 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
       '_onSliderValueChange'
     )
 
+    const { editor } = this.context
+    this._operation = editor.getOrCreateOperation('adjustments')
+
     this.state = { selectedControls: null }
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when the user clicks the back button
+   * @param {Event} e
+   * @private
+   */
+  _onBackClick (e) {
+    // @TODO Implement history
+    super._onBackClick(e)
+  }
 
   /**
    * Gets called when the user changes the slider value
@@ -72,21 +85,6 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
    * @private
    */
   _onButtonClick (controlsItem, e) {
-    const { editor } = this.context
-    const { selectedControls } = this.state
-
-    // Exit current controls
-    if (selectedControls) {
-      // If value is at default, remove operation
-      const value = this._operation.getOption(selectedControls.identifier)
-      const defaultValue = this._operation.getOptionDefault(selectedControls.identifier)
-      if (value === defaultValue) {
-        editor.removeOperation(this._operation)
-      }
-    }
-
-    // Enter new controls
-    this._operation = editor.getOrCreateOperation(controlsItem.identifier)
     this.setState({ selectedControls: controlsItem })
   }
 
