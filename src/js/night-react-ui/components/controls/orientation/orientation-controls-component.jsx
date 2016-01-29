@@ -97,6 +97,16 @@ export default class OrientationControlsComponent extends ControlsComponent {
     this._operation.setRotation(newDegrees)
     this._rotateCrop(additionalDegrees)
 
+    const flipVertically = this._operation.getFlipVertically()
+    const flipHorizontally = this._operation.getFlipHorizontally()
+
+    if (flipVertically !== flipHorizontally) {
+      this._operation.set({
+        flipVertically: !flipHorizontally,
+        flipHorizontally: !flipVertically
+      })
+    }
+
     const { editor } = this.context
     editor.addHistory(this._operation,
       previousOptions,
@@ -118,6 +128,15 @@ export default class OrientationControlsComponent extends ControlsComponent {
    */
   _onFlipClick (direction) {
     const previousOptions = this._operation.serializeOptions()
+
+    const rotation = this._operation.getRotation()
+    if (rotation === 90 || rotation === 270) {
+      if (direction === 'vertical') {
+        direction = 'horizontal'
+      } else {
+        direction = 'vertical'
+      }
+    }
 
     switch (direction) {
       case 'horizontal':
