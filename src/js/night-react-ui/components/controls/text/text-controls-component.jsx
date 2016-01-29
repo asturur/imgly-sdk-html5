@@ -19,7 +19,7 @@ import { ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'
-import FontSizeSliderComponent from './font-size-slider-component'
+import SliderOverlayComponent from '../slider-overlay-component'
 import FontPreviewComponent from './font-preview-component'
 import FontComponent from './font-component'
 
@@ -211,11 +211,15 @@ export default class TextControlsComponent extends ControlsComponent {
     if (!selectedText) return
 
     const { editor } = this.context
+    const zoom = editor.getSDK().getZoom()
     const outputDimensions = editor.getOutputDimensions()
 
+    const maxFontSize = Math.round(outputDimensions.y * zoom)
     const fontSize = Math.round(selectedText.getFontSize() * outputDimensions.y)
-    return (<FontSizeSliderComponent
+    return (<SliderOverlayComponent
       value={fontSize}
+      maxValue={maxFontSize}
+      label={this._t('controls.text.size')}
       onChange={this._onFontSizeChange} />)
   }
 

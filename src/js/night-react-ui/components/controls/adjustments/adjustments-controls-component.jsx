@@ -9,22 +9,57 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM } from '../../../globals'
+import { ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
-
-import BrightnessControls from './brightness/'
-import SaturationControls from './saturation/'
-import ContrastControls from './contrast/'
+import SliderOverlayComponent from '../slider-overlay-component'
 
 const ITEMS = [
-  BrightnessControls,
-  SaturationControls,
-  ContrastControls
+  {
+    identifier: 'brightness',
+    isSelectable: (editor) => editor.isOperationEnabled('brightness'),
+    valueMultiplier: 100,
+    valueOffset: 0
+  },
+  {
+    identifier: 'saturation',
+    isSelectable: (editor) => editor.isOperationEnabled('saturation'),
+    valueMultiplier: 100,
+    valueOffset: -100
+  },
+  {
+    identifier: 'contrast',
+    isSelectable: (editor) => editor.isOperationEnabled('contrast'),
+    valueMultiplier: 100,
+    valueOffset: -100
+  }
 ]
 
 export default class AdjustmentsControlsComponent extends ControlsComponent {
+  constructor (...args) {
+    super(...args)
+
+    this._bindAll(
+      '_onSliderValueChange'
+    )
+
+    this.state = { selectedControls: null }
+  }
+
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when the user changes the slider value
+   * @param  {Number} value
+   * @private
+   */
+  _onSliderValueChange (value) {
+    const { selectedControls } = this.state
+    const { identifier, valueMultiplier, valueOffset } = selectedControls
+    value = (value - valueOffset) / valueMultiplier
+    this._operation.setOption(identifier, value)
+    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+  }
 
   /**
    * Gets called when the user clicks one of the three buttons
@@ -33,10 +68,46 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
    * @private
    */
   _onButtonClick (controlsItem, e) {
-    this.context.editorScreen.switchToControls(controlsItem)
+    const { editor } = this.context
+    const { selectedControls } = this.state
+
+    // Exit current controls
+    if (selectedControls) {
+      // If value is at default, remove operation
+      const value = this._operation.getOption(selectedControls.identifier)
+      const defaultValue = this._operation.getOptionDefault(selectedControls.identifier)
+      if (value === defaultValue) {
+        editor.removeOperation(this._operation)
+      }
+    }
+
+    // Enter new controls
+    this._operation = editor.getOrCreateOperation(controlsItem.identifier)
+    this.setState({ selectedControls: controlsItem })
   }
 
   // -------------------------------------------------------------------------- RENDERING
+
+  renderOverlayControls () {
+    const { selectedControls } = this.state
+    if (!selectedControls) return
+
+    let { identifier, valueMultiplier, valueOffset } = selectedControls
+
+    const minValue = -1 * valueMultiplier
+    const maxValue = 1 * valueMultiplier
+    const value = this._operation.getOption(identifier) * valueMultiplier + valueOffset
+
+    return (<SliderOverlayComponent
+      minValue={minValue}
+      maxValue={maxValue}
+      value={value}
+      valueUnit='%'
+      positiveValuePrefix='+'
+      label={this._t(`controls.adjustments.${identifier}`)}
+      middleDot={true}
+      onChange={this._onSliderValueChange} />)
+  }
 
   /**
    * Renders the list items

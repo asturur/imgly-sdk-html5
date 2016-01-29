@@ -9,10 +9,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent } from '../../../globals'
-import SliderComponent from '../../slider-component'
+import { SDKUtils, ReactBEM, BaseComponent } from '../../globals'
+import SliderComponent from '../slider-component'
 
-export default class TextControlsComponent extends BaseComponent {
+export default class SliderOverlayComponent extends BaseComponent {
   constructor (...args) {
     super(...args)
 
@@ -20,7 +20,7 @@ export default class TextControlsComponent extends BaseComponent {
       '_onSliderValueChange'
     )
 
-    this.state = { fontSize: this.props.value }
+    this.state = { value: this.props.value }
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -30,8 +30,8 @@ export default class TextControlsComponent extends BaseComponent {
    * @param  {Object} props
    */
   componentWillReceiveProps (props) {
-    if (props.value !== this.state.fontSize) {
-      this.state.fontSize = props.value
+    if (props.value !== this.state.value) {
+      this.state.value = props.value
     }
   }
 
@@ -45,7 +45,7 @@ export default class TextControlsComponent extends BaseComponent {
   _onSliderValueChange (value) {
     this.props.onChange &&
       this.props.onChange(value)
-    this.setState({ fontSize: value })
+    this.setState({ value })
   }
 
   // -------------------------------------------------------------------------- RENDERING
@@ -55,22 +55,18 @@ export default class TextControlsComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const { editor } = this.context
-    const zoom = editor.getSDK().getZoom()
-    const outputDimensions = editor.getOutputDimensions()
-
-    const maxFontSize = Math.round(outputDimensions.y * zoom)
-    const fontSize = this.state.fontSize
+    const props = SDKUtils.defaults(this.props, {
+      style: '',
+      middleDot: false,
+      minValue: 1,
+      maxValue: 100,
+      label: 'Label',
+      onChange: this._onSliderValueChange,
+      value: this.state.value
+    })
 
     return (<div bem='$b:controls e:overlay m:large m:dark'>
-      <SliderComponent
-        style='large'
-        middleDot={false}
-        minValue={1}
-        maxValue={maxFontSize}
-        label={this._t('controls.text.size')}
-        onChange={this._onSliderValueChange}
-        value={fontSize} />
+      <SliderComponent {...props} />
     </div>)
   }
 }
