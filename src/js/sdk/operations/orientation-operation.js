@@ -105,8 +105,6 @@ class OrientationOperation extends Operation {
 
       let scaleX = 1
       let scaleY = 1
-      let translateX = 0
-      let translateY = 0
 
       if (this._options.flipHorizontally) {
         scaleX = -1
@@ -147,7 +145,7 @@ OrientationOperation.prototype.availableOptions = {
     if (value % 90 !== 0) {
       throw new Error('OrientationOperation: `rotation` has to be a multiple of 90.')
     }
-  }},
+  }, setter: (value) => value % 360 },
   flipVertically: { type: 'boolean', default: false },
   flipHorizontally: { type: 'boolean', default: false }
 }
