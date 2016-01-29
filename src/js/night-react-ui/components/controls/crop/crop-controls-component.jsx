@@ -148,16 +148,31 @@ export default class OrientationControlsComponent extends ControlsComponent {
   // -------------------------------------------------------------------------- RATIO HANDLING
 
   /**
-   * Selects the *last* ratio that has `selected` set to true
+   * Selects the initial ratio
    * @private
    */
   _selectInitialRatio () {
-    const selectedRatios = this._ratios.filter((ratio) => ratio.selected)
-    let lastSelectedRatio = selectedRatios.pop()
-    if (!lastSelectedRatio) {
-      lastSelectedRatio = this._ratios[0]
+    let selectedRatio = null
+
+    // 1. Selected ratio stored in operation
+    const operationRatio = this._operation._ratio
+    if (operationRatio) {
+      const matchingRatios = this._ratios.filter((ratio) => ratio.ratio === operationRatio)
+      selectedRatio = matchingRatios[0]
     }
-    return this._selectRatio(lastSelectedRatio)
+
+    // 2. First ratio with `selected` flag
+    if (!selectedRatio) {
+      const selectedRatios = this._ratios.filter((ratio) => ratio.selected)
+      selectedRatio = selectedRatios.pop()
+    }
+
+    // 3. First ratio
+    if (!selectedRatio) {
+      selectedRatio = this._ratios[0]
+    }
+
+    return this._selectRatio(selectedRatio)
   }
 
   /**
@@ -214,7 +229,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
         key={ratio.identifier}>
         <bem specifier='$b:controls'>
           <div bem='$e:button m:withLabel'
-            className={this.state.ratio === ratio ? 'is-active' : null}
+            className={this._operation._ratio === ratio.ratio ? 'is-active' : null}
             onClick={this._selectRatio.bind(this, ratio)}>
               <img bem='e:icon' src={this._getAssetPath(`controls/crop/${ratio.identifier}@2x.png`, true)} />
               <div bem='e:label'>{this._t(`controls.crop.${ratio.identifier}`)}</div>
