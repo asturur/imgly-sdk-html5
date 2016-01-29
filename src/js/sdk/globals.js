@@ -13,6 +13,7 @@ import Engine from './engine'
 import Utils from './lib/utils'
 import Configurable from './lib/configurable'
 import Color from './lib/color'
+import Constants from './constants'
 
 import Vector2 from './lib/math/vector2'
 import Rectangle from './lib/math/rectangle'
@@ -24,6 +25,7 @@ export default {
   Utils,
   Configurable,
   Color,
+  Constants,
 
   Vector2, Rectangle, Matrix
 }

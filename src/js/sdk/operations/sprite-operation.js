@@ -8,9 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine } from '../globals'
+import { Constants, Engine, Vector2 } from '../globals'
 import Operation from './operation'
-import Vector2 from '../lib/math/vector2'
 
 import Sprite from './sprites/sprite'
 import Sticker from './sprites/sticker'
@@ -31,7 +30,7 @@ class SpriteOperation extends Operation {
 
     this._onOperationUpdate = this._onOperationUpdate.bind(this)
     this._onSpriteUpdate = this._onSpriteUpdate.bind(this)
-    this._sdk.on('operation-update', this._onOperationUpdate)
+    this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
 
     this._container = new Engine.Container()
     this._inputSprite = new Engine.Sprite()
@@ -67,8 +66,8 @@ class SpriteOperation extends Operation {
       this._applyCrop(operation, options)
     }
 
-    if (identifier === 'rotation' &&
-        'degrees' in options) {
+    if (identifier === 'orientation' &&
+        'rotation' in options) {
       this._applyRotation(operation, options)
     }
   }
@@ -90,21 +89,22 @@ class SpriteOperation extends Operation {
    * @private
    */
   _applyRotation (operation, options) {
-    const oldDegrees = operation.getDegrees()
-    const newDegrees = options.degrees
-    const degreesDifference = newDegrees - oldDegrees
+    const oldRotation = operation.getRotation()
+    const newRotation = options.rotation
+    const degreesDifference = newRotation - oldRotation
 
     this._options.sprites.forEach((sprite) => {
+      // Update sprite rotation
       let spriteDegrees = sprite.getRotation() * 180 / Math.PI
       spriteDegrees += degreesDifference
       sprite.setRotation(spriteDegrees * Math.PI / 180)
 
       // Flip X and Y unless we're rotating by 180 degrees
       const spritePosition = sprite.getPosition()
-      if (degreesDifference === 90 || (oldDegrees === 270 && newDegrees === 0)) {
+      if (degreesDifference === 90 || (oldRotation === 270 && newRotation === 0)) {
         spritePosition.flip()
         spritePosition.x = 1 - spritePosition.x
-      } else if (degreesDifference === -90 || (oldDegrees === -270 && newDegrees === 0)) {
+      } else if (degreesDifference === -90 || (oldRotation === -270 && newRotation === 0)) {
         spritePosition.flip()
         spritePosition.y = 1 - spritePosition.y
       }

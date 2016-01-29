@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Constants } from '../globals'
 import Promise from '../vendor/promise'
 import EventEmitter from './event-emitter'
 
@@ -38,7 +39,7 @@ export default class OperationsStack extends EventEmitter {
    * @private
    */
   _onOperationUpdate (operation, options) {
-    this.emit('operation-update', operation, options)
+    this.emit(Constants.Events.OPERATION_UPDATED, operation, options)
   }
 
   /**
@@ -180,4 +181,3 @@ export default class OperationsStack extends EventEmitter {
     return this._stack
   }
 }
-

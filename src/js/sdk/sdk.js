@@ -18,7 +18,7 @@ import Operations from './operations/'
 import Exif from './lib/exif'
 import ImageExporter from './lib/image-exporter'
 
-import { RenderType, ImageFormat } from './constants'
+import { RenderType, ImageFormat, Events } from './constants'
 
 export default class PhotoEditorSDK extends EventEmitter {
   constructor (preferredRenderer, options = {}) {
@@ -293,7 +293,7 @@ export default class PhotoEditorSDK extends EventEmitter {
    * @private
    */
   _onOperationUpdate (...args) {
-    this.emit('operation-update', ...args)
+    this.emit(Events.OPERATION_UPDATED, ...args)
   }
 
   /**
@@ -359,11 +359,11 @@ export default class PhotoEditorSDK extends EventEmitter {
   getOperationsStack () { return this._operationsStack }
   setOperationsStack (operationsStack) {
     if (this._operationsStack) {
-      this._operationsStack.off('operation-update', this._onOperationUpdate)
+      this._operationsStack.off(Events.OPERATION_UPDATED, this._onOperationUpdate)
     }
 
     this._operationsStack = operationsStack
-    this._operationsStack.on('operation-update', this._onOperationUpdate)
+    this._operationsStack.on(Events.OPERATION_UPDATED, this._onOperationUpdate)
   }
   getOperations () { return this._operations }
   getImage () { return this._image }

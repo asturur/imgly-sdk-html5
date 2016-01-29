@@ -13,20 +13,19 @@
  * @enum {string}
  * @alias PhotoEditorSDK.RenderType
  */
-export var RenderType = {
-  IMAGE: 'image',
-  DATAURL: 'data-url',
-  BUFFER: 'buffer',
-  BLOB: 'blob',
-  MSBLOB: 'ms-blob'
-}
-
-/**
- * The available output image formats
- * @enum {string}
- * @alias PhotoEditorSDK.ImageFormat
- */
-export var ImageFormat = {
-  PNG: 'image/png',
-  JPEG: 'image/jpeg'
+export default {
+  RenderType: {
+    IMAGE: 'image',
+    DATAURL: 'data-url',
+    BUFFER: 'buffer',
+    BLOB: 'blob',
+    MSBLOB: 'ms-blob'
+  },
+  ImageFormat: {
+    PNG: 'image/png',
+    JPEG: 'image/jpeg'
+  },
+  Events: {
+    OPERATION_UPDATED: 'operation:update'
+  }
 }
