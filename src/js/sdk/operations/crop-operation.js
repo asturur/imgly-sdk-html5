@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2 } from '../globals'
+import { Constants, Vector2 } from '../globals'
 import Operation from './operation'
 import Promise from '../vendor/promise'
 
@@ -24,7 +24,46 @@ class CropOperation extends Operation {
     super(...args)
 
     this._sprite.setAnchor(0, 0)
+
+    this._onOperationUpdate = this._onOperationUpdate.bind(this)
+    this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
   }
+
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when an operation is about to be updated. If the crop
+   * or rotation operation is updated, this will be recognized and the
+   * crop will be updated accordingly
+   * @param  {Operation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _onOperationUpdate (operation, options) {
+    const { identifier } = operation.constructor
+
+    if (identifier === 'orientation' && 'rotation' in options) {
+      const currentRotation = operation.getRotation()
+      const newRotation = options.rotation
+      const degreesDifference = newRotation - currentRotation
+
+      let start = this._options.start.clone()
+      let end = this._options.end.clone()
+
+      const tempStart = start.clone()
+      if (degreesDifference === 90 || degreesDifference === -270) {
+        start.set(1.0 - end.y, tempStart.x)
+        end.set(1.0 - tempStart.y, end.x)
+      } else if (degreesDifference === -90 || degreesDifference === 270) {
+        start.set(tempStart.y, 1.0 - end.x)
+        end.set(end.y, 1.0 - tempStart.x)
+      }
+
+      this.set({ start, end })
+    }
+  }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Rotates and crops the image using WebGL

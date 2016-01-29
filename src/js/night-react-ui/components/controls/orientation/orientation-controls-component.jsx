@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Constants, Vector2 } from '../../../globals'
+import { ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 
@@ -24,7 +24,6 @@ export default class OrientationControlsComponent extends ControlsComponent {
       '_onOperationRemoved'
     )
     this._operation = this.getSharedState('operation')
-    this._cropOperation = this.context.editor.getOperation('crop')
     this._operationExistedBefore = this.getSharedState('operationExistedBefore')
 
     this._events = {
@@ -95,7 +94,6 @@ export default class OrientationControlsComponent extends ControlsComponent {
     const additionalDegrees = 90 * (direction === 'left' ? -1 : 1)
     const newDegrees = (degrees + additionalDegrees) % 360
     this._operation.setRotation(newDegrees)
-    this._rotateCrop(additionalDegrees)
 
     const flipVertically = this._operation.getFlipVertically()
     const flipHorizontally = this._operation.getFlipHorizontally()
@@ -155,59 +153,6 @@ export default class OrientationControlsComponent extends ControlsComponent {
       this._operationExistedBefore)
 
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
-  }
-
-  // -------------------------------------------------------------------------- GETTERS
-
-  /**
-   * Returns or create the flip operation
-   * @return {FlipOperation}
-   * @private
-   */
-  _getFlipOperation () {
-    const { editor } = this.context
-    this._flipOperation = editor.getOrCreateOperation('flip')
-    return this._flipOperation
-  }
-
-  /**
-   * Returns or create the rotation operation
-   * @return {RotationOperation}
-   * @private
-   */
-  _getRotationOperation () {
-    const { editor } = this.context
-    this._rotationOperation = editor.getOrCreateOperation('rotation')
-    return this._rotationOperation
-  }
-
-  // -------------------------------------------------------------------------- MISC
-
-  /**
-   * Rotates the current crop options by the given degrees
-   * @param  {Number} degrees
-   * @todo   Move this to CropOperation
-   * @private
-   */
-  _rotateCrop (degrees) {
-    if (!this._cropOperation) return
-
-    let start = this._cropOperation.getStart().clone()
-    let end = this._cropOperation.getEnd().clone()
-
-    const _start = start.clone()
-    switch (degrees) {
-      case 90:
-        start = new Vector2(1.0 - end.y, _start.x)
-        end = new Vector2(1.0 - _start.y, end.x)
-        break
-      case -90:
-        start = new Vector2(_start.y, 1.0 - end.x)
-        end = new Vector2(end.y, 1.0 - _start.x)
-        break
-    }
-
-    this._cropOperation.set({ start, end })
   }
 
   // -------------------------------------------------------------------------- RENDERING
