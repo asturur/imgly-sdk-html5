@@ -9,12 +9,9 @@
  */
 
 import FiltersControlsComponent from './filters-controls-component'
-import FiltersCanvasControlsComponent from './filters-canvas-controls-component'
 
 export default {
-  canvasControls: FiltersCanvasControlsComponent,
   controls: FiltersControlsComponent,
-  largeCanvasControls: true,
   identifier: 'filters',
   icon: 'controls/overview/filters@2x.png',
   label: 'controls.overview.filters',

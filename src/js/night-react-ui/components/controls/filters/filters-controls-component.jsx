@@ -13,6 +13,7 @@
 import { ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
+import SliderOverlayComponent from '../slider-overlay-component'
 
 export default class FiltersControlsComponent extends ControlsComponent {
   constructor (...args) {
@@ -20,7 +21,8 @@ export default class FiltersControlsComponent extends ControlsComponent {
 
     this._bindAll(
       '_onItemClick',
-      '_onOperationUpdated'
+      '_onOperationUpdated',
+      '_onSliderValueChange'
     )
     this._operation = this.getSharedState('operation')
 
@@ -50,11 +52,23 @@ export default class FiltersControlsComponent extends ControlsComponent {
   // -------------------------------------------------------------------------- EVENTS
 
   /**
+   * Gets called when the slider value has been changed
+   * @param {Number} value
+   * @private
+   */
+  _onSliderValueChange (value) {
+    this._operation.setIntensity(value / 100)
+    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+  }
+
+  /**
    * Gets called when an operation has been updated
    * @param  {Operation} operation
    * @private
    */
   _onOperationUpdated (operation) {
+    // The undo button might change this operation's selected filter or intensity.
+    // Update the component to reflect the change
     if (operation === this._operation) {
       this.forceUpdate()
     }
@@ -67,9 +81,12 @@ export default class FiltersControlsComponent extends ControlsComponent {
    * @private
    */
   _onItemClick (filter, e) {
-    this._operation.setFilter(filter)
-    this._operation.setIntensity(1)
+    this._operation.set({
+      filter,
+      intensity: 1
+    })
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this.forceUpdate()
   }
 
   /**
@@ -98,6 +115,25 @@ export default class FiltersControlsComponent extends ControlsComponent {
   }
 
   // -------------------------------------------------------------------------- RENDERING
+
+  /**
+   * Renders the overlay controls of this component
+   * @return {ReactBEM.Element}
+   */
+  renderOverlayControls () {
+    const currentFilter = this._operation.getFilter()
+    if (currentFilter.isIdentity) return null
+
+    const intensity = this._operation.getIntensity()
+    return (<SliderOverlayComponent
+      minValue={0}
+      maxValue={100}
+      value={intensity * 100}
+      valueUnit='%'
+      positiveValuePrefix='+'
+      label={this._t(`controls.filters.intensity`)}
+      onChange={this._onSliderValueChange} />)
+  }
 
   /**
    * Renders the list items for this control
