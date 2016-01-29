@@ -186,6 +186,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
   /**
    * Rotates the current crop options by the given degrees
    * @param  {Number} degrees
+   * @todo   Move this to CropOperation
    * @private
    */
   _rotateCrop (degrees) {
