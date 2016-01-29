@@ -57,22 +57,33 @@ export default class ControlsComponent extends BaseComponent {
   }
 
   /**
+   * Renders the overlay controls of this component
+   * @return {ReactBEM.Element}
+   */
+  renderOverlayControls () {
+    return null
+  }
+
+  /**
    * Renders this component
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    let backButton = this._hasBackButton
+    const backButton = this._hasBackButton
       ? <BackButtonComponent onClick={this._onBackClick} />
       : null
 
-    let doneButton = this._hasDoneButton
+    const doneButton = this._hasDoneButton
       ? <DoneButtonComponent onClick={this._onDoneClick} />
       : null
 
-    return (<div bem='$b:controls e:table'>
-      {backButton}
-      {this.renderControls()}
-      {doneButton}
+    return (<div bem='$b:controls'>
+      {this.renderOverlayControls()}
+      <div bem='e:table'>
+        {backButton}
+        {this.renderControls()}
+        {doneButton}
+      </div>
     </div>)
   }
 }
