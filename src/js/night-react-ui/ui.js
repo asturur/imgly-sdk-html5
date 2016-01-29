@@ -28,8 +28,6 @@ export default class NightReactUI extends EventEmitter {
     this._initOptions()
     this._initLanguage()
 
-    this._initWatermarkOperation()
-
     this.run()
   }
 
@@ -45,7 +43,6 @@ export default class NightReactUI extends EventEmitter {
     this._renderer.setImage(image, exif)
 
     this.fixOperationsStack()
-    this._initWatermarkOperation()
   }
 
   /**
@@ -58,19 +55,6 @@ export default class NightReactUI extends EventEmitter {
     // Container has to be position: relative
     this._options.container.style.position = 'relative'
     this._render()
-  }
-
-  /**
-   * Creates the watermark operation if it doesn't exist yet
-   * @private
-   *  @todo Does this belong here?
-   */
-  _initWatermarkOperation () {
-    if (this._options.watermark) {
-      this._watermarkOperation = this.getOrCreateOperation('watermark', {
-        image: this._options.watermark
-      })
-    }
   }
 
   /**

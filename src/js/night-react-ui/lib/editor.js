@@ -50,9 +50,23 @@ export default class Editor extends EventEmitter {
     this._tick = this._tick.bind(this)
 
     this._mediator.on(Constants.EVENTS.CANVAS_RENDER, this.render)
+
+    this._initWatermark()
   }
 
   // -------------------------------------------------------------------------- INITIALIZATION
+
+  /**
+   * Initializes the watermark operation
+   * @private
+   */
+  _initWatermark () {
+    if (this._options.watermark) {
+      this._watermarkOperation = this.getOrCreateOperation('watermark', {
+        image: this._options.watermark
+      })
+    }
+  }
 
   /**
    * Initializes the SDK
@@ -328,10 +342,9 @@ export default class Editor extends EventEmitter {
    *  @todo Does this belong here?
    */
   export (download = false) {
-    // if (this._watermarkOperation) {
-    //   this._watermarkOperation = this.getOperation('watermark')
-    //   this._watermarkOperation.setEnabled(false)
-    // }
+    if (this._watermarkOperation) {
+      this._watermarkOperation.setEnabled(false)
+    }
 
     // Invalidate caches
     this._sdk.setAllOperationsToDirty()
@@ -342,9 +355,9 @@ export default class Editor extends EventEmitter {
       .then((output) => {
         this.emit('export', output)
 
-        // if (this._watermarkOperation) {
-        //   this._watermarkOperation.setEnabled(true)
-        // }
+        if (this._watermarkOperation) {
+          this._watermarkOperation.setEnabled(true)
+        }
 
         // Invalidate caches
         this._sdk.setAllOperationsToDirty()
