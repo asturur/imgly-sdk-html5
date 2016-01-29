@@ -80,9 +80,12 @@ export default {
       const sdk = editor.getSDK()
       const renderer = sdk.getRenderer()
       const text = operation.createText({
-        text: 'Text',
+        text: 'Double-click to edit',
         maxWidth: 0.5,
         maxHeight: renderer.getMaxTextureSize(),
+        fontSize: 0.15,
+        fontFamily: 'Impact',
+        alignment: 'center',
         anchor: new Vector2(0, 0),
         pivot: new Vector2(0.5, 0)
       })
