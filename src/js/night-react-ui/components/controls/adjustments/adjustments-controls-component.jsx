@@ -61,7 +61,21 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
    * @private
    */
   _onBackClick (e) {
-    // @TODO Implement history
+    const { editor } = this.context
+    const operationExistedBefore = this.getSharedState('operationExistedBefore')
+    const initialOptions = this.getSharedState('initialOptions')
+
+    if (!this._operation.optionsEqual(initialOptions)) {
+      editor.addHistory(this._operation,
+        initialOptions,
+      operationExistedBefore)
+    }
+
+    const defaultOptions = this._operation.getDefaultOptions()
+    if (this._operation.optionsEqual(defaultOptions)) {
+      editor.removeOperation(this._operation)
+    }
+
     super._onBackClick(e)
   }
 

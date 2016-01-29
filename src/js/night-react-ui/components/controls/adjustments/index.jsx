@@ -16,6 +16,14 @@ export default {
   identifier: 'adjustments',
   icon: 'controls/overview/adjustments@2x.png',
   label: 'controls.overview.adjustments',
+  getInitialSharedState: (editor) => {
+    const operationExistedBefore = editor.operationExists('adjustments')
+    const operation = editor.getOrCreateOperation('adjustments')
+    const initialOptions = operation.serializeOptions()
+    return {
+      operation, operationExistedBefore, initialOptions
+    }
+  },
   isSelectable: (editor) => {
     return editor.isOperationEnabled('adjustments')
   }
