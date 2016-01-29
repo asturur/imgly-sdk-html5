@@ -50,9 +50,9 @@ export default class FrameOperation extends Operation {
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
-    const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
+    const renderer = sdk.getRenderer()
 
     // Re-render to RenderTexture if dirty
     if (this.isDirtyForRenderer(renderer)) {
@@ -73,6 +73,7 @@ export default class FrameOperation extends Operation {
       })
 
       renderTexture.render(this._container)
+      this.setDirtyForRenderer(false, renderer)
     }
 
     outputSprite.setTexture(renderTexture)
@@ -122,4 +123,3 @@ FrameOperation.prototype.availableOptions = {
   color: { type: 'color', default: new Color(0, 0, 0, 1) },
   thickness: { type: 'number', default: 0.05 }
 }
-
