@@ -42,25 +42,52 @@ class CropOperation extends Operation {
   _onOperationUpdate (operation, options) {
     const { identifier } = operation.constructor
 
-    if (identifier === 'orientation' && 'rotation' in options) {
-      const currentRotation = operation.getRotation()
-      const newRotation = options.rotation
-      const degreesDifference = newRotation - currentRotation
-
-      let start = this._options.start.clone()
-      let end = this._options.end.clone()
-
-      const tempStart = start.clone()
-      if (degreesDifference === 90 || degreesDifference === -270) {
-        start.set(1.0 - end.y, tempStart.x)
-        end.set(1.0 - tempStart.y, end.x)
-      } else if (degreesDifference === -90 || degreesDifference === 270) {
-        start.set(tempStart.y, 1.0 - end.x)
-        end.set(end.y, 1.0 - tempStart.x)
+    if (identifier === 'orientation') {
+      if ('rotation' in options) {
+        this._applyRotation(operation, options)
       }
-
-      this.set({ start, end })
+      if ('flipVertically' in options || 'flipHorizontally' in options) {
+        this._applyFlip(operation, options)
+      }
     }
+  }
+
+  // -------------------------------------------------------------------------- FIXES
+
+  /**
+   * Applies the rotation done by an orientation operation
+   * @param  {Operation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _applyRotation (operation, options) {
+    const currentRotation = operation.getRotation()
+    const newRotation = options.rotation
+    const degreesDifference = newRotation - currentRotation
+
+    let start = this._options.start.clone()
+    let end = this._options.end.clone()
+
+    const tempStart = start.clone()
+    if (degreesDifference === 90 || degreesDifference === -270) {
+      start.set(1.0 - end.y, tempStart.x)
+      end.set(1.0 - tempStart.y, end.x)
+    } else if (degreesDifference === -90 || degreesDifference === 270) {
+      start.set(tempStart.y, 1.0 - end.x)
+      end.set(end.y, 1.0 - tempStart.x)
+    }
+
+    this.set({ start, end })
+  }
+
+  /**
+   * Applies the flip done by an orientation operation
+   * @param  {Operation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _applyFlip (operation, options) {
+    // @TODO Implement, make sure all edge cases (like flipping a rotated image) work properly
   }
 
   // -------------------------------------------------------------------------- RENDERING
