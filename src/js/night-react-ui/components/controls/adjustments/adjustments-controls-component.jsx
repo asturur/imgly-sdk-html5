@@ -97,12 +97,10 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
   _buildSliderProps (controls) {
     let { identifier, defaultValue, valueMultiplier, valueOffset } = controls
 
-    const { editor } = this.context
-    const operation = editor.getOperation(identifier)
     const minValue = -1 * valueMultiplier
     const maxValue = 1 * valueMultiplier
-    let value = operation
-      ? operation.getOption(identifier)
+    let value = this._operation
+      ? this._operation.getOption(identifier)
       : defaultValue
 
     value *= valueMultiplier
