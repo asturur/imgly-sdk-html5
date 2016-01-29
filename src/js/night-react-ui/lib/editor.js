@@ -152,7 +152,7 @@ export default class Editor extends EventEmitter {
         this.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
       }
 
-      this.emit(Constants.EVENTS.UNDO, operation)
+      this._mediator.emit(Constants.EVENTS.HISTORY_UNDO, operation)
       this.render()
     }
   }
