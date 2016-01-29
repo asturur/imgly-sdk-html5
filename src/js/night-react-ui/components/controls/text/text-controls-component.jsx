@@ -100,7 +100,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @param  {Object} newState
    */
   sharedStateDidChange (newState) {
-    if ('selectedText' in newState) {
+    if ('selectedSprite' in newState) {
       this.forceUpdate()
     }
   }
@@ -114,7 +114,7 @@ export default class TextControlsComponent extends ControlsComponent {
     const { editor } = this.context
     const getOutputDimensions = editor.getOutputDimensions()
 
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     selectedText.setFontSize(fontSize / getOutputDimensions.y)
     this.forceSharedUpdate()
   }
@@ -125,7 +125,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onFontChange (font) {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     selectedText.setFontFamily(font.fontFamily)
     selectedText.setFontWeight(font.fontWeight)
     this.forceSharedUpdate()
@@ -137,7 +137,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onAlignmentClick (e) {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     const alignment = selectedText.getAlignment()
 
     const currentIndex = ALIGNMENTS.indexOf(alignment)
@@ -154,7 +154,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onForegroundColorChange (color) {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     selectedText.setColor(color)
     this.forceSharedUpdate()
   }
@@ -165,7 +165,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onBackgroundColorChange (color) {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     selectedText.setBackgroundColor(color)
     this.forceSharedUpdate()
   }
@@ -209,7 +209,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _renderFontSizeOverlayControl () {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     if (!selectedText) return
 
     const { editor } = this.context
@@ -227,7 +227,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _renderSizeItem () {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     if (!selectedText) return
 
     const { editor } = this.context
@@ -259,7 +259,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _renderFontFamilyOverlayControl () {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     if (!selectedText) return
 
     return (<FontComponent
@@ -275,7 +275,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _renderFontItem () {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     if (!selectedText) return
 
     const className = this.state.mode === 'font' ? 'is-active' : null
@@ -304,7 +304,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _renderAlignmentItem () {
-    const selectedText = this.getSharedState('selectedText')
+    const selectedText = this.getSharedState('selectedSprite')
     if (!selectedText) return
 
     const alignment = selectedText.getAlignment()
@@ -335,8 +335,7 @@ export default class TextControlsComponent extends ControlsComponent {
     ]
 
     const overlayControl = this._renderOverlayControl()
-    const selectedText = this.getSharedState('selectedText')
-    if (!selectedText) return null
+    const selectedText = this.getSharedState('selectedSprite')
 
     const foregroundColor = selectedText.getColor().clone()
     const backgroundColor = selectedText.getBackgroundColor().clone()
