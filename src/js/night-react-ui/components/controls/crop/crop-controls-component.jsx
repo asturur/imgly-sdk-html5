@@ -98,10 +98,9 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _onBackClick (e) {
-    super._onBackClick(e)
-
     if (this.getSharedState('operationExistedBefore')) {
-      this._operation.set(this._initialOptions)
+      const initialOptions = this.getSharedState('initialOptions')
+      this._operation.set(initialOptions)
     } else {
       const { editor } = this.context
       editor.removeOperation(this._operation)
@@ -109,6 +108,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
 
     this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+
+    super._onBackClick(e)
   }
 
   /**
