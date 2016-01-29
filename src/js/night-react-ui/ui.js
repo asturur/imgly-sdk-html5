@@ -134,7 +134,7 @@ export default class NightReactUI extends EventEmitter {
       webcam: true,
       assets: {},
       controlsOrder: [
-        'crop', 'orientation', 'filters', 'adjustments', 'text', 'sticker', 'brush', 'focus', 'frames'
+        'crop', 'orientation', 'filters', 'adjustments', 'text', 'stickers', 'brush', 'focus', 'frames'
       ],
       operationsOrder: [
         // First, all operations that affect the image dimensions
