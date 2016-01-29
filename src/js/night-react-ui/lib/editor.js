@@ -230,6 +230,9 @@ export default class Editor extends EventEmitter {
       this._mediator.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
     })
     const index = this._preferredOperationOrder.indexOf(identifier)
+    if (index === -1) {
+      throw new Error(`Editor#addOperation: \`${identifier}\` does not appear in \`preferredOperationOrder\``)
+    }
     this._operationsStack.set(index, operation)
     this._operationsMap[identifier] = operation
   }
