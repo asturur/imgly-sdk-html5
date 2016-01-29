@@ -13,23 +13,27 @@ import { ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import SliderOverlayComponent from '../slider-overlay-component'
+import MiniSliderComponent from '../mini-slider-component'
 
 const ITEMS = [
   {
     identifier: 'brightness',
     isSelectable: (editor) => editor.isOperationEnabled('brightness'),
+    defaultValue: 0,
     valueMultiplier: 100,
     valueOffset: 0
   },
   {
     identifier: 'saturation',
     isSelectable: (editor) => editor.isOperationEnabled('saturation'),
+    defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100
   },
   {
     identifier: 'contrast',
     isSelectable: (editor) => editor.isOperationEnabled('contrast'),
+    defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100
   }
@@ -86,27 +90,44 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
     this.setState({ selectedControls: controlsItem })
   }
 
+  // -------------------------------------------------------------------------- MISC
+
+  /**
+   * Builds the props hash passed to the sliders
+   * @return {Object}
+   */
+  _buildSliderProps (controls) {
+    let { identifier, defaultValue, valueMultiplier, valueOffset } = controls
+
+    const { editor } = this.context
+    const operation = editor.getOperation(identifier)
+    const minValue = -1 * valueMultiplier
+    const maxValue = 1 * valueMultiplier
+    let value = operation
+      ? operation.getOption(identifier)
+      : defaultValue
+
+    value *= valueMultiplier
+    value += valueOffset
+
+    return {
+      minValue, maxValue, value,
+      valueUnit: '%',
+      positiveValuePrefix: '+',
+      label: this._t(`controls.adjustments.${identifier}`),
+      middleDot: true,
+      onChange: this._onSliderValueChange
+    }
+  }
+
   // -------------------------------------------------------------------------- RENDERING
 
   renderOverlayControls () {
     const { selectedControls } = this.state
     if (!selectedControls) return
 
-    let { identifier, valueMultiplier, valueOffset } = selectedControls
-
-    const minValue = -1 * valueMultiplier
-    const maxValue = 1 * valueMultiplier
-    const value = this._operation.getOption(identifier) * valueMultiplier + valueOffset
-
-    return (<SliderOverlayComponent
-      minValue={minValue}
-      maxValue={maxValue}
-      value={value}
-      valueUnit='%'
-      positiveValuePrefix='+'
-      label={this._t(`controls.adjustments.${identifier}`)}
-      middleDot={true}
-      onChange={this._onSliderValueChange} />)
+    const sliderProps = this._buildSliderProps(selectedControls)
+    return (<SliderOverlayComponent {...sliderProps} />)
   }
 
   /**
@@ -118,13 +139,27 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
     return ITEMS
       .filter((item) => item.isSelectable(this.context.editor))
       .map((item) => {
+        const isSelected = this.state.selectedControls === item
+        const className = isSelected ? 'is-active' : null
+
+        let miniSlider
+        if (!isSelected) {
+          const sliderProps = this._buildSliderProps(item)
+          miniSlider = (<bem specifier='b:adjustmentsControls'>
+            <div bem='e:miniSlider'>
+              <MiniSliderComponent {...sliderProps} />
+            </div>
+          </bem>)
+        }
+
         return (<li
           bem='e:item'
           key={item.identifier}>
           <bem specifier='$b:controls'>
-            <div bem='$e:button m:withLabel' onClick={this._onButtonClick.bind(this, item)}>
+            <div bem='$e:button m:withLabel' onClick={this._onButtonClick.bind(this, item)} className={className}>
               <img bem='e:icon' src={this._getAssetPath(`controls/adjustments/${item.identifier}@2x.png`, true)} />
               <div bem='e:label'>{this._t(`controls.adjustments.${item.identifier}`)}</div>
+              {miniSlider}
             </div>
           </bem>
         </li>)

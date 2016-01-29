@@ -1,0 +1,42 @@
+/*
+ * Photo Editor SDK - photoeditorsdk.com
+ * Copyright (c) 2013-2015 9elements GmbH
+ *
+ * Released under Attribution-NonCommercial 3.0 Unported
+ * http://creativecommons.org/licenses/by-nc/3.0/
+ *
+ * For commercial use, please contact us at contact@9elements.com
+ */
+
++block(editor)
+  +block(miniSlider)
+    margin: auto
+    width: 44px
+
+    +element(bar)
+      position: relative
+      width: 100%
+      height: 2px
+
+      +elements(background, foreground)
+        @include border-radius(3px)
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+
+      +element(background)
+        background: rgba(white, 0.3)
+
+      +element(foreground)
+        width: 0
+        background: $primaryColor
+
+      +element(knob)
+        position: absolute
+        z-index: 2
+        bottom: 0
+        width: 2px
+        height: 4px
+        background: white
