@@ -112,20 +112,22 @@ class Operation extends Configurable {
 
   /**
    * Applies this operation using WebGL
+   * @param  {PhotoEditorSDK} sdk
    * @return {WebGLRenderer} renderer
    * @private
    */
   /* istanbul ignore next */
-  _renderWebGL () {
+  _renderWebGL (sdk) {
     throw new Error('Operation#_renderWebGL is abstract and not implemented in inherited class.')
   }
 
   /**
    * Applies this operation using Canvas2D
+   * @param  {PhotoEditorSDK} sdk
    * @return {CanvasRenderer} renderer
    * @private
    */
-  _renderCanvas () {
+  _renderCanvas (sdk) {
     throw new Error('Operation#_renderCanvas is abstract and not implemented in inherited class.')
   }
 
