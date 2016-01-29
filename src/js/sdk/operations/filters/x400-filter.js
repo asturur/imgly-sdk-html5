@@ -20,7 +20,7 @@ class X400Filter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.add(new Filter.Primitives.X400())
+    this._stack.push(new Filter.Primitives.X400())
   }
 
   /**

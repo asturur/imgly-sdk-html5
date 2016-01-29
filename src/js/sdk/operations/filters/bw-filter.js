@@ -20,7 +20,7 @@ class BWFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.add(new Filter.Primitives.Grayscale())
+    this._stack.push(new Filter.Primitives.Grayscale())
   }
 
   /**

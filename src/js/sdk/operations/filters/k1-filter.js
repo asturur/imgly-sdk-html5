@@ -21,7 +21,7 @@ class K1Filter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [53, 32],
@@ -32,7 +32,7 @@ class K1Filter extends Filter {
     }))
 
     // Saturation
-    this._stack.add(new Filter.Primitives.Saturation({
+    this._stack.push(new Filter.Primitives.Saturation({
       saturation: 0.9
     }))
   }

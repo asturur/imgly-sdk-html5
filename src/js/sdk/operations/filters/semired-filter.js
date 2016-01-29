@@ -20,7 +20,7 @@ class SemiredFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 129],
@@ -43,7 +43,7 @@ class SemiredFilter extends Filter {
       }
     }))
 
-    this._stack.add(new Filter.Primitives.Glow())
+    this._stack.push(new Filter.Primitives.Glow())
   }
 
   /**

@@ -19,15 +19,15 @@ import Filter from './filter'
 class A15Filter extends Filter {
   constructor (...args) {
     super(...args)
-    this._stack.add(new Filter.Primitives.Contrast({
+    this._stack.push(new Filter.Primitives.Contrast({
       contrast: 0.63
     }))
 
-    this._stack.add(new Filter.Primitives.Brightness({
+    this._stack.push(new Filter.Primitives.Brightness({
       brightness: 0.12
     }))
 
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 38],

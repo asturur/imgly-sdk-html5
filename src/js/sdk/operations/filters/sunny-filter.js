@@ -20,7 +20,7 @@ class SunnyFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 0],
@@ -42,7 +42,7 @@ class SunnyFilter extends Filter {
       }
     }))
 
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [55, 20],

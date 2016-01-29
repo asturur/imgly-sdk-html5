@@ -21,7 +21,7 @@ class FrontFilter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 65],

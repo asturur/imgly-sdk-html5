@@ -20,11 +20,11 @@ class GlamFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.add(new Filter.Primitives.Contrast({
+    this._stack.push(new Filter.Primitives.Contrast({
       contrast: 1.1
     }))
 
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 0],

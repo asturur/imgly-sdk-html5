@@ -20,7 +20,7 @@ class GobblinFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.add(new Filter.Primitives.Gobblin())
+    this._stack.push(new Filter.Primitives.Gobblin())
   }
 
   /**

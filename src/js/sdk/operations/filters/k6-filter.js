@@ -21,7 +21,7 @@ class K6Filter extends Filter {
     super(...args)
 
     // Saturation
-    this._stack.add(new Filter.Primitives.Saturation({
+    this._stack.push(new Filter.Primitives.Saturation({
       saturation: 0.5
     }))
   }

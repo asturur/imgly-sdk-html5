@@ -20,7 +20,7 @@ class LomoFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [87, 20],

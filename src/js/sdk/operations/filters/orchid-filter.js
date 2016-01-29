@@ -21,7 +21,7 @@ class OrchidFilter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 0],
@@ -45,7 +45,7 @@ class OrchidFilter extends Filter {
     }))
 
     // Tone curve
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [117, 151],
@@ -55,7 +55,7 @@ class OrchidFilter extends Filter {
     }))
 
     // Desaturation
-    this._stack.add(new Filter.Primitives.Desaturation({
+    this._stack.push(new Filter.Primitives.Desaturation({
       desaturation: 0.65
     }))
   }

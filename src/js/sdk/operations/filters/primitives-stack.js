@@ -57,8 +57,15 @@ class PrimitivesStack {
    * Adds the given primitive to the stack
    * @param {PhotoEditorSDK.Filter.Primitive} primitive
    */
-  add (primitive) {
+  push (primitive) {
     this._stack.push(primitive)
+  }
+
+  /**
+   * Clears the stack
+   */
+  clear () {
+    this._stack = []
   }
 
   /**

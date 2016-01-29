@@ -21,12 +21,12 @@ class BreezeFilter extends Filter {
     super(...args)
 
     // Desaturation
-    this._stack.add(new Filter.Primitives.Desaturation({
+    this._stack.push(new Filter.Primitives.Desaturation({
       desaturation: 0.5
     }))
 
     // Tone curve
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 0],

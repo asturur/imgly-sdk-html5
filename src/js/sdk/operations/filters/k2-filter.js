@@ -22,7 +22,7 @@ class K2Filter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.add(new Filter.Primitives.ToneCurve({
+    this._stack.push(new Filter.Primitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [54, 33],
@@ -36,7 +36,7 @@ class K2Filter extends Filter {
     }))
 
     // Soft color overlay
-    this._stack.add(new Filter.Primitives.SoftColorOverlay({
+    this._stack.push(new Filter.Primitives.SoftColorOverlay({
       color: new Color(40 / 255, 40 / 255, 40 / 255)
     }))
   }
