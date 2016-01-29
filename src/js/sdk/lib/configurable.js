@@ -153,6 +153,21 @@ export default class Configurable extends EventEmitter {
   }
 
   /**
+   * Returns a hash with the default options
+   * @return {Object}
+   */
+  getDefaultOptions () {
+    let options = {}
+    for (let optionName in this._options) {
+      const defaultValue = this.availableOptions[optionName].default
+      if (typeof defaultValue === 'undefined') continue
+
+      options[optionName] = defaultValue
+    }
+    return options
+  }
+
+  /**
    * Check if the current options equal the given ones
    * @param  {Object} options
    * @return {Boolean}
