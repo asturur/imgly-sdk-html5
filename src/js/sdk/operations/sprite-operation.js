@@ -226,23 +226,21 @@ class SpriteOperation extends Operation {
 
     this._inputSprite.setTexture(outputSprite.getTexture())
 
-    if (this.isDirtyForRenderer(renderer)) {
-      const container = this._container
-      const sprites = this._options.sprites
+    const container = this._container
+    const sprites = this._options.sprites
 
-      const outputBounds = outputSprite.getBounds()
-      renderTexture.resizeTo(new Vector2(outputBounds.width, outputBounds.height))
+    const outputBounds = outputSprite.getBounds()
+    renderTexture.resizeTo(new Vector2(outputBounds.width, outputBounds.height))
 
-      sprites.forEach((sprite) => {
-        sprite.update(sdk)
-      })
+    sprites.forEach((sprite) => {
+      sprite.update(sdk)
+    })
 
-      renderTexture.clear()
-      renderTexture.render(container)
-      this.setDirtyForRenderer(true, renderer)
-    }
-
+    renderTexture.clear()
+    renderTexture.render(container)
     outputSprite.setTexture(renderTexture)
+    this.setDirtyForRenderer(true, renderer)
+
     return Promise.resolve()
   }
 

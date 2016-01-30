@@ -39,32 +39,29 @@ class OrientationOperation extends Operation {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
-    if (this.isDirtyForRenderer(renderer)) {
-      const actualDegrees = this._options.rotation % 360
-      const radians = actualDegrees * (Math.PI / 180)
+    const actualDegrees = this._options.rotation % 360
+    const radians = actualDegrees * (Math.PI / 180)
 
-      this._sprite.setScale(
-        this._options.flipHorizontally ? -1 : 1,
-        this._options.flipVertically ? -1 : 1
-      )
-      this._sprite.setRotation(radians)
-      this._sprite.setAnchor(0.5, 0.5)
-      this._sprite.setTexture(outputSprite.getTexture())
-      this._sprite.updateTransform()
+    this._sprite.setScale(
+      this._options.flipHorizontally ? -1 : 1,
+      this._options.flipVertically ? -1 : 1
+    )
+    this._sprite.setRotation(radians)
+    this._sprite.setAnchor(0.5, 0.5)
+    this._sprite.setTexture(outputSprite.getTexture())
+    this._sprite.updateTransform()
 
-      const bounds = this._sprite.getBounds()
-      renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
+    const bounds = this._sprite.getBounds()
+    renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
 
-      // Make sure we're rendering to top left corner
-      this._sprite.setPosition(renderTexture.getWidth() / 2, renderTexture.getHeight() / 2)
+    // Make sure we're rendering to top left corner
+    this._sprite.setPosition(renderTexture.getWidth() / 2, renderTexture.getHeight() / 2)
 
-      // Draw
-      renderTexture.render(this._container)
-
-      this.setDirtyForRenderer(false, renderer)
-    }
-
+    // Draw
+    renderTexture.render(this._container)
     outputSprite.setTexture(renderTexture)
+    this.setDirtyForRenderer(false, renderer)
+
     return Promise.resolve()
   }
 

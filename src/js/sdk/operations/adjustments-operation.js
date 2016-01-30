@@ -50,24 +50,22 @@ class AdjustmentsOperation extends Operation {
     const renderTexture = this._getRenderTexture(sdk)
     const renderer = sdk.getRenderer()
 
-    if (this.isDirtyForRenderer(renderer)) {
-      this._sprite.setTexture(outputSprite.getTexture())
+    this._sprite.setTexture(outputSprite.getTexture())
 
-      const spriteBounds = outputSprite.getBounds()
-      const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
-      renderTexture.resizeTo(spriteDimensions)
+    const spriteBounds = outputSprite.getBounds()
+    const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+    renderTexture.resizeTo(spriteDimensions)
 
-      this._filter.setUniforms({
-        u_brightness: this._options.brightness,
-        u_saturation: this._options.saturation,
-        u_contrast: this._options.contrast
-      })
+    this._filter.setUniforms({
+      u_brightness: this._options.brightness,
+      u_saturation: this._options.saturation,
+      u_contrast: this._options.contrast
+    })
 
-      renderTexture.render(this._container)
-      this.setDirtyForRenderer(false, renderer)
-    }
-
+    renderTexture.render(this._container)
     outputSprite.setTexture(renderTexture)
+
+    this.setDirtyForRenderer(false, renderer)
 
     return Promise.resolve()
   }

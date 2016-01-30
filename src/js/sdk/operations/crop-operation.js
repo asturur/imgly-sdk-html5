@@ -105,24 +105,22 @@ class CropOperation extends Operation {
     const renderTexture = this._getRenderTexture(sdk)
 
     this._sprite.setTexture(outputSprite.getTexture())
-    if (this.isDirtyForRenderer(renderer)) {
-      const outputBounds = outputSprite.getBounds()
-      const outputDimensions = new Vector2(outputBounds.width, outputBounds.height)
 
-      const start = this._options.start.clone()
-        .multiply(outputDimensions)
-      const end = this._options.end.clone()
-        .multiply(outputDimensions)
+    const outputBounds = outputSprite.getBounds()
+    const outputDimensions = new Vector2(outputBounds.width, outputBounds.height)
 
-      const newDimensions = end.clone().subtract(start)
-      renderTexture.resizeTo(newDimensions)
+    const start = this._options.start.clone()
+      .multiply(outputDimensions)
+    const end = this._options.end.clone()
+      .multiply(outputDimensions)
 
-      this._sprite.setPosition(-start.x, -start.y)
-      renderTexture.render(this._container)
+    const newDimensions = end.clone().subtract(start)
+    renderTexture.resizeTo(newDimensions)
 
-      this.setDirtyForRenderer(true, renderer)
-    }
+    this._sprite.setPosition(-start.x, -start.y)
+    renderTexture.render(this._container)
     outputSprite.setTexture(renderTexture)
+    this.setDirtyForRenderer(true, renderer)
 
     return Promise.resolve()
   }

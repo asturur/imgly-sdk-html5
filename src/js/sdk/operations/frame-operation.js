@@ -54,29 +54,25 @@ export default class FrameOperation extends Operation {
     const renderTexture = this._getRenderTexture(sdk)
     const renderer = sdk.getRenderer()
 
-    // Re-render to RenderTexture if dirty
-    if (this.isDirtyForRenderer(renderer)) {
-      this._sprite.setTexture(outputSprite.getTexture())
+    this._sprite.setTexture(outputSprite.getTexture())
 
-      const spriteBounds = outputSprite.getBounds()
-      const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+    const spriteBounds = outputSprite.getBounds()
+    const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
 
-      renderTexture.resizeTo(spriteDimensions)
+    renderTexture.resizeTo(spriteDimensions)
 
-      // Update uniforms
-      const thickness = this._options.thickness *
-        Math.min(spriteDimensions.x, spriteDimensions.y)
-      const thicknessVec2 = [thickness / spriteDimensions.x, thickness / spriteDimensions.y]
-      this._filter.setUniforms({
-        u_color: this._options.color.toGLColor(),
-        u_thickness: thicknessVec2
-      })
+    // Update uniforms
+    const thickness = this._options.thickness *
+      Math.min(spriteDimensions.x, spriteDimensions.y)
+    const thicknessVec2 = [thickness / spriteDimensions.x, thickness / spriteDimensions.y]
+    this._filter.setUniforms({
+      u_color: this._options.color.toGLColor(),
+      u_thickness: thicknessVec2
+    })
 
-      renderTexture.render(this._container)
-      this.setDirtyForRenderer(false, renderer)
-    }
-
+    renderTexture.render(this._container)
     outputSprite.setTexture(renderTexture)
+    this.setDirtyForRenderer(false, renderer)
 
     return Promise.resolve()
   }

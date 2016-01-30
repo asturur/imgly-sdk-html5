@@ -57,7 +57,6 @@ class WatermarkOperation extends Operation {
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
-    const renderer = sdk.getRenderer()
     if (!this._watermarkTexture) {
       this._watermarkTexture = Engine.Texture.fromImage(this._options.image)
       this._watermarkSprite.setTexture(this._watermarkTexture)
@@ -69,21 +68,19 @@ class WatermarkOperation extends Operation {
     const renderTexture = this._getRenderTexture(sdk)
     this._sprite.setTexture(outputSprite.getTexture())
 
-    if (this.isDirtyForRenderer(renderer)) {
-      const { width, height } = this._options.image
-      const dimensions = Utils.resizeVectorToFit(
-        new Vector2(width, height),
-        outputDimensions
-      )
-      this._watermarkSprite.setPosition(
-        outputDimensions.x / 2,
-        outputDimensions.y / 2
-      )
-      this._watermarkSprite.setWidth(dimensions.x)
-      this._watermarkSprite.setHeight(dimensions.y)
+    const { width, height } = this._options.image
+    const dimensions = Utils.resizeVectorToFit(
+      new Vector2(width, height),
+      outputDimensions
+    )
+    this._watermarkSprite.setPosition(
+      outputDimensions.x / 2,
+      outputDimensions.y / 2
+    )
+    this._watermarkSprite.setWidth(dimensions.x)
+    this._watermarkSprite.setHeight(dimensions.y)
 
-      renderTexture.render(this._container)
-    }
+    renderTexture.render(this._container)
 
     outputSprite.setTexture(renderTexture)
     return Promise.resolve()

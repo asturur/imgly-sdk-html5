@@ -61,44 +61,42 @@ class TiltShiftOperation extends Operation {
     const renderTexture = this._getRenderTexture(sdk)
 
     this._sprite.setTexture(outputSprite.getTexture())
-    if (this.isDirtyForRenderer(renderer)) {
-      const spriteBounds = outputSprite.getBounds()
-      const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
 
-      const start = this._options.start.clone()
-      const end = this._options.end.clone()
+    const spriteBounds = outputSprite.getBounds()
+    const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
 
-      if (this._options.numberFormat === 'relative') {
-        start.multiply(outputDimensions)
-        end.multiply(outputDimensions)
-      }
+    const start = this._options.start.clone()
+    const end = this._options.end.clone()
 
-      // Calculate delta
-      const delta = end.clone().subtract(start)
-      const d = delta.len()
-
-      const commonUniforms = {
-        u_blurRadius: this._options.blurRadius,
-        u_gradientRadius: this._options.gradientRadius,
-        u_start: [start.x, start.y],
-        u_end: [end.x, end.y],
-        u_texSize: [outputDimensions.x, outputDimensions.y]
-      }
-
-      this._horizontalFilter.setUniforms(commonUniforms)
-      this._verticalFilter.setUniforms(commonUniforms)
-
-      this._horizontalFilter.setUniform('u_delta', [delta.x / d, delta.y / d])
-      this._verticalFilter.setUniform('u_delta', [-delta.y / d, delta.x / d])
-
-      const bounds = this._sprite.getBounds()
-      renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
-
-      renderTexture.render(this._container)
-      this.setDirtyForRenderer(false, renderer)
+    if (this._options.numberFormat === 'relative') {
+      start.multiply(outputDimensions)
+      end.multiply(outputDimensions)
     }
 
+    // Calculate delta
+    const delta = end.clone().subtract(start)
+    const d = delta.len()
+
+    const commonUniforms = {
+      u_blurRadius: this._options.blurRadius,
+      u_gradientRadius: this._options.gradientRadius,
+      u_start: [start.x, start.y],
+      u_end: [end.x, end.y],
+      u_texSize: [outputDimensions.x, outputDimensions.y]
+    }
+
+    this._horizontalFilter.setUniforms(commonUniforms)
+    this._verticalFilter.setUniforms(commonUniforms)
+
+    this._horizontalFilter.setUniform('u_delta', [delta.x / d, delta.y / d])
+    this._verticalFilter.setUniform('u_delta', [-delta.y / d, delta.x / d])
+
+    const bounds = this._sprite.getBounds()
+    renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
+    renderTexture.render(this._container)
+
     outputSprite.setTexture(renderTexture)
+    this.setDirtyForRenderer(false, renderer)
 
     return Promise.resolve()
   }
