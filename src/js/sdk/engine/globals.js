@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Log from '../../shared/log'
 import Color from '../lib/color'
 import Matrix from '../lib/math/matrix'
 import Rectangle from '../lib/math/rectangle'
@@ -25,5 +26,6 @@ Globals.Matrix = Matrix
 Globals.Vector2 = Vector2
 Globals.Rectangle = Rectangle
 Globals.EventEmitter = EventEmitter
+Globals.Log = Log
 
 export default Globals

@@ -11,7 +11,6 @@
 import { Log, Constants } from '../globals'
 import Promise from '../vendor/promise'
 import EventEmitter from './event-emitter'
-import PerformanceTest from '../lib/performance-test'
 
 export default class OperationsStack extends EventEmitter {
   constructor (operations = []) {
@@ -56,32 +55,41 @@ export default class OperationsStack extends EventEmitter {
 
   /**
    * Renders all operations
-   * @param  {Renderer} renderer
+   * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
    */
-  render (renderer) {
+  render (sdk) {
     const operations = this._stack
       .filter((op) => !!op)
 
-    let perfTest
-    if (PerformanceTest.canLog()) {
-      perfTest = new PerformanceTest(this.constructor.name, 'Frame rendering')
+    // Find first operation from end of array that is not dirty
+    operations.reverse()
+    let firstUndirtyOperation = operations.filter((o) =>
+      !o.isDirtyForRenderer(sdk.getRenderer())
+    )[0]
+    let firstUndirtyIndex = operations.indexOf(firstUndirtyOperation)
+
+    operations.reverse()
+
+    // Skip operations that would be overwritten by succeeding operations
+    let startIndex = 0
+    if (firstUndirtyIndex !== -1) {
+      startIndex = operations.length - firstUndirtyIndex - 1
     }
 
-    Log.info(this.constructor.name, '------------------------------')
-    Log.info(this.constructor.name, `Rendering starts - ${operations.length} operation(s)`)
+    for (let index = 0; index < startIndex; index++) {
+      Log.info(this.constructor.name, `Skipping ${operations[index].constructor.name}`)
+    }
 
     let promise = Promise.resolve()
-    operations.forEach((operation) => {
+    for (let index = startIndex; index < operations.length; index++) {
+      const operation = operations[index]
       promise = promise.then(() => {
-        return operation.render(renderer)
+        return operation.render(sdk)
       })
-    })
+    }
 
     return promise
-      .then(() => {
-        perfTest && perfTest.stop()
-      })
   }
 
   /**

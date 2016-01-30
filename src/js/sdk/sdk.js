@@ -18,6 +18,7 @@ import Operations from './operations/'
 import Exif from './lib/exif'
 import ImageExporter from './lib/image-exporter'
 import Log from '../shared/log'
+import PerformanceTest from './lib/performance-test'
 
 import { RenderType, ImageFormat, Events } from './constants'
 
@@ -106,6 +107,16 @@ export default class PhotoEditorSDK extends EventEmitter {
   render () {
     if (!this._renderer) this._initRenderer()
 
+    let context = this._renderer.getContext()
+    if (context.startFrame) context.startFrame()
+
+    let perfTest
+    if (PerformanceTest.canLog()) {
+      perfTest = new PerformanceTest(this.constructor.name, 'Frame rendering')
+    }
+    Log.info(this.constructor.name, '------------------------------')
+    Log.info(this.constructor.name, 'Rendering starts')
+
     this._sprite.setAnchor(0, 0)
     this._sprite.setPosition(0, 0)
     this._sprite.setScale(1, 1)
@@ -133,6 +144,10 @@ export default class PhotoEditorSDK extends EventEmitter {
         }
 
         this._renderer.render(this._container)
+      })
+      .then(() => {
+        perfTest && perfTest.stop()
+        if (context.endFrame) context.endFrame()
       })
   }
 
