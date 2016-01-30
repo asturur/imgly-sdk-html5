@@ -116,7 +116,8 @@ export default class SliderComponent extends BaseComponent {
     const { bar } = this.refs
     const barWidth = bar.offsetWidth
     const progress = position.x / barWidth
-    const newValue = this.props.minValue + (this.props.maxValue - this.props.minValue) * progress
+    let newValue = this.props.minValue + (this.props.maxValue - this.props.minValue) * progress
+    newValue = Math.max(this.props.minValue, Math.min(this.props.maxValue, newValue))
     this._setValue(newValue)
   }
 
