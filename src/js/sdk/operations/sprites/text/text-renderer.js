@@ -170,10 +170,6 @@ export default class TextRenderer {
 
     // Calculate max width
     let maxWidth = this._text.getMaxWidth()
-    let numberFormat = this._operation.getNumberFormat()
-    if (numberFormat === 'relative') {
-      maxWidth *= outputDimensions.x
-    }
 
     // Apply text options
     this._applyTextOptions(textOptions)
@@ -213,8 +209,11 @@ export default class TextRenderer {
    * @return {Vector2}
    */
   getBoundingBox (sdk, considerZoom = false) {
-    const textOptions = this.calculateFontStyles(sdk, considerZoom)
+    const textOptions = this.calculateFontStyles(sdk)
     const { boundingBox } = this._calculateText(sdk, textOptions)
+    if (considerZoom) {
+      boundingBox.multiply(sdk.getZoom())
+    }
     return boundingBox
   }
 }

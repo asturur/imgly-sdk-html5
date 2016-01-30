@@ -86,6 +86,6 @@ Sprite.prototype.availableOptions = {
   pivot: { type: 'vector2', default: new Vector2(0, 0) },
   rotation: { type: 'number', default: 0 },
   text: { type: 'string', required: true },
-  maxWidth: { type: 'number', default: 1.0 },
+  maxWidth: { type: 'number', default: 100 },
   maxHeight: { type: 'number', default: 0 }
 }

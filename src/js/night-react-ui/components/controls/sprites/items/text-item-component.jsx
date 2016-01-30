@@ -137,6 +137,7 @@ export default class TextItemComponent extends ItemComponent {
     const textRotation = sprite.getRotation()
 
     const { editor } = this.context
+    const zoom = editor.getSDK().getZoom()
     const outputDimensions = editor.getOutputDimensions()
 
     const cos = Math.cos(textRotation)
@@ -148,7 +149,7 @@ export default class TextItemComponent extends ItemComponent {
     const distanceToPosition = newKnobPosition.clone()
       .subtract(position)
 
-    const newMaxWidth = (distanceToPosition.x * cos + distanceToPosition.y * sin) / outputDimensions.x * 2
+    const newMaxWidth = (distanceToPosition.x * cos + distanceToPosition.y * sin) / zoom * 2
     sprite.setMaxWidth(newMaxWidth)
     this.forceUpdate()
   }
@@ -256,7 +257,8 @@ export default class TextItemComponent extends ItemComponent {
     const transform = `rotateZ(${degrees.toFixed(2)}deg)`
     const transformOrigin = '50% 0'
 
-    const maxWidth = sprite.getMaxWidth() * outputDimensions.x
+    const zoom = editor.getSDK().getZoom()
+    const maxWidth = sprite.getMaxWidth() * zoom
     return {
       width: maxWidth,
       left: textPosition.x,

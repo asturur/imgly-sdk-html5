@@ -79,9 +79,11 @@ export default {
     if (!additionalState.selectedSprite) {
       const sdk = editor.getSDK()
       const renderer = sdk.getRenderer()
+
+      const maxWidth = sdk.getInputDimensions().x / 2
       const text = operation.createText({
         text: 'Double-click to edit',
-        maxWidth: 0.5,
+        maxWidth,
         maxHeight: renderer.getMaxTextureSize(),
         fontSize: 0.15,
         fontFamily: 'Impact',
