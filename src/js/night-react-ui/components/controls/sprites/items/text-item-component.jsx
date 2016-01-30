@@ -371,20 +371,13 @@ export default class TextItemComponent extends ItemComponent {
     const { sprite } = this.props
 
     let content = null
-    if (this.state.editMode) {
-      content = (<textarea
-        bem='e:content'
-        ref='textarea'
-        style={this._getTextStyle()}
-        defaultValue={sprite.getText()}
-        onChange={this._onTextChange} />)
-    } else {
-      content = (<div
-        bem='e:content'
-        className='is-draggable'
-        style={this._getTextStyle()}
-        onDoubleClick={this._onItemDoubleClick}>{sprite.getText()}</div>)
-    }
+    content = (<textarea
+      bem='e:content'
+      ref='textarea'
+      style={this._getTextStyle()}
+      defaultValue={sprite.getText()}
+      disabled={!this.state.editMode}
+      onChange={this._onTextChange} />)
 
     let textBEM = '$e:text'
     if (this.props.selected) {
