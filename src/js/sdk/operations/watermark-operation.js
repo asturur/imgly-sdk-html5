@@ -63,19 +63,20 @@ class WatermarkOperation extends Operation {
     }
 
     const outputSprite = sdk.getSprite()
-    const outputBounds = outputSprite.getBounds()
-    const outputDimensions = new Vector2(outputBounds.width, outputBounds.height)
+    const spriteBounds = outputSprite.getBounds()
+    const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
     const renderTexture = this._getRenderTexture(sdk)
+    renderTexture.resizeTo(spriteDimensions)
     this._sprite.setTexture(outputSprite.getTexture())
 
     const { width, height } = this._options.image
     const dimensions = Utils.resizeVectorToFit(
       new Vector2(width, height),
-      outputDimensions
+      spriteDimensions
     )
     this._watermarkSprite.setPosition(
-      outputDimensions.x / 2,
-      outputDimensions.y / 2
+      spriteDimensions.x / 2,
+      spriteDimensions.y / 2
     )
     this._watermarkSprite.setWidth(dimensions.x)
     this._watermarkSprite.setHeight(dimensions.y)
