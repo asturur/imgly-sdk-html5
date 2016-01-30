@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine, Vector2, Utils } from '../globals'
+import { Constants, Engine, Vector2, Utils } from '../globals'
 import Operation from './operation'
 import StackBlur from '../vendor/stack-blur'
 import Promise from '../vendor/promise'
@@ -50,6 +50,103 @@ class RadialBlurOperation extends Operation {
 
     this._horizontalFilter.setUniform('u_delta', [1, 1])
     this._verticalFilter.setUniform('u_delta', [-1, 1])
+
+    this._onOperationUpdate = this._onOperationUpdate.bind(this)
+    this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
+  }
+
+  /**
+   * Gets called when an operation is about to be updated. If the crop
+   * or rotation operation is updated, this will be recognized and the
+   * blur will be updated accordingly
+   * @param  {Operation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _onOperationUpdate (operation, options) {
+    const { identifier } = operation.constructor
+
+    if (identifier === 'orientation' &&
+        'rotation' in options) {
+      this._applyRotation(operation, options)
+    }
+
+    if (identifier === 'orientation' &&
+        ('flipHorizontally' in options || 'flipVertically' in options)) {
+      this._applyFlip(operation, options)
+    }
+  }
+
+  /**
+   * Applies the given rotation change
+   * @param  {RotationOperation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _applyRotation (operation, options) {
+    const oldRotation = operation.getRotation()
+    const newRotation = options.rotation
+    const degreesDifference = newRotation - oldRotation
+
+    const position = this._options.position
+
+    if (degreesDifference === 90 || (oldRotation === 270 && newRotation === 0)) {
+      position.flip()
+      position.x = 1 - position.x
+    } else if (degreesDifference === -90 || (oldRotation === -270 && newRotation === 0)) {
+      position.flip()
+      position.y = 1 - position.y
+    }
+
+    this.set({ position })
+  }
+
+  /**
+   * Applies the given flip change
+   * @param  {RotationOperation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _applyFlip (operation, options) {
+    if ('flipVertically' in options &&
+        operation.getFlipVertically() !== options.flipVertically) {
+      this._applyFlipDirection(operation, 'vertical')
+    }
+
+    if ('flipHorizontally' in options &&
+        operation.getFlipHorizontally() !== options.flipHorizontally) {
+      this._applyFlipDirection(operation, 'horizontal')
+    }
+  }
+
+  /**
+   * Applies a flip with the given direction
+   * @param  {Operation} operation
+   * @param  {String} direction
+   * @private
+   */
+  _applyFlipDirection (operation, direction) {
+    const rotation = operation.getRotation()
+    if (rotation === 90 || rotation === 270) {
+      if (direction === 'vertical') {
+        direction = 'horizontal'
+      } else {
+        direction = 'vertical'
+      }
+    }
+
+    const position = this._options.position
+
+    switch (direction) {
+      case 'horizontal':
+        position.x = 1 - position.x
+        break
+      case 'vertical':
+        position.y = 1 - position.y
+        break
+    }
+
+    this.set({ position })
   }
 
   /**
