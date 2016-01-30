@@ -10,8 +10,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Log from '../../shared/log'
 import Engine from '../engine/'
 import Configurable from '../lib/configurable'
+import PerformanceTest from '../lib/performance-test'
 
 /**
  * Base class for Operations. Extendable via {@link PhotoEditorSDK.Operation#extend}.
@@ -69,16 +71,27 @@ class Operation extends Configurable {
     }
 
     const renderer = sdk.getRenderer()
+    let promise
+    let perf
+    if (PerformanceTest.canLog())
+      perf = new PerformanceTest(this.constructor.name, 'Rendering')
+
 
     // Handle caching
     if (this.isDirtyForRenderer(renderer)) {
-      return this._render(sdk)
+      promise = this._render(sdk)
         .then(() => {
           this.setDirtyForRenderer(false, renderer)
         })
     } else {
-      return this.renderCached(sdk)
+      Log.info(this.constructor.name, 'Rendering from cache')
+      promise = this.renderCached(sdk)
     }
+
+    return promise
+      .then(() => {
+        if (perf) perf.stop()
+      })
   }
 
   /**

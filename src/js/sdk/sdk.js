@@ -17,6 +17,7 @@ import VersionChecker from './lib/version-checker'
 import Operations from './operations/'
 import Exif from './lib/exif'
 import ImageExporter from './lib/image-exporter'
+import Log from '../shared/log'
 
 import { RenderType, ImageFormat, Events } from './constants'
 
@@ -26,6 +27,9 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     this._onOperationUpdate = this._onOperationUpdate.bind(this)
 
+    const { version } = require('../../../package.json')
+    this.version = version
+
     this._preferredRenderer = preferredRenderer
     this._options = Utils.defaults(options, {
       additionalOperations: {},
@@ -34,8 +38,11 @@ export default class PhotoEditorSDK extends EventEmitter {
       image: null,
       dimensions: null,
       canvas: null,
-      zoom: 1
+      zoom: 1,
+      logLevel: 'warn'
     })
+
+    Log.setLevel(this._options.logLevel)
 
     this._offset = new Vector2()
     this._zoom = this._options.zoom
@@ -56,6 +63,9 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._checkForUpdates()
     this._registerOperations()
     this._initRenderer()
+
+    const renderer = this._renderer.constructor.name
+    Log.log('Yo!', `Version: ${this.version} (${renderer}) - https://www.photoeditorsdk.com`)
   }
 
   /**
@@ -267,8 +277,7 @@ export default class PhotoEditorSDK extends EventEmitter {
    */
   _checkForUpdates () {
     if (typeof window !== 'undefined' && this._options.versionCheck) {
-      const { version } = require('../../../package.json')
-      this._versionChecker = new VersionChecker(version)
+      this._versionChecker = new VersionChecker(this.version)
     }
   }
 

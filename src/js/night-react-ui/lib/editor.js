@@ -25,11 +25,6 @@ export default class Editor extends EventEmitter {
     this._options = options
     this._mediator = mediator
     this._isDefaultZoom = false
-    this._debug = !!this._options.debug
-
-    if (this._debug) {
-      this._fpsCounter = new FPSCounter()
-    }
 
     this._initSDK()
     this._initOperations()
@@ -73,9 +68,10 @@ export default class Editor extends EventEmitter {
    * @private
    */
   _initSDK () {
-    const { image, preferredRenderer } = this._options
+    const { image, preferredRenderer, logLevel } = this._options
     const rendererOptions = {
-      image
+      image,
+      logLevel
     }
     this._sdk = new SDK(preferredRenderer, rendererOptions)
   }
@@ -339,7 +335,7 @@ export default class Editor extends EventEmitter {
    * Exports an image
    * @param {Boolean} download = false
    * @return {Promise}
-   *  @todo Does this belong here?
+   * @todo Does this belong here?
    */
   export (download = false) {
     if (this._watermarkOperation) {
@@ -460,12 +456,8 @@ export default class Editor extends EventEmitter {
    */
   _tick () {
     if (this._renderRequested) {
-      if (this._debug) this._fpsCounter.startFrame()
-
       this._render()
         .then(() => {
-          if (this._debug) this._fpsCounter.endFrame()
-
           this._renderCallbacks.forEach((r) => r())
           this._renderCallbacks = []
         })

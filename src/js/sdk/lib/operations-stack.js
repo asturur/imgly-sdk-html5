@@ -8,9 +8,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Constants } from '../globals'
+import { Log, Constants } from '../globals'
 import Promise from '../vendor/promise'
 import EventEmitter from './event-emitter'
+import PerformanceTest from '../lib/performance-test'
 
 export default class OperationsStack extends EventEmitter {
   constructor (operations = []) {
@@ -62,6 +63,14 @@ export default class OperationsStack extends EventEmitter {
     const operations = this._stack
       .filter((op) => !!op)
 
+    let perfTest
+    if (PerformanceTest.canLog()) {
+      perfTest = new PerformanceTest(this.constructor.name, 'Frame rendering')
+    }
+
+    Log.info(this.constructor.name, '------------------------------')
+    Log.info(this.constructor.name, `Rendering starts - ${operations.length} operation(s)`)
+
     let promise = Promise.resolve()
     operations.forEach((operation) => {
       promise = promise.then(() => {
@@ -70,6 +79,9 @@ export default class OperationsStack extends EventEmitter {
     })
 
     return promise
+      .then(() => {
+        perfTest && perfTest.stop()
+      })
   }
 
   /**
