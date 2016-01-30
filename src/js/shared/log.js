@@ -39,10 +39,10 @@ LEVELS.forEach((level) => {
     console.log(
       `%c  %c PhotoEditorSDK %c  %c ${tag} %c  ${output}  %c  `,
       'background: #43ADEB; padding: 5px 0',
-      'background: black; color: white; padding: 5px 0',
+      'background: #2B2B2B; color: white; padding: 5px 0',
       'background: #43ADEB; padding: 5px 0',
       `background: ${background}; color: ${color}; padding: 5px 0; font-weight: bold`,
-      'background: black; color: white; padding: 5px 0',
+      'background: #2B2B2B; color: white; padding: 5px 0',
       'background: #43ADEB; padding: 5px 0')
   }
 })
