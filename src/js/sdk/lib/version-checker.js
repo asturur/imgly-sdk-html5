@@ -8,6 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Log } from '../globals'
+
 const VERSION_CHECK_FN = 'imglySDKVersionCallback'
 const VERSION_CHECK_URL = `https://www.photoeditorsdk.com/version.json?sdk=html5&jsoncallback=${VERSION_CHECK_FN}`
 
@@ -25,8 +27,7 @@ export default class VersionChecker {
     let self = this
     window[VERSION_CHECK_FN] = (response) => {
       if (response.outdated) {
-        console.warn(`imgly-sdk-html5: Your version ${self._version} is outdated.`)
-        console.warn(`imgly-sdk-html5: Current version is ${response.version}.`)
+        Log.warn(this.constructor.name, `Your Version ${self._version} is outdated. Current version is ${response.version}.`)
       }
     }
 
