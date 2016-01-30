@@ -112,10 +112,9 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     let perfTest
     if (PerformanceTest.canLog()) {
-      perfTest = new PerformanceTest(this.constructor.name, 'Frame rendering')
+      perfTest = new PerformanceTest('⚡⚡⚡', 'Frame rendering')
     }
-    Log.info(this.constructor.name, '------------------------------')
-    Log.info(this.constructor.name, 'Rendering starts')
+    Log.info('⚡⚡⚡', 'Rendering starts')
 
     this._sprite.setAnchor(0, 0)
     this._sprite.setPosition(0, 0)
