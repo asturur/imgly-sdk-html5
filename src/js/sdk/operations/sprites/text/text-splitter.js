@@ -25,7 +25,7 @@ export default class TextSplitter {
     }
 
     let lines = []
-    let newLine = []
+    let newLineWords = []
 
     // Iterate over lines
     const linesCount = this._lines.length
@@ -33,42 +33,68 @@ export default class TextSplitter {
       const line = this._lines[l]
 
       // Iterate over words
-      const words = line.split(' ')
+      const words = this._buildWords(line)
       const wordsCount = words.length
       for (let w = 0; w < wordsCount; w++) {
         const word = words[w]
 
         // Check if line is too wide for the maxwidth
-        const width = this._getWidth(newLine.concat(word).join(' '))
+        let currentLine = newLineWords.concat(word).join('')
+          .replace(/\s+$/i, '')
+        const width = this._getWidth(currentLine)
         if (width > this._maxWidth) {
           // If there have been words before this one, start
           // a new line
-          if (newLine.length > 0) {
+          if (newLineWords.length > 0) {
             // Line too long -> line ended
-            lines.push(newLine.join(' '))
+            lines.push(newLineWords.join(''))
 
             // Start a new line with the word
-            newLine = [word]
+            newLineWords = [word]
           }
 
-          // If the next word is too long, split it up
-          if (this._getWidth(word) > this._maxWidth) {
+          // If the next word is too long (without trailing spaces), split it up
+          const _word = word.replace(/\s+$/i, '')
+          if (this._getWidth(_word) > this._maxWidth) {
             const splitWord = this._splitWord(word)
             lines = lines.concat(splitWord.lines)
             if (splitWord.rest) {
-              newLine = [splitWord.rest]
+              newLineWords = [splitWord.rest]
             }
           }
         } else {
-          newLine.push(word)
+          newLineWords.push(word)
         }
       }
 
-      lines.push(newLine.join(' '))
-      newLine = []
+      lines.push(newLineWords.join(''))
+      newLineWords = []
     }
 
     return lines
+  }
+
+  /**
+   * Builds an array of words from the given line
+   * @param  {String} line
+   * @return {Array.<String>}
+   * @private
+   */
+  _buildWords (line) {
+    let words = []
+    let word = ''
+
+    const len = line.length
+    for (let i = 0; i < len; i++) {
+      const char = line[i]
+      word += char
+      if (char === ' ' || char === '-' || i === len - 1) {
+        words.push(word)
+        word = ''
+      }
+    }
+
+    return words
   }
 
   /**
