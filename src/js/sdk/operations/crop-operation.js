@@ -87,7 +87,50 @@ class CropOperation extends Operation {
    * @private
    */
   _applyFlip (operation, options) {
-    // @TODO Implement, make sure all edge cases (like flipping a rotated image) work properly
+    if ('flipVertically' in options &&
+        operation.getFlipVertically() !== options.flipVertically) {
+      this._applyFlipDirection(operation, 'vertical')
+    }
+
+    if ('flipHorizontally' in options &&
+        operation.getFlipHorizontally() !== options.flipHorizontally) {
+      this._applyFlipDirection(operation, 'horizontal')
+    }
+  }
+
+  /**
+   * Applies a flip with the given direction
+   * @param  {Operation} operation
+   * @param  {String} direction
+   * @private
+   */
+  _applyFlipDirection (operation, direction) {
+    const rotation = operation.getRotation()
+    if (rotation === 90 || rotation === 270) {
+      if (direction === 'vertical') {
+        direction = 'horizontal'
+      } else {
+        direction = 'vertical'
+      }
+    }
+
+    const start = this._options.start
+    const end = this._options.end
+
+    switch (direction) {
+      case 'horizontal':
+        const tempStartX = start.x
+        start.x = 1 - end.x
+        end.x = 1 - tempStartX
+        break
+      case 'vertical':
+        const tempStartY = start.y
+        start.y = 1 - end.y
+        end.y = 1 - tempStartY
+        break
+    }
+
+    this.set({ start, end })
   }
 
   // -------------------------------------------------------------------------- RENDERING
