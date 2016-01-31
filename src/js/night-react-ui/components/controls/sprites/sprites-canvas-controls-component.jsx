@@ -60,7 +60,7 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
       if (clickResponse) {
         // Don't re-select an already selected item
         if (clickResponse.selectedSprite === this.getSharedState('selectedSprite')) {
-          continue
+          return true
         }
 
         // Responds to click, switch to the controls

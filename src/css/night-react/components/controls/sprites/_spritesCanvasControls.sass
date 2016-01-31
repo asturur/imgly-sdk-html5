@@ -38,7 +38,15 @@
           cursor: move
 
       +element(text)
+        +element(disabledOverlay)
+          position: absolute
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+
         +element(content)
           overflow: hidden
+          border: none
           width: 100%
-          white-space: pre-wrap
+          cursor: pointer

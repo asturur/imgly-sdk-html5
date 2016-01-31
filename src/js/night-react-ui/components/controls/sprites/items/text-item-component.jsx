@@ -370,18 +370,20 @@ export default class TextItemComponent extends ItemComponent {
   _renderItem () {
     const { sprite } = this.props
 
-    let content = null
-    content = (<textarea
+    let content = []
+    content = [(<textarea
       bem='e:content'
       ref='textarea'
       style={this._getTextStyle()}
       defaultValue={sprite.getText()}
       disabled={!this.state.editMode}
-      onChange={this._onTextChange} />)
+      onChange={this._onTextChange} />)]
 
     let textBEM = '$e:text'
     if (this.props.selected) {
       textBEM += ' m:selected'
+    } else {
+      content.push(<div bem='e:disabledOverlay' />)
     }
 
     return (<DraggableComponent
@@ -392,6 +394,7 @@ export default class TextItemComponent extends ItemComponent {
         <div
           bem='$e:text'
           style={this._getItemContainerStyle()}
+          onDoubleClick={this._onItemDoubleClick}
           className={this.props.selected ? 'is-selected' : null}>
           {content}
         </div>
