@@ -9,6 +9,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+const MIN_ZOOM_DIMENSIONS = 300
+
 import {
   Utils, SDKUtils, ReactBEM, Vector2, BaseComponent
 } from '../../../globals'
@@ -128,6 +130,24 @@ export default class CanvasComponent extends BaseComponent {
 
     // Since default and native dimensions have the same ratio, we can take either x or y here
     return defaultDimensions
+      .divide(finalDimensions)
+      .x
+  }
+
+  /**
+   * Returns the minimum zoom level
+   * @return {Number}
+   */
+  getMinimumZoom () {
+    const { editor } = this.context
+
+    const finalDimensions = editor.getFinalDimensions()
+    const minimumDimensions = SDKUtils.resizeVectorToFit(
+      finalDimensions,
+      new Vector2(MIN_ZOOM_DIMENSIONS, MIN_ZOOM_DIMENSIONS)
+    )
+
+    return minimumDimensions
       .divide(finalDimensions)
       .x
   }

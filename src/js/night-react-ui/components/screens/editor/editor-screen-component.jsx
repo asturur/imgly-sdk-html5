@@ -247,6 +247,10 @@ export default class EditorScreenComponent extends ScreenComponent {
       zoom = 'auto'
     }
 
+    const maxZoom = defaultZoom * 2
+    const minZoom = canvasComponent.getMinimumZoom()
+    newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom))
+
     this._editor.setZoom(newZoom, zoom === 'auto')
 
     this._previousZoomState = SDKUtils.extend({
@@ -264,14 +268,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _onZoomIn () {
-    const canvasComponent = this.refs.canvas
-    const defaultZoom = canvasComponent.getDefaultZoom()
-
-    let newZoom = this.state.zoom
-    newZoom += 0.1
-    newZoom = Math.min(defaultZoom * 2, newZoom)
-
-    this._zoom(newZoom)
+    this._zoom(this.state.zoom + 0.1)
   }
 
   /**
@@ -279,14 +276,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _onZoomOut () {
-    const canvasComponent = this.refs.canvas
-    const defaultZoom = canvasComponent.getDefaultZoom()
-
-    let newZoom = this.state.zoom
-    newZoom -= 0.1
-    newZoom = Math.max(Math.min(defaultZoom, 1), newZoom)
-
-    this._zoom(newZoom)
+    this._zoom(this.state.zoom - 0.1)
   }
 
   // -------------------------------------------------------------------------- MISC
