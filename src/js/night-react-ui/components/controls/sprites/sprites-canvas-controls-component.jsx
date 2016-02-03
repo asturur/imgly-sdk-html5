@@ -81,7 +81,6 @@ export default class SpritesCanvasControlsComponent extends BaseComponent {
    */
   _onCanvasClick (e) {
     if (this._canvasClickDisabled) return
-    if (!this.getSharedState('selectedSprite')) return
 
     const hitTest = this._performHitTest(Utils.getEventPosition(e))
     if (!hitTest) {
