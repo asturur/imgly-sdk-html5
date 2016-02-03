@@ -66,10 +66,49 @@ class SpriteOperation extends Operation {
       this._applyCrop(operation, options)
     }
 
-    if (identifier === 'orientation' &&
-        'rotation' in options) {
-      this._applyRotation(operation, options)
+    if (identifier === 'orientation') {
+      if ('rotation' in options) {
+        this._applyRotation(operation, options)
+      }
+
+      if ('flipVertically' in options &&
+          operation.getFlipVertically() !== options.flipVertically) {
+        this._applyFlip(operation, 'vertical')
+      }
+
+      if ('flipHorizontally' in options &&
+          operation.getFlipHorizontally() !== options.flipHorizontally) {
+        this._applyFlip(operation, 'horizontal')
+      }
     }
+  }
+
+  /**
+   * Applies a flip with the given direction
+   * @param  {Operation} operation
+   * @param  {String} direction
+   * @private
+   */
+  _applyFlip (operation, direction) {
+    this._options.sprites.forEach((sprite) => {
+      const spritePosition = sprite.getPosition()
+      switch (direction) {
+        case 'horizontal':
+          spritePosition.x = 1 - spritePosition.x
+          sprite.set({
+            flipHorizontally: !sprite.getFlipHorizontally(),
+            position: spritePosition
+          })
+          break
+        case 'vertical':
+          spritePosition.y = 1 - spritePosition.y
+          sprite.set({
+            flipVertically: !sprite.getFlipVertically(),
+            position: spritePosition
+          })
+          break
+      }
+    })
   }
 
   /**
