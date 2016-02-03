@@ -77,7 +77,7 @@ class CropOperation extends Operation {
       end.set(end.y, 1.0 - tempStart.x)
     }
 
-    this.set({ start, end })
+    this.set({ start, end }, false)
   }
 
   /**
@@ -130,7 +130,7 @@ class CropOperation extends Operation {
         break
     }
 
-    this.set({ start, end })
+    this.set({ start, end }, false)
   }
 
   // -------------------------------------------------------------------------- RENDERING

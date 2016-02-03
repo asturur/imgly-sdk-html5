@@ -121,8 +121,10 @@ export default class Configurable extends EventEmitter {
    * Sets the given options
    * @param {Object} options
    */
-  set (options) {
-    this.emit('update', this, options)
+  set (options, emitUpdate = true) {
+    if (emitUpdate) {
+      this.emit('update', this, options)
+    }
 
     for (let optionName in options) {
       this.setOption(optionName, options[optionName], false)
