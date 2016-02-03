@@ -190,7 +190,7 @@ export default class OperationsStack extends EventEmitter {
     if (this._stack[index]) {
       this._stack[index].off('update', this._onOperationUpdate)
     }
-    this._stack.splice(index, 1)
+    this._stack[index] = undefined
   }
 
   /**
