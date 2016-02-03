@@ -49,12 +49,7 @@ export default class FrameControlsComponent extends ControlsComponent {
    * @private
    */
   _onThicknessUpdate (thickness) {
-    const { editor } = this.context
-    const finalDimensions = editor.getFinalDimensions()
-
-    const shorterSide = Math.min(finalDimensions.x, finalDimensions.y)
-    const relativeThickness = thickness / shorterSide
-    this._operation.setThickness(relativeThickness)
+    this._operation.setThickness(thickness)
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
   }
 
@@ -120,10 +115,9 @@ export default class FrameControlsComponent extends ControlsComponent {
     const { editor } = this.context
     const finalDimensions = editor.getFinalDimensions()
 
-    const shorterSide = Math.min(finalDimensions.x, finalDimensions.y)
     const minThickness = 0
-    const maxThickness = Math.round(shorterSide / 2)
-    const currentWidth = this._operation.getThickness() * shorterSide
+    const maxThickness = Math.round(Math.min(finalDimensions.x, finalDimensions.y) / 2)
+    const currentWidth = this._operation.getThickness()
 
     return [(<div bem='e:cell m:slider'>
       <SliderComponent

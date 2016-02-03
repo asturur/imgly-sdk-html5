@@ -17,8 +17,13 @@ export default {
   icon: 'controls/overview/frame@2x.png',
   label: 'controls.overview.frame',
   getInitialSharedState: (editor) => {
+    const inputDimensions = editor.getInputDimensions()
+    const defaultThickness = Math.min(inputDimensions.x, inputDimensions.y) * 0.05
+
     const operationExistedBefore = editor.operationExists('frame')
-    const operation = editor.getOrCreateOperation('frame')
+    const operation = editor.getOrCreateOperation('frame', {
+      thickness: defaultThickness
+    })
     const initialOptions = {
       color: operation.getColor().clone(),
       thickness: operation.getThickness()

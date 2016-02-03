@@ -21,7 +21,11 @@ class FrameFilter extends Engine.Filter {
       },
       u_thickness: {
         type: '2f',
-        value: 0
+        value: [0, 0]
+      },
+      u_textureSize: {
+        type: '2f',
+        value: [0, 0]
       }
     })
     super(null, fragmentSource, uniforms)
@@ -62,12 +66,10 @@ export default class FrameOperation extends Operation {
     renderTexture.resizeTo(spriteDimensions)
 
     // Update uniforms
-    const thickness = this._options.thickness *
-      Math.min(spriteDimensions.x, spriteDimensions.y)
-    const thicknessVec2 = [thickness / spriteDimensions.x, thickness / spriteDimensions.y]
     this._filter.setUniforms({
       u_color: this._options.color.toGLColor(),
-      u_thickness: thicknessVec2
+      u_thickness: [this._options.thickness, this._options.thickness],
+      u_textureSize: [spriteDimensions.x, spriteDimensions.y]
     })
 
     renderTexture.render(this._container)
@@ -117,5 +119,5 @@ FrameOperation.identifier = 'frame'
  */
 FrameOperation.prototype.availableOptions = {
   color: { type: 'color', default: new Color(0, 0, 0, 1) },
-  thickness: { type: 'number', default: 0.05 }
+  thickness: { type: 'number', default: 5 }
 }
