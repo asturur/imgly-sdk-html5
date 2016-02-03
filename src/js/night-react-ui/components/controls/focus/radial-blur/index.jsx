@@ -30,6 +30,6 @@ export default {
     }
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('radial-blur')
+    return editor.isFeatureEnabled('radial-blur')
   }
 }

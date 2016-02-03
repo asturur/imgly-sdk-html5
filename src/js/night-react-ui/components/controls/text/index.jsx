@@ -106,6 +106,6 @@ export default {
     return SDKUtils.extend({}, state, additionalState)
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('sprite')
+    return editor.isFeatureEnabled('text')
   }
 }

@@ -12,7 +12,7 @@ import FiltersControlsComponent from './filters-controls-component'
 
 export default {
   controls: FiltersControlsComponent,
-  identifier: 'filters',
+  identifier: 'filter',
   icon: 'controls/overview/filters@2x.png',
   label: 'controls.overview.filters',
   getInitialSharedState: (editor) => {
@@ -29,6 +29,6 @@ export default {
     }
   },
   isSelectable: function (editor) {
-    return editor.isOperationEnabled('filter')
+    return editor.isFeatureEnabled('filter')
   }
 }

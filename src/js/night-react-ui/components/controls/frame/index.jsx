@@ -28,6 +28,6 @@ export default {
     }
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('frame')
+    return editor.isFeatureEnabled('frame')
   }
 }

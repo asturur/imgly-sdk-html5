@@ -39,7 +39,7 @@ export default class OverviewControlsComponent extends ControlsComponent {
    */
   _renderListItems () {
     const { editor } = this.context
-    return editor.getEnabledControls()
+    return editor.getControls()
       .map((control) => {
         return (<li
           bem='e:item'

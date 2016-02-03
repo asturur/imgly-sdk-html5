@@ -16,7 +16,7 @@ import SpriteCanvasControlsComponent from '../sprites/sprites-canvas-controls-co
 export default {
   canvasControls: SpriteCanvasControlsComponent,
   controls: StickersControlsComponent,
-  identifier: 'stickers',
+  identifier: 'sticker',
   icon: 'controls/overview/stickers@2x.png',
   label: 'controls.overview.stickers',
 
@@ -84,6 +84,6 @@ export default {
   },
 
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('sprite')
+    return editor.isFeatureEnabled('sticker')
   }
 }

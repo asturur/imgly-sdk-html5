@@ -31,6 +31,6 @@ export default {
     }
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('crop')
+    return editor.isFeatureEnabled('crop')
   }
 }

@@ -25,6 +25,8 @@ export default {
     }
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('adjustments')
+    return editor.isFeatureEnabled('brightness') ||
+      editor.isFeatureEnabled('saturation') ||
+      editor.isFeatureEnabled('contrast')
   }
 }

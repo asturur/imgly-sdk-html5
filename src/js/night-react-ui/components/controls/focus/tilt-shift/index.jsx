@@ -35,6 +35,6 @@ export default {
     }
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('tilt-shift')
+    return editor.isFeatureEnabled('tilt-shift')
   }
 }

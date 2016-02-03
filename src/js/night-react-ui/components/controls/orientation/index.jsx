@@ -28,6 +28,7 @@ export default {
     }
   },
   isSelectable: (editor) => {
-    return editor.isOperationEnabled('orientation')
+    return editor.isFeatureEnabled('rotation') ||
+      editor.isFeatureEnabled('flip')
   }
 }

@@ -33,7 +33,7 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     this._preferredRenderer = preferredRenderer
     this._options = Utils.defaults(options, {
-      additionalOperations: {},
+      extensions: {},
       renderMode: 'dynamic',
       versionCheck: true,
       image: null,
@@ -41,6 +41,12 @@ export default class PhotoEditorSDK extends EventEmitter {
       canvas: null,
       zoom: 1,
       logLevel: 'warn'
+    })
+
+    this._options.extensions = Utils.defaults(this._options.extensions, {
+      operations: [],
+      controls: [],
+      languages: []
     })
 
     Log.setLevel(this._options.logLevel)
@@ -308,7 +314,7 @@ export default class PhotoEditorSDK extends EventEmitter {
     }
 
     this._operations = Utils.extend(this._operations,
-      this._options.additionalOperations)
+      this._options.extensions.operations)
   }
 
   /**

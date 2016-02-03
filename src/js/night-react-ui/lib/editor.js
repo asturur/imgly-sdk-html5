@@ -12,7 +12,6 @@ import {
   EventEmitter, SDK, SDKUtils, Constants, Vector2,
   requestAnimationFrame, cancelAnimationFrame
 } from '../globals'
-import FPSCounter from './fps-counter'
 import Exporter from './exporter'
 
 /**
@@ -82,21 +81,6 @@ export default class Editor extends EventEmitter {
    */
   _initOperations () {
     this._availableOperations = this._sdk.getOperations()
-    this._enabledOperations = []
-
-    let operationIdentifiers = this._options.operations
-    if (!(operationIdentifiers instanceof Array)) {
-      operationIdentifiers = operationIdentifiers
-        .replace(/\s+?/ig, '')
-        .split(',')
-    }
-
-    for (let identifier in this._availableOperations) {
-      if (this._options.operations === 'all' ||
-          operationIdentifiers.indexOf(identifier) !== -1) {
-        this._enabledOperations.push(identifier)
-      }
-    }
   }
 
   /**
@@ -104,8 +88,6 @@ export default class Editor extends EventEmitter {
    * @private
    */
   _initControls () {
-    // @TODO Use `options.extensions.controls` instead of `options.additionalControls`.
-    //       Same goes for operations and languages.
     this._availableControls = SDKUtils.extend({
       filters: require('../components/controls/filters/'),
       orientation: require('../components/controls/orientation/'),
@@ -115,7 +97,7 @@ export default class Editor extends EventEmitter {
       frame: require('../components/controls/frame/'),
       stickers: require('../components/controls/stickers/'),
       text: require('../components/controls/text/')
-    }, this._options.additionalControls)
+    }, this._options.extensions.controls)
 
     this._enabledControls = []
     for (let identifier in this._availableControls) {
@@ -186,10 +168,10 @@ export default class Editor extends EventEmitter {
   // -------------------------------------------------------------------------- PUBLIC CONTROLS API
 
   /**
-   * Returns the enabled controls
+   * Returns the controls that should be displayed
    * @return {Array.<Object>}
    */
-  getEnabledControls () {
+  getControls () {
     return this._enabledControls
   }
 
@@ -201,16 +183,16 @@ export default class Editor extends EventEmitter {
     return this._availableControls
   }
 
-  // -------------------------------------------------------------------------- PUBLIC OPERATIONS API
-
   /**
-   * Checks whether the operation with the given identifier is enabled
-   * @param  {String}  name
+   * Checks if the control with the feature identifier is enabled
+   * @param  {String}  identifier
    * @return {Boolean}
    */
-  isOperationEnabled (name) {
-    return this._enabledOperations.indexOf(name) !== -1
+  isFeatureEnabled (identifier) {
+    return this._options.features.indexOf(identifier) !== -1
   }
+
+  // -------------------------------------------------------------------------- PUBLIC OPERATIONS API
 
   /**
    * If the operation with the given identifier already exists, it returns
@@ -283,8 +265,6 @@ export default class Editor extends EventEmitter {
   getOperation (identifier) {
     return this._operationsMap[identifier]
   }
-
-  getEnabledOperations () { return this._enabledOperations }
 
   /**
    * Checks whether an operation with the given identifier exists
