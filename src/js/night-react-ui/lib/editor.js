@@ -282,14 +282,7 @@ export default class Editor extends EventEmitter {
    * @return {Vector2}
    */
   getFinalDimensions () {
-    let inputDimensions = this._sdk.getInputDimensions()
-    const operationsStack = this._sdk.getOperationsStack()
-
-    operationsStack.forEach((operation) => {
-      inputDimensions = operation.getNewDimensions(inputDimensions)
-    })
-
-    return inputDimensions
+    return this._sdk.getFinalDimensions()
   }
 
   /**

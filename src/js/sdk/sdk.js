@@ -87,7 +87,7 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     this._renderMode = 'export'
     const tempDimensions = this._renderer.getDimensions()
-    this._renderer.resizeTo(this._getFinalDimensions())
+    this._renderer.resizeTo(this.getFinalDimensions())
 
     return ImageExporter.validateSettings(renderType, imageFormat)
       .then(() => {
@@ -203,7 +203,7 @@ export default class PhotoEditorSDK extends EventEmitter {
       width = canvas.width
       height = canvas.height
     } else if (this._image) {
-      const dimensions = this._getFinalDimensions()
+      const dimensions = this.getFinalDimensions()
       width = dimensions.x
       height = dimensions.y
     }
@@ -224,8 +224,20 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._sprite.setTexture(this._inputTexture)
   }
 
-  _getFinalDimensions () {
-    return new Vector2(this._image.width, this._image.height)
+  /**
+   * Returns the final dimensions that the input image would have
+   * after all existing operations have been applied
+   * @return {Vector2}
+   */
+  getFinalDimensions () {
+    let dimensions = this.getInputDimensions()
+    const operationsStack = this._operationsStack
+
+    operationsStack.forEach((operation) => {
+      dimensions = operation.getNewDimensions(dimensions)
+    })
+
+    return dimensions
   }
 
   getSprite () { return this._sprite }
