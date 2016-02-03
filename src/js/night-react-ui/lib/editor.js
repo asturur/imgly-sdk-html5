@@ -13,6 +13,7 @@ import {
   requestAnimationFrame, cancelAnimationFrame
 } from '../globals'
 import Exporter from './exporter'
+import Controls from '../components/controls'
 
 /**
  * The Editor class is an interface to the SDK, managing operations, rendering,
@@ -88,34 +89,11 @@ export default class Editor extends EventEmitter {
    * @private
    */
   _initControls () {
-    this._availableControls = SDKUtils.extend({
-      filters: require('../components/controls/filters/'),
-      orientation: require('../components/controls/orientation/'),
-      adjustments: require('../components/controls/adjustments/'),
-      crop: require('../components/controls/crop/'),
-      focus: require('../components/controls/focus/'),
-      frame: require('../components/controls/frame/'),
-      stickers: require('../components/controls/stickers/'),
-      text: require('../components/controls/text/')
-    }, this._options.extensions.controls)
-
-    this._enabledControls = []
-    for (let identifier in this._availableControls) {
-      const controls = this._availableControls[identifier]
-      if (!controls.isSelectable || controls.isSelectable(this)) {
-        this._enabledControls.push(controls)
-      }
-    }
-
-    this._enabledControls.sort((a, b) => {
-      let sortA = this._options.controlsOrder.indexOf(a.identifier)
-      let sortB = this._options.controlsOrder.indexOf(b.identifier)
-      if (sortA === -1) return 1
-      if (sortB === -1) return -1
-      if (sortA < sortB) return -1
-      if (sortA > sortB) return 1
-      return 0
+    const defaultControls = {}
+    Controls.forEach((control) => {
+      defaultControls[control.identifier] = control
     })
+    this._availableControls = SDKUtils.extend(defaultControls, this._options.extensions.controls)
   }
 
   // -------------------------------------------------------------------------- PUBLIC HISTORY API
@@ -168,11 +146,24 @@ export default class Editor extends EventEmitter {
   // -------------------------------------------------------------------------- PUBLIC CONTROLS API
 
   /**
-   * Returns the controls that should be displayed
-   * @return {Array.<Object>}
+   * Checks if the control with the given identifier is selectable
+   * @param  {String}  identifier
+   * @return {Boolean}
    */
-  getControls () {
-    return this._enabledControls
+  isControlEnabled (identifier) {
+    const control = this.getControl(identifier)
+    if (!control) return false
+
+    return control.isSelectable && control.isSelectable(this)
+  }
+
+  /**
+   * Returns the control with the given identifier
+   * @param  {String} identifier
+   * @return {Control}
+   */
+  getControl (identifier) {
+    return this._availableControls[identifier]
   }
 
   /**

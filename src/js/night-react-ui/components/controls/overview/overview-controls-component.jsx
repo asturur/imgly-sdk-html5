@@ -39,9 +39,11 @@ export default class OverviewControlsComponent extends ControlsComponent {
    */
   _renderListItems () {
     const { editor } = this.context
-    return editor.getControls()
-      .map((control) => {
-        return (<li
+
+    let items = []
+    const makeItem = (identifier) => {
+      const control = editor.getControl(identifier)
+      return (<li
           bem='e:item'
           key={control.identifier}
           onClick={this._onItemClick.bind(this, control)}>
@@ -52,7 +54,33 @@ export default class OverviewControlsComponent extends ControlsComponent {
               </div>
             </bem>
         </li>)
-      })
+    }
+
+    const { controlsOrder } = this.context.options
+    controlsOrder.forEach((groupOrIdentifier) => {
+      if (Array.isArray(groupOrIdentifier)) {
+        const group = groupOrIdentifier
+
+        let groupItems = []
+        group.forEach((identifier) => {
+          if (!editor.isControlEnabled(identifier)) return
+          groupItems.push(makeItem(identifier))
+        })
+
+        if (groupItems.length) {
+          if (groupOrIdentifier !== controlsOrder[controlsOrder.length - 1]) {
+            groupItems.push(<li bem='e:separator'></li>)
+          }
+          items = items.concat(groupItems)
+        }
+      } else {
+        const identifier = groupOrIdentifier
+        if (!editor.isControlEnabled(identifier)) return
+        items.push(makeItem(identifier))
+      }
+    })
+
+    return items
   }
 
   /**

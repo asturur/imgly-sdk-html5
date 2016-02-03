@@ -288,6 +288,15 @@ class Utils {
     /* eslint-enable */
   }
 
+  /**
+   * Flattens the given multidimensional array
+   * @return {Array}
+   */
+  static flatten (array) {
+    return array.reduce(function (flat, toFlatten) {
+      return flat.concat(Array.isArray(toFlatten) ? Utils.flatten(toFlatten) : toFlatten)
+    }, [])
+  }
 }
 
 export default Utils

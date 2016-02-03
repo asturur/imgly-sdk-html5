@@ -26,6 +26,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     super(...args)
 
     this._editor = new Editor(this.context.options, this.context.mediator)
+    window.editor = this._editor
     this._overviewControls = OverviewControlsComponent
 
     this._bindAll(

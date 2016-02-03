@@ -111,7 +111,6 @@ export default class NightReactUI extends EventEmitter {
     this._options = SDKUtils.defaults(this._options, {
       preferredRenderer: 'webgl',
       language: 'en',
-      operations: 'all',
       title: 'PhotoEditor SDK',
       maxMegaPixels: {},
       responsive: false,
@@ -121,7 +120,10 @@ export default class NightReactUI extends EventEmitter {
         'crop', 'rotation', 'flip', 'filter', 'brightness', 'saturation', 'contrast', 'text', 'sticker', 'brush', 'radial-blur', 'tilt-shift', 'frame'
       ],
       controlsOrder: [
-        'crop', 'orientation', 'filter', 'adjustments', 'text', 'sticker', 'brush', 'focus', 'frame'
+        ['crop', 'orientation'],
+        ['filter', 'adjustments'],
+        ['text', 'sticker', 'brush'],
+        ['focus', 'frame']
       ],
       operationsOrder: [
         // First, all operations that affect the image dimensions
