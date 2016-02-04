@@ -40,7 +40,8 @@ export default class PhotoEditorSDK extends EventEmitter {
       dimensions: null,
       canvas: null,
       zoom: 1,
-      logLevel: 'warn'
+      logLevel: 'warn',
+      pixelRatio: (window && window.devicePixelRatio) || 1
     })
 
     this._options.extensions = Utils.defaults(this._options.extensions, {
@@ -194,7 +195,7 @@ export default class PhotoEditorSDK extends EventEmitter {
   _initRenderer () {
     const rendererOptions = {
       canvas: this._options.canvas,
-      pixelRatio: (window && window.devicePixelRatio) || 1
+      pixelRatio: this._options.pixelRatio
     }
 
     let width, height
@@ -426,4 +427,5 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._zoom = zoom
     this._sprite.setScale(this._zoom, this._zoom)
   }
+  getPixelRatio () { return this._options.pixelRatio }
 }

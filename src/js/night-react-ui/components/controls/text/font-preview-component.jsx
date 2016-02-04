@@ -37,16 +37,22 @@ export default class FontPreviewComponent extends BaseComponent {
    */
   _renderCanvas () {
     const { canvas } = this.refs
+    const { editor } = this.context
+    const sdk = editor.getSDK()
 
-    canvas.width = canvas.offsetWidth
-    canvas.height = canvas.offsetHeight
+    const pixelRatio = sdk.getPixelRatio()
+    canvas.width = canvas.offsetWidth * pixelRatio
+    canvas.height = canvas.offsetHeight * pixelRatio
+
+    canvas.style.width = `${canvas.offsetWidth}px`
+    canvas.style.height = `${canvas.offsetHeight}px`
 
     const context = canvas.getContext('2d')
 
     context.fillStyle = 'red'
     context.clearRect(0, 0, canvas.width, canvas.height)
 
-    context.font = `${this.props.fontWeight} 24px ${this.props.fontFamily}`
+    context.font = `${this.props.fontWeight} ${24 * pixelRatio}px ${this.props.fontFamily}`
     context.textBaseline = 'middle'
     context.textAlign = 'center'
     context.fillStyle = 'white'
