@@ -100,11 +100,18 @@ export default class StickersOverviewControlsComponent extends ControlsComponent
    * @private
    */
   _renderSticker (index, stickerPaths) {
+    const { editor } = this.context
+    const sdk = editor.getSDK()
+
     const resolvedStickerPath = this._getAssetPath(stickerPaths[0])
     const canvas = this.refs[`canvas-${index}`]
 
-    canvas.width = canvas.offsetWidth
-    canvas.height = canvas.offsetHeight
+    const pixelRatio = sdk.getPixelRatio()
+    canvas.width = canvas.offsetWidth * pixelRatio
+    canvas.height = canvas.offsetHeight * pixelRatio
+
+    canvas.style.width = `${canvas.offsetWidth}px`
+    canvas.style.height = `${canvas.offsetHeight}px`
 
     const context = canvas.getContext('2d')
 
