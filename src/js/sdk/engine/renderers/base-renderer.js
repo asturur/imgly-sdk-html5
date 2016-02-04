@@ -34,7 +34,6 @@ export default class BaseRenderer extends EventEmitter {
    */
   setCanvas (canvas) {
     this._canvas = canvas
-    this.resizeTo(new Vector2(this._width, this._height))
 
     this._createContext()
     this._onBeforeContext()
