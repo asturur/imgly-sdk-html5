@@ -83,7 +83,6 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
 
     const newKnobPosition = this._initialKnobPosition.clone()
       .add(offset)
-      .clamp(new Vector2(0, 0), outputDimensions)
 
     this._operation.set({
       position: newPosition
