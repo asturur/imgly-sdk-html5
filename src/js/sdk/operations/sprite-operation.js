@@ -92,19 +92,28 @@ class SpriteOperation extends Operation {
   _applyFlip (operation, direction) {
     this._options.sprites.forEach((sprite) => {
       const spritePosition = sprite.getPosition()
+      let rotation
       switch (direction) {
         case 'horizontal':
           spritePosition.x = 1 - spritePosition.x
+
+          rotation = sprite.getRotation()
+          rotation += (Math.PI - rotation) * 2
+
           sprite.set({
-            flipHorizontally: !sprite.getFlipHorizontally(),
-            position: spritePosition
+            position: spritePosition,
+            rotation
           })
           break
         case 'vertical':
           spritePosition.y = 1 - spritePosition.y
+
+          rotation = sprite.getRotation()
+          rotation += (Math.PI / 2 - rotation) * 2
+
           sprite.set({
-            flipVertically: !sprite.getFlipVertically(),
-            position: spritePosition
+            position: spritePosition,
+            rotation
           })
           break
       }
@@ -277,7 +286,6 @@ class SpriteOperation extends Operation {
     renderTexture.clear()
     renderTexture.render(container)
     outputSprite.setTexture(renderTexture)
-    this.setDirtyForRenderer(true, renderer)
 
     return Promise.resolve()
   }

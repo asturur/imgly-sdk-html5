@@ -62,7 +62,7 @@ export default class Sprite extends Configurable {
     )
 
     if (this._options.scale) {
-      this._sprite.setScale(this._options.scale)
+      this._sprite.setScale(this._options.scale.clone())
     }
     this._sprite.updateTransform()
 

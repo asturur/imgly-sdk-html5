@@ -50,7 +50,7 @@ export default class Sticker extends Sprite {
 
     // Stickers with adjustments are rendered to a render texture that
     // can be re-used
-    if (this.isDirtyForRenderer(renderer) && hasAdjustments) {
+    if (hasAdjustments) {
       this._identitySprite.setTexture(this._inputTexture)
       this._identitySprite.setFilters(hasAdjustments ? [this._adjustmentsFilter] : [])
 
@@ -64,11 +64,6 @@ export default class Sticker extends Sprite {
       const { width, height } = this._options.image
       renderTexture.resizeTo(new Vector2(width, height))
       renderTexture.render(this._identitySprite)
-
-      this.setDirtyForRenderer(false, renderer)
-    }
-
-    if (hasAdjustments) {
       this._sprite.setTexture(renderTexture)
     } else {
       this._sprite.setTexture(this._inputTexture)

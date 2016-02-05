@@ -56,19 +56,24 @@ export default class Text extends Sprite {
    * @return {Promise}
    */
   update (sdk) {
+    // Re-render text
+    this._textRenderer.update(sdk)
+    const textTexture = this._textRenderer.getTexture()
+    const baseTexture = textTexture.getBaseTexture()
+    baseTexture.update()
+
+    // Upload texture
     const renderer = sdk.getRenderer()
-    if (this.isDirtyForRenderer(renderer)) {
-      this._textRenderer.update(sdk)
+    renderer.updateTexture(textTexture.getBaseTexture())
 
-      const textTexture = this._textRenderer.getTexture()
-      const baseTexture = textTexture.getBaseTexture()
-      baseTexture.update()
-      renderer.updateTexture(textTexture.getBaseTexture())
+    super.update(sdk)
 
-      this.setDirtyForRenderer(false, renderer)
-    }
-
-    return super.update(sdk)
+    // Flip
+    this._sprite.setScale(
+      this._options.flipHorizontally ? -1 : 1,
+      this._options.flipVertically ? -1 : 1
+    )
+    this._sprite.updateTransform()
   }
 }
 
@@ -87,5 +92,7 @@ Sprite.prototype.availableOptions = {
   rotation: { type: 'number', default: 0 },
   text: { type: 'string', required: true },
   maxWidth: { type: 'number', default: 100 },
-  maxHeight: { type: 'number', default: 0 }
+  maxHeight: { type: 'number', default: 0 },
+  flipHorizontally: { type: 'boolean', default: false },
+  flipVertically: { type: 'boolean', default: false }
 }
