@@ -34,7 +34,7 @@ export default class WebcamScreenComponent extends ScreenComponent {
    * @private
    */
   _onCancel () {
-    this.props.editor.switchToSplashScreen()
+    this.props.app.switchToSplashScreen()
   }
 
   /**
@@ -45,7 +45,7 @@ export default class WebcamScreenComponent extends ScreenComponent {
     const webcam = this.refs.webcam
     webcam.makePhoto()
       .then((image) => {
-        this.props.editor.setImage(image)
+        this.props.app.setImage(image)
       })
       .catch((e) => {
         console.error && console.error(e)
