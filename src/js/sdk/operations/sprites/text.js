@@ -66,14 +66,7 @@ export default class Text extends Sprite {
     const renderer = sdk.getRenderer()
     renderer.updateTexture(textTexture.getBaseTexture())
 
-    super.update(sdk)
-
-    // Flip
-    this._sprite.setScale(
-      this._options.flipHorizontally ? -1 : 1,
-      this._options.flipVertically ? -1 : 1
-    )
-    this._sprite.updateTransform()
+    return super.update(sdk)
   }
 }
 
