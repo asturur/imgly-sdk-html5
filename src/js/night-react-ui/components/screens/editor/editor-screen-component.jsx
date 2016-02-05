@@ -105,7 +105,9 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _onNewFile (image) {
-    this.props.editor.setImage(image)
+    this._editor.setImage(image)
+    this._zoom('auto')
+    this.forceUpdate()
   }
 
   // -------------------------------------------------------------------------- EVENTS
@@ -128,7 +130,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _onNewClick () {
     if (this.context.options.webcam !== false) {
-      this.props.editor.switchToSplashScreen()
+      this.props.app.switchToSplashScreen()
     } else {
       this._fileLoader.open()
     }

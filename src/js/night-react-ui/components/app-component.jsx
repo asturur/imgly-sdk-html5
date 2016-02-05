@@ -41,21 +41,6 @@ export default class AppComponent extends React.Component {
     this.state = { screen: initialScreen }
   }
 
-  // -------------------------------------------------------------------------- LIFECYCLE
-
-  /**
-   * Gets called when this component has been mounted
-   */
-  componentDidMount () {
-    // @TODO Deprecated code - move this to editor
-    // const renderer = this._sdk
-    // if (renderer.hasImage()) {
-    //   const image = renderer.getImage()
-    //   renderer.setImage(null)
-    //   this.setImage(image)
-    // }
-  }
-
   // -------------------------------------------------------------------------- EVENTS
 
   /**
@@ -86,57 +71,9 @@ export default class AppComponent extends React.Component {
    * @todo Move this to a separate Editor class
    */
   setImage (image) {
-    const translate = this.props.ui.translate.bind(this.props.ui)
-    const exif = EXIF.isJPEG(image.src) ? EXIF.fromBase64String(image.src) : null
-
-    const done = (image) => {
-      this._operationsMap = {}
-      this._sdk.getOperationsStack().clear()
-      this._sdk.setImage(image, exif)
-
-      // Forces reinitialization
-      this.setState({ screen: null })
-      this.setState({ screen: this._screens.editor })
-    }
-
-    const maxMegaPixels = this._getMaxMegapixels()
-    const maxPixels = maxMegaPixels * 1000000
-    const maxDimensions = this._sdk.getMaxDimensions()
-
-    const megaPixelsExceeded = image.width * image.height > maxPixels
-    const dimensionsExceeded = maxDimensions && (image.width > maxDimensions || image.height > maxDimensions)
-
-    if (megaPixelsExceeded || dimensionsExceeded) {
-      const loadingModal = ModalManager.instance.displayLoading(translate('loading.resizing'))
-      const imageResizer = new ImageResizer(image, maxPixels, maxDimensions)
-
-      imageResizer.resize()
-        .then(({ canvas, dimensions }) => {
-          loadingModal.close()
-
-          if (megaPixelsExceeded) {
-            ModalManager.instance.displayWarning(
-              translate('warnings.imageResized_megaPixels.title'),
-              translate('warnings.imageResized_megaPixels.text', {
-                maxMegaPixels: maxMegaPixels,
-                width: dimensions.x,
-                height: dimensions.y
-              })
-            )
-          } else if (dimensionsExceeded) {
-            ModalManager.instance.displayWarning(
-              translate('warnings.imageResized_maxDimensions.title'),
-              translate('warnings.imageResized_maxDimensions.text', {
-                width: dimensions.x,
-                height: dimensions.y
-              })
-            )
-          }
-          done(canvas)
-        })
-    } else {
-      done(image)
-    }
+    const { options } = this.props
+    options.image = image
+    this.setState({ screen: this._screens.editor })
   }
 
   /**
@@ -164,7 +101,7 @@ export default class AppComponent extends React.Component {
         modalManager={ModalManager.instance}
         onUpdate={this._onModalManagerUpdate} />
 
-      <Screen ref='screen' />
+      <Screen ref='screen' app={this} />
     </div>)
   }
 

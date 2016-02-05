@@ -286,6 +286,16 @@ export default class Editor extends EventEmitter {
   }
 
   /**
+   * Sets the given image
+   * @param {Image} image
+   */
+  setImage (image) {
+    this._options.image = image
+    this._sdk.setImage(image)
+    this.reset()
+  }
+
+  /**
    * Sets the given zoom level
    * @param {Boolean}  zoom
    * @param {Boolean} isDefault
@@ -440,6 +450,15 @@ export default class Editor extends EventEmitter {
       .then(() => {
         this._lastOutputBounds = this._sdk.getSprite().getBounds()
       })
+  }
+
+  /**
+   * Resets everything
+   */
+  reset () {
+    this._sdk.reset()
+    this._history = []
+    this._operationsMap = {}
   }
 
   // -------------------------------------------------------------------------- DISPOSAL

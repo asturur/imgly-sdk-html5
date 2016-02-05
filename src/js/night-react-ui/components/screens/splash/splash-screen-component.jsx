@@ -26,7 +26,7 @@ export default class SplashScreenComponent extends ScreenComponent {
    * @private
    */
   _onWebcamClick () {
-    this.props.editor.switchToWebcamScreen()
+    this.props.app.switchToWebcamScreen()
   }
 
   /**
@@ -35,7 +35,7 @@ export default class SplashScreenComponent extends ScreenComponent {
    * @private
    */
   _onImage (image) {
-    this.props.editor.setImage(image)
+    this.props.app.setImage(image)
   }
 
   /**

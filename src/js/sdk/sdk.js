@@ -264,7 +264,7 @@ export default class PhotoEditorSDK extends EventEmitter {
    * Resets all custom and selected operations
    */
   reset () {
-    if (!this._renderer || !this._image) return
+    this._operationsStack.clear()
   }
 
   addOperation (operation) {
@@ -295,7 +295,9 @@ export default class PhotoEditorSDK extends EventEmitter {
       this._exif = exif
       this._handleExifOrientation()
     }
-    this.reset()
+
+    this._inputTexture = Engine.Texture.fromImage(this._image)
+    this._sprite.setTexture(this._inputTexture)
   }
 
   resizeTo (dimensions) {
