@@ -60,6 +60,13 @@ class Operation extends Configurable {
   }
 
   /**
+   * Disposes the RenderTexture
+   */
+  disposeRenderTexture () {
+    this._renderTexture = null
+  }
+
+  /**
    * Applies this operation
    * @param  {PhotoEditorSDK} sdk
    * @return {Promise}

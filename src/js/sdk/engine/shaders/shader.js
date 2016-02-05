@@ -9,6 +9,7 @@
  */
 
 import Globals from '../globals'
+const { Log } = Globals
 
 export default class Shader {
   constructor (renderer, vertexSource, fragmentSource, uniforms, attributes) {
@@ -108,7 +109,7 @@ export default class Shader {
         gl.uniformMatrix3fv(location, false, uniform.value)
         break
       default:
-        throw new Error(`Unknown uniform type: ${uniform.type}`)
+        Log.warn(this.constructor.name, `Unknown uniform type: ${uniform.type}`)
     }
   }
 
@@ -157,9 +158,10 @@ export default class Shader {
     // Check linking status
     const linked = gl.getProgramParameter(program, gl.LINK_STATUS)
     if (!linked) {
-      const lastError = gl.getProgramInfoLog(program)
+      let errorMessage = gl.getProgramInfoLog(program)
+      if (gl.isContextLost()) errorMessage = 'WebGL context lost'
       gl.deleteProgram(program)
-      throw new Error(`WebGL program linking error: ${lastError}`)
+      Log.error(this.constructor.name, `WebGL program linking error: ${errorMessage}`)
     }
 
     this._program = program
@@ -183,9 +185,10 @@ export default class Shader {
     // Check compilation status
     const compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS)
     if (!compiled) {
-      const lastError = gl.getShaderInfoLog(shader)
+      let errorMessage = gl.getShaderInfoLog(shader)
+      if (gl.isContextLost()) errorMessage = 'WebGL context lost'
       gl.deleteShader(shader)
-      throw new Error(`WebGL shader compilation error: ${lastError}`)
+      Log.error(this.constructor.name, `WebGL shader compilation error: ${errorMessage}`)
     }
 
     return shader

@@ -24,8 +24,6 @@ export default class BaseRenderer extends EventEmitter {
       pixelRatio: 1,
       clearColor: Color.TRANSPARENT
     })
-
-    this.setCanvas(options.canvas || document.createElement('canvas'))
   }
 
   /**

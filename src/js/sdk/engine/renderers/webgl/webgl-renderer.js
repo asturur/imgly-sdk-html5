@@ -22,10 +22,44 @@ export default class WebGLRenderer extends BaseRenderer {
   constructor (...args) {
     super(...args)
 
+    this._textures = []
     this._fakeObject = new DisplayObject()
+    this._onContextLost = this._onContextLost.bind(this)
+    this._onContextRestored = this._onContextRestored.bind(this)
+
+    this.setCanvas(this._options.canvas || document.createElement('canvas'))
 
     this.shaders = this._initShaders()
     this.renderers = this._initRenderers()
+  }
+
+  // -------------------------------------------------------------------------- CONTEXT LOSS
+
+  /**
+   * Gets called when the WebGL context has been lost
+   * @param  {Event} e
+   * @private
+   */
+  _onContextLost (e) {
+    e.preventDefault()
+    Log.warn(this.constructor.name, 'WebGL context has been lost - trying to restore.')
+  }
+
+  /**
+   * Gets called when the WebGL context has been restored. Cleans up and resets everything.
+   * @private
+   */
+  _onContextRestored () {
+    Log.warn(this.constructor.name, 'WebGL context has been restored. Clearing all textures.')
+
+    const gl = this._context
+    this._textures.forEach((texture) => {
+      texture.disposeGLTextures(gl.id)
+    })
+
+    this._createContext()
+    this._setupContext()
+    this.emit('context-restored')
   }
 
   /**
@@ -45,6 +79,22 @@ export default class WebGLRenderer extends BaseRenderer {
     this._currentShader = shader
     this._context.useProgram(shader.getProgram())
     this._setAttributesForShader(shader)
+  }
+
+  /**
+   * Sets the canvas to the given one
+   * @param {Canvas} canvas
+   */
+  setCanvas (canvas) {
+    if (this._canvas) {
+      this._canvas.removeEventListener('webglcontextlost', this._onContextLost)
+      this._canvas.removeEventListener('webglcontextrestored', this._onContextRestored)
+    }
+
+    canvas.addEventListener('webglcontextlost', this._onContextLost)
+    canvas.addEventListener('webglcontextrestored', this._onContextRestored)
+
+    super.setCanvas(canvas)
   }
 
   /**
@@ -227,6 +277,9 @@ export default class WebGLRenderer extends BaseRenderer {
     if (!glTexture) {
       glTexture = gl.createTexture()
       texture.setGLTextureForId(glTexture, gl.id)
+
+      // Hold reference to texture for easier disposal
+      this._textures.push(texture)
     }
 
     return glTexture

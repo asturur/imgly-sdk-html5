@@ -27,6 +27,7 @@ export default class PhotoEditorSDK extends EventEmitter {
     super()
 
     this._onOperationUpdate = this._onOperationUpdate.bind(this)
+    this._onContextRestored = this._onContextRestored.bind(this)
 
     const { version } = require('../../../package.json')
     this.version = version
@@ -106,6 +107,7 @@ export default class PhotoEditorSDK extends EventEmitter {
       .then((data) => {
         this._renderer.resizeTo(tempDimensions)
         this._renderMode = 'dynamic'
+        this.setAllOperationsToDirty()
         this.render()
         return data
       })
@@ -155,6 +157,19 @@ export default class PhotoEditorSDK extends EventEmitter {
         perfTest && perfTest.stop()
         if (context.endFrame) context.endFrame()
       })
+  }
+
+  /**
+   * Gets called when the WebGL context has been restored. Re-triggers a render.
+   * @private
+   */
+  _onContextRestored () {
+    Log.warn(this.constructor.name, 'Trying to re-render after WebGL context has been restored.')
+    this.setAllOperationsToDirty()
+    this._operationsStack.forEach((operation) => {
+      operation.disposeRenderTexture()
+    })
+    this.render()
   }
 
   setAllOperationsToDirty () {
@@ -212,6 +227,7 @@ export default class PhotoEditorSDK extends EventEmitter {
     switch (this._preferredRenderer) {
       case 'webgl':
         this._renderer = new Engine.WebGLRenderer(width, height, rendererOptions)
+        this._renderer.on('context-restored', this._onContextRestored)
         break
       default:
         console && console.error && console.error(`

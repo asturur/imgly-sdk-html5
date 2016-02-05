@@ -75,7 +75,6 @@ export default class RadialBlurCanvasControlsComponent extends BaseComponent {
   _onCenterDrag (offset) {
     const { editor } = this.context
     const relativeOffset = offset.clone().divide(editor.getOutputDimensions())
-    const outputDimensions = editor.getOutputDimensions()
 
     const newPosition = this._initialPosition
       .clone()
