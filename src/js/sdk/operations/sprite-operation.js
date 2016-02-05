@@ -90,6 +90,15 @@ class SpriteOperation extends Operation {
    * @private
    */
   _applyFlip (operation, direction) {
+    const rotation = operation.getRotation()
+    if (rotation === 90 || rotation === 270) {
+      if (direction === 'vertical') {
+        direction = 'horizontal'
+      } else {
+        direction = 'vertical'
+      }
+    }
+
     this._options.sprites.forEach((sprite) => {
       const spritePosition = sprite.getPosition()
       let rotation
@@ -101,6 +110,7 @@ class SpriteOperation extends Operation {
           rotation += (Math.PI - rotation) * 2
 
           sprite.set({
+            flipHorizontally: !sprite.getFlipHorizontally(),
             position: spritePosition,
             rotation
           })
@@ -112,6 +122,7 @@ class SpriteOperation extends Operation {
           rotation += (Math.PI / 2 - rotation) * 2
 
           sprite.set({
+            flipVertically: !sprite.getFlipVertically(),
             position: spritePosition,
             rotation
           })
