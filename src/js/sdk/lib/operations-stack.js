@@ -108,7 +108,7 @@ export default class OperationsStack extends EventEmitter {
    * Sets all operations to dirty
    */
   setAllToDirty () {
-    this._stack.forEach((op) => op.setDirty(true))
+    this.forEach((op) => op.setDirty(true))
   }
 
   /**

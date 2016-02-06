@@ -9,9 +9,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent, Utils, Vector2 } from '../../../globals'
+import { ReactBEM, Utils, Vector2 } from '../../../globals'
+import CanvasControlsComponent from '../canvas-controls-component'
 
-export default class OverviewCanvasControlsComponent extends BaseComponent {
+export default class OverviewCanvasControlsComponent extends CanvasControlsComponent {
   constructor (...args) {
     super(...args)
     this._bindAll('_onClick')

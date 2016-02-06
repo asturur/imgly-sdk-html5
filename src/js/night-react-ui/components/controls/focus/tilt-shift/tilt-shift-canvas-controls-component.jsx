@@ -9,10 +9,11 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent, Vector2, Constants } from '../../../../globals'
+import { ReactBEM, Vector2, Constants } from '../../../../globals'
 import DraggableComponent from '../../../draggable-component.jsx'
+import CanvasControlsComponent from '../../canvas-controls-component'
 
-export default class TiltShiftCanvasControlsComponent extends BaseComponent {
+export default class TiltShiftCanvasControlsComponent extends CanvasControlsComponent {
   constructor (...args) {
     super(...args)
 
@@ -29,6 +30,16 @@ export default class TiltShiftCanvasControlsComponent extends BaseComponent {
       knobPosition: new Vector2()
     }
     this._operation = this.getSharedState('operation')
+  }
+
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called after the canvas has been zoomed in or out
+   * @private
+   */
+  _onCanvasZoomDone () {
+    this._setStylesFromOptions()
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
