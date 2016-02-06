@@ -43,7 +43,6 @@ export default class TextItemComponent extends ItemComponent {
   _onTextChange (e) {
     const { sprite } = this.props
     sprite.setText(e.target.value)
-    this.forceUpdate()
   }
 
   /**
@@ -100,7 +99,6 @@ export default class TextItemComponent extends ItemComponent {
     ) - Math.atan2(boundingBox.y, boundingBox.x / 2)
 
     sprite.setRotation(radians)
-    this.forceUpdate()
   }
 
   /**
@@ -138,7 +136,6 @@ export default class TextItemComponent extends ItemComponent {
 
     const { editor } = this.context
     const zoom = editor.getSDK().getZoom()
-    const outputDimensions = editor.getOutputDimensions()
 
     const cos = Math.cos(textRotation)
     const sin = Math.sin(textRotation)
@@ -151,7 +148,6 @@ export default class TextItemComponent extends ItemComponent {
 
     const newMaxWidth = (distanceToPosition.x * cos + distanceToPosition.y * sin) / zoom * 2
     sprite.setMaxWidth(newMaxWidth)
-    this.forceUpdate()
   }
 
   /**

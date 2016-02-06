@@ -34,7 +34,6 @@ export default class StickersContrastControlsComponent extends ControlsComponent
     const selectedSticker = this.getSharedState('selectedSprite')
     let stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setContrast((value + 100) / 100)
-    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- RENDERING

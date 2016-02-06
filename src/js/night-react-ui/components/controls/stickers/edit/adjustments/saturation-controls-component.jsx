@@ -34,7 +34,6 @@ export default class StickersSaturationControlsComponent extends ControlsCompone
     const selectedSticker = this.getSharedState('selectedSprite')
     let stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setSaturation((value + 100) / 100)
-    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- RENDERING

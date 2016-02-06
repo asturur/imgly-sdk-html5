@@ -19,7 +19,8 @@ export default class ItemComponent extends BaseComponent {
       '_onRemoveClick',
       '_onItemDragStart',
       '_onItemDragStop',
-      '_onItemDrag'
+      '_onItemDrag',
+      '_onSpriteUpdate'
     )
   }
 
@@ -39,7 +40,33 @@ export default class ItemComponent extends BaseComponent {
       .multiply(outputDimensions)
   }
 
+  // -------------------------------------------------------------------------- LIFECYCLE
+
+  /**
+   * Gets called when this component has been mounted
+   */
+  componentDidMount () {
+    super.componentDidMount()
+    this.props.sprite.on('update', this._onSpriteUpdate)
+  }
+
+  /**
+   * Gets called when this component is about to be unmounted
+   */
+  componentWillUnmount () {
+    super.componentWillUnmount()
+    this.props.sprite.off('update', this._onSpriteUpdate)
+  }
+
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when this component's sprite has been updated
+   * @private
+   */
+  _onSpriteUpdate () {
+    this.forceUpdate()
+  }
 
   /**
    * Gets called when the user starts dragging this item
@@ -66,7 +93,6 @@ export default class ItemComponent extends BaseComponent {
       .add(offset.clone().divide(outputDimensions))
 
     sprite.setPosition(newPosition)
-    this.forceUpdate()
   }
 
   /**

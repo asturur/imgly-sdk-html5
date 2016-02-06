@@ -34,7 +34,6 @@ export default class StickersBrightnessControlsComponent extends ControlsCompone
     const selectedSticker = this.getSharedState('selectedSprite')
     let stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setBrightness(value / 100)
-    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- RENDERING

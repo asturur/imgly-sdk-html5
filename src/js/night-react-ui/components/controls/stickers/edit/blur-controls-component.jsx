@@ -34,8 +34,6 @@ export default class StickersBlurControlsComponent extends ControlsComponent {
     const selectedSticker = this.getSharedState('selectedSticker')
     const stickerAdjustments = selectedSticker.getAdjustments()
     stickerAdjustments.setBlur(value / 100)
-    this._operation.setDirty(true)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
   }
 
   // -------------------------------------------------------------------------- RENDERING

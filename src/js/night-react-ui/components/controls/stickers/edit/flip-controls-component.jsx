@@ -36,7 +36,6 @@ export default class StickersFlipControlsComponent extends ControlsComponent {
         selectedSticker.setFlipVertically(!selectedSticker.getFlipVertically())
         break
     }
-    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- RENDERING

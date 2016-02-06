@@ -113,7 +113,6 @@ export default class TextControlsComponent extends ControlsComponent {
 
     const selectedText = this.getSharedState('selectedSprite')
     selectedText.setFontSize(fontSize / getOutputDimensions.y)
-    this.forceSharedUpdate()
   }
 
   /**
@@ -125,7 +124,6 @@ export default class TextControlsComponent extends ControlsComponent {
     const selectedText = this.getSharedState('selectedSprite')
     selectedText.setFontFamily(font.fontFamily)
     selectedText.setFontWeight(font.fontWeight)
-    this.forceSharedUpdate()
   }
 
   /**
@@ -153,7 +151,6 @@ export default class TextControlsComponent extends ControlsComponent {
   _onForegroundColorChange (color) {
     const selectedText = this.getSharedState('selectedSprite')
     selectedText.setColor(color)
-    this.forceSharedUpdate()
   }
 
   /**
@@ -164,7 +161,6 @@ export default class TextControlsComponent extends ControlsComponent {
   _onBackgroundColorChange (color) {
     const selectedText = this.getSharedState('selectedSprite')
     selectedText.setBackgroundColor(color)
-    this.forceSharedUpdate()
   }
 
   // -------------------------------------------------------------------------- MODES

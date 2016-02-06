@@ -19,6 +19,8 @@ export default class Configurable extends EventEmitter {
     this.availableOptions = this.availableOptions || {}
     this.availableOptions = Utils.extend(this.availableOptions, additionalAvailableOptions)
 
+    this._onConfigurableUpdate = this._onConfigurableUpdate.bind(this)
+
     this._initOptions(options)
   }
 
@@ -101,6 +103,7 @@ export default class Configurable extends EventEmitter {
       // Handle configurable initialization
       if (option.type === 'configurable') {
         this._options[optionName] = new Configurable(null, option.structure)
+        this._options[optionName].on('update', this._onConfigurableUpdate)
       }
     }
 
@@ -371,7 +374,16 @@ export default class Configurable extends EventEmitter {
 
     this._onOptionsChange()
     if (update) {
-      this.emit('updated', this, { [optionName]: value })
+      this.emit('update', this, { [optionName]: value })
     }
+  }
+
+  /**
+   * Gets called when a `configurable` option has been updated
+   * @param  {*} ...args
+   * @private
+   */
+  _onConfigurableUpdate (...args) {
+    this.emit('update', ...args)
   }
 }

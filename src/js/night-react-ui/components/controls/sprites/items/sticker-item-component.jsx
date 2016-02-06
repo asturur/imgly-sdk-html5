@@ -94,9 +94,10 @@ export default class StickerItemComponent extends ItemComponent {
         knobDistanceFromCenter.len() / initialDistanceFromCenter.len()
       )
 
-    sprite.getScale().set(newScale.x, newScale.x)
-    sprite.setRotation(radians)
-    this.forceUpdate()
+    sprite.set({
+      scale: newScale,
+      rotation: radians
+    })
   }
 
   /**
