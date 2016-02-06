@@ -220,15 +220,13 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _undoZoom (callback) {
-    if (!this._previousZoomState) return
+    if (this._previousZoom !== null) return
 
     const canvasComponent = this.refs.canvas
-    const { zoom, canvasState } = this._previousZoomState
 
     // Couldn't come up with something clean here :(
-    canvasComponent.setState(canvasState)
-    this._previousZoomState = null
-    this.setState({ zoom }, callback)
+    this._zoom(this._previousZoom, callback)
+    this._previousZoom = null
   }
 
   /**
@@ -252,11 +250,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom))
 
     this._editor.setZoom(newZoom, zoom === 'auto')
-
-    this._previousZoomState = SDKUtils.extend({
-      zoom: this.state.zoom,
-      canvasState: SDKUtils.clone(canvasComponent.state)
-    }, canvasComponent.state)
+    this._previousZoom = zoom
 
     this.setState({ zoom: newZoom }, () => {
       this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
