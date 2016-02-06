@@ -9,12 +9,13 @@
  * For commercial usf please contact us at contact@9elements.com
  */
 
-import { Utils, Vector2, SDK, ReactBEM, BaseComponent } from '../../../globals'
+import { Utils, Vector2, SDK, ReactBEM } from '../../../globals'
 import TextItemComponent from './items/text-item-component'
 import StickerItemComponent from './items/sticker-item-component'
+import CanvasControlsComponent from '../canvas-controls-component'
 const { Sticker, Text } = SDK
 
-export default class SpritesCanvasControlsComponent extends BaseComponent {
+export default class SpritesCanvasControlsComponent extends CanvasControlsComponent {
   constructor (...args) {
     super(...args)
 

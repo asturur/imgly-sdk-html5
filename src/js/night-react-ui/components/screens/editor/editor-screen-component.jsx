@@ -8,6 +8,8 @@
  *
  * For commercial use, please contact us at contact@9elements.com
  */
+const WINDOW_RESIZE_DELAY = 500
+
 import { React, ReactBEM, Constants, SDKUtils, SharedState } from '../../../globals'
 import OverviewControlsComponent from '../../controls/overview/overview-controls-component'
 import FileLoader from '../../../lib/file-loader'
@@ -42,7 +44,7 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onExportClick',
       '_onUndoClick',
       '_onWindowResize',
-      '_updateZoomToFitNewSize',
+      '_onWindowResizeDone',
       '_onNewFile'
     )
 
@@ -74,10 +76,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._fileLoader = new FileLoader(this.refs.fileInput)
     this._fileLoader.on('file', this._onNewFile)
 
-    const { options } = this.context
-    if (options.responsive) {
-      window.addEventListener('resize', this._onWindowResize)
-    }
+    window.addEventListener('resize', this._onWindowResize)
 
     this._zoom('auto')
     this._editor.start()
@@ -121,7 +120,15 @@ export default class EditorScreenComponent extends ScreenComponent {
       window.clearTimeout(this._resizeTimeout)
       this._resizeTimeout = null
     }
-    this._resizeTimeout = window.setTimeout(this._updateZoomToFitNewSize, 500)
+    this._resizeTimeout = window.setTimeout(this._onWindowResizeDone, WINDOW_RESIZE_DELAY)
+  }
+
+  /**
+   * Gets called `WINDOW_RESIZE_DELAY` ms after the last resize event has been called
+   * @private
+   */
+  _onWindowResizeDone () {
+    this._emitEvent(Constants.EVENTS.WINDOW_RESIZE)
   }
 
   /**
@@ -206,15 +213,6 @@ export default class EditorScreenComponent extends ScreenComponent {
   }
 
   // -------------------------------------------------------------------------- ZOOM
-
-  /**
-   * Updates the zoom level to fit the new editor dimensions
-   * @private
-   */
-  _updateZoomToFitNewSize () {
-    const canvasComponent = this.refs.canvas
-    canvasComponent.onResize()
-  }
 
   /**
    * Undos the last zoom

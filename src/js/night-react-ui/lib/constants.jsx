@@ -19,6 +19,7 @@ export default {
     EDITOR_ENABLE_FEATURES: 'editor:enable',
     COLORPICKER_OPEN: 'colorpicker:open',
     HISTORY_UPDATED: 'history:update',
-    HISTORY_UNDO: 'history:undo'
+    HISTORY_UNDO: 'history:undo',
+    WINDOW_RESIZE: 'window:resize'
   }
 }

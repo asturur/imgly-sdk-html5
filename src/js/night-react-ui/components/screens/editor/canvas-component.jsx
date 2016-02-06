@@ -12,7 +12,7 @@
 const MIN_ZOOM_DIMENSIONS = 300
 
 import {
-  Utils, SDKUtils, ReactBEM, Vector2, BaseComponent
+  Utils, SDKUtils, ReactBEM, Vector2, BaseComponent, Constants
 } from '../../../globals'
 
 export default class CanvasComponent extends BaseComponent {
@@ -22,8 +22,13 @@ export default class CanvasComponent extends BaseComponent {
     this._bindAll(
       '_onDragStart',
       '_onDragMove',
-      '_onDragEnd'
+      '_onDragEnd',
+      '_onWindowResize'
     )
+
+    this._events = {
+      [Constants.EVENTS.WINDOW_RESIZE]: this._onWindowResize
+    }
 
     this._initialRenderDone = false
 
@@ -31,6 +36,19 @@ export default class CanvasComponent extends BaseComponent {
       canvasPosition: new Vector2(),
       canvasOffset: new Vector2()
     }
+  }
+
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called after the window has been resized
+   * @private
+   */
+  _onWindowResize () {
+    const { editor } = this.context
+    const sdk = editor.getSDK()
+    sdk.resizeTo(this._getContainerDimensions())
+    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto')
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -163,13 +181,6 @@ export default class CanvasComponent extends BaseComponent {
   }
 
   // -------------------------------------------------------------------------- RENDERING
-
-  onResize () {
-    const { editor } = this.context
-    const sdk = editor.getSDK()
-    sdk.resizeTo(this._getContainerDimensions())
-    editor.render()
-  }
 
   /**
    * Returns the style properties for the draggable canvas area
