@@ -12,15 +12,18 @@ void main() {
   vec4 color = texColor;
 
   // Apply brightness
-  color = vec4((color.rgb + vec3(u_brightness) * color.a), color.a);
+  color.rgb = (color.rgb + u_brightness);
 
   // Apply saturation
   float luminance = dot(color.rgb, luminanceWeighting);
   vec3 greyScaleColor = vec3(luminance);
-  color = vec4(mix(greyScaleColor, color.rgb, u_saturation) * color.a, color.a);
+  color.rgb = mix(greyScaleColor, color.rgb, u_saturation);
 
   // Apply contrast
-  color = vec4(((color.rgb - vec3(0.5)) * u_contrast + vec3(0.5) * color.a), color.a);
+  color.rgb = (color.rgb - 0.5) * u_contrast + 0.5;
+
+  // Apply alpha
+  color = vec4(color.rgb * texColor.a, texColor.a);
 
   gl_FragColor = color;
 }
