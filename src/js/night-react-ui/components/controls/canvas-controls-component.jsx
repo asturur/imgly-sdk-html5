@@ -16,17 +16,17 @@ export default class CanvasControlsComponent extends BaseComponent {
     super(...args)
 
     this._bindAll(
-      '_onWindowResize'
+      '_onCanvasZoomDone'
     )
   }
 
   // -------------------------------------------------------------------------- EVENTS
 
   /**
-   * Gets called when the window has been resized
+   * Gets called after the canvas has been zoomed in or out
    * @private
    */
-  _onWindowResize () {
+  _onCanvasZoomDone () {
     this.forceUpdate()
   }
 
@@ -37,8 +37,8 @@ export default class CanvasControlsComponent extends BaseComponent {
   _bindEvents () {
     super._bindEvents()
     this.context.mediator.on(
-      Constants.EVENTS.WINDOW_RESIZE,
-      this._onWindowResize
+      Constants.EVENTS.CANVAS_ZOOM_DONE,
+      this._onCanvasZoomDone
     )
   }
 
@@ -49,8 +49,8 @@ export default class CanvasControlsComponent extends BaseComponent {
   _unbindEvents () {
     super._unbindEvents()
     this.context.mediator.off(
-      Constants.EVENTS.WINDOW_RESIZE,
-      this._onWindowResize
+      Constants.EVENTS.CANVAS_ZOOM_DONE,
+      this._onCanvasZoomDone
     )
   }
 }

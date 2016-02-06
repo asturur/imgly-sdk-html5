@@ -71,7 +71,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
 
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
 
-    this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
+    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_UNDO)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
   }
 
@@ -92,7 +92,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
         this.getSharedState('operationExistedBefore'))
     }
 
-    this._emitEvent(Constants.EVENTS.CANVAS_UNDO_ZOOM)
+    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_UNDO)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
     super._onDoneClick(e)
   }

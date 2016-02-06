@@ -12,7 +12,8 @@ export default {
   EVENTS: {
     CANVAS_RENDER: 'canvas:render',
     CANVAS_ZOOM: 'canvas:zoom',
-    CANVAS_UNDO_ZOOM: 'canvas:zoom_undo',
+    CANVAS_ZOOM_DONE: 'canvas:zoom:done',
+    CANVAS_ZOOM_UNDO: 'canvas:zoom:undo',
     OPERATION_UPDATED: 'operation:update',
     OPERATION_REMOVED: 'operation:removed',
     EDITOR_DISABLE_FEATURES: 'editor:disable',

@@ -58,7 +58,7 @@ export default class EditorScreenComponent extends ScreenComponent {
 
     this._events = {
       [Constants.EVENTS.CANVAS_ZOOM]: this._zoom,
-      [Constants.EVENTS.CANVAS_UNDO_ZOOM]: this._undoZoom,
+      [Constants.EVENTS.CANVAS_ZOOM_UNDO]: this._undoZoom,
       [Constants.EVENTS.EDITOR_DISABLE_FEATURES]: this._onDisableFeatures,
       [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures,
       [Constants.EVENTS.HISTORY_UNDO]: this._onUndo
@@ -259,7 +259,10 @@ export default class EditorScreenComponent extends ScreenComponent {
     }, canvasComponent.state)
 
     this.setState({ zoom: newZoom }, () => {
-      this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, callback)
+      this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
+        this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_DONE)
+        callback && callback()
+      })
     })
   }
 
