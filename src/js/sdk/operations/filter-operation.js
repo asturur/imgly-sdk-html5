@@ -66,6 +66,10 @@ FilterOperation.prototype.availableOptions = {
   },
   filter: { type: 'object', default: IdentityFilter,
     setter: function (Filter) {
+      if (this._selectedFilter) {
+        this._selectedFilter.dispose()
+        this._selectedFilter = null
+      }
       this._selectedFilter = new Filter(this._options.intensity)
       return Filter
     }

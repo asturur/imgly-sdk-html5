@@ -36,21 +36,17 @@ class SoftColorOverlay extends Primitive {
   constructor (...args) {
     super(...args)
 
+    this._filter = new SoftColorOverlayFilter()
     this._options = Utils.defaults(this._options, {
       color: new Color(1.0, 1.0, 1.0)
     })
   }
 
   /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
+   * Updates the filter's uniforms
    */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new SoftColorOverlayFilter()
-    }
+  update () {
     this._filter.setUniform('u_overlay', this._options.color.toRGBGLColor())
-    return this._filter
   }
 
   /**

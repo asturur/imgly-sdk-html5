@@ -25,15 +25,9 @@ class GobblinFilter extends Engine.Filter {
  * @extends {PhotoEditorSDK.Filter.Primitive}
  */
 class Gobblin extends Primitive {
-  /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
-   */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new GobblinFilter()
-    }
-    return this._filter
+  constructor (...args) {
+    super(...args)
+    this._filter = new GobblinFilter()
   }
 
   /**

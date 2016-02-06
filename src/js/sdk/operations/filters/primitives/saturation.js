@@ -35,21 +35,17 @@ class Saturation extends Primitive {
   constructor (...args) {
     super(...args)
 
+    this._filter = new SaturationFilter()
     this._options = Utils.defaults(this._options, {
       saturation: 0
     })
   }
 
   /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
+   * Updates the filter's uniforms
    */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new SaturationFilter()
-    }
+  update () {
     this._filter.setUniform('u_saturation', this._options.saturation)
-    return this._filter
   }
 
   /**

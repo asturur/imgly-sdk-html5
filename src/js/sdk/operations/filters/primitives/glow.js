@@ -36,21 +36,17 @@ class Glow extends Primitive {
   constructor (...args) {
     super(...args)
 
+    this._filter = new GlowFilter()
     this._options = Utils.defaults(this._options, {
       color: new Color(1, 1, 1)
     })
   }
 
   /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
+   * Updates the filter's uniforms
    */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new GlowFilter()
-    }
+  update () {
     this._filter.setUniform('u_color', this._options.color.toRGBGLColor())
-    return this._filter
   }
 
   /**

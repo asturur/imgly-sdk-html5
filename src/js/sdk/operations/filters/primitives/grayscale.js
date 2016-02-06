@@ -25,15 +25,9 @@ class GrayscaleFilter extends Engine.Filter {
  * @extends {PhotoEditorSDK.Filter.Primitive}
  */
 class Grayscale extends Primitive {
-  /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
-   */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new GrayscaleFilter()
-    }
-    return this._filter
+  constructor (...args) {
+    super(...args)
+    this._filter = new GrayscaleFilter()
   }
 
   /**

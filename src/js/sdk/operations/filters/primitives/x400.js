@@ -25,15 +25,9 @@ class X400Filter extends Engine.Filter {
  * @extends {PhotoEditorSDK.Filter.Primitive}
  */
 class X400 extends Primitive {
-  /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
-   */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new X400Filter()
-    }
-    return this._filter
+  constructor (...args) {
+    super(...args)
+    this._filter = new X400Filter()
   }
 
   /**

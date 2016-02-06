@@ -35,21 +35,17 @@ class Desaturation extends Primitive {
   constructor (...args) {
     super(...args)
 
+    this._filter = new DesaturationFilter()
     this._options = Utils.defaults(this._options, {
       desaturation: 1
     })
   }
 
   /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
+   * Updates the filter's uniforms
    */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new DesaturationFilter()
-    }
+  update () {
     this._filter.setUniform('u_desaturation', this._options.desaturation)
-    return this._filter
   }
 
   /**

@@ -3,6 +3,7 @@
  * https://gist.github.com/bloodyowl/41b1de3388c626796eca
  */
 
+import Log from '../../shared/log'
 const DEFAULT_MAX_LISTENERS = 12
 
 function error (message, ...args) {
@@ -38,14 +39,10 @@ class EventEmitter {
     listeners.push(listener)
 
     if (listeners.length > this._maxListeners) {
-      error(
-        `possible memory leak, added %i %s listeners,
-        use EventEmitter#setMaxListeners(number) if you
-        want to increase the limit (%i now)`,
-        listeners.length,
-        type,
-        this._maxListeners
+      Log.warn('EventEmitter',
+        `Possible memory leak detected, added ${listeners.length} \`${type}\` listeners (current limit is ${this._maxListeners})`
       )
+      console.trace()
     }
     return this
   }

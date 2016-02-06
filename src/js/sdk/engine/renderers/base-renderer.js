@@ -15,6 +15,7 @@ export default class BaseRenderer extends EventEmitter {
   constructor (width, height, options = {}) {
     super()
 
+    this.setMaxListeners(25)
     this._width = width || 800
     this._height = height || 600
     this._dimensions = new Vector2(this._width, this._height)

@@ -61,6 +61,13 @@ class Filter {
   setDirty (dirty) {
     this._stack.setDirty(dirty)
   }
+
+  /**
+   * Cleans this instance up
+   */
+  dispose () {
+    this._stack.dispose()
+  }
 }
 
 /**

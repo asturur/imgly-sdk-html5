@@ -35,21 +35,17 @@ class Contrast extends Primitive {
   constructor (...args) {
     super(...args)
 
+    this._filter = new ContrastFilter()
     this._options = Utils.defaults(this._options, {
       contrast: 1.0
     })
   }
 
   /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
+   * Updates the filter's uniforms
    */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new ContrastFilter()
-    }
+  update () {
     this._filter.setUniform('u_contrast', this._options.contrast)
-    return this._filter
   }
 
   /**

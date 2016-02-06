@@ -159,4 +159,8 @@ export default class Container extends DisplayObject {
 
   getChildren () { return this._children }
   getFilters () { return this._filters }
+
+  dispose () {
+
+  }
 }

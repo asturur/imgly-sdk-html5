@@ -149,4 +149,10 @@ export default class Sprite extends Container {
     this._boundsNeedUpdate = true
     this._localBoundsNeedUpdate = true
   }
+
+  dispose () {
+    if (this._texture) {
+      this._texture.off('update', this._onTextureUpdate)
+    }
+  }
 }

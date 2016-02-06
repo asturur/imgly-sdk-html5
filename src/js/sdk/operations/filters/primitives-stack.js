@@ -46,6 +46,7 @@ class PrimitivesStack {
 
     this._stack = []
     this._dirtiness = {}
+    this._renderTextures = {}
     this._container = new Engine.Container()
     this._sprite = new Engine.Sprite()
     this._container.addChild(this._sprite)
@@ -81,10 +82,15 @@ class PrimitivesStack {
    */
   renderWebGL (sdk, outputTexture) {
     if (this._stack.length === 0) return Promise.resolve()
-
     const renderer = sdk.getRenderer()
+
+    let renderTexture = this._renderTextures[renderer.id]
+    if (!renderTexture) {
+      renderTexture =
+        this._renderTextures[renderer.id] = sdk.createRenderTexture()
+    }
+
     const outputSprite = sdk.getSprite()
-    const renderTexture = this._getRenderTexture(sdk)
     if (this.isDirtyForRenderer(renderer)) {
       this._sprite.setTexture(outputSprite.getTexture())
 
@@ -120,18 +126,6 @@ class PrimitivesStack {
 
     outputSprite.setTexture(outputTexture)
     return Promise.resolve()
-  }
-
-  /**
-   * Creates and returns a render texture
-   * @param  {PhotoEditorSDK} sdk
-   * @return {RenderTexture}
-   */
-  _getRenderTexture (sdk) {
-    if (!this._renderTexture) {
-      this._renderTexture = sdk.createRenderTexture()
-    }
-    return this._renderTexture
   }
 
   /**
@@ -215,9 +209,24 @@ class PrimitivesStack {
    */
   _getRenderTexture (sdk) {
     if (!this._renderTexture) {
-      this._renderTexture = sdk.createRenderTexture()
+
     }
     return this._renderTexture
+  }
+
+  /**
+   * Cleans up this instance
+   */
+  dispose () {
+    for (let rendererId in this._renderTextures) {
+      this._renderTextures[rendererId].dispose()
+      delete this._renderTextures[rendererId]
+    }
+    this._stack.forEach((primitive) => primitive.dispose())
+    this._stack = []
+    this._blendFilter.dispose()
+
+    this._sprite.dispose()
   }
 }
 

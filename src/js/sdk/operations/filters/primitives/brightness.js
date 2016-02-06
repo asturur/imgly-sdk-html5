@@ -35,21 +35,17 @@ class Brightness extends Primitive {
   constructor (...args) {
     super(...args)
 
+    this._filter = new BrightnessFilter()
     this._options = Utils.defaults(this._options, {
       brightness: 1.0
     })
   }
 
   /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
+   * Updates the filter's uniforms
    */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new BrightnessFilter()
-    }
+  update () {
     this._filter.setUniform('u_brightness', this._options.brightness)
-    return this._filter
   }
 
   /**

@@ -114,4 +114,12 @@ export default class Filter {
     gl.bindTexture(gl.TEXTURE_2D, inputTarget.getTexture())
     gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0)
   }
+
+  /**
+   * Cleans up this instance
+   */
+  dispose () {
+    this._shaders.forEach((shader) => shader.dispose())
+    this._shaders = []
+  }
 }

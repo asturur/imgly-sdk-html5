@@ -120,11 +120,16 @@ export default class RenderTexture extends Texture {
 
     const tempFilterManager = this._renderer.getFilterManager()
     this._renderer.setFilterManager(this._filterManager)
-
     this._renderer.renderDisplayObject(displayObject, this._renderTarget)
-
     this._renderer.setFilterManager(tempFilterManager)
   }
 
   getRenderTarget () { return this._renderTarget }
+
+  /**
+   * Cleans this instance up
+   */
+  dispose () {
+    this._filterManager.dispose()
+  }
 }

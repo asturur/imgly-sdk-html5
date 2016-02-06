@@ -38,18 +38,8 @@ class LookupTable extends Primitive {
   constructor (...args) {
     super(...args)
 
+    this._filter = new LookupTableFilter()
     this._textures = []
-  }
-
-  /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
-   */
-  getFilter () {
-    if (!this._filter) {
-      this._filter = new LookupTableFilter()
-    }
-    return this._filter
   }
 
   /**

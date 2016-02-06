@@ -23,14 +23,6 @@ class Primitive {
   }
 
   /**
-   * Returns the `Engine.Filter` for this Primitive
-   * @return {Engine.Filter}
-   */
-  getFilter () {
-    throw new Error('Primitive#getFilter is abstract and not implemented in inherited class.')
-  }
-
-  /**
    * Gets called before this primitive's filter is being applied
    */
   update () {
@@ -77,6 +69,18 @@ class Primitive {
 
   get options () {
     return this._options
+  }
+
+  getFilter () {
+    return this._filter
+  }
+
+  /**
+   * Cleans up this instance
+   */
+  dispose () {
+    this._filter.dispose()
+    this._filter = null
   }
 }
 
