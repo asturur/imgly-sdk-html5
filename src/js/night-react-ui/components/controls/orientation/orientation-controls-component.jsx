@@ -155,6 +155,35 @@ export default class OrientationControlsComponent extends ControlsComponent {
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
   }
 
+  // -------------------------------------------------------------------------- MISC
+
+  _getListItems () {
+    const { editor } = this.context
+    const rotationEnabled = editor.isFeatureEnabled('rotation')
+    const flipEnabled = editor.isFeatureEnabled('flip')
+
+    let items = []
+    if (rotationEnabled) {
+      items = items.concat([
+        { identifier: 'rotate-l', onClick: this._onRotateClick.bind(this, 'left') },
+        { identifier: 'rotate-r', onClick: this._onRotateClick.bind(this, 'right') },
+      ])
+    }
+
+    if (rotationEnabled || flipEnabled) {
+      items.push(null) // gap
+    }
+
+    if (flipEnabled) {
+      items = items.concat([
+        { identifier: 'flip-h', onClick: this._onFlipClick.bind(this, 'horizontal') },
+        { identifier: 'flip-v', onClick: this._onFlipClick.bind(this, 'vertical') }
+      ])
+    }
+
+    return items
+  }
+
   // -------------------------------------------------------------------------- RENDERING
 
   /**
@@ -163,13 +192,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _renderListItems () {
-    const itemsMap = [
-      { identifier: 'rotate-l', onClick: this._onRotateClick.bind(this, 'left') },
-      { identifier: 'rotate-r', onClick: this._onRotateClick.bind(this, 'right') },
-      null, // gap
-      { identifier: 'flip-h', onClick: this._onFlipClick.bind(this, 'horizontal') },
-      { identifier: 'flip-v', onClick: this._onFlipClick.bind(this, 'vertical') }
-    ]
+    const itemsMap = this._getListItems()
 
     return itemsMap.map((item) => {
       if (item === null) {
