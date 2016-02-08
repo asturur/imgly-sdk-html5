@@ -11,20 +11,20 @@
 import { Log } from '../globals'
 
 export default class ContextPerformanceHook {
-  constructor (gl) {
-    this._gl = gl
+  constructor (context) {
+    this._context = context
     this._tracking = false
 
     const self = this
-    for (let key in gl) {
-      let value = gl[key]
+    for (let key in context) {
+      let value = context[key]
       if (typeof value === 'function') {
         value = function (...args) {
-          const fn = gl[key]
-          if (!self._tracking) return fn.apply(gl, args)
+          const fn = context[key]
+          if (!self._tracking) return fn.apply(context, args)
 
           const start = window.performance.now()
-          const result = fn.apply(gl, args)
+          const result = fn.apply(context, args)
           const time = window.performance.now() - start
 
           const call = {

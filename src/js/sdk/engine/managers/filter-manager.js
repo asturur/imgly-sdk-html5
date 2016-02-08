@@ -82,12 +82,12 @@ export default class FilterManager {
     const bounds = target.getBounds()
     this._currentFrame = bounds
 
-    const renderTexture = this._getOrCreateRenderTarget()
-    this._renderer.setRenderTarget(renderTexture)
-    renderTexture.clear()
+    const renderTarget = this._getOrCreateRenderTarget()
+    this._renderer.setRenderTarget(renderTarget)
+    renderTarget.clear()
 
     this._filterStack.push({
-      renderTarget: renderTexture,
+      renderTarget: renderTarget,
       filters
     })
   }
@@ -137,8 +137,8 @@ export default class FilterManager {
    * @param  {RenderTarget} outputRenderTarget
    */
   _applyFilters (filters, inputRenderTarget, outputRenderTarget) {
-    let flipTexture = inputRenderTarget
-    let flopTexture = this._getOrCreateRenderTarget(true)
+    let flipRenderTarget = inputRenderTarget
+    let flopRenderTarget = this._getOrCreateRenderTarget(true)
 
     const lastFilter = filters[filters.length - 1]
     filters.forEach((filter, i) => {
@@ -146,21 +146,21 @@ export default class FilterManager {
 
       if (!isLastFilter) {
         // Render from flip to flop with filter
-        filter.apply(this._renderer, flipTexture, flopTexture)
+        filter.apply(this._renderer, flipRenderTarget, flopRenderTarget)
 
         // Flip the render targets
-        let temp = flipTexture
-        flipTexture = flopTexture
-        flopTexture = temp
+        let temp = flipRenderTarget
+        flipRenderTarget = flopRenderTarget
+        flopRenderTarget = temp
       } else {
         // Render to output
-        filter.apply(this._renderer, flipTexture, outputRenderTarget)
+        filter.apply(this._renderer, flipRenderTarget, outputRenderTarget)
       }
     })
 
     // Push the textures back into the texture pool to use them again later
-    this._textures.push(flipTexture)
-    this._textures.push(flopTexture)
+    this._textures.push(flipRenderTarget)
+    this._textures.push(flopRenderTarget)
   }
 
   /**
