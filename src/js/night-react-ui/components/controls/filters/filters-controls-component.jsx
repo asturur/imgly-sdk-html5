@@ -154,7 +154,7 @@ export default class FiltersControlsComponent extends ControlsComponent {
             bem='$e:button m:withInlineLabel'
             className={filter === currentFilter ? 'is-active' : null}>
             <img bem='e:icon' src={this._getAssetPath(`controls/filters/${identifier}.png`, true)} />
-            <div bem='e:label'>{filter.prototype.name}</div>
+            <div bem='e:label'>{filter.displayName}</div>
           </div>
         </bem>
       </li>)
