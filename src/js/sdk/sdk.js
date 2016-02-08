@@ -120,8 +120,6 @@ export default class PhotoEditorSDK extends EventEmitter {
    * @return {Promise}
    */
   export (renderType = RenderType.DATAURL, imageFormat = ImageFormat.PNG, quality = 0.8) {
-    if (!this._renderer) this._initRenderer()
-
     this._renderMode = 'export'
     const tempDimensions = this._renderer.getDimensions()
     this._renderer.resizeTo(this.getFinalDimensions())
@@ -153,8 +151,6 @@ export default class PhotoEditorSDK extends EventEmitter {
    * @return {Promise}
    */
   render () {
-    if (!this._renderer) this._initRenderer()
-
     let context = this._renderer.getContext()
     if (context.startFrame) context.startFrame()
 
@@ -439,24 +435,6 @@ export default class PhotoEditorSDK extends EventEmitter {
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
   /**
-   * Sets the canvas to the given one
-   * @param {Canvas} canvas
-   */
-  setCanvas (canvas) {
-    if (!this._renderer) this._initRenderer()
-    this._renderer.setCanvas(canvas)
-  }
-
-  /**
-   * Returns the current canvas
-   * @return {Canvas}
-   */
-  getCanvas () {
-    if (!this._renderer) this._initRenderer()
-    return this._renderer.getCanvas()
-  }
-
-  /**
    * Sets the image and parses the exif data
    * @param {Image} image
    * @param {Exif} exif = null
@@ -475,6 +453,8 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._sprite.setTexture(this._inputTexture)
   }
 
+  setCanvas (canvas) { this._renderer.setCanvas(canvas) }
+  getCanvas () { return this._renderer.getCanvas() }
   getSprite () { return this._sprite }
   getContainer () { return this._container }
   getOperationsStack () { return this._operationsStack }
