@@ -59,10 +59,11 @@ export default class Sticker extends Sprite {
         u_brightness: adjustments.getBrightness(),
         u_saturation: adjustments.getSaturation(),
         u_contrast: adjustments.getContrast()
-      }, true)
+      })
 
       const { width, height } = this._options.image
       renderTexture.resizeTo(new Vector2(width, height))
+      renderTexture.clear()
       renderTexture.render(this._identitySprite)
       this._sprite.setTexture(renderTexture)
     } else {
