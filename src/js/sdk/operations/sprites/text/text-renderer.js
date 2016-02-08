@@ -165,9 +165,6 @@ export default class TextRenderer {
    * @private
    */
   _calculateText (sdk, textOptions) {
-    const spriteBounds = sdk.getSprite().getBounds()
-    const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
-
     // Calculate max width
     let maxWidth = this._text.getMaxWidth()
 

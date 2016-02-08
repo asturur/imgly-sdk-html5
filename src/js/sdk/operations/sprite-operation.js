@@ -278,7 +278,6 @@ class SpriteOperation extends Operation {
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
-    const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 

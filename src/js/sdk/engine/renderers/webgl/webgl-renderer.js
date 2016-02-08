@@ -144,12 +144,12 @@ export default class WebGLRenderer extends BaseRenderer {
     let gl = canvas.getContext('webgl') ||
       canvas.getContext('experimental-webgl')
 
-    if (window.WebGLDebugUtils) {
+    if (window.WebGLDebugUtils && this._options.debug) {
       const logGL = (functionName, args) => {
         console.error('gl.' + functionName + '(' +
           window.WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ')')
       }
-      // gl = window.WebGLDebugUtils.makeDebugContext(gl, null, null)
+      gl = window.WebGLDebugUtils.makeDebugContext(gl, null, logGL)
     }
 
     if (Log.canLog('trace')) {

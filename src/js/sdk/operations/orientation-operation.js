@@ -105,12 +105,12 @@ class OrientationOperation extends Operation {
 
       if (this._options.flipHorizontally) {
         scaleX = -1
-        translateX = canvas.width
+        // translateX = canvas.width
       }
 
       if (this._options.flipVertically) {
         scaleY = -1
-        translateY = canvas.height
+        // translateY = canvas.height
       }
 
       sdk.resizeTo(newDimensions)

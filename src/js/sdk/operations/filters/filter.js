@@ -9,7 +9,6 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2 } from '../../globals'
 import PrimitivesStack from './primitives-stack'
 
 /**

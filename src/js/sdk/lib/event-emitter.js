@@ -6,10 +6,6 @@
 import Log from '../../shared/log'
 const DEFAULT_MAX_LISTENERS = 12
 
-function error (message, ...args) {
-  console.error.apply(console, [message].concat(args))
-}
-
 class EventEmitter {
   constructor () {
     this._maxListeners = DEFAULT_MAX_LISTENERS

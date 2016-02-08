@@ -23,7 +23,8 @@ export default class BaseRenderer extends EventEmitter {
 
     this._options = Utils.defaults(options, {
       pixelRatio: 1,
-      clearColor: Color.TRANSPARENT
+      clearColor: Color.TRANSPARENT,
+      debug: false
     })
   }
 
