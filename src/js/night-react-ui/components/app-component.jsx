@@ -9,8 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { React, ReactBEM, SDKUtils, EXIF } from '../globals'
-import ImageResizer from '../lib/image-resizer'
+import { React, ReactBEM, SDKUtils } from '../globals'
 import SplashScreenComponent from './screens/splash/splash-screen-component'
 import WebcamScreenComponent from './screens/webcam/webcam-screen-component'
 import EditorScreenComponent from './screens/editor/editor-screen-component'

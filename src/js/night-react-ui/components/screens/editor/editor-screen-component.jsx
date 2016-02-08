@@ -10,7 +10,7 @@
  */
 const WINDOW_RESIZE_DELAY = 500
 
-import { React, ReactBEM, Constants, SDKUtils, SharedState } from '../../../globals'
+import { React, ReactBEM, Constants, SharedState } from '../../../globals'
 import OverviewControlsComponent from '../../controls/overview/overview-controls-component'
 import FileLoader from '../../../lib/file-loader'
 import ScreenComponent from '../screen-component'
@@ -221,8 +221,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _undoZoom (callback) {
     if (this._previousZoom !== null) return
-
-    const canvasComponent = this.refs.canvas
 
     // Couldn't come up with something clean here :(
     this._zoom(this._previousZoom, callback)

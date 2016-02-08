@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDK, ReactBEM, Constants, Vector2 } from '../../../globals'
+import { ReactBEM, Constants, Vector2 } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ModalManager from '../../../lib/modal-manager'

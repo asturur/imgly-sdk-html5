@@ -17,8 +17,6 @@ export default class BackButtonComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const { ui } = this.context
-
     return (<bem specifier='$b:controls'>
       <div bem='e:cell m:button m:withBorderRight m:narrow'>
         <div bem='$e:button m:narrow' onClick={this.props.onClick}>

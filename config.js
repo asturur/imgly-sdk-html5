@@ -59,7 +59,9 @@ module.exports = {
     // The files that should be checked by the `standard` linter
     standardSrc: [
       source + '/js/**/*.js',
-      '!' + source + '/js/vendor/**/*.js'
+      source + '/js/**/*.jsx',
+      '!' + source + '/js/vendor/**/*.js',
+      '!' + source + '/js/vendor/**/*.jsx'
     ],
     dest: destination + '/js/',
     destFiles: [
