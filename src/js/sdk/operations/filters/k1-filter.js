@@ -39,6 +39,6 @@ class K1Filter extends Filter {
 }
 
 K1Filter.identifier = 'k1'
-K1Filter.name = 'K1'
+K1Filter.displayName = 'K1'
 
 export default K1Filter

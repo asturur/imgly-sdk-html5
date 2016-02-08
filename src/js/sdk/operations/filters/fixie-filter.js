@@ -52,6 +52,6 @@ class FixieFilter extends Filter {
 }
 
 FixieFilter.identifier = 'fixie'
-FixieFilter.name = 'Fixie'
+FixieFilter.displayName = 'Fixie'
 
 export default FixieFilter

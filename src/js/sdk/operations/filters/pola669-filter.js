@@ -53,6 +53,6 @@ class Pola669Filter extends Filter {
 }
 
 Pola669Filter.identifier = 'pola669'
-Pola669Filter.name = 'Pola 669'
+Pola669Filter.displayName = 'Pola 669'
 
 export default Pola669Filter

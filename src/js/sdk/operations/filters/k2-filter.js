@@ -43,6 +43,6 @@ class K2Filter extends Filter {
 }
 
 K2Filter.identifier = 'k2'
-K2Filter.name = 'K2'
+K2Filter.displayName = 'K2'
 
 export default K2Filter

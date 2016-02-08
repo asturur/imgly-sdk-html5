@@ -42,6 +42,6 @@ class MellowFilter extends Filter {
 }
 
 MellowFilter.identifier = 'mellow'
-MellowFilter.name = 'Mellow'
+MellowFilter.displayName = 'Mellow'
 
 export default MellowFilter

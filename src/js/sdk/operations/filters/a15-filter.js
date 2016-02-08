@@ -54,6 +54,6 @@ class A15Filter extends Filter {
 }
 
 A15Filter.identifier = 'a15'
-A15Filter.name = '15'
+A15Filter.displayName = '15'
 
 export default A15Filter

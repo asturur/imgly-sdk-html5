@@ -41,6 +41,6 @@ class KDynamicFilter extends Filter {
 }
 
 KDynamicFilter.identifier = 'kdynamic'
-KDynamicFilter.name = 'KDynamic'
+KDynamicFilter.displayName = 'KDynamic'
 
 export default KDynamicFilter

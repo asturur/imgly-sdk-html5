@@ -55,6 +55,6 @@ class PolaFilter extends Filter {
 }
 
 PolaFilter.identifier = 'pola'
-PolaFilter.name = 'Pola SX'
+PolaFilter.displayName = 'Pola SX'
 
 export default PolaFilter

@@ -59,6 +59,6 @@ class QuoziFilter extends Filter {
 }
 
 QuoziFilter.identifier = 'quozi'
-QuoziFilter.name = 'Quozi'
+QuoziFilter.displayName = 'Quozi'
 
 export default QuoziFilter

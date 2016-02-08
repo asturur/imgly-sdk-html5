@@ -30,6 +30,6 @@ class FoodFilter extends Filter {
 }
 
 FoodFilter.identifier = 'food'
-FoodFilter.name = 'Food'
+FoodFilter.displayName = 'Food'
 
 export default FoodFilter

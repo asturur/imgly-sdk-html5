@@ -53,6 +53,6 @@ class BreezeFilter extends Filter {
 }
 
 BreezeFilter.identifier = 'breeze'
-BreezeFilter.name = 'Breeze'
+BreezeFilter.displayName = 'Breeze'
 
 export default BreezeFilter

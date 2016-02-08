@@ -33,6 +33,6 @@ class LomoFilter extends Filter {
 }
 
 LomoFilter.identifier = 'lomo'
-LomoFilter.name = 'Lomo'
+LomoFilter.displayName = 'Lomo'
 
 export default LomoFilter

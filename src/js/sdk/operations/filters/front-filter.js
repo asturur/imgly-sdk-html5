@@ -51,6 +51,6 @@ class FrontFilter extends Filter {
 }
 
 FrontFilter.identifier = 'front'
-FrontFilter.name = 'Front'
+FrontFilter.displayName = 'Front'
 
 export default FrontFilter

@@ -61,6 +61,6 @@ class LeninFilter extends Filter {
 }
 
 LeninFilter.identifier = 'lenin'
-LeninFilter.name = 'Lenin'
+LeninFilter.displayName = 'Lenin'
 
 export default LeninFilter

@@ -28,6 +28,6 @@ class BWHardFilter extends Filter {
 }
 
 BWHardFilter.identifier = 'bwhard'
-BWHardFilter.name = '1920'
+BWHardFilter.displayName = '1920'
 
 export default BWHardFilter

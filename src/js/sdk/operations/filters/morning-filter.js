@@ -42,6 +42,6 @@ class MorningFilter extends Filter {
 }
 
 MorningFilter.identifier = 'morning'
-MorningFilter.name = 'Morning'
+MorningFilter.displayName = 'Morning'
 
 export default MorningFilter

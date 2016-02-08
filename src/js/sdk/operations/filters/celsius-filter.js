@@ -45,6 +45,6 @@ class CelsiusFilter extends Filter {
 }
 
 CelsiusFilter.identifier = 'celsius'
-CelsiusFilter.name = 'Celsius'
+CelsiusFilter.displayName = 'Celsius'
 
 export default CelsiusFilter

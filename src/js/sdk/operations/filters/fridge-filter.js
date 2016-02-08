@@ -49,6 +49,6 @@ class FridgeFilter extends Filter {
 }
 
 FridgeFilter.identifier = 'fridge'
-FridgeFilter.name = 'Fridge'
+FridgeFilter.displayName = 'Fridge'
 
 export default FridgeFilter

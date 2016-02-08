@@ -62,6 +62,6 @@ class OrchidFilter extends Filter {
 }
 
 OrchidFilter.identifier = 'orchid'
-OrchidFilter.name = 'Orchid'
+OrchidFilter.displayName = 'Orchid'
 
 export default OrchidFilter

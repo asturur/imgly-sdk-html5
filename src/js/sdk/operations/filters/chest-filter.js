@@ -47,6 +47,6 @@ class ChestFilter extends Filter {
 }
 
 ChestFilter.identifier = 'chest'
-ChestFilter.name = 'Chest'
+ChestFilter.displayName = 'Chest'
 
 export default ChestFilter

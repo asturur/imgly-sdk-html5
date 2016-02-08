@@ -28,6 +28,6 @@ class K6Filter extends Filter {
 }
 
 K6Filter.identifier = 'k6'
-K6Filter.name = 'K6'
+K6Filter.displayName = 'K6'
 
 export default K6Filter

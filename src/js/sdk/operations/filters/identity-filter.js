@@ -27,7 +27,7 @@ class IdentityFilter extends Filter {
 }
 
 IdentityFilter.isIdentity = true
-IdentityFilter.name = 'Original'
+IdentityFilter.displayName = 'Original'
 IdentityFilter.identifier = 'identity'
 
 export default IdentityFilter

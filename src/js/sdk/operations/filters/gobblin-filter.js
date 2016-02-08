@@ -25,6 +25,6 @@ class GobblinFilter extends Filter {
 }
 
 GobblinFilter.identifier = 'gobblin'
-GobblinFilter.name = 'Gobblin'
+GobblinFilter.displayName = 'Gobblin'
 
 export default GobblinFilter

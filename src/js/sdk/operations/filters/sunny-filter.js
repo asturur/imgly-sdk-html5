@@ -54,6 +54,6 @@ class SunnyFilter extends Filter {
 }
 
 SunnyFilter.identifier = 'sunny'
-SunnyFilter.name = 'Sunny'
+SunnyFilter.displayName = 'Sunny'
 
 export default SunnyFilter

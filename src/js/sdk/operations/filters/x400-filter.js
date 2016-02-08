@@ -25,6 +25,6 @@ class X400Filter extends Filter {
 }
 
 X400Filter.identifier = 'x400'
-X400Filter.name = 'X400'
+X400Filter.displayName = 'X400'
 
 export default X400Filter

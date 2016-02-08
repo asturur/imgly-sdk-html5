@@ -58,7 +58,7 @@ class Filter {
 
 Filter.identifier = null
 Filter.isIdentity = false
-Filter.name = null
+Filter.displayName = null
 
 /**
  * To create an {@link PhotoEditorSDK.Filter} class of your own, call this

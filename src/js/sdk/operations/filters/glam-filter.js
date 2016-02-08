@@ -49,6 +49,6 @@ class GlamFilter extends Filter {
 }
 
 GlamFilter.identifier = 'glam'
-GlamFilter.name = 'Glam'
+GlamFilter.displayName = 'Glam'
 
 export default GlamFilter

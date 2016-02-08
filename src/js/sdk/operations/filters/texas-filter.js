@@ -42,6 +42,6 @@ class TexasFilter extends Filter {
 }
 
 TexasFilter.identifier = 'texas'
-TexasFilter.name = 'Texas'
+TexasFilter.displayName = 'Texas'
 
 export default TexasFilter

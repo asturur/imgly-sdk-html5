@@ -48,6 +48,6 @@ class SemiredFilter extends Filter {
 }
 
 SemiredFilter.identifier = 'semired'
-SemiredFilter.name = 'Semired'
+SemiredFilter.displayName = 'Semired'
 
 export default SemiredFilter
