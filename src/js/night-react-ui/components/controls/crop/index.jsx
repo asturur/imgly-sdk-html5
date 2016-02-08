@@ -17,6 +17,13 @@ export default {
   identifier: 'crop',
   icon: 'controls/overview/crop@2x.png',
   label: 'controls.overview.crop',
+
+  /**
+   * Returns the initial shared state for this control
+   * @param  {Editor} editor
+   * @param  {Object} additionalState = {}
+   * @return {Object}
+   */
   getInitialSharedState: (editor) => {
     const operationExistedBefore = editor.operationExists('crop')
     const operation = editor.getOrCreateOperation('crop')
@@ -30,7 +37,13 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (editor) => {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: (editor) => {
     return editor.isFeatureEnabled('crop')
   }
 }

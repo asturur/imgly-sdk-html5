@@ -13,6 +13,10 @@ import { ReactBEM, React, BaseComponent } from '../../../globals'
 import ButtonComponent from '../../button-component'
 
 export default class WebcamComponent extends BaseComponent {
+  /**
+   * Renders this component
+   * @return {ReactBEM.Element}
+   */
   renderWithBEM () {
     let cellBEM = '$e:cell'
     if (this.props.halfHeight) {

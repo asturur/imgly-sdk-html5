@@ -182,6 +182,10 @@ export default class RadialBlurCanvasControlsComponent extends CanvasControlsCom
 
   // -------------------------------------------------------------------------- RENDERING
 
+  /**
+   * Sets the dimensions and position values from the current operation options
+   * @private
+   */
   _setStylesFromOptions () {
     const { editor } = this.context
     const zoom = editor.getSDK().getZoom()

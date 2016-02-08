@@ -18,6 +18,13 @@ export default {
   identifier: 'tilt-shift',
   icon: 'controls/focus/tilt-shift@2x.png',
   label: 'controls.focus.tilt-shift',
+
+  /**
+   * Returns the initial shared state for this control
+   * @param  {Editor} editor
+   * @param  {Object} additionalState = {}
+   * @return {Object}
+   */
   getInitialSharedState: (editor) => {
     const operationExistedBefore = editor.operationExists('tilt-shift')
     const operation = editor.getOrCreateOperation('tilt-shift', {
@@ -34,7 +41,13 @@ export default {
       operation, operationExistedBefore, initialOptions
     }
   },
-  isSelectable: (editor) => {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: (editor) => {
     return editor.isFeatureEnabled('tilt-shift')
   }
 }

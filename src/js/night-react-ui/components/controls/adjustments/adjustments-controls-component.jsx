@@ -18,21 +18,21 @@ import MiniSliderComponent from '../mini-slider-component'
 const ITEMS = [
   {
     identifier: 'brightness',
-    isSelectable: (editor) => editor.isFeatureEnabled('brightness'),
+    isAvailable: (editor) => editor.isFeatureEnabled('brightness'),
     defaultValue: 0,
     valueMultiplier: 100,
     valueOffset: 0
   },
   {
     identifier: 'saturation',
-    isSelectable: (editor) => editor.isFeatureEnabled('saturation'),
+    isAvailable: (editor) => editor.isFeatureEnabled('saturation'),
     defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100
   },
   {
     identifier: 'contrast',
-    isSelectable: (editor) => editor.isFeatureEnabled('contrast'),
+    isAvailable: (editor) => editor.isFeatureEnabled('contrast'),
     defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100
@@ -147,7 +147,7 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
    */
   _renderListItems () {
     return ITEMS
-      .filter((item) => item.isSelectable(this.context.editor))
+      .filter((item) => item.isAvailable(this.context.editor))
       .map((item) => {
         const isSelected = this.state.selectedControls === item
         const className = isSelected ? 'is-active' : null

@@ -154,7 +154,7 @@ export default class Editor extends EventEmitter {
     const control = this.getControl(identifier)
     if (!control) return false
 
-    return control.isSelectable && control.isSelectable(this)
+    return control.isAvailable && control.isAvailable(this)
   }
 
   /**
@@ -463,6 +463,9 @@ export default class Editor extends EventEmitter {
 
   // -------------------------------------------------------------------------- DISPOSAL
 
+  /**
+   * Cleans this instance up
+   */
   dispose () {
     this.stop()
 

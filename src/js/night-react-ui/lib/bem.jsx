@@ -19,14 +19,28 @@ class BEMObject {
     this._name = name
   }
 
+  /**
+   * Creates a BEMObject of type "element" that has this element as parent
+   * @param  {String} name
+   * @return {BEMObject}
+   */
   element (name) {
     return new BEMObject(this, 'element', name)
   }
 
+  /**
+   * Creates a BEMObject of type "modifier" that has this element as parent
+   * @param  {String} name
+   * @return {BEMObject}
+   */
   modifier (name) {
     return new BEMObject(this, 'modifier', name)
   }
 
+  /**
+   * Builds the class name for this BEMObject
+   * @return {String}
+   */
   get str () {
     let response = this._parent ? this._parent.str : ''
     switch (this._type) {
@@ -45,7 +59,12 @@ class BEMObject {
 }
 
 export default {
-  block (blockName) {
-    return new BEMObject(null, 'block', blockName)
+  /**
+   * Creates a BEMObject of type "block" that has this element as parent
+   * @param  {String} name
+   * @return {BEMObject}
+   */
+  block (name) {
+    return new BEMObject(null, 'block', name)
   }
 }

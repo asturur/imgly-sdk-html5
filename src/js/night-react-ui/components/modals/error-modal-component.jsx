@@ -17,10 +17,18 @@ export default class ErrorModalComponent extends BaseComponent {
     this._bindAll('_onClose')
   }
 
+  /**
+   * Gets called when the user clicks the close button
+   * @private
+   */
   _onClose () {
     this.props.modal.close()
   }
 
+  /**
+   * Renders this component
+   * @return {ReactBEM.Element}
+   */
   renderWithBEM () {
     const modal = this.props.modal
 

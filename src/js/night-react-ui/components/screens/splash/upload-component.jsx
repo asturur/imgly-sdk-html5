@@ -24,6 +24,8 @@ export default class UploadComponent extends BaseComponent {
     this.state = { dragAreaHovered: false }
   }
 
+  // -------------------------------------------------------------------------- EVENTS
+
   /**
    * Gets called when the cell emits a `dragEnter` event. Highlights
    * the cell
@@ -120,6 +122,8 @@ export default class UploadComponent extends BaseComponent {
     const file = fileInput.files[0]
     this._handleFile(file)
   }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Renders this component

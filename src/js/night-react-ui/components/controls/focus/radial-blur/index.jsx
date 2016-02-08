@@ -17,6 +17,13 @@ export default {
   identifier: 'radial-blur',
   icon: 'controls/focus/radial-blur@2x.png',
   label: 'controls.focus.radial-blur',
+
+  /**
+   * Returns the initial shared state for this control
+   * @param  {Editor} editor
+   * @param  {Object} additionalState = {}
+   * @return {Object}
+   */
   getInitialSharedState: (editor) => {
     const operationExistedBefore = editor.operationExists('radial-blur')
     const operation = editor.getOrCreateOperation('radial-blur')
@@ -29,7 +36,13 @@ export default {
       operation, operationExistedBefore, initialOptions
     }
   },
-  isSelectable: (editor) => {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: (editor) => {
     return editor.isFeatureEnabled('radial-blur')
   }
 }

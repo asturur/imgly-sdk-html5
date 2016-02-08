@@ -192,6 +192,10 @@ export default class TiltShiftCanvasControlsComponent extends CanvasControlsComp
 
   // -------------------------------------------------------------------------- RENDERING
 
+  /**
+   * Sets the dimensions and position values from the current operation options
+   * @private
+   */
   _setStylesFromOptions () {
     const { editor } = this.context
     const outputDimensions = editor.getOutputDimensions()

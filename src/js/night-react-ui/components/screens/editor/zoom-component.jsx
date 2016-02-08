@@ -21,6 +21,8 @@ export default class ZoomComponent extends BaseComponent {
     )
   }
 
+  // -------------------------------------------------------------------------- EVENTS
+
   /**
    * Gets called when the user clicks the "zoom out" button
    * @param {Event} e
@@ -40,6 +42,8 @@ export default class ZoomComponent extends BaseComponent {
     if (!this.props.zoomEnabled) return
     this.props.onZoomIn && this.props.onZoomIn()
   }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Renders this component

@@ -64,7 +64,7 @@ export default {
   },
 
   /**
-   * Returns the initial state for this control
+   * Returns the initial shared state for this control
    * @param  {Editor} editor
    * @param  {Object} additionalState = {}
    * @return {Object}
@@ -105,7 +105,13 @@ export default {
 
     return SDKUtils.extend({}, state, additionalState)
   },
-  isSelectable: (editor) => {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: (editor) => {
     return editor.isFeatureEnabled('text')
   }
 }

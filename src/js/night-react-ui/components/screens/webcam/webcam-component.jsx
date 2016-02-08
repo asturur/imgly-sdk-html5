@@ -20,14 +20,7 @@ export default class WebcamComponent extends BaseComponent {
     this.state = { webcamReady: false }
   }
 
-  /**
-   * Gets called when the webcam is ready to serve a video
-   * @private
-   */
-  _onWebcamReady () {
-    this.props.onReady && this.props.onReady()
-    this.setState({ webcamReady: true })
-  }
+  // -------------------------------------------------------------------------- LIFECYCLE
 
   /**
    * Checks whether this component needs an update
@@ -37,6 +30,41 @@ export default class WebcamComponent extends BaseComponent {
   shouldComponentUpdate (nextProps, nextState) {
     // This component never updates
     return false
+  }
+
+  /**
+   * Gets called when the component is about to unmount. Stops the video
+   * stream and kills the video
+   */
+  componentWillUnmount () {
+    super.componentWillUnmount()
+
+    const { video } = this.refs
+    if (this._stream) {
+      const track = this._stream.getTracks()[0]
+      track && track.stop()
+      this._stream.stop && this._stream.stop()
+    }
+    video.pause()
+  }
+
+  /**
+   * Gets called after the component has been mounted
+   */
+  componentDidMount () {
+    this._resizeVideo()
+    this._initVideoStream()
+  }
+
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when the webcam is ready to serve a video
+   * @private
+   */
+  _onWebcamReady () {
+    this.props.onReady && this.props.onReady()
+    this.setState({ webcamReady: true })
   }
 
   /**
@@ -64,30 +92,6 @@ export default class WebcamComponent extends BaseComponent {
       })
       image.src = canvas.toDataURL('image/png')
     })
-  }
-
-  /**
-   * Gets called when the component is about to unmount. Stops the video
-   * stream and kills the video
-   */
-  componentWillUnmount () {
-    super.componentWillUnmount()
-
-    const { video } = this.refs
-    if (this._stream) {
-      const track = this._stream.getTracks()[0]
-      track && track.stop()
-      this._stream.stop && this._stream.stop()
-    }
-    video.pause()
-  }
-
-  /**
-   * Gets called after the component has been mounted
-   */
-  componentDidMount () {
-    this._resizeVideo()
-    this._initVideoStream()
   }
 
   /**
@@ -136,6 +140,8 @@ export default class WebcamComponent extends BaseComponent {
       errorModal.on('close', () => this.props.onBack())
     })
   }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Renders this component

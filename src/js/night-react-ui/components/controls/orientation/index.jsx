@@ -16,6 +16,13 @@ export default {
   identifier: 'orientation',
   icon: 'controls/overview/orientation@2x.png',
   label: 'controls.overview.orientation',
+
+  /**
+   * Returns the initial shared state for this control
+   * @param  {Editor} editor
+   * @param  {Object} additionalState = {}
+   * @return {Object}
+   */
   getInitialSharedState: (editor) => {
     const operationExistedBefore = editor.operationExists('orientation')
     const operation = editor.getOrCreateOperation('orientation')
@@ -27,7 +34,13 @@ export default {
       initialOptions
     }
   },
-  isSelectable: (editor) => {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: (editor) => {
     return editor.isFeatureEnabled('rotation') ||
       editor.isFeatureEnabled('flip')
   }

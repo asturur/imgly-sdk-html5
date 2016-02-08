@@ -12,6 +12,10 @@
 import { React, ReactBEM, BaseComponent } from '../../globals'
 
 export default class WarningModalComponent extends BaseComponent {
+  /**
+   * Renders this component
+   * @return {ReactBEM.Element}
+   */
   renderWithBEM () {
     const modal = this.props.modal
     return (

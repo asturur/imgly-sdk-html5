@@ -21,6 +21,31 @@ export default class BaseComponent extends React.Component {
     )
   }
 
+  // -------------------------------------------------------------------------- LIFECYCLE
+
+  /**
+   * Gets called when this component has been mounted
+   */
+  componentDidMount () {
+    this._bindEvents()
+    if (this.props.sharedState) {
+      this.props.sharedState.on('update', this._onSharedStateUpdate)
+    }
+  }
+
+  /**
+   * Gets called before this component is unmounted
+   */
+  componentWillUnmount () {
+    this._unbindEvents()
+
+    if (this.props.sharedState) {
+      this.props.sharedState.off('update', this._onSharedStateUpdate)
+    }
+  }
+
+  // -------------------------------------------------------------------------- HELPER FUNCTIONS
+
   /**
    * Binds the instance methods with the given names
    * to the class context
@@ -55,23 +80,7 @@ export default class BaseComponent extends React.Component {
     return this.context.ui.getAssetPath(...args)
   }
 
-  /**
-   * Method we are using for rendering
-   * @return {ReactBEM.element}
-   */
-  renderWithBEM () {
-
-  }
-
-  /**
-   * Gets called when this component has been mounted
-   */
-  componentDidMount () {
-    this._bindEvents()
-    if (this.props.sharedState) {
-      this.props.sharedState.on('update', this._onSharedStateUpdate)
-    }
-  }
+  // -------------------------------------------------------------------------- SHARED STATE
 
   /**
    * Gets called when the shared state did change
@@ -89,17 +98,6 @@ export default class BaseComponent extends React.Component {
    */
   sharedStateDidChange (newState) {
 
-  }
-
-  /**
-   * Gets called before this component is unmounted
-   */
-  componentWillUnmount () {
-    this._unbindEvents()
-
-    if (this.props.sharedState) {
-      this.props.sharedState.off('update', this._onSharedStateUpdate)
-    }
   }
 
   /**
@@ -126,6 +124,8 @@ export default class BaseComponent extends React.Component {
   forceSharedUpdate () {
     this.props.sharedState.broadcastUpdate()
   }
+
+  // -------------------------------------------------------------------------- EVENT HANDLING
 
   /**
    * Binds the events in _events
@@ -158,6 +158,16 @@ export default class BaseComponent extends React.Component {
    */
   _emitEvent (eventName, ...args) {
     this.context.mediator.emit(eventName, ...args)
+  }
+
+  // -------------------------------------------------------------------------- RENDERING
+
+  /**
+   * Renders this element
+   * @return {ReactBEM.element}
+   */
+  renderWithBEM () {
+
   }
 
   /**

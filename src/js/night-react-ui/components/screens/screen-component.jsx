@@ -12,6 +12,10 @@
 import { React, ReactBEM, BaseComponent } from '../../globals'
 
 export default class ScreenComponent extends BaseComponent {
+  /**
+   * Renders this component
+   * @return {ReactBEM.Element}
+   */
   renderWithBEM () {
     return <div />
   }

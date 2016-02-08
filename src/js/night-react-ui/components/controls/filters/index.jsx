@@ -15,6 +15,13 @@ export default {
   identifier: 'filter',
   icon: 'controls/overview/filters@2x.png',
   label: 'controls.overview.filters',
+
+  /**
+   * Returns the initial shared state for this control
+   * @param  {Editor} editor
+   * @param  {Object} additionalState = {}
+   * @return {Object}
+   */
   getInitialSharedState: (editor) => {
     const operationExistedBefore = editor.operationExists('filter')
     const operation = editor.getOrCreateOperation('filter')
@@ -28,7 +35,13 @@ export default {
       initialOptions
     }
   },
-  isSelectable: function (editor) {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: function (editor) {
     return editor.isFeatureEnabled('filter')
   }
 }

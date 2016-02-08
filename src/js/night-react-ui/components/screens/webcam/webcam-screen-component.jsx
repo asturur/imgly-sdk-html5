@@ -21,6 +21,8 @@ export default class WebcamScreenComponent extends ScreenComponent {
     this.state = { webcamReady: false }
   }
 
+  // -------------------------------------------------------------------------- EVENTS
+
   /**
    * Gets called when the webcam is ready
    * @private
@@ -51,6 +53,8 @@ export default class WebcamScreenComponent extends ScreenComponent {
         console.error && console.error(e)
       })
   }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Renders this component

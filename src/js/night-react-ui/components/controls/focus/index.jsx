@@ -16,7 +16,13 @@ export default {
   identifier: 'focus',
   icon: 'controls/overview/focus@2x.png',
   label: 'controls.overview.focus',
-  isSelectable: (editor) => {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: (editor) => {
     return editor.isFeatureEnabled('radial-blur') ||
       editor.isFeatureEnabled('tilt-shift')
   }

@@ -16,6 +16,13 @@ export default {
   identifier: 'adjustments',
   icon: 'controls/overview/adjustments@2x.png',
   label: 'controls.overview.adjustments',
+
+  /**
+   * Returns the initial shared state for this control
+   * @param  {Editor} editor
+   * @param  {Object} additionalState = {}
+   * @return {Object}
+   */
   getInitialSharedState: (editor) => {
     const operationExistedBefore = editor.operationExists('adjustments')
     const operation = editor.getOrCreateOperation('adjustments')
@@ -24,7 +31,13 @@ export default {
       operation, operationExistedBefore, initialOptions
     }
   },
-  isSelectable: (editor) => {
+
+  /**
+   * Checks if this control is available to the user
+   * @param  {Editor} editor
+   * @return {Boolean}
+   */
+  isAvailable: (editor) => {
     return editor.isFeatureEnabled('brightness') ||
       editor.isFeatureEnabled('saturation') ||
       editor.isFeatureEnabled('contrast')

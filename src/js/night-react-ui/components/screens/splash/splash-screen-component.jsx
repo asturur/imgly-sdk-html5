@@ -21,6 +21,8 @@ export default class SplashScreenComponent extends ScreenComponent {
     this._bindAll('_onWebcamClick', '_onImage')
   }
 
+  // -------------------------------------------------------------------------- EVENTS
+
   /**
    * Gets called when the WebcamComponent has received a click
    * @private
@@ -37,6 +39,8 @@ export default class SplashScreenComponent extends ScreenComponent {
   _onImage (image) {
     this.props.app.setImage(image)
   }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Renders this component

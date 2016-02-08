@@ -43,7 +43,7 @@ export default class FocusControlsComponent extends ControlsComponent {
    */
   _renderListItems () {
     return ITEMS
-      .filter((item) => item.isSelectable(this.context.editor))
+      .filter((item) => item.isAvailable(this.context.editor))
       .map((item) => {
         return (<li
           bem='e:item'
