@@ -92,22 +92,6 @@ export default class AppComponent extends React.Component {
       <Screen ref='screen' app={this} />
     </div>)
   }
-
-  /**
-   * Returns the maximum megapixels for the current device
-   * @return {Number}
-   * @private
-   * @todo  This belongs to the Editor class
-   */
-  _getMaxMegapixels () {
-    const { maxMegaPixels } = this.props.options
-    if (typeof maxMegaPixels === 'number') {
-      return maxMegaPixels
-    } else {
-      const isMobile = SDKUtils.isMobile()
-      return maxMegaPixels[isMobile ? 'mobile' : 'desktop']
-    }
-  }
 }
 
 AppComponent.childContextTypes = {

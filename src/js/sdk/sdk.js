@@ -8,19 +8,17 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import Engine from './engine/'
-import EventEmitter from './lib/event-emitter'
-import Utils from './lib/utils'
-import Vector2 from './lib/math/vector2'
+import
+  { Constants, Engine, Utils, EventEmitter, Vector2, Log, requestAnimationFrame }
+from './globals'
 import OperationsStack from './lib/operations-stack'
 import VersionChecker from './lib/version-checker'
 import Operations from './operations/'
 import Exif from './lib/exif'
 import ImageExporter from './lib/image-exporter'
-import Log from '../shared/log'
 import PerformanceTest from './lib/performance-test'
 
-import { RenderType, ImageFormat, Events } from './constants'
+const { RenderType, ImageFormat, Events } = Constants
 
 export default class PhotoEditorSDK extends EventEmitter {
   constructor (preferredRenderer, options = {}) {
@@ -75,6 +73,18 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     const renderer = this._renderer.constructor.name
     Log.log('Yo!', `Version: ${this.version} (${renderer}) - https://www.photoeditorsdk.com`)
+
+    // Async image handling
+    requestAnimationFrame(this._init.bind(this))
+  }
+
+  /**
+   * Initializes the SDK
+   */
+  _init () {
+    if (this._options.image) {
+      this.setImage(this._options.image)
+    }
   }
 
   // -------------------------------------------------------------------------- EVENTS

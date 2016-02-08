@@ -19,7 +19,7 @@ import BaseComponent from './components/base-component'
 import Utils from './lib/utils'
 import Constants from './lib/constants'
 import SharedState from './lib/shared-state'
-import { requestAnimationFrame, cancelAnimationFrame } from './lib/request-animation-frame'
+import { requestAnimationFrame, cancelAnimationFrame } from '../shared/animation-frame'
 
 const Promise = PhotoEditorSDK.Promise
 const Color = PhotoEditorSDK.Color

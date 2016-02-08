@@ -10,6 +10,7 @@
 
 import Engine from './engine'
 
+import EventEmitter from './lib/event-emitter'
 import Utils from './lib/utils'
 import Configurable from './lib/configurable'
 import Color from './lib/color'
@@ -20,14 +21,19 @@ import Vector2 from './lib/math/vector2'
 import Rectangle from './lib/math/rectangle'
 import Matrix from './lib/math/matrix'
 
+import { requestAnimationFrame, cancelAnimationFrame } from '../shared/animation-frame'
+
 export default {
   Engine,
 
+  EventEmitter,
   Utils,
   Configurable,
   Color,
   Constants,
   Log,
 
-  Vector2, Rectangle, Matrix
+  Vector2, Rectangle, Matrix,
+
+  requestAnimationFrame, cancelAnimationFrame
 }
