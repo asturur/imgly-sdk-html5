@@ -46,23 +46,9 @@ class GlamFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'glam'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Glam'
-  }
 }
+
+GlamFilter.identifier = 'glam'
+GlamFilter.name = 'Glam'
 
 export default GlamFilter

@@ -25,23 +25,9 @@ class K6Filter extends Filter {
       saturation: 0.5
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'k6'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'K6'
-  }
 }
+
+K6Filter.identifier = 'k6'
+K6Filter.name = 'K6'
 
 export default K6Filter

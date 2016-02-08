@@ -27,23 +27,9 @@ class FoodFilter extends Filter {
       contrast: 1.1
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'food'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Food'
-  }
 }
+
+FoodFilter.identifier = 'food'
+FoodFilter.name = 'Food'
 
 export default FoodFilter

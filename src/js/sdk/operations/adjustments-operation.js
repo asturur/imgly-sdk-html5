@@ -69,7 +69,7 @@ class AdjustmentsOperation extends Operation {
 
     return Promise.resolve()
   }
- }
+}
 
 /**
  * A unique string that identifies this operation. Can be used to select

@@ -38,23 +38,9 @@ class KDynamicFilter extends Filter {
       saturation: 0.7
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'kdynamic'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'KDynamic'
-  }
 }
+
+KDynamicFilter.identifier = 'kdynamic'
+KDynamicFilter.name = 'KDynamic'
 
 export default KDynamicFilter

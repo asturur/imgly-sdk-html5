@@ -22,23 +22,9 @@ class X400Filter extends Filter {
 
     this._stack.push(new Filter.Primitives.X400())
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'x400'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'X400'
-  }
 }
+
+X400Filter.identifier = 'x400'
+X400Filter.name = 'X400'
 
 export default X400Filter

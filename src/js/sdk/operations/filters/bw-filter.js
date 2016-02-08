@@ -22,23 +22,9 @@ class BWFilter extends Filter {
 
     this._stack.push(new Filter.Primitives.Grayscale())
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'bw'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'B&W'
-  }
 }
+
+BWFilter.identifier = 'bw'
+BWFilter.name = 'B&W'
 
 export default BWFilter

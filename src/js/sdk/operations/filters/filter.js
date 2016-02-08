@@ -23,19 +23,6 @@ class Filter {
   }
 
   /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () { return null }
-
-  /**
-   * Specifies whether this filter is an identity filter
-   * @return {Boolean}
-   */
-  static get isIdentity () { return false }
-
-  /**
    * Renders the filter
    * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
@@ -68,6 +55,10 @@ class Filter {
     this._stack.dispose()
   }
 }
+
+Filter.identifier = null
+Filter.isIdentity = false
+Filter.name = null
 
 /**
  * To create an {@link PhotoEditorSDK.Filter} class of your own, call this

@@ -18,29 +18,6 @@ import Filter from './filter'
  */
 class IdentityFilter extends Filter {
   /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'identity'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Original'
-  }
-
-  /**
-   * Specifies whether this filter is an identity filter
-   * @return {Boolean}
-   */
-  static get isIdentity () { return true }
-
-  /**
    * Renders the filter
    * @return {Promise}
    */
@@ -48,5 +25,9 @@ class IdentityFilter extends Filter {
     return Promise.resolve()
   }
 }
+
+IdentityFilter.isIdentity = true
+IdentityFilter.name = 'Original'
+IdentityFilter.identifier = 'identity'
 
 export default IdentityFilter

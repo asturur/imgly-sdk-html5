@@ -39,23 +39,9 @@ class TexasFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'texas'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Texas'
-  }
 }
+
+TexasFilter.identifier = 'texas'
+TexasFilter.name = 'Texas'
 
 export default TexasFilter

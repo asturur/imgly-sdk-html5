@@ -51,23 +51,9 @@ class A15Filter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'a15'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return '15'
-  }
 }
+
+A15Filter.identifier = 'a15'
+A15Filter.name = '15'
 
 export default A15Filter

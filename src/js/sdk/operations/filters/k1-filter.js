@@ -36,23 +36,9 @@ class K1Filter extends Filter {
       saturation: 0.9
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'k1'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'K1'
-  }
 }
+
+K1Filter.identifier = 'k1'
+K1Filter.name = 'K1'
 
 export default K1Filter

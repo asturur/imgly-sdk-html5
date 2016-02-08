@@ -50,23 +50,9 @@ class Pola669Filter extends Filter {
       contrast: 1.5
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'pola669'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Pola 669'
-  }
 }
+
+Pola669Filter.identifier = 'pola669'
+Pola669Filter.name = 'Pola 669'
 
 export default Pola669Filter

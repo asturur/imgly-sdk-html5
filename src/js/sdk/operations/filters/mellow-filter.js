@@ -39,23 +39,9 @@ class MellowFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'mellow'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Mellow'
-  }
 }
+
+MellowFilter.identifier = 'mellow'
+MellowFilter.name = 'Mellow'
 
 export default MellowFilter

@@ -40,23 +40,9 @@ class K2Filter extends Filter {
       color: new Color(40 / 255, 40 / 255, 40 / 255)
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'k2'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'K2'
-  }
 }
+
+K2Filter.identifier = 'k2'
+K2Filter.name = 'K2'
 
 export default K2Filter

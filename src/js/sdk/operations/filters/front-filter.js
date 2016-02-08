@@ -48,23 +48,9 @@ class FrontFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'front'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Front'
-  }
 }
+
+FrontFilter.identifier = 'front'
+FrontFilter.name = 'Front'
 
 export default FrontFilter

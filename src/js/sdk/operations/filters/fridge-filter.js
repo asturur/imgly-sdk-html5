@@ -46,23 +46,9 @@ class FridgeFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'fridge'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Fridge'
-  }
 }
+
+FridgeFilter.identifier = 'fridge'
+FridgeFilter.name = 'Fridge'
 
 export default FridgeFilter

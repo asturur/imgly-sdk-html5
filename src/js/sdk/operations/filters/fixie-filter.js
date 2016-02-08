@@ -49,23 +49,9 @@ class FixieFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'fixie'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Fixie'
-  }
 }
+
+FixieFilter.identifier = 'fixie'
+FixieFilter.name = 'Fixie'
 
 export default FixieFilter

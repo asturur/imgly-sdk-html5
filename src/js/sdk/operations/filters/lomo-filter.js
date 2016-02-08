@@ -30,23 +30,9 @@ class LomoFilter extends Filter {
       ]
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'lomo'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Lomo'
-  }
 }
+
+LomoFilter.identifier = 'lomo'
+LomoFilter.name = 'Lomo'
 
 export default LomoFilter

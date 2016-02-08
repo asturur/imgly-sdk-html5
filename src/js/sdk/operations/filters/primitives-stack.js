@@ -203,18 +203,6 @@ class PrimitivesStack {
   }
 
   /**
-   * Creates and returns a render texture
-   * @param  {PhotoEditorSDK} sdk
-   * @return {RenderTexture}
-   */
-  _getRenderTexture (sdk) {
-    if (!this._renderTexture) {
-
-    }
-    return this._renderTexture
-  }
-
-  /**
    * Cleans up this instance
    */
   dispose () {

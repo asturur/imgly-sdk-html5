@@ -56,23 +56,9 @@ class QuoziFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'quozi'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Quozi'
-  }
 }
+
+QuoziFilter.identifier = 'quozi'
+QuoziFilter.name = 'Quozi'
 
 export default QuoziFilter

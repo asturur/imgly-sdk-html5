@@ -39,23 +39,9 @@ class MorningFilter extends Filter {
 
     this._stack.push(new Filter.Primitives.Glow())
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'morning'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Morning'
-  }
 }
+
+MorningFilter.identifier = 'morning'
+MorningFilter.name = 'Morning'
 
 export default MorningFilter

@@ -58,23 +58,9 @@ class LeninFilter extends Filter {
       }
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'lenin'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Lenin'
-  }
 }
+
+LeninFilter.identifier = 'lenin'
+LeninFilter.name = 'Lenin'
 
 export default LeninFilter

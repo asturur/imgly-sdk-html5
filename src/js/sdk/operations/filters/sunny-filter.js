@@ -51,23 +51,9 @@ class SunnyFilter extends Filter {
       ]
     }))
   }
-
-  /**
-   * A unique string that identifies this operation. Can be used to select
-   * the active filter.
-   * @type {String}
-   */
-  static get identifier () {
-    return 'sunny'
-  }
-
-  /**
-   * The name that is displayed in the UI
-   * @type {String}
-   */
-  get name () {
-    return 'Sunny'
-  }
 }
+
+SunnyFilter.identifier = 'sunny'
+SunnyFilter.name = 'Sunny'
 
 export default SunnyFilter
