@@ -106,7 +106,9 @@ export default class ItemComponent extends BaseComponent {
    * Gets called when the user clicks the remove button
    * @private
    */
-  _onRemoveClick () {
+  _onRemoveClick (e) {
+    e.stopPropagation()
+
     const { operation, sprite, onRemove } = this.props
     operation.removeSprite(sprite)
 
