@@ -76,6 +76,30 @@ export default class Sprite extends Configurable {
   }
 
   /**
+   * Applies a flip in the given direction
+   * @param  {String} direction
+   */
+  applyFlip (direction) {
+    const position = this._options.position
+    switch (direction) {
+      case 'horizontal':
+        position.x = 1 - position.x
+        this.set({
+          flipHorizontally: !this._options.flipHorizontally,
+          position
+        })
+        break
+      case 'vertical':
+        position.y = 1 - position.y
+        this.set({
+          flipVertically: !this._options.flipVertically,
+          position
+        })
+        break
+    }
+  }
+
+  /**
    * Checks if this operation is dirty for the given renderer
    * @param  {BaseRenderer}  renderer
    * @return {Boolean}

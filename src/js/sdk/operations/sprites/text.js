@@ -51,6 +51,26 @@ export default class Text extends Sprite {
   }
 
   /**
+   * Applies a flip in the given direction
+   * @param  {String} direction
+   */
+  applyFlip (direction) {
+    super.applyFlip(direction)
+
+    let rotation = this._options.rotation
+    switch (direction) {
+      case 'horizontal':
+        rotation += (Math.PI - rotation) * 2
+        this.setRotation(rotation)
+        break
+      case 'vertical':
+        rotation += (Math.PI / 2 - rotation) * 2
+        this.setRotation(rotation)
+        break
+    }
+  }
+
+  /**
    * Updates this sprite
    * @param  {SDK} sdk
    * @return {Promise}
