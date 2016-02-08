@@ -77,6 +77,31 @@ export default class PhotoEditorSDK extends EventEmitter {
     Log.log('Yo!', `Version: ${this.version} (${renderer}) - https://www.photoeditorsdk.com`)
   }
 
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when an operation is updated. Delegates the event.
+   * @private
+   */
+  _onOperationUpdate (...args) {
+    this.emit(Events.OPERATION_UPDATED, ...args)
+  }
+
+  /**
+   * Gets called when the WebGL context has been restored. Re-triggers a render.
+   * @private
+   */
+  _onContextRestored () {
+    Log.warn(this.constructor.name, 'Trying to re-render after WebGL context has been restored.')
+    this.setAllOperationsToDirty()
+    this._operationsStack.forEach((operation) => {
+      operation.disposeRenderTexture()
+    })
+    this.render()
+  }
+
+  // -------------------------------------------------------------------------- RENDERING
+
   /**
    * Exports the image
    * @param  {PhotoEditorSDK.RenderType} [renderType=PhotoEditorSDK.RenderType.DATAURL] - The output type
@@ -113,6 +138,10 @@ export default class PhotoEditorSDK extends EventEmitter {
       })
   }
 
+  /**
+   * Renders the current image
+   * @return {Promise}
+   */
   render () {
     if (!this._renderer) this._initRenderer()
 
@@ -159,25 +188,29 @@ export default class PhotoEditorSDK extends EventEmitter {
       })
   }
 
+  // -------------------------------------------------------------------------- OPERATIONS
+
   /**
-   * Gets called when the WebGL context has been restored. Re-triggers a render.
+   * Registers all default operations
    * @private
    */
-  _onContextRestored () {
-    Log.warn(this.constructor.name, 'Trying to re-render after WebGL context has been restored.')
-    this.setAllOperationsToDirty()
-    this._operationsStack.forEach((operation) => {
-      operation.disposeRenderTexture()
-    })
-    this.render()
+  _registerOperations () {
+    this._operations = {}
+
+    for (let operationName in Operations) {
+      const operation = Operations[operationName]
+      this._operations[operation.identifier] = operation
+    }
+
+    this._operations = Utils.extend(this._operations,
+      this._options.extensions.operations)
   }
 
+  /**
+   * Sets all operations in the stack to dirty
+   */
   setAllOperationsToDirty () {
     this._operationsStack.setAllToDirty()
-  }
-
-  getInputDimensions () {
-    return new Vector2(this._image.width, this._image.height)
   }
 
   /**
@@ -200,6 +233,71 @@ export default class PhotoEditorSDK extends EventEmitter {
     return operation
   }
 
+  /**
+   * Adds the given operation to the operations stack
+   * @param {Operation} operation
+   */
+  addOperation (operation) {
+    this._operationsStack.push(operation)
+  }
+
+  // -------------------------------------------------------------------------- DIMENSIONS
+
+  /**
+   * Returns the maximum dimensions that this device supports (WebGL only)
+   * @return {Number}
+   */
+  getMaxDimensions () {
+    const canvas = document.createElement('canvas')
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+    if (!gl) {
+      return null
+    } else {
+      return gl.getParameter(gl.MAX_TEXTURE_SIZE)
+    }
+  }
+
+  /**
+   * Returns the initial image dimensions
+   * @return {Vector2}
+   */
+  getInputDimensions () {
+    return new Vector2(this._image.width, this._image.height)
+  }
+
+  /**
+   * Returns the final dimensions that the input image would have
+   * after all existing operations have been applied
+   * @return {Vector2}
+   */
+  getFinalDimensions () {
+    let dimensions = this.getInputDimensions()
+    const operationsStack = this._operationsStack
+
+    operationsStack.forEach((operation) => {
+      dimensions = operation.getNewDimensions(dimensions)
+    })
+
+    return dimensions
+  }
+
+  // -------------------------------------------------------------------------- MISC
+
+  /**
+   * Checks for version updates
+   * @private
+   */
+  _checkForUpdates () {
+    if (typeof window !== 'undefined' && this._options.versionCheck) {
+      this._versionChecker = new VersionChecker(this.version)
+    }
+  }
+
+  /**
+   * Creates a render texture for the current renderer
+   * @return {Engine.RenderTexture}
+   * @TODO  This does probably not belong here
+   */
   createRenderTexture () {
     const { pixelRatio } = this._options
     // @TODO Use Sprite#getFrame or Sprite#getWidth/#getHeight
@@ -207,6 +305,10 @@ export default class PhotoEditorSDK extends EventEmitter {
     return new Engine.RenderTexture(this._renderer, bounds.width, bounds.height, pixelRatio)
   }
 
+  /**
+   * Initializes the renderer
+   * @private
+   */
   _initRenderer () {
     const rendererOptions = {
       canvas: this._options.canvas,
@@ -241,24 +343,9 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._sprite.setTexture(this._inputTexture)
   }
 
-  /**
-   * Returns the final dimensions that the input image would have
-   * after all existing operations have been applied
-   * @return {Vector2}
-   */
-  getFinalDimensions () {
-    let dimensions = this.getInputDimensions()
-    const operationsStack = this._operationsStack
-
-    operationsStack.forEach((operation) => {
-      dimensions = operation.getNewDimensions(dimensions)
-    })
-
-    return dimensions
+  resizeTo (dimensions) {
+    this._renderer.resizeTo(dimensions)
   }
-
-  getSprite () { return this._sprite }
-  getContainer () { return this._container }
 
   /**
    * Resets all custom and selected operations
@@ -267,47 +354,13 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._operationsStack.clear()
   }
 
-  addOperation (operation) {
-    this._operationsStack.push(operation)
-  }
-
-  setCanvas (canvas) {
-    if (!this._renderer) this._initRenderer()
-    this._renderer.setCanvas(canvas)
-  }
-
-  getCanvas () {
-    if (!this._renderer) this._initRenderer()
-    return this._renderer.getCanvas()
-  }
-
-  /**
-   * Sets the image and parses the exif data
-   * @param {Image} image
-   * @param {Exif} exif = null
-   */
-  setImage (image, exif = null) {
-    this._options.image = image
-    this._image = image
-    if (!exif) {
-      this._parseExif(image)
-    } else {
-      this._exif = exif
-      this._handleExifOrientation()
-    }
-
-    this._inputTexture = Engine.Texture.fromImage(this._image)
-    this._sprite.setTexture(this._inputTexture)
-  }
-
-  resizeTo (dimensions) {
-    this._renderer.resizeTo(dimensions)
-  }
+  // -------------------------------------------------------------------------- EXIF
 
   /**
    * Parses the exif data and fixes the orientation if necessary
    * @param {Image} image
    * @private
+   * @TODO Move this somewhere else
    */
   _parseExif (image) {
     if (!image) return
@@ -323,42 +376,9 @@ export default class PhotoEditorSDK extends EventEmitter {
   }
 
   /**
-   * Checks for version updates
-   * @private
-   */
-  _checkForUpdates () {
-    if (typeof window !== 'undefined' && this._options.versionCheck) {
-      this._versionChecker = new VersionChecker(this.version)
-    }
-  }
-
-  /**
-   * Registers all default operations
-   * @private
-   */
-  _registerOperations () {
-    this._operations = {}
-
-    for (let operationName in Operations) {
-      const operation = Operations[operationName]
-      this._operations[operation.identifier] = operation
-    }
-
-    this._operations = Utils.extend(this._operations,
-      this._options.extensions.operations)
-  }
-
-  /**
-   * Gets called when an operation is updated. Delegates the event.
-   * @private
-   */
-  _onOperationUpdate (...args) {
-    this.emit(Events.OPERATION_UPDATED, ...args)
-  }
-
-  /**
    * Reads the EXIF orientation tag and fixes it with the OrientationOperation
    * @private
+   * @TODO Move this somewhere else
    */
   _handleExifOrientation () {
     let exifTags = this._exif.getTags()
@@ -406,16 +426,47 @@ export default class PhotoEditorSDK extends EventEmitter {
     }
   }
 
-  getMaxDimensions () {
-    const canvas = document.createElement('canvas')
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-    if (!gl) {
-      return null
-    } else {
-      return gl.getParameter(gl.MAX_TEXTURE_SIZE)
-    }
+  // -------------------------------------------------------------------------- GETTERS / SETTERS
+
+  /**
+   * Sets the canvas to the given one
+   * @param {Canvas} canvas
+   */
+  setCanvas (canvas) {
+    if (!this._renderer) this._initRenderer()
+    this._renderer.setCanvas(canvas)
   }
 
+  /**
+   * Returns the current canvas
+   * @return {Canvas}
+   */
+  getCanvas () {
+    if (!this._renderer) this._initRenderer()
+    return this._renderer.getCanvas()
+  }
+
+  /**
+   * Sets the image and parses the exif data
+   * @param {Image} image
+   * @param {Exif} exif = null
+   */
+  setImage (image, exif = null) {
+    this._options.image = image
+    this._image = image
+    if (!exif) {
+      this._parseExif(image)
+    } else {
+      this._exif = exif
+      this._handleExifOrientation()
+    }
+
+    this._inputTexture = Engine.Texture.fromImage(this._image)
+    this._sprite.setTexture(this._inputTexture)
+  }
+
+  getSprite () { return this._sprite }
+  getContainer () { return this._container }
   getOperationsStack () { return this._operationsStack }
   setOperationsStack (operationsStack) {
     if (this._operationsStack) {
