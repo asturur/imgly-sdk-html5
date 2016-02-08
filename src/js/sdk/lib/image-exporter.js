@@ -55,7 +55,7 @@ class ImageExporter {
 
   /**
    * Exports the image from the given canvas with the given options
-   * @param  {PhotoEditorSDK} kit
+   * @param  {PhotoEditorSDK} sdk
    * @param  {Image} image
    * @param  {Canvas} canvas
    * @param  {PhotoEditorSDK.RenderType} renderType
@@ -63,7 +63,7 @@ class ImageExporter {
    * @param  {Number} quality = 0.8
    * @return {Promise}
    */
-  static export (kit, image, canvas, renderType, imageFormat, quality = 0.8) {
+  static export (sdk, image, canvas, renderType, imageFormat, quality = 0.8) {
     return new Promise((resolve, reject) => {
       let result
       if (renderType === RenderType.IMAGE ||
@@ -78,7 +78,7 @@ class ImageExporter {
         // When image's `src` attribute is a jpeg data url, we can restore
         // the exif information
         if (Exif.isJPEG(image.src) && Exif.isJPEG(result)) {
-          const exif = kit.getExif()
+          const exif = sdk.getExif()
           if (exif) {
             result = exif.restoreExifTags(result)
           }
