@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM } from '../../../globals'
+import { ReactBEM, SDKUtils } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 
@@ -68,10 +68,7 @@ export default class OverviewControlsComponent extends ControlsComponent {
         })
 
         if (groupItems.length) {
-          if (groupOrIdentifier !== controlsOrder[controlsOrder.length - 1]) {
-            groupItems.push(<li bem='e:separator'></li>)
-          }
-          items = items.concat(groupItems)
+          items.push(groupItems)
         }
       } else {
         const identifier = groupOrIdentifier
@@ -80,7 +77,15 @@ export default class OverviewControlsComponent extends ControlsComponent {
       }
     })
 
-    return items
+    let finalItems = []
+    items.forEach((itemOrGroup) => {
+      finalItems = finalItems.concat(itemOrGroup)
+      if (itemOrGroup !== items[items.length - 1]) {
+        finalItems.push(<li bem='e:separator'></li>)
+      }
+    })
+
+    return finalItems
   }
 
   /**
