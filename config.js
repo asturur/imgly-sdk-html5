@@ -27,7 +27,6 @@ module.exports = {
   // node-sass / libsass configuration
   sass: {
     src: [
-      source + '/css/pesdk-night-ui.sass',
       source + '/css/pesdk-night-react-ui.sass'
     ],
     allSrc: [
@@ -35,7 +34,6 @@ module.exports = {
     ],
     dest: destination + '/css',
     destFiles: [
-      destination + '/css/pesdk-night-ui.css',
       destination + '/css/pesdk-night-react-ui.css'
     ],
     settings: {
@@ -93,7 +91,6 @@ module.exports = {
     },
     entry: {
       SDK: './sdk/index',
-      NightUI: './night-ui/ui',
       NightReactUI: './night-react-ui/ui'
     },
     devtool: 'inline-source-map',
