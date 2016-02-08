@@ -2,7 +2,7 @@
   "controls": {
     "overview": {
       "filters": "Filters",
-      "orientation": "Rotate & Flip",
+      "orientation": "Orientation",
       "adjustments": "Adjust",
       "crop": "Crop",
       "focus": "Focus",
