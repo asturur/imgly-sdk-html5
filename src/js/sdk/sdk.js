@@ -54,7 +54,6 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._offset = new Vector2()
     this._zoom = this._options.zoom
     this._operations = {}
-    this._image = this._options.image
     this._renderMode = this._options.renderMode
     this._operationsStack = null
     this.setOperationsStack(new OperationsStack())
@@ -66,6 +65,10 @@ export default class PhotoEditorSDK extends EventEmitter {
 
     this._inputBaseTexture = null
     this._inputTexture = null
+
+    if (this._options.image) {
+      this.setImage(this._options.image)
+    }
 
     this._checkForUpdates()
     this._registerOperations()
@@ -344,9 +347,6 @@ export default class PhotoEditorSDK extends EventEmitter {
         `)
         this._renderer = Engine.autoDetectRenderer(100, 100, rendererOptions)
     }
-
-    this._inputTexture = Engine.Texture.fromImage(this._image)
-    this._sprite.setTexture(this._inputTexture)
   }
 
   resizeTo (dimensions) {
