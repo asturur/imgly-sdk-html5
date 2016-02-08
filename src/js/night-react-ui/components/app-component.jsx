@@ -28,8 +28,6 @@ export default class AppComponent extends React.Component {
       empty: EmptyScreenComponent
     }
 
-    this._onModalManagerUpdate = this._onModalManagerUpdate.bind(this)
-
     let initialScreen
     if (this.props.options.image) {
       initialScreen = this._screens.editor
@@ -41,14 +39,6 @@ export default class AppComponent extends React.Component {
   }
 
   // -------------------------------------------------------------------------- EVENTS
-
-  /**
-   * Gets called when the modal manager has triggered an update
-   * @private
-   */
-  _onModalManagerUpdate () {
-    this.forceUpdate()
-  }
 
   /**
    * Switches to the webcam screen
@@ -97,8 +87,7 @@ export default class AppComponent extends React.Component {
 
     return ReactBEM.transform(<div bem='b:editor'>
       <ModalContainerComponent
-        modalManager={ModalManager.instance}
-        onUpdate={this._onModalManagerUpdate} />
+        modalManager={ModalManager.instance} />
 
       <Screen ref='screen' app={this} />
     </div>)
