@@ -27,7 +27,7 @@ export default class ControlPoint {
 
     context.beginPath()
     context.lineJoin = 'round'
-    context.strokeStyle = this._path.getColor().toHex()
+    context.strokeStyle = this._path.getColor().toRGBA()
     context.lineWidth = this._path.getThickness()
     context.moveTo(lastPosition.x, lastPosition.y)
     context.lineTo(position.x, position.y)

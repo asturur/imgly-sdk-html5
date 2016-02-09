@@ -55,6 +55,10 @@
       "flip": "Spiegeln",
       "flip-v": "Spiegeln (V)",
       "flip-h": "Spiegeln (H)"
+    },
+    "brush": {
+      "thickness": "Dicke",
+      "color": "Farbe"
     }
   },
   "webcam": {

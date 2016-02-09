@@ -55,6 +55,10 @@
       "flip": "Flip",
       "flip-v": "Flip (V)",
       "flip-h": "Flip (H)"
+    },
+    "brush": {
+      "thickness": "Thickness",
+      "color": "Color"
     }
   },
   "webcam": {

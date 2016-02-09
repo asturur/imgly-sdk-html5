@@ -11,6 +11,8 @@
 
 import { ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
+import SliderComponent from '../../slider-component'
+import ColorPickerComponent from '../../color-picker/color-picker-component'
 
 export default class TiltShiftControlsComponent extends ControlsComponent {
   constructor (...args) {
@@ -18,6 +20,20 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
 
     this._hasDoneButton = true
     this._operation = this.getSharedState('operation')
+
+    this._bindAll(
+      '_onThicknessUpdated',
+      '_onColorUpdated',
+      '_onOperationUpdated'
+    )
+
+    this.state = {
+      thicknessControlsEnabled: false
+    }
+
+    this._events = {
+      [Constants.EVENTS.OPERATION_UPDATED]: this._onOperationUpdated
+    }
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -32,6 +48,37 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     })
   }
 
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when an operation has been updated
+   * @param  {Operation} operation
+   * @private
+   */
+  _onOperationUpdated (operation) {
+    if (operation === this._operation) {
+      this.forceUpdate()
+    }
+  }
+
+  /**
+   * Gets called when the thickness has been updated
+   * @param {Number} thickness
+   * @private
+   */
+  _onThicknessUpdated (thickness) {
+    this._operation.setThickness(thickness)
+  }
+
+  /**
+   * Gets called when the color has been updated
+   * @param  {Color} color
+   * @private
+   */
+  _onColorUpdated (color) {
+    this._operation.setColor(color)
+  }
+
   // -------------------------------------------------------------------------- RENDERING
 
   /**
@@ -39,8 +86,28 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
    * @return {ReactBEM.Element}
    */
   renderControls () {
-    return (<div bem='e:cell'>
+    const { editor } = this.context
+    const finalDimensions = editor.getFinalDimensions()
 
-    </div>)
+    const minThickness = 0
+    const maxThickness = Math.round(Math.min(finalDimensions.x, finalDimensions.y) / 2)
+    const currentWidth = this._operation.getThickness()
+
+    return [(<div bem='e:cell m:slider'>
+      <SliderComponent
+        style='large'
+        minValue={minThickness}
+        maxValue={maxThickness}
+        valueUnit='px'
+        middleDot={false}
+        label={this._t('controls.brush.thickness')}
+        onChange={this._onThicknessUpdated}
+        value={currentWidth} />
+    </div>),
+    (<div bem='e:cell m:colorPicker'>
+      <ColorPickerComponent
+        initialValue={this._operation.getColor().clone()}
+        onChange={this._onColorUpdated} />
+    </div>)]
   }
 }

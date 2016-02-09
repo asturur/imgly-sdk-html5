@@ -12,7 +12,7 @@
 import { Constants, ReactBEM, Vector2, Utils } from '../../../globals'
 import CanvasControlsComponent from '../canvas-controls-component'
 
-export default class TiltShiftCanvasControlsComponent extends CanvasControlsComponent {
+export default class BrushCanvasControlsComponent extends CanvasControlsComponent {
   constructor (...args) {
     super(...args)
 
@@ -30,6 +30,10 @@ export default class TiltShiftCanvasControlsComponent extends CanvasControlsComp
       cursorVisible: false,
       cursorPosition: new Vector2()
     }
+
+    this._events = {
+      [Constants.EVENTS.OPERATION_UPDATED]: this._onOperationUpdated
+    }
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -42,6 +46,17 @@ export default class TiltShiftCanvasControlsComponent extends CanvasControlsComp
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when an operation has been updated
+   * @param  {Operation} operation
+   * @private
+   */
+  _onOperationUpdated (operation) {
+    if (operation === this._operation) {
+      this.forceUpdate()
+    }
+  }
 
   /**
    * Gets called when the user enters the canvas
