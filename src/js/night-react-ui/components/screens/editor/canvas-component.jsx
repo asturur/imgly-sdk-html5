@@ -62,7 +62,9 @@ export default class CanvasComponent extends BaseComponent {
       const { editor } = this.context
       const sdk = editor.getSDK()
       sdk.setAllOperationsToDirty()
-      editor.render(props.zoom)
+      if (editor.isReady()) {
+        editor.render(props.zoom)
+      }
     }
   }
 

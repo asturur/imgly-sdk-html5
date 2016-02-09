@@ -9,11 +9,12 @@
  */
 
 import {
-  EventEmitter, SDK, SDKUtils, Constants, Vector2,
-  requestAnimationFrame, cancelAnimationFrame
+  EventEmitter, SDK, SDKUtils, Constants, Vector2, Utils,
+  requestAnimationFrame, cancelAnimationFrame, Promise
 } from '../globals'
 import Exporter from './exporter'
 import Controls from '../components/controls'
+import ImageResizer from './image-resizer'
 
 /**
  * The Editor class is an interface to the SDK, managing operations, rendering,
@@ -25,6 +26,7 @@ export default class Editor extends EventEmitter {
     this._options = options
     this._mediator = mediator
     this._isDefaultZoom = false
+    this._ready = false
 
     this._initSDK()
     this._initOperations()
@@ -47,9 +49,41 @@ export default class Editor extends EventEmitter {
     this._mediator.on(Constants.EVENTS.CANVAS_RENDER, this.render)
 
     this._initWatermark()
+    requestAnimationFrame(this._initImage.bind(this))
   }
 
   // -------------------------------------------------------------------------- INITIALIZATION
+
+  /**
+   * Initializes the image resizing etc.
+   * @private
+   */
+  _initImage () {
+    const maxPixels = this.getMaxMegapixels() * 1000000
+    const maxDimensions = this._sdk.getRenderer().getMaxDimensions()
+    const imageResizer = new ImageResizer(
+      this._options.image,
+      maxPixels,
+      maxDimensions
+    )
+
+    const done = (image) => {
+      this.setImage(image)
+      this._ready = true
+      this.emit('ready')
+    }
+
+    if (!imageResizer.needsResize()) {
+      done(this._options.image)
+    } else {
+      this.emit('resize')
+      imageResizer.resize()
+        .then(({ canvas, dimensions, reason }) => {
+          this.emit('resized', { dimensions, reason })
+          done(canvas)
+        })
+    }
+  }
 
   /**
    * Initializes the watermark operation
@@ -266,6 +300,18 @@ export default class Editor extends EventEmitter {
     return !!this._operationsMap[identifier]
   }
 
+  // -------------------------------------------------------------------------- MISC PRIVATE API
+
+  /**
+   * Returns the maximum mega pixels
+   * @return {Number}
+   * @private
+   */
+  getMaxMegapixels () {
+    const { maxMegaPixels } = this._options
+    return Utils.isMobile() ? maxMegaPixels.mobile : maxMegaPixels.desktop
+  }
+
   // -------------------------------------------------------------------------- MISC PUBLIC API
 
   /**
@@ -446,6 +492,8 @@ export default class Editor extends EventEmitter {
    * @internal
    */
   _render () {
+    if (!this._ready) return Promise.resolve()
+
     return this._sdk.render()
       .then(() => {
         this._lastOutputBounds = this._sdk.getSprite().getBounds()
@@ -474,6 +522,7 @@ export default class Editor extends EventEmitter {
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
+  isReady () { return this._ready }
   getRenderer () { return this._sdk.getRenderer() }
   getSDK () { return this._sdk }
   isDefaultZoom () { return this._isDefaultZoom }

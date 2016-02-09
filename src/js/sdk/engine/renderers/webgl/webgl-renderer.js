@@ -318,6 +318,20 @@ export default class WebGLRenderer extends BaseRenderer {
     gl.activeTexture(gl.TEXTURE0)
   }
 
+  /**
+   * Returns the maximum dimensions
+   * @return {Number}
+   */
+  getMaxDimensions () {
+    const canvas = document.createElement('canvas')
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+    if (!gl) {
+      return null
+    } else {
+      return gl.getParameter(gl.MAX_TEXTURE_SIZE)
+    }
+  }
+
   getCurrentRenderTarget () { return this._currentRenderTarget }
   getCurrentObjectRenderer () { return this._currentObjectRenderer }
   getFilterManager () { return this._filterManager }

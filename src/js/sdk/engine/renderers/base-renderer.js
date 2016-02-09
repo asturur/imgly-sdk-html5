@@ -99,6 +99,14 @@ export default class BaseRenderer extends EventEmitter {
 
   }
 
+  /**
+   * Returns the maximum dimensions
+   * @return {Number}
+   */
+  getMaxDimensions () {
+    return null
+  }
+
   getContext () { return this._context }
   getWidth () { return this._dimensions.x }
   getHeight () { return this._dimensions.y }

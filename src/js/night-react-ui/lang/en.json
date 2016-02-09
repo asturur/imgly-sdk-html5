@@ -87,7 +87,7 @@
     "loading": "Loading..."
   },
   "warnings": {
-    "imageResized_megaPixels": {
+    "imageResized_maxMegaPixels": {
       "title": "Image resized",
       "text": "Your image exceeds the maximum size of ${maxMegaPixels} megapixels and has therefore been resized to ${width}x${height} pixels."
     },

@@ -27,12 +27,11 @@ export default class EditorScreenComponent extends ScreenComponent {
   constructor (...args) {
     super(...args)
 
-    this._editor = new Editor(this.context.options, this.context.mediator)
-    window.editor = this._editor
     this._overviewControls = OverviewControlsComponent
 
     this._bindAll(
       'switchToControls',
+      '_startEditor',
       '_onZoomIn',
       '_onZoomOut',
       '_zoom',
@@ -45,7 +44,8 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onUndoClick',
       '_onWindowResize',
       '_onWindowResizeDone',
-      '_onNewFile'
+      '_onNewFile',
+      '_onImageResize'
     )
 
     this._previousControlsStack = []
@@ -63,6 +63,10 @@ export default class EditorScreenComponent extends ScreenComponent {
       [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures,
       [Constants.EVENTS.HISTORY_UNDO]: this._onUndo
     }
+
+    this._editor = new Editor(this.context.options, this.context.mediator)
+    this._editor.on('ready', this._startEditor)
+    this._editor.on('resize', this._onImageResize)
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -77,9 +81,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._fileLoader.on('file', this._onNewFile)
 
     window.addEventListener('resize', this._onWindowResize)
-
-    this._zoom('auto')
-    this._editor.start()
   }
 
   /**
@@ -96,6 +97,15 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._fileLoader.dispose()
   }
 
+  /**
+   * Sets the zoom level and starts the editor rendering
+   * @private
+   */
+  _startEditor () {
+    this._zoom('auto')
+    this._editor.start()
+  }
+
   // -------------------------------------------------------------------------- FILE LOADING
 
   /**
@@ -110,6 +120,27 @@ export default class EditorScreenComponent extends ScreenComponent {
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when the editor starts resizing an image
+   * @private
+   */
+  _onImageResize () {
+    const loadingModal = ModalManager.instance.displayLoading(this._t('loading.resizing'))
+    this._editor.once('resized', ({ dimensions, reason }) => {
+      loadingModal.close()
+
+      ModalManager.instance.displayWarning(
+        this._t(`warnings.imageResized_${reason}.title`),
+        this._t(`warnings.imageResized_${reason}.text`,
+          {
+            maxMegaPixels: this._editor.getMaxMegapixels(),
+            width: dimensions.x,
+            height: dimensions.y
+          }
+        ))
+    })
+  }
 
   /**
    * Gets called on window resize
