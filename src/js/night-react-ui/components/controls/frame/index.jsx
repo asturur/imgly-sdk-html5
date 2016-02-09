@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Constants } from '../../../globals'
 import FrameControlsComponent from './frame-controls-component'
 
 export default {
@@ -16,6 +17,27 @@ export default {
   identifier: 'frame',
   icon: 'controls/overview/frame@2x.png',
   label: 'controls.overview.frame',
+
+  /**
+   * Gets called when the user leaves these controls
+   * @this {StickersControlsComponent}
+   */
+  onExit: function () {
+    const { editor } = this.context
+    const operation = this.getSharedState('operation')
+
+    editor.addHistory(
+      operation,
+      this.getSharedState('initialOptions'),
+      this.getSharedState('operationExistedBefore')
+    )
+
+    operation.setEnabled(true)
+
+    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_UNDO)
+    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+  },
 
   /**
    * Returns the initial shared state for this control

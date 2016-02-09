@@ -74,27 +74,6 @@ export default class FrameControlsComponent extends ControlsComponent {
   }
 
   /**
-   * Gets called when the user clicks the done button
-   * @param  {Event} e
-   * @private
-   */
-  _onDoneClick (e) {
-    const { editor } = this.context
-
-    const operationExistedBefore = this.getSharedState('operationExistedBefore')
-    const initialOptions = this.getSharedState('initialOptions')
-    const optionsChanged = !this._operation.optionsEqual(initialOptions)
-
-    if (optionsChanged || !operationExistedBefore) {
-      editor.addHistory(this._operation,
-        this.getSharedState('initialOptions'),
-        this.getSharedState('operationExistedBefore'))
-    }
-
-    super._onDoneClick(e)
-  }
-
-  /**
    * Gets called when the color has changed
    * @param  {Color} color
    * @private
