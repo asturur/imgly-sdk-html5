@@ -79,8 +79,10 @@ class Primitive {
    * Cleans up this instance
    */
   dispose () {
-    this._filter.dispose()
-    this._filter = null
+    if (this._filter) {
+      this._filter.dispose()
+      this._filter = null
+    }
   }
 }
 

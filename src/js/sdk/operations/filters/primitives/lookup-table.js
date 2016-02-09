@@ -78,7 +78,7 @@ class LookupTable extends Primitive {
 
   /**
    * Updates the lookup table texture (WebGL only)
-   * @param {SDK} sdk
+   * @param {PhotoEditorSDK} sdk
    * @private
    */
   /* istanbul ignore next */
@@ -100,6 +100,17 @@ class LookupTable extends Primitive {
     texture.setGLUnit(TEXTURE_GL_UNIT)
 
     renderer.updateTexture(texture)
+  }
+
+  /**
+   * Cleans up this primitive
+   */
+  dispose () {
+    super.dispose()
+    for (let id in this._textures) {
+      delete this._textures[id]
+    }
+    delete this._options.data
   }
 }
 

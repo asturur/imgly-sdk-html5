@@ -52,9 +52,8 @@ export default class WebGLRenderer extends BaseRenderer {
   _onContextRestored () {
     Log.warn(this.constructor.name, 'WebGL context has been restored. Clearing all textures.')
 
-    const gl = this._context
     this._textures.forEach((texture) => {
-      texture.disposeGLTextures(gl.id)
+      texture.disposeGLTextures(this)
     })
 
     this._createContext()

@@ -146,6 +146,15 @@ export default class RenderTarget {
     this.resizeTo(new Vector2(this._width, this._height))
   }
 
+  /**
+   * Cleans up this render target
+   */
+  dispose () {
+    const gl = this._gl
+    gl.deleteTexture(this._texture)
+    gl.deleteFramebuffer(this._framebuffer)
+  }
+
   getProjectionMatrix () { return this._projectionMatrix }
   getTexture () { return this._texture }
   getFrame () { return this._frame }

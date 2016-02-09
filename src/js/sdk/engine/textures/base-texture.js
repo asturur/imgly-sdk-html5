@@ -74,10 +74,20 @@ export default class BaseTexture extends EventEmitter {
 
   /**
    * Disposes the WebGL textures for the given ID
-   * @param  {Number} id
+   * @param  {WebGLRenderer} renderer
    */
-  disposeGLTextures (id) {
-    delete this._glTextures[id]
+  disposeGLTextures (renderer) {
+    const gl = renderer.getContext()
+    gl.deleteTexture(this._glTextures[gl.id])
+    delete this._glTextures[gl.id]
+  }
+
+  /**
+   * Cleans up this object
+   * @param  {WebGLRenderer} renderer
+   */
+  dispose (renderer) {
+    this.disposeGLTextures(renderer)
   }
 
   isLoaded () { return this._loaded }

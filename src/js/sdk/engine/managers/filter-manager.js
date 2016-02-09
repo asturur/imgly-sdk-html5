@@ -177,5 +177,6 @@ export default class FilterManager {
    */
   dispose () {
     this._renderer.off('context', this._onContextChange)
+    this._quad.dispose()
   }
 }

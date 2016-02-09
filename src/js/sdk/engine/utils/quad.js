@@ -105,4 +105,14 @@ export default class Quad {
 
   getVertexBuffer () { return this._vertexBuffer }
   getIndexBuffer () { return this._indexBuffer }
+
+  /**
+   * Cleans up this Quad's buffers
+   */
+  dispose () {
+    const gl = this._renderer.getContext()
+    gl.deleteBuffer(this._vertexBuffer)
+    gl.deleteBuffer(this._indexBuffer)
+  }
+
 }

@@ -130,6 +130,8 @@ export default class RenderTexture extends Texture {
    * Cleans this instance up
    */
   dispose () {
+    this._baseTexture.dispose(this._renderer)
+    this._renderTarget.dispose()
     this._filterManager.dispose()
   }
 }
