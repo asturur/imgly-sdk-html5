@@ -8,7 +8,8 @@
       "blur": "Weichzeichnen",
       "frame": "Rahmen",
       "stickers": "Sticker",
-      "text": "Text"
+      "text": "Text",
+      "brush": "Malen"
     },
     "frame": {
       "color": "Farbe",

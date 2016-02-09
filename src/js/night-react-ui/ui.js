@@ -139,6 +139,7 @@ export default class NightReactUI extends EventEmitter {
         'tilt-shift',
         'frame',
         'sprite',
+        'brush',
         'watermark'
       ],
       controlsOptions: {},

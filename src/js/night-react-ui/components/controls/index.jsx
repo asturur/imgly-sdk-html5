@@ -16,5 +16,6 @@ export default [
   require('./frame'),
   require('./orientation'),
   require('./stickers'),
-  require('./text')
+  require('./text'),
+  require('./brush')
 ]

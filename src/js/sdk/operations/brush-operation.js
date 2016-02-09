@@ -10,6 +10,8 @@
 
 import { Engine, Vector2, Color } from '../globals'
 import Operation from './operation'
+import Path from './brush/path'
+import ControlPoint from './brush/control-point'
 
 const DEFAULT_THICKNESS = 10
 const DEFAULT_COLOR = new Color(1.0, 0.0, 0.0, 1.0)
@@ -33,6 +35,16 @@ class BrushOperation extends Operation {
     this._container.removeChild(this._sprite)
     this._container.addChild(this._inputSprite)
     this._container.addChild(this._sprite)
+
+    this._onPathUpdate = this._onPathUpdate.bind(this)
+  }
+
+  /**
+   * Gets called when a path has been updated
+   * @private
+   */
+  _onPathUpdate () {
+    this.setDirty(true)
   }
 
   /**
@@ -104,7 +116,9 @@ class BrushOperation extends Operation {
    */
   createPath (thickness, color) {
     const path = new BrushOperation.Path(this, thickness, color)
+    path.on('update', this._onPathUpdate)
     this._options.paths.push(path)
+    this.setDirty(true)
     return path
   }
 
@@ -151,89 +165,12 @@ BrushOperation.identifier = 'brush'
  * @type {Object}
  */
 BrushOperation.prototype.availableOptions = {
+  thickness: { type: 'number', default: 10 },
+  color: { type: 'color', default: new Color(1, 0, 0, 1) },
   paths: { type: 'array', default: [] }
 }
 
-/**
- * Represents a path that can be drawn on a canvas
- */
-BrushOperation.Path = class Path {
-  constructor (operation, thickness, color) {
-    this._thickness = thickness
-    this._color = color
-    this._controlPoints = []
-  }
-
-  renderToCanvas (canvas) {
-    if (this._controlPoints.length < 2) return
-
-    let lastControlPoint = this._controlPoints[0]
-    let controlPoint = lastControlPoint
-    for (let i = 1; i < this._controlPoints.length; i++) {
-      controlPoint = this._controlPoints[i]
-      controlPoint.renderToCanvas(canvas, lastControlPoint)
-      lastControlPoint = controlPoint
-    }
-  }
-
-  addControlPoint (position) {
-    const controlPoint = new BrushOperation.ControlPoint(this, position)
-    this._controlPoints.push(controlPoint)
-  }
-
-  getColor () {
-    return this._color
-  }
-
-  getThickness () {
-    return this._thickness
-  }
-
-  setDirty () {
-    this._controlPoints.forEach((point) => {
-      point.setDirty()
-    })
-  }
-}
-
-/**
- * Represents a control point of a path
- */
-BrushOperation.ControlPoint = class ControlPoint {
-  constructor (path, position) {
-    this._path = path
-    this._drawnCanvases = []
-    this._position = position
-  }
-
-  renderToCanvas (canvas, lastControlPoint) {
-    if (this._drawnCanvases.indexOf(canvas) !== -1) {
-      // This control point has already been drawn on this canvas. Ignore.
-      return
-    }
-
-    const context = canvas.getContext('2d')
-    const position = this._position
-    const lastPosition = lastControlPoint.getPosition()
-
-    context.beginPath()
-    context.lineJoin = 'round'
-    context.strokeStyle = this._path.getColor().toHex()
-    context.lineWidth = this._path.getThickness()
-    context.moveTo(lastPosition.x, lastPosition.y)
-    context.lineTo(position.x, position.y)
-    context.closePath()
-    context.stroke()
-    this._drawnCanvases.push(canvas)
-  }
-
-  getPosition () {
-    return this._position.clone()
-  }
-
-  setDirty () {
-    this._drawnCanvases = []
-  }
-}
+BrushOperation.Path = Path
+BrushOperation.ControlPoint = ControlPoint
 
 export default BrushOperation
