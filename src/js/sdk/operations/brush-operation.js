@@ -1,6 +1,6 @@
 /*
  * Photo Editor SDK - photoeditorsdk.com
- * Copyright (c) 2013-2015 9elements GmbH
+ * Copyright (c) 2013-2016 9elements GmbH
  *
  * Released under Attribution-NonCommercial 3.0 Unported
  * http://creativecommons.org/licenses/by-nc/3.0/
@@ -8,11 +8,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Engine, Vector2, Color } from '../globals'
 import Operation from './operation'
-import Vector2 from '../lib/math/vector2'
-import Color from '../lib/color'
 
-const DEFAULT_THICKNESS = 0.02
+const DEFAULT_THICKNESS = 10
 const DEFAULT_COLOR = new Color(1.0, 0.0, 0.0, 1.0)
 
 /**
@@ -26,76 +25,39 @@ class BrushOperation extends Operation {
   constructor (...args) {
     super(...args)
 
-    this._textureIndex = 1
-
-    /**
-     * The fragment shader used for this operation
-     */
-    this._fragmentShader = require('raw!../shaders/generic/sprite_legacy.frag')
-
     this._brushCanvas = document.createElement('canvas')
+    this._texture = Engine.Texture.fromCanvas(this._brushCanvas)
+    this._sprite.setTexture(this._texture)
+
+    this._inputSprite = new Engine.Sprite()
+    this._container.removeChild(this._sprite)
+    this._container.addChild(this._inputSprite)
+    this._container.addChild(this._sprite)
   }
 
   /**
-   * Crops this image using WebGL
-   * @param  {WebGLRenderer} renderer
+   * Renders the brush operation using WebGL
+   * @param  {PhotoEditorSDK} sdk
    * @private
    */
   /* istanbul ignore next */
-  _renderWebGL (renderer) {
-    this.renderBrushCanvas(renderer.getCanvas())
-    var gl = renderer.getContext()
-    this._setupProgram(renderer)
-    this._uploadCanvasToTexture(gl, this._brushCanvas)
+  _renderWebGL (sdk) {
+    this.renderBrushCanvas(sdk)
 
-    // use the complete area available
-    var position = new Vector2(0, 0)
-    var size = new Vector2(1, 1)
+    const renderer = sdk.getRenderer()
+    const outputSprite = sdk.getSprite()
+    this._inputSprite.setTexture(outputSprite.getTexture())
 
-    // Execute the shader
-    renderer.runShader(null, this._fragmentShader, {
-      uniforms: {
-        u_textImage: { type: 'i', value: this._textureIndex },
-        u_position: { type: '2f', value: [position.x, position.y] },
-        u_size: { type: '2f', value: [size.x, size.y] }
-      }
-    })
-  }
+    renderer.updateTexture(this._texture.getBaseTexture())
 
-  /**
-   * Uploads pixel-data contained in a canvas onto a texture
-   * @param  {Context} gl    gl-context (use renderer.getContext())
-   * @param  {Canvas} canvas A canvas that contains the pixel data for the texture
-   */
-  _uploadCanvasToTexture (gl, canvas) {
-    gl.activeTexture(gl.TEXTURE0 + this._textureIndex)
-    this._texture = gl.createTexture()
-    gl.bindTexture(gl.TEXTURE_2D, this._texture)
+    const renderTexture = this._getRenderTexture(sdk)
+    const outputBounds = outputSprite.getBounds()
+    renderTexture.resizeTo(new Vector2(outputBounds.width, outputBounds.height))
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    renderTexture.render(this._container)
+    outputSprite.setTexture(renderTexture)
 
-    // Set premultiplied alpha
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
-
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas)
-    gl.activeTexture(gl.TEXTURE0)
-  }
-
-  /**
-   * This method initializes the shaders once
-   * @param  {WebGLRenderer} renderer WebGLRenderer that is used to compile the
-   * shafers
-   */
-  _setupProgram (renderer) {
-    if (!this._glslPrograms[renderer.id]) {
-      this._glslPrograms[renderer.id] = renderer.setupGLSLProgram(
-        null,
-        this._fragmentShader
-      )
-    }
+    return Promise.resolve()
   }
 
   /**
@@ -115,16 +77,16 @@ class BrushOperation extends Operation {
    * @param {Canvas} canvas
    * @private
    */
-  renderBrushCanvas (outputCanvas, canvas = this._brushCanvas) {
-    if (this._dirty) {
-      const context = canvas.getContext('2d')
-      context.clearRect(0, 0, canvas.width, canvas.height)
-    }
+  renderBrushCanvas (sdk, canvas = this._brushCanvas) {
+    const context = canvas.getContext('2d')
+    context.clearRect(0, 0, canvas.width, canvas.height)
 
-    if (canvas.width !== outputCanvas.width ||
-        canvas.height !== outputCanvas.height) {
-      canvas.width = outputCanvas.width
-      canvas.height = outputCanvas.height
+    const finalDimensions = sdk.getFinalDimensions()
+    if (canvas.width !== finalDimensions.x ||
+        canvas.height !== finalDimensions.y) {
+      canvas.width = finalDimensions.x
+      canvas.height = finalDimensions.y
+      this._texture.getBaseTexture().update()
     }
 
     const paths = this._options.paths
@@ -144,15 +106,6 @@ class BrushOperation extends Operation {
     const path = new BrushOperation.Path(this, thickness, color)
     this._options.paths.push(path)
     return path
-  }
-
-  /**
-   * returns the longer size of the canvas
-   * @param {Canvas}
-   * @return {Number}
-   */
-  _getLongerSideSize (canvas) {
-    return Math.max(canvas.width, canvas.height)
   }
 
   /**
@@ -260,18 +213,13 @@ BrushOperation.ControlPoint = class ControlPoint {
     }
 
     const context = canvas.getContext('2d')
-    const canvasSize = new Vector2(canvas.width, canvas.height)
-    const longerSide = Math.max(canvasSize.x, canvasSize.y)
-
-    const position = this._position.clone().multiply(canvasSize)
+    const position = this._position
     const lastPosition = lastControlPoint.getPosition()
-      .clone()
-      .multiply(canvasSize)
 
     context.beginPath()
     context.lineJoin = 'round'
     context.strokeStyle = this._path.getColor().toHex()
-    context.lineWidth = this._path.getThickness() * longerSide
+    context.lineWidth = this._path.getThickness()
     context.moveTo(lastPosition.x, lastPosition.y)
     context.lineTo(position.x, position.y)
     context.closePath()
