@@ -90,9 +90,6 @@ class BrushOperation extends Operation {
    * @private
    */
   renderBrushCanvas (sdk, canvas = this._brushCanvas) {
-    const context = canvas.getContext('2d')
-    context.clearRect(0, 0, canvas.width, canvas.height)
-
     const finalDimensions = sdk.getFinalDimensions()
     if (canvas.width !== finalDimensions.x ||
         canvas.height !== finalDimensions.y) {

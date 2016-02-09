@@ -16,10 +16,10 @@ export default class ControlPoint {
   }
 
   renderToCanvas (canvas, lastControlPoint) {
-    // if (this._drawnCanvases.indexOf(canvas) !== -1) {
-    //   // This control point has already been drawn on this canvas. Ignore.
-    //   return
-    // }
+    if (this._drawnCanvases.indexOf(canvas) !== -1) {
+      // This control point has already been drawn on this canvas. Ignore.
+      return
+    }
 
     const context = canvas.getContext('2d')
     const position = this._position
@@ -33,7 +33,7 @@ export default class ControlPoint {
     context.lineTo(position.x, position.y)
     context.closePath()
     context.stroke()
-    // this._drawnCanvases.push(canvas)
+    this._drawnCanvases.push(canvas)
   }
 
   getPosition () {
