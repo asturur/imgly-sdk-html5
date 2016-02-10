@@ -23,7 +23,8 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
       '_onMouseLeave',
       '_onMouseMove',
       '_onMouseDown',
-      '_onMouseUp'
+      '_onMouseUp',
+      '_onOperationUpdated'
     )
 
     this.state = {
@@ -109,6 +110,9 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     const zoom = this.context.editor.getSDK().getZoom()
     const cursorPosition = this._getCursorPosition(e)
 
+    this._optionsBeforeDraw = this._operation.serializeOptions()
+    this._operationExistedBeforeDraw = !!this._operation.getPaths().length
+
     const thickness = this._operation.getThickness()
     const color = this._operation.getColor()
     this._drawing = true
@@ -125,6 +129,9 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
   _onMouseUp () {
     this._currentPath = null
     this._drawing = false
+
+    const { editor } = this.context
+    editor.addHistory(this._operation, this._optionsBeforeDraw, this._operationExistedBeforeDraw)
   }
 
   /**

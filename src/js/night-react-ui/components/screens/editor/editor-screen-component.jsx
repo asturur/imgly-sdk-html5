@@ -36,7 +36,7 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onZoomOut',
       '_zoom',
       '_undoZoom',
-      '_onUndo',
+      '_onHistoryUpdated',
       '_onDisableFeatures',
       '_onEnableFeatures',
       '_onNewClick',
@@ -61,7 +61,7 @@ export default class EditorScreenComponent extends ScreenComponent {
       [Constants.EVENTS.CANVAS_ZOOM_UNDO]: this._undoZoom,
       [Constants.EVENTS.EDITOR_DISABLE_FEATURES]: this._onDisableFeatures,
       [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures,
-      [Constants.EVENTS.HISTORY_UNDO]: this._onUndo
+      [Constants.EVENTS.HISTORY_UPDATED]: this._onHistoryUpdated
     }
 
     this._editor = new Editor(this.context.options, this.context.mediator)
@@ -204,10 +204,10 @@ export default class EditorScreenComponent extends ScreenComponent {
   }
 
   /**
-   * Gets called when an action has been undone
+   * Gets called when the history has been changed
    * @private
    */
-  _onUndo () {
+  _onHistoryUpdated () {
     this.forceUpdate()
   }
 

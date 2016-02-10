@@ -27,6 +27,7 @@ class BrushOperation extends Operation {
   constructor (...args) {
     super(...args)
 
+    this._brushCanvasDirty = true
     this._brushCanvas = document.createElement('canvas')
     this._texture = Engine.Texture.fromCanvas(this._brushCanvas)
     this._sprite.setTexture(this._texture)
@@ -84,12 +85,24 @@ class BrushOperation extends Operation {
   }
 
   /**
+   * Clears the brush canvas
+   */
+  clearBrushCanvas () {
+    if (!this._brushCanvas) return
+
+    const canvas = this._brushCanvas
+    const context = canvas.getContext('2d')
+    context.clearRect(0, 0, canvas.width, canvas.height)
+  }
+
+  /**
    * Renders the brush canvas that will be used as a texture in WebGL
    * and as an image in canvas
    * @param {Canvas} canvas
    * @private
    */
   renderBrushCanvas (sdk, canvas = this._brushCanvas) {
+    console.log('rendering brush canvas', this._options.paths.length, 'paths')
     const finalDimensions = sdk.getFinalDimensions()
     if (canvas.width !== finalDimensions.x ||
         canvas.height !== finalDimensions.y) {
@@ -103,6 +116,7 @@ class BrushOperation extends Operation {
       const path = paths[i]
       path.renderToCanvas(canvas)
     }
+    this._brushCanvasDirty = false
   }
 
   /**
@@ -117,36 +131,6 @@ class BrushOperation extends Operation {
     this._options.paths.push(path)
     this.setDirty(true)
     return path
-  }
-
-  /**
-   * returns the last color
-   * @return {Color}
-   */
-  getLastColor () {
-    const lastPath = this._options.paths[this._options.paths.length - 1]
-    if (!lastPath) return DEFAULT_COLOR
-    return lastPath.getColor()
-  }
-
-  /**
-   * returns the last thickness
-   * @return {Thickness}
-   */
-  getLastThickness () {
-    const lastPath = this._options.paths[this._options.paths.length - 1]
-    if (!lastPath) return DEFAULT_THICKNESS
-    return lastPath.getThickness()
-  }
-
-  /**
-   * Gets called when this operation has been set to dirty
-   * @private
-   */
-  _onDirty () {
-    this._options.paths.forEach((path) => {
-      path.setDirty()
-    })
   }
 }
 
@@ -164,7 +148,15 @@ BrushOperation.identifier = 'brush'
 BrushOperation.prototype.availableOptions = {
   thickness: { type: 'number', default: 10 },
   color: { type: 'color', default: new Color(1, 0, 0, 1) },
-  paths: { type: 'array', default: [] }
+  paths: { type: 'array', default: [], setter: function (paths) {
+    paths.forEach((path) => {
+      path.setDirty(true)
+    })
+    this._brushCanvasDirty = true
+    this.clearBrushCanvas()
+    this.setDirty(true)
+    return paths
+  }}
 }
 
 BrushOperation.Path = Path

@@ -84,8 +84,8 @@ export default class Configurable extends EventEmitter {
 
       // Create setter and getter
       let fn = function (optionName, option) {
-        self['set' + capitalized] = function (value) {
-          self.setOption(optionName, value)
+        self['set' + capitalized] = function (value, update) {
+          self.setOption(optionName, value, update)
         }
 
         // Default getter
@@ -97,7 +97,7 @@ export default class Configurable extends EventEmitter {
 
       // Set default if available
       if (typeof option.default !== 'undefined') {
-        this['set' + capitalized](option.default)
+        this['set' + capitalized](option.default, false)
       }
 
       // Handle configurable initialization
@@ -116,7 +116,7 @@ export default class Configurable extends EventEmitter {
 
       // Call setter
       capitalized = optionName.charAt(0).toUpperCase() + optionName.slice(1)
-      this['set' + capitalized](userOptions[optionName])
+      this['set' + capitalized](userOptions[optionName], false)
     }
   }
 
@@ -372,8 +372,8 @@ export default class Configurable extends EventEmitter {
         break
     }
 
-    this._onOptionsChange()
     if (update) {
+      this._onOptionsChange()
       this.emit('update', this, { [optionName]: value })
     }
   }

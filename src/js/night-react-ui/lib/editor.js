@@ -149,13 +149,14 @@ export default class Editor extends EventEmitter {
       let { operation, existent, options } = lastItem
       if (!existent) {
         this.removeOperation(operation)
-        this.emit(Constants.EVENTS.OPERATION_REMOVED, operation)
+        this._mediator.emit(Constants.EVENTS.OPERATION_REMOVED, operation)
       } else {
         operation = this.getOrCreateOperation(operation.constructor.identifier)
         operation.set(options)
-        this.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
+        this._mediator.emit(Constants.EVENTS.OPERATION_UPDATED, operation)
       }
 
+      this._mediator.emit(Constants.EVENTS.HISTORY_UPDATED, operation)
       this._mediator.emit(Constants.EVENTS.HISTORY_UNDO, operation)
       this.render()
     }
@@ -173,7 +174,7 @@ export default class Editor extends EventEmitter {
       operation, options, existent
     }
     this._history.push(historyItem)
-    this.emit(Constants.EVENTS.HISTORY_UPDATED, operation)
+    this._mediator.emit(Constants.EVENTS.HISTORY_UPDATED, operation)
     return historyItem
   }
 

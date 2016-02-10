@@ -18,13 +18,14 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 
-    this._hasDoneButton = true
+    this._hasDoneButton = false
     this._operation = this.getSharedState('operation')
 
     this._bindAll(
       '_onThicknessUpdated',
       '_onColorUpdated',
-      '_onOperationUpdated'
+      '_onOperationUpdated',
+      '_onOperationRemoved'
     )
 
     this.state = {
@@ -32,7 +33,8 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     }
 
     this._events = {
-      [Constants.EVENTS.OPERATION_UPDATED]: this._onOperationUpdated
+      [Constants.EVENTS.OPERATION_UPDATED]: this._onOperationUpdated,
+      [Constants.EVENTS.OPERATION_REMOVED]: this._onOperationRemoved
     }
   }
 
@@ -49,6 +51,27 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when an operation has been removed
+   * @param  {Operation} operation
+   * @private
+   */
+  _onOperationRemoved (operation) {
+    if (operation !== this._operation) return
+
+    // Operation can be removed by the undo button. We need
+    // to make sure we re-create the operation for the lifetime
+    // of this control
+    const { editor } = this.context
+    const newOperation = editor.getOrCreateOperation('brush')
+    this._operation = newOperation
+    this.setSharedState({
+      operation: newOperation,
+      operationExistedBefore: false,
+      initialOptions: {}
+    })
+  }
 
   /**
    * Gets called when an operation has been updated

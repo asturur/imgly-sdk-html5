@@ -162,14 +162,6 @@ class Operation extends Configurable {
   }
 
   /**
-   * Gets called when this operation has been marked as dirty
-   * @protected
-   */
-  _onDirty () {
-
-  }
-
-  /**
    * Resets this operation
    */
   reset () {
