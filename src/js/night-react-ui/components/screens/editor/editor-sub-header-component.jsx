@@ -17,35 +17,6 @@ import ZoomComponent from './zoom-component'
 export default class EditorSubHeaderComponent extends SubHeaderComponent {
   constructor (...args) {
     super(...args)
-
-    this._bindAll(
-      '_onZoomIn',
-      '_onZoomOut'
-    )
-
-    this.state = {
-      zoomEnabled: true
-    }
-  }
-
-  // -------------------------------------------------------------------------- EVENTS
-
-  /**
-   * Gets called when the user clicked the zoom in button
-   * @private
-   */
-  _onZoomIn () {
-    const { editor } = this.context
-    editor.zoomIn()
-  }
-
-  /**
-   * Gets called when the user clicked the zoom out button
-   * @private
-   */
-  _onZoomOut () {
-    const { editor } = this.context
-    editor.zoomOut()
   }
 
   // -------------------------------------------------------------------------- RENDERING
@@ -97,17 +68,6 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
   }
 
   /**
-   * Renders the zoom component
-   * @return {ZoomComponent}
-   */
-  _renderZoomComponent () {
-    return (<ZoomComponent
-      onZoomIn={this._onZoomIn}
-      onZoomOut={this._onZoomOut}
-      enabled={this.state.zoomEnabled} />)
-  }
-
-  /**
    * Renders the content of this SubHeaderComponent
    * @return {ReactBEM.Element}
    */
@@ -123,7 +83,7 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
         {this._renderExportButton()}
       </div>
 
-      {this._renderZoomComponent()}
+      <ZoomComponent />
     </bem>)
   }
 }

@@ -24,12 +24,16 @@ export default class ZoomComponent extends BaseComponent {
     this._events = {
       [Constants.EVENTS.ZOOM_DONE]: this._onZoomDone
     }
+
+    this.state = {
+      enabled: true
+    }
   }
 
   // -------------------------------------------------------------------------- EVENTS
 
   /**
-   * Gets called when a zoom level has been applied / when the zoom has been done
+   * Gets called when the new zoom level has been applied
    * @private
    */
   _onZoomDone () {
@@ -42,8 +46,9 @@ export default class ZoomComponent extends BaseComponent {
    * @private
    */
   _onZoomOutClick (e) {
-    if (!this.props.enabled) return
-    this.props.onZoomOut && this.props.onZoomOut()
+    if (!this.state.enabled) return
+    const { editor } = this.context
+    editor.zoomOut()
   }
 
   /**
@@ -52,8 +57,9 @@ export default class ZoomComponent extends BaseComponent {
    * @private
    */
   _onZoomInClick (e) {
-    if (!this.props.enabled) return
-    this.props.onZoomIn && this.props.onZoomIn()
+    if (!this.state.enabled) return
+    const { editor } = this.context
+    editor.zoomIn()
   }
 
   // -------------------------------------------------------------------------- RENDERING
@@ -63,8 +69,8 @@ export default class ZoomComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const { enabled } = this.props
     const zoom = this.context.editor.getZoom()
+    const { enabled } = this.state
 
     return (
       <div bem='$b:editorScreen $e:zoom'>
@@ -77,7 +83,7 @@ export default class ZoomComponent extends BaseComponent {
 
         <div bem='e:label'>
           Zoom<br />
-        {Math.round(zoom * 100)}%
+          {Math.round(zoom * 100)}%
         </div>
 
         <div
