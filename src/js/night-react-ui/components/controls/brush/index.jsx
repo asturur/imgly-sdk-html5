@@ -46,7 +46,8 @@ export default {
       paths: operation.getPaths().slice()
     }
     return {
-      operation, operationExistedBefore, initialOptions
+      operation, operationExistedBefore, initialOptions,
+      initialThickness: thickness
     }
   },
 

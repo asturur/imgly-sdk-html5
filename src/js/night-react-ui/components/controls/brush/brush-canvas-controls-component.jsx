@@ -17,7 +17,6 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     super(...args)
 
     this._drawing = false
-    this._operation = this.getSharedState('operation')
     this._bindAll(
       '_onMouseEnter',
       '_onMouseLeave',
@@ -54,7 +53,7 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
    * @private
    */
   _onOperationUpdated (operation) {
-    if (operation === this._operation) {
+    if (operation === this.getSharedState('operation')) {
       this.forceUpdate()
     }
   }
@@ -110,13 +109,15 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     const zoom = this.context.editor.getSDK().getZoom()
     const cursorPosition = this._getCursorPosition(e)
 
-    this._optionsBeforeDraw = this._operation.serializeOptions()
-    this._operationExistedBeforeDraw = !!this._operation.getPaths().length
+    const operation = this.getSharedState('operation')
 
-    const thickness = this._operation.getThickness()
-    const color = this._operation.getColor()
+    this._optionsBeforeDraw = operation.serializeOptions()
+    this._operationExistedBeforeDraw = !!operation.getPaths().length
+
+    const thickness = operation.getThickness()
+    const color = operation.getColor()
     this._drawing = true
-    this._currentPath = this._operation.createPath(thickness, color)
+    this._currentPath = operation.createPath(thickness, color)
     this._currentPath.addControlPoint(cursorPosition.clone().divide(zoom))
 
     this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
@@ -131,7 +132,10 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     this._drawing = false
 
     const { editor } = this.context
-    editor.addHistory(this._operation, this._optionsBeforeDraw, this._operationExistedBeforeDraw)
+    editor.addHistory(
+      this.getSharedState('operation'),
+      this._optionsBeforeDraw,
+      this._operationExistedBeforeDraw)
   }
 
   /**
@@ -143,7 +147,7 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     const { editor } = this.context
     const sdk = editor.getSDK()
 
-    this._operation.renderBrushCanvas(sdk, canvas)
+    this.getSharedState('operation').renderBrushCanvas(sdk, canvas)
   }
 
   // -------------------------------------------------------------------------- CURSOR
@@ -182,8 +186,9 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
    * @private
    */
   _getCursorStyle () {
-    const thickness = this._operation.getThickness()
-    const color = this._operation.getColor()
+    const operation = this.getSharedState('operation')
+    const thickness = operation.getThickness()
+    const color = operation.getColor()
 
     const { cursorPosition } = this.state
     return {

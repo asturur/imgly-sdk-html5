@@ -64,7 +64,9 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     // to make sure we re-create the operation for the lifetime
     // of this control
     const { editor } = this.context
-    const newOperation = editor.getOrCreateOperation('brush')
+    const newOperation = editor.getOrCreateOperation('brush', {
+      thickness: this.getSharedState('initialThickness')
+    })
     this._operation = newOperation
     this.setSharedState({
       operation: newOperation,
