@@ -186,8 +186,11 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
    * @private
    */
   _getCursorStyle () {
+    const { editor } = this.context
+    const zoom = editor.getSDK().getZoom()
+
     const operation = this.getSharedState('operation')
-    const thickness = operation.getThickness()
+    const thickness = operation.getThickness() * zoom
     const color = operation.getColor()
 
     const { cursorPosition } = this.state
