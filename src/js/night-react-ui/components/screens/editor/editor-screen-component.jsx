@@ -10,7 +10,7 @@
  */
 const WINDOW_RESIZE_DELAY = 500
 
-import { React, ReactBEM, Constants, SharedState } from '../../../globals'
+import { Utils, React, ReactBEM, Constants, SharedState } from '../../../globals'
 import OverviewControlsComponent from '../../controls/overview/overview-controls-component'
 import FileLoader from '../../../lib/file-loader'
 import ScreenComponent from '../screen-component'
@@ -167,7 +167,7 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _onNewClick () {
-    if (this.context.options.webcam !== false) {
+    if (this.context.options.webcam !== false && !Utils.isMobile()) {
       this.props.app.switchToSplashScreen()
     } else {
       this._fileLoader.open()

@@ -143,10 +143,8 @@ export default class UploadComponent extends BaseComponent {
 
     let cellBEM = '$e:cell'
     let orNode = null
-    if (this.context.options.webcam !== false) {
-      orNode = <div bem='e:or'>{this._t('splash.or')}</div>
-    }
     if (this.props.halfHeight) {
+      orNode = <div bem='e:or'>{this._t('splash.or')}</div>
       cellBEM += ' m:halfHeight'
     }
 

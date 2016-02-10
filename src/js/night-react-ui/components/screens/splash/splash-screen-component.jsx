@@ -8,7 +8,7 @@
  *
  * For commercial use, please contact us at contact@9elements.com
  */
-import { ReactBEM } from '../../../globals'
+import { ReactBEM, Utils } from '../../../globals'
 import HeaderComponent from '../../header-component'
 import ScreenComponent from '../screen-component'
 import SplashScreenUploadComponent from './upload-component'
@@ -40,6 +40,16 @@ export default class SplashScreenComponent extends ScreenComponent {
     this.props.app.setImage(image)
   }
 
+  // -------------------------------------------------------------------------- MISC
+
+  /**
+   * Checks if the webcam is available for the given device
+   * @private
+   */
+  _isWebcamAvailable () {
+    return !Utils.isMobile() && this.context.options.webcam !== false
+  }
+
   // -------------------------------------------------------------------------- RENDERING
 
   /**
@@ -47,8 +57,9 @@ export default class SplashScreenComponent extends ScreenComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
+    const webcamAvailable = this._isWebcamAvailable()
     let webcamComponent
-    if (this.context.options.webcam !== false) {
+    if (webcamAvailable) {
       webcamComponent = <SplashScreenWebcamComponent
         halfHeight
         onClick={this._onWebcamClick} />
@@ -58,7 +69,7 @@ export default class SplashScreenComponent extends ScreenComponent {
       <HeaderComponent />
       {webcamComponent}
       <SplashScreenUploadComponent
-        halfHeight={this.context.options.webcam !== false}
+        halfHeight={webcamAvailable}
         onImage={this._onImage} />
     </div>)
   }
