@@ -13,9 +13,6 @@ import Operation from './operation'
 import Path from './brush/path'
 import ControlPoint from './brush/control-point'
 
-const DEFAULT_THICKNESS = 10
-const DEFAULT_COLOR = new Color(1.0, 0.0, 0.0, 1.0)
-
 /**
  * An operation that can draw brushes on the canvas
  *
@@ -102,7 +99,6 @@ class BrushOperation extends Operation {
    * @private
    */
   renderBrushCanvas (sdk, canvas = this._brushCanvas) {
-    console.log('rendering brush canvas', this._options.paths.length, 'paths')
     const finalDimensions = sdk.getFinalDimensions()
     if (canvas.width !== finalDimensions.x ||
         canvas.height !== finalDimensions.y) {
