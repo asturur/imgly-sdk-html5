@@ -113,9 +113,9 @@ export default class OrientationControlsComponent extends ControlsComponent {
     this._operationExistedBefore = true
 
     if (editor.isDefaultZoom()) {
-      this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto')
+      this._emitEvent(Constants.EVENTS.ZOOM, 'auto')
     } else {
-      this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+      this._emitEvent(Constants.EVENTS.RENDER)
     }
   }
 
@@ -152,7 +152,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
       previousOptions,
       this._operationExistedBefore)
 
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   // -------------------------------------------------------------------------- MISC

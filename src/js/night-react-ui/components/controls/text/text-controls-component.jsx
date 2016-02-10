@@ -38,7 +38,7 @@ export default class TextControlsComponent extends ControlsComponent {
 
     this.state = { mode: null }
 
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
     this._initFonts()
   }
 
@@ -74,7 +74,7 @@ export default class TextControlsComponent extends ControlsComponent {
     super.componentDidMount()
 
     // Reset zoom to fit the container
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
+    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
       // Disable zoom and drag while we're cropping
       this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
     })
@@ -88,7 +88,7 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onBackClick (e) {
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
     super._onBackClick()
   }
 

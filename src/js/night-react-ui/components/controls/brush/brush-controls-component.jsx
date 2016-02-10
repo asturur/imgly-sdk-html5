@@ -45,7 +45,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
    */
   componentDidMount () {
     super.componentDidMount()
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
+    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
       this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
     })
   }

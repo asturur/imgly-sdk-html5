@@ -35,7 +35,7 @@ export default class FrameControlsComponent extends ControlsComponent {
     super.componentDidMount()
 
     // Reset zoom to fit the container
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
+    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
       // Disable zoom and drag while we're cropping
       this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
     })
@@ -50,7 +50,7 @@ export default class FrameControlsComponent extends ControlsComponent {
    */
   _onThicknessUpdate (thickness) {
     this._operation.setThickness(thickness)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   /**
@@ -68,9 +68,9 @@ export default class FrameControlsComponent extends ControlsComponent {
       this._operation.set(this.getSharedState('initialOptions'))
     }
 
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_UNDO)
+    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   /**
@@ -81,7 +81,7 @@ export default class FrameControlsComponent extends ControlsComponent {
   _onColorUpdate (color) {
     this._operation.setColor(color)
     this._emitEvent(Constants.EVENTS.OPERATION_UPDATED, this._operation)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   // -------------------------------------------------------------------------- RENDERING

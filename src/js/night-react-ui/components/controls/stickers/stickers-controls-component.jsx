@@ -24,7 +24,7 @@ export default class StickersControlsComponent extends BaseComponent {
     this._operation = this.getSharedState('operation')
     this._initiallyHadSticker = this.getSharedState('selectedSprite')
 
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -36,7 +36,7 @@ export default class StickersControlsComponent extends BaseComponent {
     super.componentDidMount()
 
     // Reset zoom to fit the container
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
+    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
       // Disable zoom and drag while we're cropping
       this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
     })

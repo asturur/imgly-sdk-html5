@@ -75,7 +75,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
     })
 
     // Reset zoom to fit the container
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto', () => {
+    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
       // Disable zoom and drag while we're cropping
       this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
 
@@ -106,7 +106,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
       editor.removeOperation(this._operation)
     }
 
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_UNDO)
+    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
 
     super._onBackClick(e)
@@ -141,7 +141,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
 
     // Zoom to auto again
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto')
+    this._emitEvent(Constants.EVENTS.ZOOM, 'auto')
 
     super._onDoneClick(e)
   }

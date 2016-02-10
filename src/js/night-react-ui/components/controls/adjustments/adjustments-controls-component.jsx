@@ -89,7 +89,7 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
     const { identifier, valueMultiplier, valueOffset } = selectedControls
     value = (value - valueOffset) / valueMultiplier
     this._operation.setOption(identifier, value)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   /**

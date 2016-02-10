@@ -37,7 +37,7 @@ export default class CanvasControlsComponent extends BaseComponent {
   _bindEvents () {
     super._bindEvents()
     this.context.mediator.on(
-      Constants.EVENTS.CANVAS_ZOOM_DONE,
+      Constants.EVENTS.ZOOM_DONE,
       this._onCanvasZoomDone
     )
   }
@@ -49,7 +49,7 @@ export default class CanvasControlsComponent extends BaseComponent {
   _unbindEvents () {
     super._unbindEvents()
     this.context.mediator.off(
-      Constants.EVENTS.CANVAS_ZOOM_DONE,
+      Constants.EVENTS.ZOOM_DONE,
       this._onCanvasZoomDone
     )
   }

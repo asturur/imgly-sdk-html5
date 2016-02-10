@@ -69,8 +69,8 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
       this._operation.set(this.getSharedState('initialOptions'))
     }
 
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_UNDO)
+    this._emitEvent(Constants.EVENTS.RENDER)
+    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
   }
 
@@ -91,7 +91,7 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
         this.getSharedState('operationExistedBefore'))
     }
 
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_UNDO)
+    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
     this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
 
     super._onDoneClick(e)
@@ -104,7 +104,7 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
    */
   _onSliderValueChange (value) {
     this._operation.setBlurRadius(value)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   // -------------------------------------------------------------------------- RENDERING

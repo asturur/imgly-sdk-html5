@@ -58,7 +58,7 @@ export default class FiltersControlsComponent extends ControlsComponent {
    */
   _onSliderValueChange (value) {
     this._operation.setIntensity(value / 100)
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
   }
 
   /**
@@ -85,7 +85,7 @@ export default class FiltersControlsComponent extends ControlsComponent {
       filter,
       intensity: 1
     })
-    this._emitEvent(Constants.EVENTS.CANVAS_RENDER)
+    this._emitEvent(Constants.EVENTS.RENDER)
     this.forceUpdate()
   }
 

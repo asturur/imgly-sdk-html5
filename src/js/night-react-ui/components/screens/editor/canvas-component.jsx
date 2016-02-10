@@ -48,7 +48,7 @@ export default class CanvasComponent extends BaseComponent {
     const { editor } = this.context
     const sdk = editor.getSDK()
     sdk.resizeTo(this._getContainerDimensions())
-    this._emitEvent(Constants.EVENTS.CANVAS_ZOOM, 'auto')
+    this._emitEvent(Constants.EVENTS.ZOOM, 'auto')
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE

@@ -46,7 +46,7 @@ export default class Editor extends EventEmitter {
     this.render = this.render.bind(this)
     this._tick = this._tick.bind(this)
 
-    this._mediator.on(Constants.EVENTS.CANVAS_RENDER, this.render)
+    this._mediator.on(Constants.EVENTS.RENDER, this.render)
 
     this._initWatermark()
     requestAnimationFrame(this._initImage.bind(this))
