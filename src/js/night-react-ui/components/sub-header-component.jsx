@@ -9,9 +9,17 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { React, ReactBEM, BaseComponent } from '../globals'
+import { ReactBEM, BaseComponent } from '../globals'
 
 export default class SubHeaderComponent extends BaseComponent {
+  /**
+   * Renders the content of this SubHeaderComponent
+   * @return {ReactBEM.Element}
+   */
+  renderContent () {
+    return null
+  }
+
   /**
    * Renders this component
    * @return {ReactBEM.Element}
@@ -19,12 +27,8 @@ export default class SubHeaderComponent extends BaseComponent {
   renderWithBEM () {
     return (<div bem='$b:subHeader e:row'>
       <div bem='e:cell'>
-        {this.props.children}
+        {this.renderContent()}
       </div>
     </div>)
   }
-}
-
-SubHeaderComponent.propTypes = {
-  children: React.PropTypes.any
 }

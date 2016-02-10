@@ -12,13 +12,10 @@ const WINDOW_RESIZE_DELAY = 500
 
 import { Utils, React, ReactBEM, Constants, SharedState } from '../../../globals'
 import OverviewControlsComponent from '../../controls/overview/overview-controls-component'
-import FileLoader from '../../../lib/file-loader'
 import ScreenComponent from '../screen-component'
 import HeaderComponent from '../../header-component'
-import SubHeaderComponent from '../../sub-header-component'
-import SubHeaderButtonComponent from '../../sub-header-button-component'
+import EditorSubHeaderComponent from './editor-sub-header-component'
 import CanvasComponent from './canvas-component'
-import ZoomComponent from './zoom-component'
 import ModalManager from '../../../lib/modal-manager'
 import OverviewControls from '../../controls/overview/'
 import Editor from '../../../lib/editor'
@@ -32,10 +29,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._bindAll(
       'switchToControls',
       '_startEditor',
-      '_onZoomIn',
-      '_onZoomOut',
-      '_zoom',
-      '_undoZoom',
       '_onHistoryUpdated',
       '_onDisableFeatures',
       '_onEnableFeatures',
@@ -57,8 +50,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     }
 
     this._events = {
-      [Constants.EVENTS.CANVAS_ZOOM]: this._zoom,
-      [Constants.EVENTS.CANVAS_ZOOM_UNDO]: this._undoZoom,
       [Constants.EVENTS.EDITOR_DISABLE_FEATURES]: this._onDisableFeatures,
       [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures,
       [Constants.EVENTS.HISTORY_UPDATED]: this._onHistoryUpdated
@@ -77,8 +68,8 @@ export default class EditorScreenComponent extends ScreenComponent {
   componentDidMount () {
     super.componentDidMount()
 
-    this._fileLoader = new FileLoader(this.refs.fileInput)
-    this._fileLoader.on('file', this._onNewFile)
+    // this._fileLoader = new FileLoader(this.refs.fileInput)
+    // this._fileLoader.on('file', this._onNewFile)
 
     window.addEventListener('resize', this._onWindowResize)
   }
@@ -93,8 +84,8 @@ export default class EditorScreenComponent extends ScreenComponent {
     if (options.responsive) {
       window.removeEventListener('resize', this._onWindowResize)
     }
-    this._fileLoader.off('file', this._onNewFile)
-    this._fileLoader.dispose()
+    // this._fileLoader.off('file', this._onNewFile)
+    // this._fileLoader.dispose()
   }
 
   /**
@@ -102,7 +93,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @private
    */
   _startEditor () {
-    this._zoom('auto')
     this._editor.start()
   }
 
@@ -243,68 +233,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     this.setState({ zoomEnabled, dragEnabled })
   }
 
-  // -------------------------------------------------------------------------- ZOOM
-
-  /**
-   * Undos the last zoom
-   * @param {Function} [callback]
-   * @private
-   */
-  _undoZoom (callback) {
-    if (this._previousZoom !== null) return
-
-    // Couldn't come up with something clean here :(
-    this._zoom(this._previousZoom, callback)
-    this._previousZoom = null
-  }
-
-  /**
-   * Zooms to the given level
-   * @param {Number|String} zoom
-   * @param {Function} [callback]
-   * @private
-   */
-  _zoom (zoom, callback) {
-    const canvasComponent = this.refs.canvas
-
-    let newZoom = zoom
-    const defaultZoom = canvasComponent.getDefaultZoom()
-    if (zoom === 'auto' || newZoom === defaultZoom) {
-      newZoom = defaultZoom
-      zoom = 'auto'
-    }
-
-    const maxZoom = defaultZoom * 2
-    const minZoom = canvasComponent.getMinimumZoom()
-    newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom))
-
-    this._editor.setZoom(newZoom, zoom === 'auto')
-    this._previousZoom = zoom
-
-    this.setState({ zoom: newZoom }, () => {
-      this._emitEvent(Constants.EVENTS.CANVAS_RENDER, undefined, () => {
-        this._emitEvent(Constants.EVENTS.CANVAS_ZOOM_DONE)
-        callback && callback()
-      })
-    })
-  }
-
-  /**
-   * Gets called when the user clicked the zoom in button
-   * @private
-   */
-  _onZoomIn () {
-    this._zoom(this.state.zoom + 0.1)
-  }
-
-  /**
-   * Gets called when the user clicked the zoom out button
-   * @private
-   */
-  _onZoomOut () {
-    this._zoom(this.state.zoom - 0.1)
-  }
-
   // -------------------------------------------------------------------------- MISC
 
   /**
@@ -409,55 +337,10 @@ export default class EditorScreenComponent extends ScreenComponent {
         ref='canvasControls' />)
     }
 
-    let newButton
-    if (this.context.options.showNewButton !== false) {
-      newButton = (<SubHeaderButtonComponent
-        label={this._t('editor.new')}
-        icon='editor/new@2x.png'
-        onClick={this._onNewClick} />)
-    }
-
-    let undoButton
-    if (this._showUndoButton()) {
-      undoButton = (<SubHeaderButtonComponent
-        label={this._t('editor.undo')}
-        icon='editor/undo@2x.png'
-        onClick={this._onUndoClick} />)
-    }
-
-    let exportButton
-    if (this.context.options.export.showButton !== false) {
-      const exportLabel = this.context.options.export.label || this._t('editor.export')
-      exportButton = (<SubHeaderButtonComponent
-        style='blue'
-        label={exportLabel}
-        icon='editor/export@2x.png'
-        onClick={this._onExportClick} />)
-    }
-
     return (<div bem='b:screen'>
       <HeaderComponent />
       <div bem='$b:editorScreen'>
-        <SubHeaderComponent
-          label={this._t('webcam.headline')}>
-          <bem specifier='$b:subHeader'>
-            <input type='file' bem='b:hiddenFileInput' ref='fileInput' />
-            <div bem='e:left'>
-              {newButton}
-            </div>
-
-            <div bem='e:right'>
-              {undoButton}
-              {exportButton}
-            </div>
-
-            <ZoomComponent
-              zoom={this.state.zoom}
-              onZoomIn={this._onZoomIn}
-              onZoomOut={this._onZoomOut}
-              zoomEnabled={this.state.zoomEnabled} />
-          </bem>
-        </SubHeaderComponent>
+        <EditorSubHeaderComponent />
 
         <CanvasComponent
           ref='canvas'

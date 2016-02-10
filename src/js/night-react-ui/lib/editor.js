@@ -16,6 +16,8 @@ import Exporter from './exporter'
 import Controls from '../components/controls'
 import ImageResizer from './image-resizer'
 
+const MIN_ZOOM_DIMENSIONS = 300
+
 /**
  * The Editor class is an interface to the SDK, managing operations, rendering,
  * history, zoom etc.
@@ -43,10 +45,17 @@ export default class Editor extends EventEmitter {
     this._renderCallbacks = []
     this._animationFrameRequest = null
 
+    // Zoom
+    this._previousZoom = null
+
+    this.setZoom = this.setZoom.bind(this)
+    this.undoZoom = this.undoZoom.bind(this)
     this.render = this.render.bind(this)
     this._tick = this._tick.bind(this)
 
     this._mediator.on(Constants.EVENTS.RENDER, this.render)
+    this._mediator.on(Constants.EVENTS.ZOOM, this.setZoom)
+    this._mediator.on(Constants.EVENTS.ZOOM_UNDO, this.undoZoom)
 
     this._initWatermark()
     requestAnimationFrame(this._initImage.bind(this))
@@ -128,6 +137,99 @@ export default class Editor extends EventEmitter {
       defaultControls[control.identifier] = control
     })
     this._availableControls = SDKUtils.extend(defaultControls, this._options.extensions.controls)
+  }
+
+  // -------------------------------------------------------------------------- ZOOMING
+
+  /**
+   * Zooms in the editor
+   */
+  zoomIn () {
+    const zoom = this._sdk.getZoom()
+    this.setZoom(zoom + 0.1)
+  }
+
+  /**
+   * Zooms out the editor
+   */
+  zoomOut () {
+    const zoom = this._sdk.getZoom()
+    this.setZoom(zoom - 0.1)
+  }
+
+  /**
+   * Switches to the previous zoom
+   */
+  undoZoom () {
+    if (!this._previousZoom) return
+    this.setZoom(this._previousZoom)
+    this._previousZoom = null
+  }
+
+  /**
+   * Returns the current zoom level
+   * @return {Number}
+   */
+  getZoom () { return this._sdk.getZoom() }
+
+  /**
+   * Sets the zoom to the given one
+   * @param {Number} zoom
+   * @param {Function} [callback]
+   */
+  setZoom (zoom, callback) {
+    this._previousZoom = this._sdk.getZoom()
+
+    let newZoom = zoom
+    const defaultZoom = this.getDefaultZoom()
+    if (zoom === 'auto' || newZoom === defaultZoom) {
+      newZoom = defaultZoom
+      zoom = 'auto'
+
+      this._isDefaultZoom = true
+    } else {
+      this._isDefaultZoom = false
+    }
+
+    const maxZoom = defaultZoom * 2
+    const minZoom = this.getMinimumZoom()
+    newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom))
+
+    this._sdk.setZoom(newZoom)
+    this.render(null, () => {
+      this._mediator.emit(Constants.EVENTS.ZOOM_DONE)
+      callback && callback()
+    })
+  }
+
+  /**
+   * Returns the default zoom level
+   * @return {Number}
+   */
+  getDefaultZoom () {
+    const finalDimensions = this.getFinalDimensions()
+    const canvasDimensions = this.getCanvasDimensions()
+    const defaultDimensions = SDKUtils.resizeVectorToFit(finalDimensions, canvasDimensions)
+
+    return defaultDimensions
+      .divide(finalDimensions)
+      .x
+  }
+
+  /**
+   * Returns the minimum zoom level
+   * @return {Number}
+   */
+  getMinimumZoom () {
+    const finalDimensions = this.getFinalDimensions()
+    const minimumDimensions = SDKUtils.resizeVectorToFit(
+      finalDimensions,
+      new Vector2(MIN_ZOOM_DIMENSIONS, MIN_ZOOM_DIMENSIONS)
+    )
+
+    return minimumDimensions
+      .divide(finalDimensions)
+      .x
   }
 
   // -------------------------------------------------------------------------- PUBLIC HISTORY API
@@ -333,6 +435,15 @@ export default class Editor extends EventEmitter {
   }
 
   /**
+   * Returns the canvas dimensions
+   * @return {Vector2}
+   */
+  getCanvasDimensions () {
+    const canvas = this._sdk.getCanvas()
+    return new Vector2(canvas.offsetWidth, canvas.offsetHeight)
+  }
+
+  /**
    * Sets the given image
    * @param {Image} image
    */
@@ -340,16 +451,6 @@ export default class Editor extends EventEmitter {
     this._options.image = image
     this._sdk.setImage(image)
     this.reset()
-  }
-
-  /**
-   * Sets the given zoom level
-   * @param {Boolean}  zoom
-   * @param {Boolean} isDefault
-   */
-  setZoom (zoom, isDefault = false) {
-    this._isDefaultZoom = isDefault
-    this._sdk.setZoom(zoom)
   }
 
   /**
@@ -389,6 +490,7 @@ export default class Editor extends EventEmitter {
    * Starts the render loop
    */
   start () {
+    this.setZoom('auto')
     this._animationFrameRequest = requestAnimationFrame(this._tick)
   }
 
@@ -518,7 +620,7 @@ export default class Editor extends EventEmitter {
   dispose () {
     this.stop()
 
-    this._mediator.off(Constants.EVENTS.CANVAS_RENDER, this.render)
+    this._mediator.off(Constants.EVENTS.RENDER, this.render)
   }
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS

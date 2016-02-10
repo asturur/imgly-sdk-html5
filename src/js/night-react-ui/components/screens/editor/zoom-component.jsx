@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent } from '../../../globals'
+import { Constants, ReactBEM, BaseComponent } from '../../../globals'
 
 export default class ZoomComponent extends BaseComponent {
   constructor (...args) {
@@ -17,11 +17,24 @@ export default class ZoomComponent extends BaseComponent {
 
     this._bindAll(
       '_onZoomOutClick',
-      '_onZoomInClick'
+      '_onZoomInClick',
+      '_onZoomDone'
     )
+
+    this._events = {
+      [Constants.EVENTS.ZOOM_DONE]: this._onZoomDone
+    }
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when a zoom level has been applied / when the zoom has been done
+   * @private
+   */
+  _onZoomDone () {
+    this.forceUpdate()
+  }
 
   /**
    * Gets called when the user clicks the "zoom out" button
@@ -29,7 +42,7 @@ export default class ZoomComponent extends BaseComponent {
    * @private
    */
   _onZoomOutClick (e) {
-    if (!this.props.zoomEnabled) return
+    if (!this.props.enabled) return
     this.props.onZoomOut && this.props.onZoomOut()
   }
 
@@ -39,7 +52,7 @@ export default class ZoomComponent extends BaseComponent {
    * @private
    */
   _onZoomInClick (e) {
-    if (!this.props.zoomEnabled) return
+    if (!this.props.enabled) return
     this.props.onZoomIn && this.props.onZoomIn()
   }
 
@@ -50,26 +63,27 @@ export default class ZoomComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const { zoomEnabled } = this.props
+    const { enabled } = this.props
+    const zoom = this.context.editor.getZoom()
 
     return (
       <div bem='$b:editorScreen $e:zoom'>
 
         <div bem='$e:button m:zoomOut'
           onClick={this._onZoomOutClick}
-          className={zoomEnabled ? null : 'is-disabled'}>
+          className={enabled ? null : 'is-disabled'}>
             <img bem='e:image' src={this._getAssetPath('controls/minus@2x.png', true)} />
         </div>
 
         <div bem='e:label'>
           Zoom<br />
-          {Math.round(this.props.zoom * 100)}%
+        {Math.round(zoom * 100)}%
         </div>
 
         <div
           bem='$e:button m:zoomIn'
           onClick={this._onZoomInClick}
-          className={zoomEnabled ? null : 'is-disabled'}>
+          className={enabled ? null : 'is-disabled'}>
             <img bem='e:image' src={this._getAssetPath('controls/plus@2x.png', true)} />
         </div>
 
