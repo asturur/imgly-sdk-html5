@@ -249,8 +249,9 @@ class SpriteOperation extends Operation {
    * @param  {PhotoEditorSDK} sdk
    * @returns {Promise}
    * @override
+   * @private
    */
-  render (sdk) {
+  _render (sdk) {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 

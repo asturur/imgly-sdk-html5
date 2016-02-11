@@ -34,8 +34,9 @@ class OrientationOperation extends Operation {
    * @param  {PhotoEditorSDK} sdk
    * @returns {Promise}
    * @override
+   * @private
    */
-  render (sdk) {
+  _render (sdk) {
     const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)

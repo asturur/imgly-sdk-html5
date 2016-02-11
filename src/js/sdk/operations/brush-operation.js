@@ -50,8 +50,9 @@ class BrushOperation extends Operation {
    * @param  {PhotoEditorSDK} sdk
    * @returns {Promise}
    * @override
+   * @private
    */
-  render (sdk) {
+  _render (sdk) {
     this.renderBrushCanvas(sdk)
 
     const renderer = sdk.getRenderer()
