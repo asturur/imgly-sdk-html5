@@ -31,5 +31,12 @@ export default {
   Sprite,
   Shaders,
   Shader,
-  Filter
+  Filter,
+  autoDetectRenderer: function (width, height, options = {}) {
+    if (WebGLRenderer.isSupported()) {
+      return new WebGLRenderer(width, height, options)
+    } else {
+      return new CanvasRenderer(width, height, options)
+    }
+  }
 }
