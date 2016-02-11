@@ -40,6 +40,50 @@ export default class Sprite extends Container {
   }
 
   /**
+   * Renders the contents of this container
+   * @param  {CanvasRenderer} renderer
+   * @private
+   */
+  _renderCanvas (renderer) {
+    const transform = this._worldTransform
+    const textureFrame = this._texture.getFrame()
+
+    const { width, height } = textureFrame
+    const pixelRatio = renderer.getPixelRatio()
+
+    // Apply transform
+    const dx = this._anchor.x * -width
+    const dy = this._anchor.y * -height
+    const ctx = renderer.getContext()
+    ctx.setTransform(
+      transform.a,
+      transform.b,
+      transform.c,
+      transform.d,
+      transform.tx * pixelRatio,
+      transform.ty * pixelRatio
+    )
+
+    const baseTexture = this._texture.getBaseTexture()
+    const texturePixelRatio = baseTexture.getPixelRatio()
+    ctx.drawImage(
+      this._texture.getBaseTexture().getSource(),
+
+      // Source x, y, width, height
+      0,
+      0,
+      width * texturePixelRatio,
+      height * texturePixelRatio,
+
+      // Destination x, y, width, height
+      dx * pixelRatio,
+      dy * pixelRatio,
+      width * pixelRatio,
+      height * pixelRatio
+    )
+  }
+
+  /**
    * Returns the non-global bounds of this DisplayObject
    * @return {Rectangle}
    */

@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Log } from '../globals'
 import DisplayObject from './display-object'
 
 export default class Container extends DisplayObject {
@@ -114,6 +115,38 @@ export default class Container extends DisplayObject {
   }
 
   /**
+   * Renders the contents of this container
+   * @param {WebGLRenderer} renderer
+   * @private
+   */
+  _renderWebGL (renderer) {
+
+  }
+
+  /**
+   * Renders this DisplayObject using the given CanvasRenderer
+   * @param  {CanvasRenderer} renderer
+   * @override
+   */
+  renderCanvas (renderer) {
+    if (!this._visible) return
+
+    this._renderCanvas(renderer)
+    this._children.forEach((child) => {
+      child.renderCanvas(renderer)
+    })
+  }
+
+  /**
+   * Renders the contents of this container
+   * @param {CanvasRenderer} renderer
+   * @private
+   */
+  _renderCanvas (renderer) {
+
+  }
+
+  /**
    * Updates the world transform for this DisplayObject
    */
   updateTransform () {
@@ -121,16 +154,6 @@ export default class Container extends DisplayObject {
     this._children.forEach((child) => {
       child.updateTransform()
     })
-  }
-
-  /**
-   * Renders the contents of this container
-   * @param {WebGLRenderer} renderer
-   * @private
-   * @abstract
-   */
-  _renderWebGL (renderer) {
-
   }
 
   /**

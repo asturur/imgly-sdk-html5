@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Matrix, Vector2, Rectangle } from '../globals'
+import { Log, Matrix, Vector2, Rectangle } from '../globals'
 
 export default class DisplayObject {
   constructor () {
@@ -35,7 +35,16 @@ export default class DisplayObject {
    * @abstract
    */
   renderWebGL (renderer) {
+    Log.warn(this.constructor.name, '`renderWebGL` is abstract and not implemented in inherited class')
+  }
 
+  /**
+   * Renders this DisplayObject using the given CanvasRenderer
+   * @param  {CanvasRenderer} renderer
+   * @abstract
+   */
+  renderCanvas (renderer) {
+    Log.warn(this.constructor.name, '`renderCanvas` is abstract and not implemented in inherited class')
   }
 
   /**
