@@ -27,8 +27,8 @@ export default class ImageResizer {
     const pixels = dimensions.x * dimensions.y
 
     return pixels > this._maxPixels ||
-      dimensions.x > this._maxDimensions ||
-      dimensions.y > this._maxDimensions
+      (this._maxDimensions !== null &&
+        (dimensions.x > this._maxDimensions || dimensions.y > this._maxDimensions))
   }
 
   /**
