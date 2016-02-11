@@ -235,6 +235,7 @@ export default class Editor extends EventEmitter {
     newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom))
 
     this._sdk.setZoom(newZoom)
+    this._fixOffset()
     this.render(() => {
       this._mediator.emit(Constants.EVENTS.ZOOM_DONE)
       callback && callback()
@@ -461,7 +462,7 @@ export default class Editor extends EventEmitter {
    * @return {Vector2}
    */
   getOutputDimensions () {
-    return new Vector2(this._lastOutputBounds.width, this._lastOutputBounds.height)
+    return this._sdk.getOutputDimensions()
   }
 
   /**
@@ -563,12 +564,7 @@ export default class Editor extends EventEmitter {
    */
   setOffset (offset) {
     offset = this._clampOffset(offset)
-
-    const initialOffset = this._sdk.getOffset()
-    if (!initialOffset.equals(offset)) {
-      this._sdk.setOffset(offset)
-      this.render()
-    }
+    this._sdk.setOffset(offset)
   }
 
   /**
@@ -594,7 +590,7 @@ export default class Editor extends EventEmitter {
   _clampOffset (offset) {
     const renderer = this._sdk.getRenderer()
     const rendererDimensions = new Vector2(renderer.getWidth(), renderer.getHeight())
-    const outputDimensions = this.getOutputDimensions()
+    const outputDimensions = this._sdk.getOutputDimensions()
 
     const minOffset = rendererDimensions.clone()
       .subtract(outputDimensions)

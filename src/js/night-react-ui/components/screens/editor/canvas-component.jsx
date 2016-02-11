@@ -103,6 +103,7 @@ export default class CanvasComponent extends BaseComponent {
 
     const { editor } = this.context
     editor.setOffset(newOffset)
+    editor.render()
   }
 
   /**

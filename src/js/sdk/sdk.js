@@ -276,6 +276,15 @@ export default class PhotoEditorSDK extends EventEmitter {
     return dimensions
   }
 
+  /**
+   * Returns the current sprite dimensions
+   * @return {Vector2}
+   */
+  getOutputDimensions () {
+    const spriteBounds = this._sprite.getBounds()
+    return new Vector2(spriteBounds.width, spriteBounds.height)
+  }
+
   // -------------------------------------------------------------------------- MISC
 
   /**
@@ -472,6 +481,7 @@ export default class PhotoEditorSDK extends EventEmitter {
   setZoom (zoom) {
     this._zoom = zoom
     this._sprite.setScale(this._zoom, this._zoom)
+    this._sprite.updateTransform()
   }
   getPixelRatio () { return this._options.pixelRatio }
 
