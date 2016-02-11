@@ -84,7 +84,9 @@ export default class Text extends Sprite {
 
     // Upload texture
     const renderer = sdk.getRenderer()
-    renderer.updateTexture(textTexture.getBaseTexture())
+    if (renderer.isOfType('webgl')) {
+      renderer.updateTexture(textTexture.getBaseTexture())
+    }
 
     return super.update(sdk)
   }

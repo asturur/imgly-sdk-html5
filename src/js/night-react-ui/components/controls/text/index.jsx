@@ -85,7 +85,7 @@ export default {
       const text = operation.createText({
         text: 'Double-click to edit',
         maxWidth,
-        maxHeight: renderer.getMaxTextureSize(),
+        maxHeight: renderer.getMaxTextureSize() || (sdk.getInputDimensions().y * 3),
         fontSize: 0.15,
         fontFamily: 'Impact',
         alignment: 'center',

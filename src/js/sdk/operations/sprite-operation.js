@@ -275,16 +275,11 @@ class SpriteOperation extends Operation {
 
   /**
    * Crops the image using Canvas2D
-   * @param  {CanvasRenderer} renderer
-   * @param  {Image} image
+   * @param  {PhotoEditorSDK} renderer
    * @private
    */
-  _renderCanvas (renderer, image) {
-    // if (!this._renderers[renderer.id]) {
-    //   this._renderers[renderer.id] = new StickerCanvasRenderer(this, renderer)
-    // }
-
-    return this._renderers[renderer.id].render()
+  _renderCanvas (sdk) {
+    return this._renderWebGL(sdk)
   }
 
   /**
