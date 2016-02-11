@@ -75,7 +75,7 @@ export default class EditorSubHeaderComponent extends BaseComponent {
    */
   renderWithBEM () {
     const { options } = this.context
-    if (!options.showNewButton) return
+    if (!options.showNewButton) return null
 
     return (<div>
       <input type='file' bem='b:hiddenFileInput' ref='fileInput' />

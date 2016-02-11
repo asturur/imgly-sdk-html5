@@ -9,40 +9,40 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent } from '../../../globals'
-import ModalManager from '../../../lib/modal-manager'
+import { ReactBEM, Constants, BaseComponent } from '../../../globals'
 import SubHeaderButtonComponent from '../../sub-header-button-component'
 
-export default class ExportButtonComponent extends BaseComponent {
+export default class UndoButtonComponent extends BaseComponent {
   constructor (...args) {
     super(...args)
 
     this._bindAll(
-      '_onButtonClick'
+      '_onButtonClick',
+      '_onHistoryUpdated'
     )
+
+    this._events = {
+      [Constants.EVENTS.HISTORY_UPDATED]: this._onHistoryUpdated
+    }
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when the history has been updated
+   * @private
+   */
+  _onHistoryUpdated () {
+    this.forceUpdate()
+  }
 
   /**
    * Gets called when the button has been clicked
    * @private
    */
   _onButtonClick () {
-    const { options, editor, editorScreen } = this.context
-    const exportOptions = options.export
-
-    editorScreen.switchToControls('home', null, () => {
-      const loadingModal = ModalManager.instance.displayLoading(this._t('loading.exporting'))
-
-      // Give it some time to display the loading modal
-      setTimeout(() => {
-        editor.export(exportOptions.download)
-          .then(() => {
-            loadingModal.close()
-          })
-      }, 1000)
-    })
+    const { editor } = this.context
+    editor.undo()
   }
 
   // -------------------------------------------------------------------------- RENDERING
@@ -52,13 +52,12 @@ export default class ExportButtonComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const { options } = this.context
-    if (!options.export.showButton) return null
+    const { editor } = this.context
+    if (!editor.historyAvailable()) return null
 
     return (<SubHeaderButtonComponent
-      style='blue'
-      label={options.export.label || this._t('editor.export')}
-      icon='editor/export@2x.png'
+      label={this._t('editor.undo')}
+      icon='editor/undo@2x.png'
       onClick={this._onButtonClick} />)
   }
 }

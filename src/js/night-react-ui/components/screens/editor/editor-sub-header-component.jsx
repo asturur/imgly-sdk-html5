@@ -11,33 +11,12 @@
 
 import { ReactBEM } from '../../../globals'
 import SubHeaderComponent from '../../sub-header-component'
-import SubHeaderButtonComponent from '../../sub-header-button-component'
 import NewFileButtonComponent from './new-file-button-component'
 import ExportButtonComponent from './export-button-component'
+import UndoButtonComponent from './undo-button-component'
 import ZoomComponent from './zoom-component'
 
 export default class EditorSubHeaderComponent extends SubHeaderComponent {
-  constructor (...args) {
-    super(...args)
-  }
-
-  // -------------------------------------------------------------------------- RENDERING
-
-  /**
-   * Renders the undo button (if available)
-   * @return {ReactBEM.Element}
-   * @private
-   */
-  _renderUndoButton () {
-    const { editor } = this.context
-    if (!editor.historyAvailable()) return
-
-    return (<SubHeaderButtonComponent
-      label={this._t('editor.undo')}
-      icon='editor/undo@2x.png'
-      onClick={this._onUndoClick} />)
-  }
-
   /**
    * Renders the content of this SubHeaderComponent
    * @return {ReactBEM.Element}
@@ -49,7 +28,7 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
       </div>
 
       <div bem='e:right'>
-        {this._renderUndoButton()}
+        <UndoButtonComponent />
         <ExportButtonComponent />
       </div>
 

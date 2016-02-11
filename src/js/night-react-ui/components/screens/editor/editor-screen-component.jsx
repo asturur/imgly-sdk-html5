@@ -10,7 +10,7 @@
  */
 const WINDOW_RESIZE_DELAY = 500
 
-import { Utils, React, ReactBEM, Constants, SharedState } from '../../../globals'
+import { React, ReactBEM, Constants, SharedState } from '../../../globals'
 import OverviewControlsComponent from '../../controls/overview/overview-controls-component'
 import ScreenComponent from '../screen-component'
 import HeaderComponent from '../../header-component'
@@ -29,10 +29,8 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._bindAll(
       'switchToControls',
       '_startEditor',
-      '_onHistoryUpdated',
       '_onDisableFeatures',
       '_onEnableFeatures',
-      '_onUndoClick',
       '_onWindowResize',
       '_onWindowResizeDone',
       '_onImageResize',
@@ -49,8 +47,7 @@ export default class EditorScreenComponent extends ScreenComponent {
 
     this._events = {
       [Constants.EVENTS.EDITOR_DISABLE_FEATURES]: this._onDisableFeatures,
-      [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures,
-      [Constants.EVENTS.HISTORY_UPDATED]: this._onHistoryUpdated
+      [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures
     }
 
     this._editor = new Editor(this.context.options, this.context.mediator)
@@ -139,22 +136,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _onWindowResizeDone () {
     this._emitEvent(Constants.EVENTS.WINDOW_RESIZE)
-  }
-
-  /**
-   * Gets called when the user clicks the undo button
-   * @private
-   */
-  _onUndoClick () {
-    this._editor.undo()
-  }
-
-  /**
-   * Gets called when the history has been changed
-   * @private
-   */
-  _onHistoryUpdated () {
-    this.forceUpdate()
   }
 
   // -------------------------------------------------------------------------- FEATURES
