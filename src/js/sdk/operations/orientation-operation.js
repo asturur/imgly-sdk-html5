@@ -32,6 +32,8 @@ class OrientationOperation extends Operation {
   /**
    * Rotates and/or flips the image
    * @param  {PhotoEditorSDK} sdk
+   * @returns {Promise}
+   * @override
    */
   render (sdk) {
     const renderer = sdk.getRenderer()

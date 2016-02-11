@@ -138,8 +138,8 @@ class CropOperation extends Operation {
   /**
    * Crops the image
    * @param  {PhotoEditorSDK} sdk
+   * @returns {Promise}
    * @override
-   * @private
    */
   render (sdk) {
     const renderer = sdk.getRenderer()
