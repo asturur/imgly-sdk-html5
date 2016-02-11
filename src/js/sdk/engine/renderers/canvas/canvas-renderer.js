@@ -16,6 +16,8 @@ export default class CanvasRenderer extends BaseRenderer {
   constructor (...args) {
     super(...args)
     this._type = 'canvas'
+
+    this.setCanvas(this._options.canvas || document.createElement('canvas'))
   }
 
   /**

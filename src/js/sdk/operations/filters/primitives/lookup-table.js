@@ -44,9 +44,10 @@ class LookupTable extends Primitive {
 
   /**
    * Gets called before this primitive's filter is being applied
+   * @param {PhotoEditorSDK} sdk
    */
-  update (renderer) {
-    this._updateTexture(renderer)
+  update (sdk) {
+    this._updateTexture(sdk)
   }
 
   /**
@@ -99,7 +100,9 @@ class LookupTable extends Primitive {
     texture.setSource(data)
     texture.setGLUnit(TEXTURE_GL_UNIT)
 
-    renderer.updateTexture(texture)
+    if (renderer.isOfType('webgl')) {
+      renderer.updateTexture(texture)
+    }
   }
 
   /**

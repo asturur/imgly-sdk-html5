@@ -39,6 +39,8 @@ export default class BaseRenderer extends EventEmitter {
     this._createContext()
     this._onBeforeContext()
     this._setupContext()
+
+    this.resizeTo(new Vector2(this._width, this._height))
   }
 
   /**

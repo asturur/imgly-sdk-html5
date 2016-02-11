@@ -119,7 +119,10 @@ class PrimitivesStack {
 
       const baseTexture = renderTexture.getBaseTexture()
       baseTexture.setGLUnit(1)
-      renderer.updateTexture(baseTexture, false)
+
+      if (renderer.isOfType('webgl')) {
+        renderer.updateTexture(baseTexture, false)
+      }
 
       outputTexture.render(this._container)
     }
@@ -131,38 +134,21 @@ class PrimitivesStack {
   /**
    * Renders this stack using Canvas2D
    * @param  {PhotoEditorSDK} sdk
+   * @param  {Engine.RenderTexture} renderTexture
    * @return {Promise}
    */
-  renderCanvas (sdk) {
-    const outputCanvas = sdk.cloneCanvas()
-
-    let promise = Promise.resolve()
-    if (this._dirty) {
-      for (var i = 0; i < this._stack.length; i++) {
-        var primitive = this._stack[i]
-        primitive.renderCanvas(sdk, outputCanvas)
-      }
-    }
-
-    promise = promise.then(() => {
-      this._dirty = false
-    }).then(() => {
-      // Render with intensity
-      const context = sdk.getContext()
-      context.globalAlpha = this._intensity
-      context.drawImage(outputCanvas, 0, 0)
-      context.globalAlpha = 1.0
-    })
-
-    return promise
+  renderCanvas (sdk, renderTexture) {
+    return this.renderWebGL(sdk, renderTexture)
   }
 
   /**
    * Renders the stack of primitives on the renderer
    * @param  {PhotoEditorSDK} sdk
+   * @param  {Engine.RenderTexture} renderTexture
+   * @return {Promise}
    */
   render (sdk, renderTexture) {
-    if (sdk.getRenderer() instanceof Engine.WebGLRenderer) {
+    if (sdk.getRenderer().isOfType('webgl')) {
       return this.renderWebGL(sdk, renderTexture)
     } else {
       return this.renderCanvas(sdk, renderTexture)
