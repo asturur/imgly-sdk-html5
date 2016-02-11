@@ -30,11 +30,10 @@ class OrientationOperation extends Operation {
   }
 
   /**
-   * Rotates the image using WebGL
+   * Rotates and/or flips the image
    * @param  {PhotoEditorSDK} sdk
    */
-  /* istanbul ignore next */
-  _renderWebGL (sdk) {
+  render (sdk) {
     const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
@@ -77,52 +76,6 @@ class OrientationOperation extends Operation {
       dimensions.flip()
     }
     return dimensions
-  }
-
-  /**
-   * Crops the image using Canvas2D
-   * @param  {PhotoEditorSDK} sdk
-   * @return {Promise}
-   * @private
-   */
-  _renderCanvas (sdk) {
-    return new Promise((resolve, reject) => {
-      const canvas = sdk.getCanvas()
-      const context = sdk.getContext()
-      const actualDegrees = this._options.rotation % 360
-      const radians = actualDegrees * Math.PI / 180
-
-      const pixelRatio = (typeof window !== 'undefined' && window.devicePixelRatio) || 1
-      const canvasDimensions = new Vector2(canvas.width, canvas.height)
-        .divide(pixelRatio)
-      const newDimensions = this.getNewDimensions(sdk, canvasDimensions)
-
-      // Clone the canvas
-      const tempCanvas = sdk.cloneCanvas()
-
-      let scaleX = 1
-      let scaleY = 1
-
-      if (this._options.flipHorizontally) {
-        scaleX = -1
-        // translateX = canvas.width
-      }
-
-      if (this._options.flipVertically) {
-        scaleY = -1
-        // translateY = canvas.height
-      }
-
-      sdk.resizeTo(newDimensions)
-      context.save()
-      context.translate(canvas.width / 2, canvas.height / 2)
-      context.rotate(radians)
-      context.scale(scaleX, scaleY)
-      context.drawImage(tempCanvas, -tempCanvas.width / 2, -tempCanvas.height / 2)
-      context.restore()
-
-      resolve()
-    })
   }
 }
 
