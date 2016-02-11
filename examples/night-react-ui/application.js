@@ -2,22 +2,14 @@
 window.onload = function () {
   var myImage = new Image()
   myImage.addEventListener('load', function () {
-    /*
-     * Initialize Renderer
-     */
-    var renderer = new PhotoEditorSDK.Renderer('webgl', {
-      image: myImage,
-      additionalOperations: {
-        // noise: NoiseOperation
-      }
-    })
-
     /**
      * Initialize the UI
      */
-    var editor = new PhotoEditorSDK.UI.NightReact(renderer, {
+    var editor = new PhotoEditorSDK.UI.NightReact({
       container: document.querySelector('#container'),
+      image: myImage,
       responsive: true,
+      logLevel: 'trace',
       assets: {
         baseUrl: '/build/assets',
         resolver: function (path) {
