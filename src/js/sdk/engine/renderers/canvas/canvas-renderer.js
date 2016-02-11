@@ -8,11 +8,16 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Color, Log } from '../../globals'
+import { Log } from '../../globals'
 import ContextPerformanceHook from '../../utils/context-performance-hook'
 import BaseRenderer from '../base-renderer'
 
 export default class CanvasRenderer extends BaseRenderer {
+  constructor (...args) {
+    super(...args)
+    this._type = 'canvas'
+  }
+
   /**
    * Gets the rendering context for this renderer
    * @returns {Object}
@@ -100,6 +105,8 @@ export default class CanvasRenderer extends BaseRenderer {
     displayObject.renderCanvas(this)
     this._context = originalContext
   }
+
+  getCurrentRenderTarget () { return this._context }
 }
 
 CanvasRenderer.contextId = 0

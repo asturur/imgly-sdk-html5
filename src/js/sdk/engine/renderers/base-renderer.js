@@ -15,17 +15,18 @@ export default class BaseRenderer extends EventEmitter {
   constructor (width, height, options = {}) {
     super()
 
-    this.setMaxListeners(25)
-    this._width = width || 800
-    this._height = height || 600
-    this._dimensions = new Vector2(this._width, this._height)
-    this._maxTextureSize = null
-
     this._options = Utils.defaults(options, {
       pixelRatio: 1,
       clearColor: Color.TRANSPARENT,
       debug: false
     })
+
+    this.setMaxListeners(25)
+    this._width = width || 800
+    this._height = height || 600
+    this._dimensions = new Vector2(this._width, this._height)
+    this._maxTextureSize = null
+    this._pixelRatio = this._options.pixelRatio
   }
 
   /**
@@ -116,7 +117,8 @@ export default class BaseRenderer extends EventEmitter {
   getWidth () { return this._dimensions.x }
   getHeight () { return this._dimensions.y }
   getDimensions () { return this._dimensions }
-  getPixelRatio () { return this._options.pixelRatio }
+  getPixelRatio () { return this._pixelRatio }
+  setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
   getMaxTextureSize () { return this._maxTextureSize }
 
   /**
@@ -124,6 +126,15 @@ export default class BaseRenderer extends EventEmitter {
    * @return {Boolean}
    */
   static isSupported () { return true }
+
+  /**
+   * Checks if this renderer's type is equal to the given one
+   * @param  {String}  type
+   * @return {Boolean}
+   */
+  isOfType (type) {
+    return this._type === type
+  }
 
   /**
    * Disposes this Renderer

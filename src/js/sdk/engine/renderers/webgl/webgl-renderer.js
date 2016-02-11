@@ -22,6 +22,8 @@ export default class WebGLRenderer extends BaseRenderer {
   constructor (...args) {
     super(...args)
 
+    this._type = 'webgl'
+
     this._textures = []
     this._fakeObject = new DisplayObject()
     this._onContextLost = this._onContextLost.bind(this)
@@ -179,7 +181,7 @@ export default class WebGLRenderer extends BaseRenderer {
     this._defaultRenderTarget = new RenderTarget(this,
       this._width,
       this._height,
-      this._options.pixelRatio,
+      this._pixelRatio,
       true)
     this.setRenderTarget(this._defaultRenderTarget)
 

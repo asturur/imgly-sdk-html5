@@ -169,7 +169,9 @@ export default class FilterManager {
    */
   _onContextChange () {
     this._textures.length = 0
-    this._quad = new Quad(this._renderer)
+    if (this._renderer.isOfType('webgl')) {
+      this._quad = new Quad(this._renderer)
+    }
   }
 
   /**
@@ -177,6 +179,8 @@ export default class FilterManager {
    */
   dispose () {
     this._renderer.off('context', this._onContextChange)
-    this._quad.dispose()
+    if (this._quad) {
+      this._quad.dispose()
+    }
   }
 }

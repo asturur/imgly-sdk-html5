@@ -11,8 +11,8 @@
 import { Vector2, Rectangle } from '../globals'
 import Texture from './texture'
 import BaseTexture from './base-texture'
-import WebGLRenderer from '../renderers/webgl/webgl-renderer'
 import RenderTarget from '../utils/render-target'
+import CanvasBuffer from '../utils/canvas-buffer'
 import FilterManager from '../managers/filter-manager'
 
 export default class RenderTexture extends Texture {
@@ -32,7 +32,10 @@ export default class RenderTexture extends Texture {
     this._pixelRatio = pixelRatio
     this._renderer = renderer
 
-    this._setupFilterManager()
+    if (this._renderer.isOfType('webgl')) {
+      this._setupFilterManager()
+    }
+
     this._setupBuffer()
     this._updateUVs()
   }
@@ -51,11 +54,10 @@ export default class RenderTexture extends Texture {
    * @private
    */
   _setupBuffer () {
-    if (this._renderer instanceof WebGLRenderer) {
+    if (this._renderer.isOfType('webgl')) {
       this._setupWebGLBuffer()
-    // } else if (this._renderer instanceof CanvasRenderer) {
-      // @TODO
-      // this._setupCanvasBuffer()
+    } else if (this._renderer.isOfType('canvas')) {
+      this._setupCanvasBuffer()
     }
   }
 
@@ -66,6 +68,18 @@ export default class RenderTexture extends Texture {
   _setupWebGLBuffer () {
     this._renderTarget = new RenderTarget(this._renderer, this._width, this._height, this._pixelRatio)
     this._baseTexture.setGLTextureForId(this._renderTarget.getTexture(), this._renderer.getContext().id)
+  }
+
+  /**
+   * Sets up the CanvasBuffer for this RenderTexture
+   * @private
+   */
+  _setupCanvasBuffer () {
+    this._renderTarget = new CanvasBuffer(
+      this._width,
+      this._height,
+      this._pixelRatio)
+    this._baseTexture.setSource(this._renderTarget.getCanvas())
   }
 
   /**
@@ -90,7 +104,9 @@ export default class RenderTexture extends Texture {
 
     this._baseTexture.resizeTo(dimensions)
     this._renderTarget.resizeTo(dimensions)
-    this._filterManager.resizeTo(dimensions)
+    if (this._filterManager) {
+      this._filterManager.resizeTo(dimensions)
+    }
   }
 
   /**
@@ -98,8 +114,10 @@ export default class RenderTexture extends Texture {
    * @param  {DisplayObject} displayObject
    */
   render (displayObject) {
-    if (this._renderer instanceof WebGLRenderer) {
+    if (this._renderer.isOfType('webgl')) {
       this._renderWebGL(displayObject)
+    } else if (this._renderer.isOfType('canvas')) {
+      this._renderCanvas(displayObject)
     } else {
       throw new Error(`RenderTexture does not support rendering via ${this._renderer.constructor.name}`)
     }
@@ -122,6 +140,24 @@ export default class RenderTexture extends Texture {
     this._renderer.setFilterManager(this._filterManager)
     this._renderer.renderDisplayObject(displayObject, this._renderTarget)
     this._renderer.setFilterManager(tempFilterManager)
+  }
+
+  /**
+   * Renders the given DisplayObject using Canvas2D
+   * @param  {displayObject} displayObject
+   * @private
+   */
+  _renderCanvas (displayObject) {
+    displayObject.getWorldTransform().reset()
+    displayObject.getChildren().forEach((child) => {
+      child.updateTransform()
+    })
+
+    const context = this._renderTarget.getContext()
+    const originalPixelRatio = this._renderer.getPixelRatio()
+    this._renderer.setPixelRatio(this._pixelRatio)
+    this._renderer.renderDisplayObject(displayObject, context)
+    this._renderer.setPixelRatio(originalPixelRatio)
   }
 
   getRenderTarget () { return this._renderTarget }
