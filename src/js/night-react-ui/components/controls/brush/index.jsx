@@ -57,6 +57,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('brush')
+    return editor.isToolEnabled('brush')
   }
 }

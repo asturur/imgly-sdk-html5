@@ -43,6 +43,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('radial-blur')
+    return editor.isToolEnabled('radial-blur')
   }
 }

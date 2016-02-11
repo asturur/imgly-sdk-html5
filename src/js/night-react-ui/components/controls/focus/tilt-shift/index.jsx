@@ -48,6 +48,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('tilt-shift')
+    return editor.isToolEnabled('tilt-shift')
   }
 }

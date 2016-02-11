@@ -159,8 +159,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
 
   _getListItems () {
     const { editor } = this.context
-    const rotationEnabled = editor.isFeatureEnabled('rotation')
-    const flipEnabled = editor.isFeatureEnabled('flip')
+    const rotationEnabled = editor.isToolEnabled('rotation')
+    const flipEnabled = editor.isToolEnabled('flip')
 
     let items = []
     if (rotationEnabled) {

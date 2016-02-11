@@ -68,6 +68,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('frame')
+    return editor.isToolEnabled('frame')
   }
 }

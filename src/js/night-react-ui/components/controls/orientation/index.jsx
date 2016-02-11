@@ -41,7 +41,7 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('rotation') ||
-      editor.isFeatureEnabled('flip')
+    return editor.isToolEnabled('rotation') ||
+      editor.isToolEnabled('flip')
   }
 }

@@ -42,6 +42,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: function (editor) {
-    return editor.isFeatureEnabled('filter')
+    return editor.isToolEnabled('filter')
   }
 }

@@ -38,8 +38,8 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('brightness') ||
-      editor.isFeatureEnabled('saturation') ||
-      editor.isFeatureEnabled('contrast')
+    return editor.isToolEnabled('brightness') ||
+      editor.isToolEnabled('saturation') ||
+      editor.isToolEnabled('contrast')
   }
 }

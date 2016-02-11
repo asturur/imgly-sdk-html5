@@ -312,12 +312,12 @@ export default class Editor extends EventEmitter {
   }
 
   /**
-   * Checks if the control with the feature identifier is enabled
+   * Checks if the control with the tool identifier is enabled
    * @param  {String}  identifier
    * @return {Boolean}
    */
-  isFeatureEnabled (identifier) {
-    return this._options.features.indexOf(identifier) !== -1
+  isToolEnabled (identifier) {
+    return this._options.tools.indexOf(identifier) !== -1
   }
 
   // -------------------------------------------------------------------------- PUBLIC OPERATIONS API

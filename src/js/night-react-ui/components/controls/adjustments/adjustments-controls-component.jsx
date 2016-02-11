@@ -18,21 +18,21 @@ import MiniSliderComponent from '../mini-slider-component'
 const ITEMS = [
   {
     identifier: 'brightness',
-    isAvailable: (editor) => editor.isFeatureEnabled('brightness'),
+    isAvailable: (editor) => editor.isToolEnabled('brightness'),
     defaultValue: 0,
     valueMultiplier: 100,
     valueOffset: 0
   },
   {
     identifier: 'saturation',
-    isAvailable: (editor) => editor.isFeatureEnabled('saturation'),
+    isAvailable: (editor) => editor.isToolEnabled('saturation'),
     defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100
   },
   {
     identifier: 'contrast',
-    isAvailable: (editor) => editor.isFeatureEnabled('contrast'),
+    isAvailable: (editor) => editor.isToolEnabled('contrast'),
     defaultValue: 1,
     valueMultiplier: 100,
     valueOffset: -100

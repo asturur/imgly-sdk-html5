@@ -44,6 +44,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('crop')
+    return editor.isToolEnabled('crop')
   }
 }

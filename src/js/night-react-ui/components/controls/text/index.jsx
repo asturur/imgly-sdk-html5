@@ -112,6 +112,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('text')
+    return editor.isToolEnabled('text')
   }
 }

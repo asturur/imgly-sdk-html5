@@ -89,6 +89,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('sticker')
+    return editor.isToolEnabled('sticker')
   }
 }

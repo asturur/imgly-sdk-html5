@@ -116,7 +116,7 @@ export default class NightReactUI extends EventEmitter {
       responsive: false,
       webcam: true,
       assets: {},
-      features: [
+      tools: [
         'crop', 'rotation', 'flip', 'filter', 'brightness', 'saturation', 'contrast', 'text', 'sticker', 'brush', 'radial-blur', 'tilt-shift', 'frame'
       ],
       controlsOrder: [

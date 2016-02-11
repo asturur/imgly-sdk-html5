@@ -23,7 +23,7 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isFeatureEnabled('radial-blur') ||
-      editor.isFeatureEnabled('tilt-shift')
+    return editor.isToolEnabled('radial-blur') ||
+      editor.isToolEnabled('tilt-shift')
   }
 }
