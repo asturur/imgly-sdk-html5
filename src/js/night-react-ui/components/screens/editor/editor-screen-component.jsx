@@ -32,13 +32,12 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onHistoryUpdated',
       '_onDisableFeatures',
       '_onEnableFeatures',
-      '_onNewClick',
       '_onExportClick',
       '_onUndoClick',
       '_onWindowResize',
       '_onWindowResizeDone',
-      '_onNewFile',
-      '_onImageResize'
+      '_onImageResize',
+      '_onNewImage'
     )
 
     this._previousControlsStack = []
@@ -56,6 +55,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     }
 
     this._editor = new Editor(this.context.options, this.context.mediator)
+    this._editor.on('new-image', this._onNewImage)
     this._editor.on('ready', this._startEditor)
     this._editor.on('resize', this._onImageResize)
   }
@@ -67,9 +67,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   componentDidMount () {
     super.componentDidMount()
-
-    // this._fileLoader = new FileLoader(this.refs.fileInput)
-    // this._fileLoader.on('file', this._onNewFile)
 
     window.addEventListener('resize', this._onWindowResize)
   }
@@ -84,8 +81,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     if (options.responsive) {
       window.removeEventListener('resize', this._onWindowResize)
     }
-    // this._fileLoader.off('file', this._onNewFile)
-    // this._fileLoader.dispose()
   }
 
   /**
@@ -96,20 +91,15 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._editor.start()
   }
 
-  // -------------------------------------------------------------------------- FILE LOADING
+  // -------------------------------------------------------------------------- EVENTS
 
   /**
-   * Gets loaded when the user has selected a new file
-   * @param  {Image} image
+   * Gets called when the image has been changed
    * @private
    */
-  _onNewFile (image) {
-    this._editor.setImage(image)
-    this._zoom('auto')
-    this.forceUpdate()
+  _onNewImage () {
+    this.switchToControls(OverviewControls)
   }
-
-  // -------------------------------------------------------------------------- EVENTS
 
   /**
    * Gets called when the editor starts resizing an image
@@ -150,18 +140,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _onWindowResizeDone () {
     this._emitEvent(Constants.EVENTS.WINDOW_RESIZE)
-  }
-
-  /**
-   * Gets called when the user clicks on the new button
-   * @private
-   */
-  _onNewClick () {
-    if (this.context.options.webcam !== false && !Utils.isMobile()) {
-      this.props.app.switchToSplashScreen()
-    } else {
-      this._fileLoader.open()
-    }
   }
 
   /**
@@ -340,7 +318,8 @@ export default class EditorScreenComponent extends ScreenComponent {
     return (<div bem='b:screen'>
       <HeaderComponent />
       <div bem='$b:editorScreen'>
-        <EditorSubHeaderComponent />
+        <EditorSubHeaderComponent
+          app={this.props.app} />
 
         <CanvasComponent
           ref='canvas'

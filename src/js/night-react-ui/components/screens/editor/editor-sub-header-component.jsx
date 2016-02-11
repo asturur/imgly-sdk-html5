@@ -9,9 +9,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM } from '../../../globals'
+import { ReactBEM, Utils } from '../../../globals'
 import SubHeaderComponent from '../../sub-header-component'
 import SubHeaderButtonComponent from '../../sub-header-button-component'
+import NewFileButtonComponent from './new-file-button-component'
 import ZoomComponent from './zoom-component'
 
 export default class EditorSubHeaderComponent extends SubHeaderComponent {
@@ -20,21 +21,6 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
   }
 
   // -------------------------------------------------------------------------- RENDERING
-
-  /**
-   * Renders the new button (if available)
-   * @return {ReactBEM.Element}
-   * @private
-   */
-  _renderNewButton () {
-    const { options } = this.context
-    if (!options.showNewButton) return
-
-    return (<SubHeaderButtonComponent
-      label={this._t('editor.new')}
-      icon='editor/new@2x.png'
-      onClick={this._onNewClick} />)
-  }
 
   /**
    * Renders the undo button (if available)
@@ -73,9 +59,8 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
    */
   renderContent () {
     return (<bem specifier='$b:subHeader'>
-      <input type='file' bem='b:hiddenFileInput' ref='fileInput' />
       <div bem='e:left'>
-        {this._renderNewButton()}
+        <NewFileButtonComponent />
       </div>
 
       <div bem='e:right'>

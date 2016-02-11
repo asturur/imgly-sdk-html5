@@ -451,6 +451,8 @@ export default class Editor extends EventEmitter {
     this._options.image = image
     this._sdk.setImage(image)
     this.reset()
+
+    this.emit('new-image')
   }
 
   /**
