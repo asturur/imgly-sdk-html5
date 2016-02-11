@@ -132,6 +132,7 @@ export default class Configurable extends EventEmitter {
     for (let optionName in options) {
       this.setOption(optionName, options[optionName], false)
     }
+    this._onOptionsChange()
   }
 
   /**
