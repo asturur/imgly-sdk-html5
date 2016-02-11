@@ -473,4 +473,13 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._sprite.setScale(this._zoom, this._zoom)
   }
   getPixelRatio () { return this._options.pixelRatio }
+
+  // -------------------------------------------------------------------------- DISPOSAL
+
+  /**
+   * Disposes the SDK
+   */
+  dispose () {
+    this._renderer.dispose()
+  }
 }

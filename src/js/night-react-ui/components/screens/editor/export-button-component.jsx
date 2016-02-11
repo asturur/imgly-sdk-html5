@@ -41,7 +41,7 @@ export default class ExportButtonComponent extends BaseComponent {
           .then(() => {
             loadingModal.close()
           })
-      }, 1000)
+      }, 100)
     })
   }
 

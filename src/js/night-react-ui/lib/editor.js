@@ -670,7 +670,10 @@ export default class Editor extends EventEmitter {
   dispose () {
     this.stop()
 
+    this._sdk.dispose()
     this._mediator.off(Constants.EVENTS.RENDER, this.render)
+    this._mediator.off(Constants.EVENTS.ZOOM, this.setZoom)
+    this._mediator.off(Constants.EVENTS.ZOOM_UNDO, this.undoZoom)
   }
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS

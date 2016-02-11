@@ -24,7 +24,7 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
   renderContent () {
     return (<bem specifier='$b:subHeader'>
       <div bem='e:left'>
-        <NewFileButtonComponent />
+        <NewFileButtonComponent app={this.props.app} />
       </div>
 
       <div bem='e:right'>

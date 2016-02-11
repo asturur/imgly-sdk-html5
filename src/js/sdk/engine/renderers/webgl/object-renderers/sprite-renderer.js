@@ -257,4 +257,22 @@ export default class SpriteRenderer extends ObjectRenderer {
     const vertexOffset = batchStartIndex * 6 * 2
     gl.drawElements(gl.TRIANGLES, verticesCount, gl.UNSIGNED_SHORT, vertexOffset)
   }
+
+  /**
+   * Disposes this ObjectRenderer
+   */
+  dispose () {
+    const renderer = this._renderer
+    const gl = renderer.getContext()
+
+    gl.deleteBuffer(this._vertexBuffer)
+    gl.deleteBuffer(this._indexBuffer)
+
+    this._vertices = null
+    this._positions = null
+    this._colors = null
+    this._indices = null
+
+    super.dispose()
+  }
 }

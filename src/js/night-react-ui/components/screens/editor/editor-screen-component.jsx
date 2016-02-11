@@ -65,6 +65,8 @@ export default class EditorScreenComponent extends ScreenComponent {
   componentWillUnmount () {
     super.componentWillUnmount()
 
+    this._editor.dispose()
+
     const { options } = this.context
     if (options.responsive) {
       window.removeEventListener('resize', this._onWindowResize)

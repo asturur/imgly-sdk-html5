@@ -335,6 +335,18 @@ export default class WebGLRenderer extends BaseRenderer {
   getCurrentObjectRenderer () { return this._currentObjectRenderer }
   getFilterManager () { return this._filterManager }
   setFilterManager (filterManager) { this._filterManager = filterManager }
+
+  /**
+   * Disposes this Renderer
+   */
+  dispose () {
+    this._filterManager.dispose()
+    this._currentObjectRenderer.dispose()
+    this._defaultRenderTarget.dispose()
+    this._textures.forEach((texture) => {
+      texture.disposeGLTextures(this)
+    })
+  }
 }
 
 WebGLRenderer.contextId = 0

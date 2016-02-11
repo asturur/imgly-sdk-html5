@@ -113,4 +113,11 @@ export default class BaseRenderer extends EventEmitter {
   getDimensions () { return this._dimensions }
   getPixelRatio () { return this._options.pixelRatio }
   getMaxTextureSize () { return this._maxTextureSize }
+
+  /**
+   * Disposes this Renderer
+   */
+  dispose () {
+
+  }
 }
