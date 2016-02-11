@@ -48,7 +48,7 @@ export default class CanvasRenderer extends BaseRenderer {
     const ctx = this._context
 
     // Enable image smoothing if available
-    if (!ctx.imageSmoothingEnabled) {
+    if (!('imageSmoothingEnabled' in ctx)) {
       ['moz', 'webkit', 'ms'].forEach((prop) => {
         if (ctx[prop]) {
           ctx[prop] = true
