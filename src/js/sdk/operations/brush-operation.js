@@ -46,19 +46,21 @@ class BrushOperation extends Operation {
   }
 
   /**
-   * Renders the brush operation using WebGL
+   * Renders the brush operation
    * @param  {PhotoEditorSDK} sdk
-   * @private
+   * @returns {Promise}
+   * @override
    */
-  /* istanbul ignore next */
-  _renderWebGL (sdk) {
+  render (sdk) {
     this.renderBrushCanvas(sdk)
 
     const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     this._inputSprite.setTexture(outputSprite.getTexture())
 
-    renderer.updateTexture(this._texture.getBaseTexture())
+    if (renderer.isOfType('webgl')) {
+      renderer.updateTexture(this._texture.getBaseTexture())
+    }
 
     const renderTexture = this._getRenderTexture(sdk)
     const outputBounds = outputSprite.getBounds()
@@ -68,17 +70,6 @@ class BrushOperation extends Operation {
     outputSprite.setTexture(renderTexture)
 
     return Promise.resolve()
-  }
-
-  /**
-   * Renders the brush operation to a canvas
-   * @param  {CanvasRenderer} renderer
-   * @private
-   */
-  _renderCanvas (renderer) {
-    this.renderBrushCanvas(renderer.getCanvas())
-    var context = renderer.getContext()
-    context.drawImage(this._brushCanvas, 0, 0)
   }
 
   /**
