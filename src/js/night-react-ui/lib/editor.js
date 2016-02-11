@@ -34,6 +34,10 @@ export default class Editor extends EventEmitter {
     this._initOperations()
     this._initControls()
 
+    this._features = {
+      drag: true,
+      zoom: true
+    }
     this._history = []
     this._operationsMap = {}
     this._operationsStack = this._sdk.getOperationsStack()
@@ -137,6 +141,42 @@ export default class Editor extends EventEmitter {
       defaultControls[control.identifier] = control
     })
     this._availableControls = SDKUtils.extend(defaultControls, this._options.extensions.controls)
+  }
+
+  // -------------------------------------------------------------------------- FEATURES
+
+  /**
+   * Checks if the feature with the given identifier is enabled
+   * @param  {String}  identifier
+   * @return {Boolean}
+   */
+  isFeatureEnabled (identifier) {
+    return this._features[identifier]
+  }
+
+  /**
+   * Enables the features with the given identifiers
+   * @param  {String...} identifiers
+   */
+  enableFeatures (...identifiers) {
+    identifiers.forEach((identifier) => {
+      this._features[identifier] = true
+    })
+    this._mediator.emit(Constants.EVENTS.FEATURES_ENABLED, identifiers)
+    this._mediator.emit(Constants.EVENTS.FEATURES_UPDATED, identifiers)
+  }
+
+  /**
+   * Disables the features with the given identifiers
+   * @param  {String...} identifiers
+   */
+  disableFeatures (...identifiers) {
+    console.log(identifiers)
+    identifiers.forEach((identifier) => {
+      this._features[identifier] = false
+    })
+    this._mediator.emit(Constants.EVENTS.FEATURES_DISABLED, identifiers)
+    this._mediator.emit(Constants.EVENTS.FEATURES_UPDATED, identifiers)
   }
 
   // -------------------------------------------------------------------------- ZOOMING
