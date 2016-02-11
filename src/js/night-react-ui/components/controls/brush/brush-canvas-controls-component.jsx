@@ -91,7 +91,7 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     this.setState({ cursorPosition })
 
     if (this._drawing) {
-      const zoom = this.context.editor.getSDK().getZoom()
+      const zoom = this.context.editor.getZoom()
       this._currentPath.addControlPoint(cursorPosition.clone().divide(zoom))
 
       const { editor } = this.context
@@ -108,7 +108,7 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
    */
   _onMouseDown (e) {
     e.preventDefault()
-    const zoom = this.context.editor.getSDK().getZoom()
+    const zoom = this.context.editor.getZoom()
     const cursorPosition = this._getCursorPosition(e)
 
     const operation = this.getSharedState('operation')
@@ -190,7 +190,7 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
    */
   _getCursorStyle () {
     const { editor } = this.context
-    const zoom = editor.getSDK().getZoom()
+    const zoom = editor.getZoom()
 
     const operation = this.getSharedState('operation')
     const thickness = operation.getThickness() * zoom

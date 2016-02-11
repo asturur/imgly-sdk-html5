@@ -135,7 +135,7 @@ export default class TextItemComponent extends ItemComponent {
     const textRotation = sprite.getRotation()
 
     const { editor } = this.context
-    const zoom = editor.getSDK().getZoom()
+    const zoom = editor.getZoom()
 
     const cos = Math.cos(textRotation)
     const sin = Math.sin(textRotation)
@@ -253,7 +253,7 @@ export default class TextItemComponent extends ItemComponent {
     const transform = `rotateZ(${degrees.toFixed(2)}deg)`
     const transformOrigin = '50% 0'
 
-    const zoom = editor.getSDK().getZoom()
+    const zoom = editor.getZoom()
     const maxWidth = sprite.getMaxWidth() * zoom
     return {
       width: maxWidth,

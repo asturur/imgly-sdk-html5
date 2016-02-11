@@ -215,12 +215,11 @@ export default class StickerItemComponent extends ItemComponent {
   _getStickerDimensions () {
     const { sprite } = this.props
     const { editor } = this.context
-    const sdk = editor.getSDK()
     const image = sprite.getImage()
 
     return new Vector2(image.width, image.height)
       .multiply(sprite.getScale())
-      .multiply(sdk.getZoom())
+      .multiply(editor.getZoom())
       .abs()
   }
 

@@ -208,7 +208,7 @@ export default class TextControlsComponent extends ControlsComponent {
     if (!selectedText) return
 
     const { editor } = this.context
-    const zoom = editor.getSDK().getZoom()
+    const zoom = editor.getZoom()
     const outputDimensions = editor.getOutputDimensions()
 
     const maxFontSize = Math.round(outputDimensions.y * zoom)

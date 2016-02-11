@@ -123,7 +123,7 @@ export default class RadialBlurCanvasControlsComponent extends CanvasControlsCom
    */
   _onKnobDrag (offset) {
     const { editor } = this.context
-    const zoom = editor.getSDK().getZoom()
+    const zoom = editor.getZoom()
     const outputDimensions = editor.getOutputDimensions()
 
     const newKnobPosition = this._initialKnobPosition.clone()
@@ -190,7 +190,7 @@ export default class RadialBlurCanvasControlsComponent extends CanvasControlsCom
    */
   _setStylesFromOptions () {
     const { editor } = this.context
-    const zoom = editor.getSDK().getZoom()
+    const zoom = editor.getZoom()
 
     const outputDimensions = this.context.editor.getOutputDimensions()
 
