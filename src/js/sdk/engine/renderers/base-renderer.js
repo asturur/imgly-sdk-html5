@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2, EventEmitter, Color } from '../globals'
+import { Log, Vector2, EventEmitter, Color } from '../globals'
 import Utils from '../utils/utils'
 
 export default class BaseRenderer extends EventEmitter {
@@ -40,6 +40,10 @@ export default class BaseRenderer extends EventEmitter {
     this._setupContext()
   }
 
+  /**
+   * Returns the current canvas
+   * @return {Canvas}
+   */
   getCanvas () {
     return this._canvas
   }
@@ -79,7 +83,7 @@ export default class BaseRenderer extends EventEmitter {
    * @abstract
    */
   _createContext () {
-    return null
+    Log.warn(this.constructor.name, '`_createContext` is abstract and not implemented in inherited class')
   }
 
   /**
@@ -88,15 +92,16 @@ export default class BaseRenderer extends EventEmitter {
    * @abstract
    */
   _setupContext () {
-
+    Log.warn(this.constructor.name, '`_setupContext` is abstract and not implemented in inherited class')
   }
 
   /**
    * Renders the given displayObject
    * @param  {DisplayObject} displayObject
+   * @abstract
    */
   render (displayObject) {
-
+    Log.warn(this.constructor.name, '`render` is abstract and not implemented in inherited class')
   }
 
   /**
@@ -115,9 +120,16 @@ export default class BaseRenderer extends EventEmitter {
   getMaxTextureSize () { return this._maxTextureSize }
 
   /**
+   * Checks if this renderer is supported on the current device and browser
+   * @return {Boolean}
+   */
+  static isSupported () { return true }
+
+  /**
    * Disposes this Renderer
+   * @abstract
    */
   dispose () {
-
+    Log.warn(this.constructor.name, '`dispose` is abstract and not implemented in inherited class')
   }
 }

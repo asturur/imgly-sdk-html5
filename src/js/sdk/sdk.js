@@ -326,12 +326,13 @@ export default class PhotoEditorSDK extends EventEmitter {
         this._renderer = new Engine.WebGLRenderer(width, height, rendererOptions)
         this._renderer.on('context-restored', this._onContextRestored)
         break
+      case 'canvas':
+        this._renderer = new Engine.CanvasRenderer(width, height, rendererOptions)
+        this._renderer.on('context-restored', this._onContextRestored)
+        break
       default:
-        console && console.error && console.error(`
-          PhotoEditorSDK Error: Renderer \`${this._preferredRenderer}\` not supported.
-          Falling back to automatically detected renderer.
-        `)
-        this._renderer = Engine.autoDetectRenderer(100, 100, rendererOptions)
+        Log.warn('PhotoEditorSDK', `PhotoEditorSDK Error: Renderer \`${this._preferredRenderer}\` not supported. Falling back to automatically detected renderer.`)
+        this._renderer = Engine.autoDetectRenderer(width, height, rendererOptions)
     }
   }
 

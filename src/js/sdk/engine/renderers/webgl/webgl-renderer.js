@@ -159,8 +159,6 @@ export default class WebGLRenderer extends BaseRenderer {
     this._context = gl
     gl.renderer = this
 
-    this._maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE)
-
     this.emit('context', gl)
 
     return gl
@@ -335,6 +333,18 @@ export default class WebGLRenderer extends BaseRenderer {
   getCurrentObjectRenderer () { return this._currentObjectRenderer }
   getFilterManager () { return this._filterManager }
   setFilterManager (filterManager) { this._filterManager = filterManager }
+
+  /**
+   * Checks if this renderer is supported on the current device and browser
+   * @return {Boolean}
+   */
+  static isSupported () {
+    if (typeof window === 'undefined') { return false }
+
+    let canvas = document.createElement('canvas')
+    let gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+    return !!gl
+  }
 
   /**
    * Disposes this Renderer
