@@ -93,7 +93,9 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     if (this._drawing) {
       const zoom = this.context.editor.getSDK().getZoom()
       this._currentPath.addControlPoint(cursorPosition.clone().divide(zoom))
-      this._emitEvent(Constants.EVENTS.RENDER)
+
+      const { editor } = this.context
+      editor.render()
     }
   }
 
@@ -120,7 +122,8 @@ export default class BrushCanvasControlsComponent extends CanvasControlsComponen
     this._currentPath = operation.createPath(thickness, color)
     this._currentPath.addControlPoint(cursorPosition.clone().divide(zoom))
 
-    this._emitEvent(Constants.EVENTS.RENDER)
+    const { editor } = this.context
+    editor.render()
   }
 
   /**

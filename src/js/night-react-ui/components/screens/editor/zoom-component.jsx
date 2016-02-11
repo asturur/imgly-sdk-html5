@@ -18,19 +18,25 @@ export default class ZoomComponent extends BaseComponent {
     this._bindAll(
       '_onZoomOutClick',
       '_onZoomInClick',
-      '_onZoomDone'
+      '_onZoomDone',
+      '_onFeaturesUpdated'
     )
 
     this._events = {
-      [Constants.EVENTS.ZOOM_DONE]: this._onZoomDone
-    }
-
-    this.state = {
-      enabled: true
+      [Constants.EVENTS.ZOOM_DONE]: this._onZoomDone,
+      [Constants.EVENTS.FEATURES_UPDATED]: this._onFeaturesUpdated
     }
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when the features have been updated
+   * @private
+   */
+  _onFeaturesUpdated () {
+    this.forceUpdate()
+  }
 
   /**
    * Gets called when the new zoom level has been applied
@@ -46,8 +52,9 @@ export default class ZoomComponent extends BaseComponent {
    * @private
    */
   _onZoomOutClick (e) {
-    if (!this.state.enabled) return
     const { editor } = this.context
+    if (!editor.isFeatureEnabled('zoom')) return
+
     editor.zoomOut()
   }
 
@@ -57,8 +64,9 @@ export default class ZoomComponent extends BaseComponent {
    * @private
    */
   _onZoomInClick (e) {
-    if (!this.state.enabled) return
     const { editor } = this.context
+    if (!editor.isFeatureEnabled('zoom')) return
+
     editor.zoomIn()
   }
 
@@ -69,8 +77,9 @@ export default class ZoomComponent extends BaseComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const zoom = this.context.editor.getZoom()
-    const { enabled } = this.state
+    const { editor } = this.context
+    const zoom = editor.getZoom()
+    const enabled = editor.isFeatureEnabled('zoom')
 
     return (
       <div bem='$b:editorScreen $e:zoom'>

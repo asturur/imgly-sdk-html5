@@ -45,9 +45,10 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
    */
   componentDidMount () {
     super.componentDidMount()
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
-    })
+
+    const { editor } = this.context
+    editor.setZoom('auto')
+    editor.disableFeatures('zoom', 'drag')
   }
 
   // -------------------------------------------------------------------------- EVENTS

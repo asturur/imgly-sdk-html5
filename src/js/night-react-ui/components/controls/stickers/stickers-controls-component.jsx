@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, BaseComponent, Constants } from '../../../globals'
+import { ReactBEM, BaseComponent } from '../../../globals'
 import StickersOverviewControlsComponent from './stickers-overview-controls-component'
 import StickersEditControlsComponent from './stickers-edit-controls-component'
 
@@ -24,7 +24,8 @@ export default class StickersControlsComponent extends BaseComponent {
     this._operation = this.getSharedState('operation')
     this._initiallyHadSticker = this.getSharedState('selectedSprite')
 
-    this._emitEvent(Constants.EVENTS.RENDER)
+    const { editor } = this.context
+    editor.render()
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -35,10 +36,9 @@ export default class StickersControlsComponent extends BaseComponent {
   componentDidMount () {
     super.componentDidMount()
 
-    // Reset zoom to fit the container
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
-      // Disable zoom and drag while we're cropping
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
+    const { editor } = this.context
+    editor.setZoom('auto', () => {
+      editor.disableFeatures('zoom', 'drag')
     })
   }
 

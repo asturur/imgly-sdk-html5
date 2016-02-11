@@ -60,8 +60,10 @@ export default class TiltShiftCanvasControlsComponent extends CanvasControlsComp
    */
   componentDidMount () {
     super.componentDidMount()
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
+
+    const { editor } = this.context
+    editor.setZoom('auto', () => {
+      editor.disableFeatures('zoom', 'drag')
       this._setStylesFromOptions()
     })
   }
@@ -101,7 +103,7 @@ export default class TiltShiftCanvasControlsComponent extends CanvasControlsComp
       end: newEnd
     })
 
-    this._emitEvent(Constants.EVENTS.RENDER)
+    editor.render()
     this._setStylesFromOptions()
     this.forceUpdate()
   }
@@ -148,7 +150,7 @@ export default class TiltShiftCanvasControlsComponent extends CanvasControlsComp
       knobPosition: newKnobPosition,
       areaDimensions: new Vector2(this.state.areaDimensions.x, newGradientRadius)
     })
-    this._emitEvent(Constants.EVENTS.RENDER)
+    editor.render()
   }
 
   // -------------------------------------------------------------------------- STYLING

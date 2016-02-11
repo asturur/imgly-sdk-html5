@@ -29,8 +29,6 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._bindAll(
       'switchToControls',
       '_startEditor',
-      '_onDisableFeatures',
-      '_onEnableFeatures',
       '_onWindowResize',
       '_onWindowResizeDone',
       '_onImageResize',
@@ -41,13 +39,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     this.state = {
       zoom: null,
       controls: OverviewControls,
-      zoomEnabled: true,
       dragEnabled: true
-    }
-
-    this._events = {
-      [Constants.EVENTS.EDITOR_DISABLE_FEATURES]: this._onDisableFeatures,
-      [Constants.EVENTS.EDITOR_ENABLE_FEATURES]: this._onEnableFeatures
     }
 
     this._editor = new Editor(this.context.options, this.context.mediator)
@@ -136,38 +128,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _onWindowResizeDone () {
     this._emitEvent(Constants.EVENTS.WINDOW_RESIZE)
-  }
-
-  // -------------------------------------------------------------------------- FEATURES
-
-  /**
-   * Gets called when a EDITOR_DISABLE_FEATURES event is emitted
-   * @param {Array.<String>} features
-   */
-  _onDisableFeatures (features) {
-    let { zoomEnabled, dragEnabled } = this.state
-    if (features.indexOf('zoom') !== -1) {
-      zoomEnabled = false
-    }
-    if (features.indexOf('drag') !== -1) {
-      dragEnabled = false
-    }
-    this.setState({ zoomEnabled, dragEnabled })
-  }
-
-  /**
-   * Gets called when a EDITOR_ENABLE_FEATURES event is emitted
-   * @param {Array.<String>} features
-   */
-  _onEnableFeatures (features) {
-    let { zoomEnabled, dragEnabled } = this.state
-    if (features.indexOf('zoom') !== -1) {
-      zoomEnabled = true
-    }
-    if (features.indexOf('drag') !== -1) {
-      dragEnabled = true
-    }
-    this.setState({ zoomEnabled, dragEnabled })
   }
 
   // -------------------------------------------------------------------------- MISC
@@ -282,8 +242,6 @@ export default class EditorScreenComponent extends ScreenComponent {
 
         <CanvasComponent
           ref='canvas'
-          zoom={this.state.zoom}
-          dragEnabled={this.state.dragEnabled}
           largeControls={this.state.controls.largeCanvasControls}>
           {canvasControls}
         </CanvasComponent>

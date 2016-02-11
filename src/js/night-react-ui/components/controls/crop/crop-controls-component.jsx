@@ -75,9 +75,10 @@ export default class OrientationControlsComponent extends ControlsComponent {
     })
 
     // Reset zoom to fit the container
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
+    const { editor } = this.context
+    editor.setZoom('auto', () => {
       // Disable zoom and drag while we're cropping
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
+      editor.disableFeatures('zoom', 'drag')
 
       if (!this.getSharedState('operationExistedBefore')) {
         // Select first ratio as default (for now)
@@ -98,16 +99,17 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _onBackClick (e) {
+    const { editor } = this.context
+
     if (this.getSharedState('operationExistedBefore')) {
       const initialOptions = this.getSharedState('initialOptions')
       this._operation.set(initialOptions)
     } else {
-      const { editor } = this.context
       editor.removeOperation(this._operation)
     }
 
-    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
-    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    editor.undoZoom()
+    editor.enableFeatures('zoom', 'drag')
 
     super._onBackClick(e)
   }
@@ -118,6 +120,8 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _onDoneClick (e) {
+    const { editor } = this.context
+
     const newOptions = {
       start: this.getSharedState('start'),
       end: this.getSharedState('end')
@@ -131,17 +135,16 @@ export default class OrientationControlsComponent extends ControlsComponent {
     this._operation.set(newOptions)
 
     if (optionsChanged) {
-      const { editor } = this.context
       editor.addHistory(this._operation,
         this.getSharedState('initialOptions'),
         this.getSharedState('operationExistedBefore'))
     }
 
     // Enable zoom and drag again
-    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    editor.enableFeatures('zoom', 'drag')
 
     // Zoom to auto again
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto')
+    editor.setZoom('auto')
 
     super._onDoneClick(e)
   }

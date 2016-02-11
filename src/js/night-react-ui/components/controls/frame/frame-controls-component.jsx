@@ -34,10 +34,9 @@ export default class FrameControlsComponent extends ControlsComponent {
   componentDidMount () {
     super.componentDidMount()
 
-    // Reset zoom to fit the container
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
-      // Disable zoom and drag while we're cropping
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
+    const { editor } = this.context
+    editor.setZoom('auto', () => {
+      editor.disableFeatures('zoom', 'drag')
     })
   }
 
@@ -50,7 +49,9 @@ export default class FrameControlsComponent extends ControlsComponent {
    */
   _onThicknessUpdate (thickness) {
     this._operation.setThickness(thickness)
-    this._emitEvent(Constants.EVENTS.RENDER)
+
+    const { editor } = this.context
+    editor.render()
   }
 
   /**
@@ -68,9 +69,9 @@ export default class FrameControlsComponent extends ControlsComponent {
       this._operation.set(this.getSharedState('initialOptions'))
     }
 
-    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
-    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
-    this._emitEvent(Constants.EVENTS.RENDER)
+    editor.undoZoom()
+    editor.enableFeatures('zoom', 'drag')
+    editor.render()
   }
 
   /**
@@ -80,8 +81,12 @@ export default class FrameControlsComponent extends ControlsComponent {
    */
   _onColorUpdate (color) {
     this._operation.setColor(color)
+
+    // @TODO Do we need this event?
     this._emitEvent(Constants.EVENTS.OPERATION_UPDATED, this._operation)
-    this._emitEvent(Constants.EVENTS.RENDER)
+
+    const { editor } = this.context
+    editor.render()
   }
 
   // -------------------------------------------------------------------------- RENDERING

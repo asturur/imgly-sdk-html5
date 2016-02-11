@@ -18,15 +18,25 @@ export default class UndoButtonComponent extends BaseComponent {
 
     this._bindAll(
       '_onButtonClick',
-      '_onHistoryUpdated'
+      '_onHistoryUpdated',
+      '_onFeaturesUpdated'
     )
 
     this._events = {
-      [Constants.EVENTS.HISTORY_UPDATED]: this._onHistoryUpdated
+      [Constants.EVENTS.HISTORY_UPDATED]: this._onHistoryUpdated,
+      [Constants.EVENTS.FEATURES_UPDATED]: this._onFeaturesUpdated
     }
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when the features have been enabled or disabled
+   * @private
+   */
+  _onFeaturesUpdated () {
+    this.forceUpdate()
+  }
 
   /**
    * Gets called when the history has been updated

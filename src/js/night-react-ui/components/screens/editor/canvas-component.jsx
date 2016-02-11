@@ -10,7 +10,7 @@
  */
 
 import {
-  Utils, SDKUtils, ReactBEM, Vector2, BaseComponent, Constants
+  Utils, ReactBEM, Vector2, BaseComponent, Constants
 } from '../../../globals'
 
 export default class CanvasComponent extends BaseComponent {
@@ -46,7 +46,7 @@ export default class CanvasComponent extends BaseComponent {
     const { editor } = this.context
     const sdk = editor.getSDK()
     sdk.resizeTo(this._getContainerDimensions())
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto')
+    editor.setZoom('auto')
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -90,9 +90,9 @@ export default class CanvasComponent extends BaseComponent {
    * @private
    */
   _onDragStart (e) {
-    if (!this.props.dragEnabled) return
-
     const { editor } = this.context
+    if (!editor.isFeatureEnabled('drag')) return
+
     const sdk = editor.getSDK()
     this._dragStartPosition = Utils.getEventPosition(e.nativeEvent)
     this._dragInitialOffset = sdk.getOffset().clone()
@@ -171,12 +171,14 @@ export default class CanvasComponent extends BaseComponent {
       canvasContent = this.props.children
     }
 
+    const dragEnabled = this.context.editor.isFeatureEnabled('drag')
+
     return (
       <div bem='$b:canvas e:container e:row'>
         <div bem='e:container e:cell' ref='canvasCell'>
           <div
             bem='e:innerContainer'
-            className={this.props.dragEnabled ? 'is-draggable' : null}
+            className={dragEnabled ? 'is-draggable' : null}
             onTouchStart={this._onDragStart}
             onMouseDown={this._onDragStart}
             style={this._getDraggableStyle()}>

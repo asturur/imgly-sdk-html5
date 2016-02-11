@@ -69,8 +69,8 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
       this._operation.set(this.getSharedState('initialOptions'))
     }
 
-    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
-    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    editor.undoZoom()
+    editor.enableFeatures('zoom', 'drag')
   }
 
   /**
@@ -90,8 +90,9 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
         this.getSharedState('operationExistedBefore'))
     }
 
-    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
-    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    editor.undoZoom()
+    editor.enableFeatures('zoom', 'drag')
+
     super._onDoneClick(e)
   }
 
@@ -102,7 +103,9 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
    */
   _onSliderValueChange (value) {
     this._operation.setBlurRadius(value)
-    this._emitEvent(Constants.EVENTS.RENDER)
+
+    const { editor } = this.context
+    editor.render()
   }
 
   // -------------------------------------------------------------------------- RENDERING

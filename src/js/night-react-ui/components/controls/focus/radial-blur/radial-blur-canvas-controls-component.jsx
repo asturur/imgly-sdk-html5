@@ -61,8 +61,9 @@ export default class RadialBlurCanvasControlsComponent extends CanvasControlsCom
    */
   componentDidMount () {
     super.componentDidMount()
-    this._emitEvent(Constants.EVENTS.ZOOM, 'auto', () => {
-      this._emitEvent(Constants.EVENTS.EDITOR_DISABLE_FEATURES, ['zoom', 'drag'])
+    const { editor } = this.context
+    editor.setZoom('auto', () => {
+      editor.disableFeatures('zoom', 'drag')
       this._setStylesFromOptions()
     })
   }
@@ -100,7 +101,7 @@ export default class RadialBlurCanvasControlsComponent extends CanvasControlsCom
 
     this.state.knobPosition = newKnobPosition
 
-    this._emitEvent(Constants.EVENTS.RENDER)
+    editor.render()
     this._setStylesFromOptions()
   }
 
@@ -147,7 +148,8 @@ export default class RadialBlurCanvasControlsComponent extends CanvasControlsCom
       )
     })
     this._operation.setGradientRadius(newGradientRadius / zoom)
-    this._emitEvent(Constants.EVENTS.RENDER)
+
+    editor.render()
   }
 
   // -------------------------------------------------------------------------- STYLING

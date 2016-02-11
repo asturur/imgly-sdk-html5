@@ -38,9 +38,10 @@ export default {
 
     operation.setEnabled(true)
 
-    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
-    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
-    this._emitEvent(Constants.EVENTS.RENDER)
+    const { editor } = this.context
+    editor.undoZoom()
+    editor.enableFeatures('zoom', 'drag')
+    editor.render()
   },
 
   /**

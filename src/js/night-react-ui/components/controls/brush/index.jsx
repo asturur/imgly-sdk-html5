@@ -8,7 +8,6 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Constants } from '../../../globals'
 import BrushControlsComponent from './brush-controls-component'
 import BrushCanvasControlsComponent from './brush-canvas-controls-component'
 
@@ -24,8 +23,9 @@ export default {
    * @this {StickersControlsComponent}
    */
   onExit: function () {
-    this._emitEvent(Constants.EVENTS.ZOOM_UNDO)
-    this._emitEvent(Constants.EVENTS.EDITOR_ENABLE_FEATURES, ['zoom', 'drag'])
+    const { editor } = this.context
+    editor.undoZoom()
+    editor.enableFeatures('zoom', 'drag')
   },
 
   /**
