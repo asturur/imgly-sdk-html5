@@ -9,10 +9,11 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Utils } from '../../../globals'
+import { ReactBEM } from '../../../globals'
 import SubHeaderComponent from '../../sub-header-component'
 import SubHeaderButtonComponent from '../../sub-header-button-component'
 import NewFileButtonComponent from './new-file-button-component'
+import ExportButtonComponent from './export-button-component'
 import ZoomComponent from './zoom-component'
 
 export default class EditorSubHeaderComponent extends SubHeaderComponent {
@@ -38,22 +39,6 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
   }
 
   /**
-   * Renders the export button (if available)
-   * @return {ReactBEM.Element}
-   * @private
-   */
-  _renderExportButton () {
-    const { options } = this.context
-    if (!options.export.showButton) return
-
-    return (<SubHeaderButtonComponent
-      style='blue'
-      label={options.export.label || this._t('editor.export')}
-      icon='editor/export@2x.png'
-      onClick={this._onExportClick} />)
-  }
-
-  /**
    * Renders the content of this SubHeaderComponent
    * @return {ReactBEM.Element}
    */
@@ -65,7 +50,7 @@ export default class EditorSubHeaderComponent extends SubHeaderComponent {
 
       <div bem='e:right'>
         {this._renderUndoButton()}
-        {this._renderExportButton()}
+        <ExportButtonComponent />
       </div>
 
       <ZoomComponent />

@@ -32,7 +32,6 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onHistoryUpdated',
       '_onDisableFeatures',
       '_onEnableFeatures',
-      '_onExportClick',
       '_onUndoClick',
       '_onWindowResize',
       '_onWindowResizeDone',
@@ -140,27 +139,6 @@ export default class EditorScreenComponent extends ScreenComponent {
    */
   _onWindowResizeDone () {
     this._emitEvent(Constants.EVENTS.WINDOW_RESIZE)
-  }
-
-  /**
-   * Gets called when the user clicks the export button
-   * @private
-   */
-  _onExportClick () {
-    const { options } = this.context
-    const exportOptions = options.export
-
-    this.switchToControls(OverviewControls, null, () => {
-      const loadingModal = ModalManager.instance.displayLoading(this._t('loading.exporting'))
-
-      // Give it some time to display the loading modal
-      setTimeout(() => {
-        this._editor.export(exportOptions.download)
-          .then(() => {
-            loadingModal.close()
-          })
-      }, 1000)
-    })
   }
 
   /**
