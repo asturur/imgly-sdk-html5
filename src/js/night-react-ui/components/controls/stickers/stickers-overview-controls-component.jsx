@@ -219,7 +219,7 @@ export default class StickersOverviewControlsComponent extends ControlsComponent
       this._stickers.push(sticker)
 
       const { editor } = this.context
-      editor.render(() => {
+      editor.render(null, () => {
         // Broadcast new state
         this.setSharedState({
           selectedSprite: sticker,
