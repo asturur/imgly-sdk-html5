@@ -235,7 +235,7 @@ export default class Editor extends EventEmitter {
     newZoom = Math.max(minZoom, Math.min(maxZoom, newZoom))
 
     this._sdk.setZoom(newZoom)
-    this.render(null, () => {
+    this.render(() => {
       this._mediator.emit(Constants.EVENTS.ZOOM_DONE)
       callback && callback()
     })
@@ -548,17 +548,9 @@ export default class Editor extends EventEmitter {
 
   /**
    * Requests a render, adds `callback` to the render callbacks
-   * @param  {Number}   [zoom]
    * @param  {Function} [callback]
    */
-  render (zoom, callback) {
-    if (zoom) {
-      this._sdk.setZoom(zoom)
-      this._renderCallbacks.push(() => {
-        this._fixOffset()
-      })
-    }
-
+  render (callback) {
     this._renderRequested = true
     if (callback) {
       this._renderCallbacks.push(callback)

@@ -52,21 +52,6 @@ export default class CanvasComponent extends BaseComponent {
   // -------------------------------------------------------------------------- LIFECYCLE
 
   /**
-   * Gets called when this component receives some new props
-   * @param {Object} props
-   */
-  componentWillReceiveProps (props) {
-    if (props.zoom !== this.props.zoom) {
-      const { editor } = this.context
-      const sdk = editor.getSDK()
-      sdk.setAllOperationsToDirty()
-      if (editor.isReady()) {
-        editor.render(props.zoom)
-      }
-    }
-  }
-
-  /**
    * Gets called after this component has been mounted
    */
   componentDidMount () {
