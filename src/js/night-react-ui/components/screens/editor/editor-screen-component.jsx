@@ -10,7 +10,7 @@
  */
 const WINDOW_RESIZE_DELAY = 500
 
-import { React, ReactBEM, Constants, SharedState } from '../../../globals'
+import { React, ReactBEM, Constants, SharedState, Log } from '../../../globals'
 import OverviewControlsComponent from '../../controls/overview/overview-controls-component'
 import ScreenComponent from '../screen-component'
 import HeaderComponent from '../../header-component'
@@ -32,7 +32,8 @@ export default class EditorScreenComponent extends ScreenComponent {
       '_onWindowResize',
       '_onWindowResizeDone',
       '_onImageResize',
-      '_onNewImage'
+      '_onNewImage',
+      '_onRenderError'
     )
 
     this._previousControlsStack = []
@@ -46,6 +47,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._editor.on('new-image', this._onNewImage)
     this._editor.on('ready', this._startEditor)
     this._editor.on('resize', this._onImageResize)
+    this._editor.on('render-error', this._onRenderError)
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -82,6 +84,21 @@ export default class EditorScreenComponent extends ScreenComponent {
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when an error occurred while rendering
+   * @param  {Event} e
+   * @private
+   */
+  _onRenderError (e) {
+    ModalManager.instance.displayError(
+      this._t('errors.renderingError.title'),
+      this._t('errors.renderingError.text'),
+      true
+    )
+    Log.error(this.constructor.name, 'An error occurred while rendering:')
+    Log.printError(e)
+  }
 
   /**
    * Gets called when the image has been changed

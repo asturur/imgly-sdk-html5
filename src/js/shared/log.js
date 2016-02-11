@@ -30,6 +30,13 @@ Log.canLog = (type) => {
   return true
 }
 
+Log.printError = (e) => {
+  const lines = e.stack.split('\n')
+  lines.forEach((line) => {
+    Log.error('Error', line)
+  })
+}
+
 LEVELS.forEach((level) => {
   const { type, background, color } = level
   Log[type] = function (tag, ...args) {

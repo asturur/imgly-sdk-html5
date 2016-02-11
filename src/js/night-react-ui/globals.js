@@ -20,6 +20,7 @@ import Utils from './lib/utils'
 import Constants from './lib/constants'
 import SharedState from './lib/shared-state'
 import { requestAnimationFrame, cancelAnimationFrame } from '../shared/animation-frame'
+import Log from '../shared/log'
 
 const Promise = PhotoEditorSDK.Promise
 const Color = PhotoEditorSDK.Color
@@ -34,5 +35,5 @@ const SDK = PhotoEditorSDK
 export {
   Promise, Utils, React, BEM, Classnames, BaseComponent, ReactBEM, Vector2,
   SDKUtils, EventEmitter, Constants, SharedState, Color, Base64, RenderType,
-  ReactDOM, EXIF, SDK, requestAnimationFrame, cancelAnimationFrame
+  ReactDOM, EXIF, SDK, requestAnimationFrame, cancelAnimationFrame, Log
 }

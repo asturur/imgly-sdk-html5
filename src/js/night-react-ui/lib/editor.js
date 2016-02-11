@@ -650,6 +650,9 @@ export default class Editor extends EventEmitter {
       .then(() => {
         this._lastOutputBounds = this._sdk.getSprite().getBounds()
       })
+      .catch((e) => {
+        this.emit('render-error', e)
+      })
   }
 
   /**
