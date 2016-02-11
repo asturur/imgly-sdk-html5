@@ -245,12 +245,12 @@ class SpriteOperation extends Operation {
   }
 
   /**
-   * Renders this operation using WebGL
+   * Renders this operation
    * @param  {PhotoEditorSDK} sdk
-   * @private
+   * @returns {Promise}
+   * @override
    */
-  /* istanbul ignore next */
-  _renderWebGL (sdk) {
+  render (sdk) {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
@@ -271,15 +271,6 @@ class SpriteOperation extends Operation {
     outputSprite.setTexture(renderTexture)
 
     return Promise.resolve()
-  }
-
-  /**
-   * Crops the image using Canvas2D
-   * @param  {PhotoEditorSDK} renderer
-   * @private
-   */
-  _renderCanvas (sdk) {
-    return this._renderWebGL(sdk)
   }
 
   /**
