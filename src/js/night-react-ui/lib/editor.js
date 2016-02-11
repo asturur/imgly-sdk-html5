@@ -171,7 +171,6 @@ export default class Editor extends EventEmitter {
    * @param  {String...} identifiers
    */
   disableFeatures (...identifiers) {
-    console.log(identifiers)
     identifiers.forEach((identifier) => {
       this._features[identifier] = false
     })
