@@ -136,13 +136,12 @@ class CropOperation extends Operation {
   // -------------------------------------------------------------------------- RENDERING
 
   /**
-   * Rotates and crops the image using WebGL
+   * Crops the image
    * @param  {PhotoEditorSDK} sdk
    * @override
    * @private
    */
-  /* istanbul ignore next */
-  _renderWebGL (sdk) {
+  render (sdk) {
     const renderer = sdk.getRenderer()
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
@@ -166,41 +165,6 @@ class CropOperation extends Operation {
     this.setDirtyForRenderer(true, renderer)
 
     return Promise.resolve()
-  }
-
-  /**
-   * Crops the image using Canvas
-   * @param {CanvasRenderer} renderer
-   * @return {Promise}
-   * @private
-   */
-  _renderCanvas (renderer) {
-    return new Promise((resolve, reject) => {
-      const canvas = renderer.getCanvas()
-      const context = renderer.getContext()
-
-      const newDimensions = this.getNewDimensions(renderer)
-
-      // Clone the canvas
-      const tempCanvas = renderer.cloneCanvas()
-
-      canvas.width = newDimensions.x
-      canvas.height = newDimensions.y
-
-      const start = this.getStart()
-      const end = this.getEnd()
-      const size = end.clone()
-        .subtract(start)
-
-      context.drawImage(
-        tempCanvas,
-        start.x * tempCanvas.width, start.y * tempCanvas.height,
-        size.x * tempCanvas.width, size.y * tempCanvas.height,
-        0, 0,
-        size.x * tempCanvas.width, size.y * tempCanvas.height)
-
-      resolve()
-    })
   }
 
   /**
