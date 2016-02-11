@@ -581,6 +581,14 @@ export default class Editor extends EventEmitter {
   }
 
   /**
+   * Returns the current offset
+   * @returns {Vector2}
+   */
+  getOffset () {
+    return this._sdk.getOffset()
+  }
+
+  /**
    * Makes sure the image stays inside the viewport
    * @private
    */

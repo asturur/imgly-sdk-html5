@@ -93,9 +93,8 @@ export default class CanvasComponent extends BaseComponent {
     const { editor } = this.context
     if (!editor.isFeatureEnabled('drag')) return
 
-    const sdk = editor.getSDK()
     this._dragStartPosition = Utils.getEventPosition(e.nativeEvent)
-    this._dragInitialOffset = sdk.getOffset().clone()
+    this._dragInitialOffset = editor.getOffset().clone()
     document.addEventListener('mousemove', this._onDragMove)
     document.addEventListener('touchmove', this._onDragMove)
     document.addEventListener('mouseup', this._onDragEnd)
