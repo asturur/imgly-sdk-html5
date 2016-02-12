@@ -14,15 +14,44 @@ import Primitive from './primitive'
 
 class BrightnessFilter extends Engine.Filter {
   constructor () {
-    const fragmentSource = require('raw!../../../shaders/primitives/brightness.frag')
-    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
-      u_brightness: {
-        type: 'f',
-        value: 1.0
-      }
-    })
-    super(null, fragmentSource, uniforms)
+    super()
+    this._fragmentSource = require('raw!../../../shaders/primitives/brightness.frag')
   }
+
+  /**
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the CanvasRenderer
+   * @param  {CanvasRenderer} renderer
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
+   */
+  _applyCanvas (renderer, inputTarget, outputTarget, clear = false) {
+    const canvas = inputTarget.getCanvas()
+    const inputContext = inputTarget.getContext()
+    const outputContext = outputTarget.getContext()
+
+    const imageData = inputContext.getImageData(0, 0, canvas.width, canvas.height)
+
+    let { brightness } = this._options
+
+    if (brightness === 0) return
+    brightness = brightness * 255
+
+    for (let i = 0; i < canvas.width * canvas.height; i++) {
+      const index = i * 4
+      imageData.data[index] += brightness
+      imageData.data[index + 1] += brightness
+      imageData.data[index + 2] += brightness
+    }
+
+    outputContext.putImageData(imageData, 0, 0)
+  }
+}
+
+BrightnessFilter.prototype.availableOptions = {
+  brightness: { type: 'number', default: 0, uniformType: 'f' }
 }
 
 /**
@@ -45,30 +74,7 @@ class Brightness extends Primitive {
    * Updates the filter's uniforms
    */
   update () {
-    this._filter.setUniform('u_brightness', this._options.brightness)
-  }
-
-  /**
-   * Renders the primitive (Canvas)
-   * @param  {CanvasRenderer} renderer
-   * @param  {Canvas} canvas
-   */
-  renderCanvas (renderer, canvas) {
-    var imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height)
-    var brightness = this._options.brightness
-
-    for (var x = 0; x < canvas.width; x++) {
-      for (var y = 0; y < canvas.height; y++) {
-        var index = (canvas.width * y + x) * 4
-
-        imageData.data[index] = imageData.data[index] + brightness * 255
-        imageData.data[index + 1] = imageData.data[index + 1] + brightness * 255
-        imageData.data[index + 2] = imageData.data[index + 2] + brightness * 255
-      }
-    }
-
-    const outputContext = canvas.getContext('2d')
-    outputContext.putImageData(imageData, 0, 0)
+    this._filter.setBrightness(this._options.brightness)
   }
 }
 

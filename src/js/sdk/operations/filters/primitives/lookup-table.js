@@ -16,15 +16,45 @@ import Primitive from './primitive'
 
 class LookupTableFilter extends Engine.Filter {
   constructor () {
-    const fragmentSource = require('raw!../../../shaders/primitives/lookup-table.frag')
-    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
-      u_lookupTable: {
-        type: 'i',
-        value: TEXTURE_GL_UNIT
-      }
-    })
-    super(null, fragmentSource, uniforms)
+    super()
+    this._fragmentSource = require('raw!../../../shaders/primitives/lookup-table.frag')
   }
+
+  /**
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the CanvasRenderer
+   * @param  {CanvasRenderer} renderer
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
+   */
+  _applyCanvas (renderer, inputTarget, outputTarget, clear = false) {
+    const canvas = inputTarget.getCanvas()
+    const inputContext = inputTarget.getContext()
+    const outputContext = outputTarget.getContext()
+
+    const imageData = inputContext.getImageData(0, 0, canvas.width, canvas.height)
+
+    const table = this._options.lookupTableData
+    for (let i = 0; i < canvas.width * canvas.height; i++) {
+      const index = i * 4
+
+      var r = imageData.data[index]
+      imageData.data[index] = table[r * 4]
+      var g = imageData.data[index + 1]
+      imageData.data[index + 1] = table[1 + g * 4]
+      var b = imageData.data[index + 2]
+      imageData.data[index + 2] = table[2 + b * 4]
+    }
+
+    outputContext.putImageData(imageData, 0, 0)
+  }
+}
+
+LookupTableFilter.prototype.availableOptions = {
+  lookupTable: { type: 'number', default: TEXTURE_GL_UNIT, uniformType: 'i' },
+  lookupTableData: { type: 'array', default: [], uniformType: 'x' }
 }
 
 /**
@@ -47,34 +77,12 @@ class LookupTable extends Primitive {
    * @param {PhotoEditorSDK} sdk
    */
   update (sdk) {
-    this._updateTexture(sdk)
-  }
-
-  /**
-   * Renders the primitive (Canvas)
-   * @param  {CanvasRenderer} renderer
-   * @param  {Canvas} canvas
-   */
-  renderCanvas (renderer, canvas) {
-    const context = canvas.getContext('2d')
-    var imageData = context.getImageData(0, 0, canvas.width, canvas.height)
-    var table = this._options.data
-
-    for (var x = 0; x < canvas.width; x++) {
-      for (var y = 0; y < canvas.height; y++) {
-        var index = (canvas.width * y + x) * 4
-
-        var r = imageData.data[index]
-        imageData.data[index] = table[r * 4]
-        var g = imageData.data[index + 1]
-        imageData.data[index + 1] = table[1 + g * 4]
-        var b = imageData.data[index + 2]
-        imageData.data[index + 2] = table[2 + b * 4]
-      }
+    const renderer = sdk.getRenderer()
+    if (renderer.isOfType('webgl')) {
+      this._updateWebGLTexture(sdk)
+    } else if (renderer.isOfType('canvas')) {
+      this._filter.setLookupTableData(this._options.data)
     }
-
-    const outputContext = canvas.getContext('2d')
-    outputContext.putImageData(imageData, 0, 0)
   }
 
   /**
@@ -83,7 +91,7 @@ class LookupTable extends Primitive {
    * @private
    */
   /* istanbul ignore next */
-  _updateTexture (sdk) {
+  _updateWebGLTexture (sdk) {
     if (typeof this._options.data === 'undefined') {
       throw new Error('LookupTable: No data specified.')
     }
