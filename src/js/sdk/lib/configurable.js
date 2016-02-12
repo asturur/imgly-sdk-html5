@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Log from '../../shared/log'
 import EventEmitter from './event-emitter'
 import Vector2 from './math/vector2'
 import Color from './color'
@@ -289,6 +290,10 @@ export default class Configurable extends EventEmitter {
     }
 
     var optionConfig = this.availableOptions[optionName]
+    if (!optionConfig) {
+      Log.error(this.constructor.name, `Unknown option \`${optionName}\`.`)
+      return
+    }
 
     if (typeof optionConfig.setter !== 'undefined') {
       value = optionConfig.setter.call(this, value)

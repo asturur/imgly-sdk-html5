@@ -67,9 +67,17 @@ export default class Filter extends Configurable {
     super.setOption(optionName, value, update)
 
     let uniformValue = value
-    switch (this.availableOptions[optionName].type) {
+    const optionConfig = this.availableOptions[optionName]
+    switch (optionConfig.type) {
       case 'color':
-        uniformValue = value.toRGBGLColor()
+        if (optionConfig.uniformType === '4f') {
+          uniformValue = value.toGLColor()
+        } else if (optionConfig.uniformType === '3f') {
+          uniformValue = value.toRGBGLColor()
+        }
+        break
+      case 'vector2':
+        uniformValue = [value.x, value.y]
         break
     }
 

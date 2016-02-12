@@ -8,28 +8,45 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine, Vector2, Utils, Color } from '../globals'
+import { Engine, Vector2, Color } from '../globals'
 import Operation from './operation'
 
 class FrameFilter extends Engine.Filter {
   constructor () {
-    const fragmentSource = require('raw!../shaders/operations/frame.frag')
-    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
-      u_color: {
-        type: '4f',
-        value: Color.TRANSPARENT
-      },
-      u_thickness: {
-        type: '2f',
-        value: [0, 0]
-      },
-      u_textureSize: {
-        type: '2f',
-        value: [0, 0]
-      }
-    })
-    super(null, fragmentSource, uniforms)
+    super()
+    this._fragmentSource = require('raw!../shaders/operations/frame.frag')
   }
+
+  /**
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the CanvasRenderer
+   * @param  {CanvasRenderer} renderer
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
+   */
+  _applyCanvas (renderer, inputTarget, outputTarget, clear = false) {
+    const canvas = inputTarget.getCanvas()
+    const outputContext = outputTarget.getContext()
+
+    const { color, thickness } = this._options
+
+    outputContext.save()
+    outputContext.drawImage(canvas, 0, 0)
+    outputContext.beginPath()
+    outputContext.lineWidth = thickness * 2
+    outputContext.strokeStyle = color.toRGBA()
+    outputContext.rect(0, 0, canvas.width, canvas.height)
+    outputContext.stroke()
+    outputContext.restore()
+  }
+}
+
+FrameFilter.prototype.availableOptions = {
+  color: { type: 'color', default: Color.BLACK, uniformType: '4f' },
+  thickness: { type: 'number', default: 0, uniformType: 'f' },
+  textureSize: { type: 'vector2', default: new Vector2(0, 0), uniformType: '2f' }
 }
 
 /**
@@ -48,12 +65,11 @@ export default class FrameOperation extends Operation {
   }
 
   /**
-   * Crops this image using WebGL
+   * Renders the frame operation
    * @param  {PhotoEditorSDK} sdk
    * @private
    */
-  /* istanbul ignore next */
-  _renderWebGL (sdk) {
+  _render (sdk) {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
     const renderer = sdk.getRenderer()
@@ -65,11 +81,13 @@ export default class FrameOperation extends Operation {
 
     renderTexture.resizeTo(spriteDimensions)
 
+    const { color, thickness } = this._options
+
     // Update uniforms
-    this._filter.setUniforms({
-      u_color: this._options.color.toGLColor(),
-      u_thickness: [this._options.thickness, this._options.thickness],
-      u_textureSize: [spriteDimensions.x, spriteDimensions.y]
+    this._filter.set({
+      color,
+      thickness,
+      textureSize: spriteDimensions
     })
 
     renderTexture.render(this._container)
@@ -77,32 +95,6 @@ export default class FrameOperation extends Operation {
     this.setDirtyForRenderer(false, renderer)
 
     return Promise.resolve()
-  }
-
-  /**
-   * Crops the image using Canvas2D
-   * @param  {CanvasRenderer} renderer
-   * @return {Promise}
-   * @private
-   */
-  _renderCanvas (renderer) {
-    return new Promise((resolve, reject) => {
-      const canvas = renderer.getCanvas()
-      const context = renderer.getContext()
-
-      const color = this._options.color
-      const thickness = this._options.thickness * Math.min(canvas.width, canvas.height)
-
-      context.save()
-      context.beginPath()
-      context.lineWidth = thickness * 2
-      context.strokeStyle = color.toRGBA()
-      context.rect(0, 0, canvas.width, canvas.height)
-      context.stroke()
-      context.restore()
-
-      resolve()
-    })
   }
 }
 
