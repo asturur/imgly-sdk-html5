@@ -134,4 +134,11 @@ export default class CanvasFilterManager {
   setFilterStack (filterStack) {
     this._filterStack = filterStack
   }
+
+  /**
+   * Disposes this FilterManager
+   */
+  dispose () {
+
+  }
 }

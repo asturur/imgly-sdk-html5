@@ -77,9 +77,11 @@ export default class BaseTexture extends EventEmitter {
    * @param  {WebGLRenderer} renderer
    */
   disposeGLTextures (renderer) {
-    const gl = renderer.getContext()
-    gl.deleteTexture(this._glTextures[gl.id])
-    delete this._glTextures[gl.id]
+    if (renderer.isOfType('webgl')) {
+      const gl = renderer.getContext()
+      gl.deleteTexture(this._glTextures[gl.id])
+      delete this._glTextures[gl.id]
+    }
   }
 
   /**
