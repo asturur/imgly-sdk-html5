@@ -8,24 +8,42 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2, Engine, Utils } from '../../globals'
+import { Vector2, Engine } from '../../globals'
 import Promise from '../../vendor/promise'
 
 class BlendFilter extends Engine.Filter {
   constructor () {
-    const fragmentSource = require('raw!../../shaders/generic/blend.frag')
-    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
-      u_filteredImage: {
-        type: 'i',
-        value: 1
-      },
-      u_intensity: {
-        type: 'f',
-        value: 1.0
-      }
-    })
-    super(null, fragmentSource, uniforms)
+    super()
+    this._fragmentSource = require('raw!../../shaders/generic/blend.frag')
   }
+
+  /**
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the CanvasRenderer
+   * @param  {CanvasRenderer} renderer
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
+   */
+  _applyCanvas (renderer, inputTarget, outputTarget, clear = false) {
+    const canvas = inputTarget.getCanvas()
+    const outputContext = outputTarget.getContext()
+
+    const { filteredCanvas } = this._options
+
+    outputContext.save()
+    outputContext.drawImage(canvas, 0, 0)
+    outputContext.globalAlpha = this._options.intensity
+    outputContext.drawImage(filteredCanvas, 0, 0)
+    outputContext.restore()
+  }
+}
+
+BlendFilter.prototype.availableOptions = {
+  filteredImage: { type: 'number', default: 1, uniformType: 'i' },
+  filteredCanvas: { type: 'object', default: null, uniformType: 'x' },
+  intensity: { type: 'number', default: 1, uniformType: 'f' }
 }
 
 /**
@@ -84,48 +102,49 @@ class PrimitivesStack {
     if (this._stack.length === 0) return Promise.resolve()
     const renderer = sdk.getRenderer()
 
-    let renderTexture = this._renderTextures[renderer.id]
-    if (!renderTexture) {
-      renderTexture =
+    let filteredRenderTexture = this._renderTextures[renderer.id]
+    if (!filteredRenderTexture) {
+      filteredRenderTexture =
         this._renderTextures[renderer.id] = sdk.createRenderTexture()
     }
 
     const outputSprite = sdk.getSprite()
-    if (this.isDirtyForRenderer(renderer)) {
-      this._sprite.setTexture(outputSprite.getTexture())
+    this._sprite.setTexture(outputSprite.getTexture())
 
-      // Resize both the output and temp texture
-      const spriteBounds = outputSprite.getBounds()
-      const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
-      outputTexture.resizeTo(spriteDimensions)
-      renderTexture.resizeTo(spriteDimensions)
+    // Resize both the output and temp texture
+    const spriteBounds = outputSprite.getBounds()
+    const spriteDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
+    outputTexture.resizeTo(spriteDimensions)
+    filteredRenderTexture.resizeTo(spriteDimensions)
 
-      // Update primitives
-      this._stack.forEach((p) => p.update(sdk))
+    // Update primitives
+    this._stack.forEach((p) => p.update(sdk))
 
-      // Set filters
-      const filters = this._stack.map((p) => p.getFilter())
-      this._sprite.setFilters(filters)
+    // Set filters
+    const filters = this._stack.map((p) => p.getFilter())
+    this._sprite.setFilters(filters)
 
-      // Render to RenderTexture
-      renderTexture.render(this._container)
+    // Render to RenderTexture
+    filteredRenderTexture.render(this._container)
 
-      // Use renderTexture as uniform for blend shader, blend the two
-      // to achieve intensity
-      this._blendFilter.setUniform('u_intensity', this._intensity)
-      this._sprite.setFilters([
-        this._blendFilter
-      ])
-
-      const baseTexture = renderTexture.getBaseTexture()
-      baseTexture.setGLUnit(1)
-
-      if (renderer.isOfType('webgl')) {
-        renderer.updateTexture(baseTexture, false)
-      }
-
-      outputTexture.render(this._container)
+    // Use filteredRenderTexture as uniform for blend shader, blend the two
+    // to achieve intensity
+    this._blendFilter.setIntensity(this._intensity)
+    if (renderer.isOfType('canvas')) {
+      this._blendFilter.setFilteredCanvas(filteredRenderTexture.getRenderTarget().getCanvas())
     }
+    this._sprite.setFilters([
+      this._blendFilter
+    ])
+
+    const baseTexture = filteredRenderTexture.getBaseTexture()
+    baseTexture.setGLUnit(1)
+
+    if (renderer.isOfType('webgl')) {
+      renderer.updateTexture(baseTexture, false)
+    }
+
+    outputTexture.render(this._container)
 
     outputSprite.setTexture(outputTexture)
     return Promise.resolve()
