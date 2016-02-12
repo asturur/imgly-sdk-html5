@@ -66,7 +66,14 @@ export default class Filter extends Configurable {
   setOption (optionName, value, update = true) {
     super.setOption(optionName, value, update)
 
-    this.setUniform(`u_${optionName}`, value)
+    let uniformValue = value
+    switch (this.availableOptions[optionName].type) {
+      case 'color':
+        uniformValue = value.toRGBGLColor()
+        break
+    }
+
+    this.setUniform(`u_${optionName}`, uniformValue)
   }
 
   /**

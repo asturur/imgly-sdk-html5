@@ -15,49 +15,27 @@ import Color from '../../../lib/color'
 
 class GlowFilter extends Engine.Filter {
   constructor () {
-    const fragmentSource = require('raw!../../../shaders/primitives/glow.frag')
-    const uniforms = Utils.extend(Engine.Shaders.TextureShader.defaultUniforms, {
-      u_color: {
-        type: '3f',
-        value: [1, 1, 1, 1]
-      }
-    })
-    super(null, fragmentSource, uniforms)
-  }
-}
-
-/**
- * Glow primitive
- * @class
- * @alias PhotoEditorSDK.Filter.Primitives.Glow
- * @extends {PhotoEditorSDK.Filter.Primitive}
- */
-class Glow extends Primitive {
-  constructor (...args) {
-    super(...args)
-
-    this._filter = new GlowFilter()
-    this._options = Utils.defaults(this._options, {
-      color: new Color(1, 1, 1)
-    })
+    super()
+    this._fragmentSource = require('raw!../../../shaders/primitives/glow.frag')
   }
 
   /**
-   * Updates the filter's uniforms
-   */
-  update () {
-    this._filter.setUniform('u_color', this._options.color.toRGBGLColor())
-  }
-
-  /**
-   * Renders the primitive (Canvas)
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the CanvasRenderer
    * @param  {CanvasRenderer} renderer
-   * @param  {Canvas} canvas
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
    */
-  renderCanvas (renderer, canvas) {
-    const context = canvas.getContext('2d')
-    var imageData = context.getImageData(0, 0, canvas.width, canvas.height)
-    var color = this._options.color
+  _applyCanvas (renderer, inputTarget, outputTarget, clear = false) {
+    const canvas = inputTarget.getCanvas()
+    const inputContext = inputTarget.getContext()
+    const outputContext = outputTarget.getContext()
+
+    const imageData = inputContext.getImageData(0, 0, canvas.width, canvas.height)
+
+    const { color } = this._options
 
     var d
     for (var x = 0; x < canvas.width; x++) {
@@ -82,8 +60,35 @@ class Glow extends Primitive {
       }
     }
 
-    const outputContext = canvas.getContext('2d')
     outputContext.putImageData(imageData, 0, 0)
+  }
+}
+
+GlowFilter.prototype.availableOptions = {
+  color: { type: 'color', default: Color.WHITE, uniformType: '3f' }
+}
+
+/**
+ * Glow primitive
+ * @class
+ * @alias PhotoEditorSDK.Filter.Primitives.Glow
+ * @extends {PhotoEditorSDK.Filter.Primitive}
+ */
+class Glow extends Primitive {
+  constructor (...args) {
+    super(...args)
+
+    this._filter = new GlowFilter()
+    this._options = Utils.defaults(this._options, {
+      color: new Color(1, 1, 1)
+    })
+  }
+
+  /**
+   * Updates the filter's uniforms
+   */
+  update () {
+    this._filter.setColor(this._options.color)
   }
 }
 

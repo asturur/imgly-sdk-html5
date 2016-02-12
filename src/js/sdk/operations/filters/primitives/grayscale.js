@@ -13,31 +13,25 @@ import Primitive from './primitive'
 
 class GrayscaleFilter extends Engine.Filter {
   constructor () {
-    const fragmentSource = require('raw!../../../shaders/primitives/grayscale.frag')
-    super(null, fragmentSource)
-  }
-}
-
-/**
- * Grayscale primitive
- * @class
- * @alias PhotoEditorSDK.Filter.Primitives.Grayscale
- * @extends {PhotoEditorSDK.Filter.Primitive}
- */
-class Grayscale extends Primitive {
-  constructor (...args) {
-    super(...args)
-    this._filter = new GrayscaleFilter()
+    super()
+    this._fragmentSource = require('raw!../../../shaders/primitives/grayscale.frag')
   }
 
   /**
-   * Renders the primitive (Canvas)
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the CanvasRenderer
    * @param  {CanvasRenderer} renderer
-   * @param  {Canvas} canvas
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
    */
-  renderCanvas (renderer, canvas) {
-    const context = canvas.getContext('2d')
-    var imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+  _applyCanvas (renderer, inputTarget, outputTarget, clear = false) {
+    const canvas = inputTarget.getCanvas()
+    const inputContext = inputTarget.getContext()
+    const outputContext = outputTarget.getContext()
+
+    const imageData = inputContext.getImageData(0, 0, canvas.width, canvas.height)
 
     for (var x = 0; x < canvas.width; x++) {
       for (var y = 0; y < canvas.height; y++) {
@@ -51,8 +45,20 @@ class Grayscale extends Primitive {
       }
     }
 
-    const outputContext = canvas.getContext('2d')
     outputContext.putImageData(imageData, 0, 0)
+  }
+}
+
+/**
+ * Grayscale primitive
+ * @class
+ * @alias PhotoEditorSDK.Filter.Primitives.Grayscale
+ * @extends {PhotoEditorSDK.Filter.Primitive}
+ */
+class Grayscale extends Primitive {
+  constructor (...args) {
+    super(...args)
+    this._filter = new GrayscaleFilter()
   }
 }
 
