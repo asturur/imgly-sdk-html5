@@ -8,7 +8,6 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Log } from '../globals'
 import DisplayObject from './display-object'
 
 export default class Container extends DisplayObject {
@@ -131,10 +130,19 @@ export default class Container extends DisplayObject {
   renderCanvas (renderer) {
     if (!this._visible) return
 
+    const filterManager = renderer.getFilterManager()
+    if (this._filters && this._filters.length) {
+      filterManager.pushFilters(this, this._filters)
+    }
+
     this._renderCanvas(renderer)
     this._children.forEach((child) => {
       child.renderCanvas(renderer)
     })
+
+    if (this._filters && this._filters.length) {
+      filterManager.popFilters()
+    }
   }
 
   /**

@@ -13,7 +13,8 @@ import Texture from './texture'
 import BaseTexture from './base-texture'
 import RenderTarget from '../utils/render-target'
 import CanvasBuffer from '../utils/canvas-buffer'
-import FilterManager from '../managers/filter-manager'
+import WebGLFilterManager from '../managers/webgl-filter-manager'
+import CanvasFilterManager from '../managers/canvas-filter-manager'
 
 export default class RenderTexture extends Texture {
   constructor (renderer, width = 100, height = 100, pixelRatio = 1) {
@@ -32,10 +33,7 @@ export default class RenderTexture extends Texture {
     this._pixelRatio = pixelRatio
     this._renderer = renderer
 
-    if (this._renderer.isOfType('webgl')) {
-      this._setupFilterManager()
-    }
-
+    this._setupFilterManager()
     this._setupBuffer()
     this._updateUVs()
   }
@@ -45,7 +43,12 @@ export default class RenderTexture extends Texture {
    * @private
    */
   _setupFilterManager () {
-    this._filterManager = new FilterManager(this._renderer)
+    if (this._renderer.isOfType('webgl')) {
+      this._filterManager = new WebGLFilterManager(this._renderer)
+    } else if (this._renderer.isOfType('canvas')) {
+      this._filterManager = new CanvasFilterManager(this._renderer)
+    }
+
     this._filterManager.resizeTo(new Vector2(this._width, this._height))
   }
 
@@ -153,10 +156,9 @@ export default class RenderTexture extends Texture {
       child.updateTransform()
     })
 
-    const context = this._renderTarget.getContext()
     const originalPixelRatio = this._renderer.getPixelRatio()
     this._renderer.setPixelRatio(this._pixelRatio)
-    this._renderer.renderDisplayObject(displayObject, context)
+    this._renderer.renderDisplayObject(displayObject, this._renderTarget)
     this._renderer.setPixelRatio(originalPixelRatio)
   }
 

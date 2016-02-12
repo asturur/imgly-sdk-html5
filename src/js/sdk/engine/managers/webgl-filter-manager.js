@@ -12,7 +12,7 @@ import { Rectangle } from '../globals'
 import RenderTarget from '../utils/render-target'
 import Quad from '../utils/quad'
 
-export default class FilterManager {
+export default class WebGLFilterManager {
   constructor (renderer) {
     this._renderer = renderer
     this._filterStack = [{
@@ -75,11 +75,11 @@ export default class FilterManager {
 
   /**
    * Pushes the given filters to the
-   * @param  {RenderTarget} target
+   * @param  {DisplayObject} displayObject
    * @param  {Array.<Filter>} filters
    */
-  pushFilters (target, filters) {
-    const bounds = target.getBounds()
+  pushFilters (displayObject, filters) {
+    const bounds = displayObject.getBounds()
     this._currentFrame = bounds
 
     const renderTarget = this._getOrCreateRenderTarget()

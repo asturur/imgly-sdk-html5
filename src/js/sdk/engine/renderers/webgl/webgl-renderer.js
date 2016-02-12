@@ -15,7 +15,7 @@ import ObjectRenderer from './object-renderers/object-renderer'
 import SpriteRenderer from './object-renderers/sprite-renderer'
 import TextureShader from '../../shaders/texture-shader'
 import DisplayObject from '../../display/display-object'
-import FilterManager from '../../managers/filter-manager'
+import WebGLFilterManager from '../../managers/webgl-filter-manager'
 import ContextPerformanceHook from '../../utils/context-performance-hook'
 
 export default class WebGLRenderer extends BaseRenderer {
@@ -68,7 +68,7 @@ export default class WebGLRenderer extends BaseRenderer {
    * @private
    */
   _onBeforeContext () {
-    this._filterManager = new FilterManager(this)
+    this._filterManager = new WebGLFilterManager(this)
     this._currentObjectRenderer = new ObjectRenderer(this)
   }
 
@@ -333,8 +333,6 @@ export default class WebGLRenderer extends BaseRenderer {
 
   getCurrentRenderTarget () { return this._currentRenderTarget }
   getCurrentObjectRenderer () { return this._currentObjectRenderer }
-  getFilterManager () { return this._filterManager }
-  setFilterManager (filterManager) { this._filterManager = filterManager }
 
   /**
    * Checks if this renderer is supported on the current device and browser

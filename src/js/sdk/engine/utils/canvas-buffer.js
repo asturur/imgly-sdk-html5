@@ -9,16 +9,22 @@
  */
 
 export default class CanvasBuffer {
-  constructor (width, height, pixelRatio) {
+  constructor (width, height, pixelRatio, canvas, context) {
     this._width = width
     this._height = height
     this._pixelRatio = pixelRatio
 
-    this._canvas = document.createElement('canvas')
-    this._context = this._canvas.getContext('2d')
+    this._canvas = canvas || document.createElement('canvas')
+    this._context = context || this._canvas.getContext('2d')
 
     this._canvas.width = this._width
     this._canvas.height = this._height
+    this._filterStack = [
+      {
+        renderTarget: this,
+        filter: []
+      }
+    ]
   }
 
   /**
@@ -51,4 +57,5 @@ export default class CanvasBuffer {
 
   getCanvas () { return this._canvas }
   getContext () { return this._context }
+  getFilterStack () { return this._filterStack }
 }

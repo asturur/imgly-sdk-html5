@@ -89,12 +89,29 @@ export default class Filter {
   /**
    * Applies this filter to the given inputTarget and renders it to
    * the given outputTarget
-   * @param  {WebGLRenderer} renderer
+   * @param  {BaseRenderer} renderer
    * @param  {RenderTarget} inputTarget
    * @param  {RenderTarget} outputTarget
    * @param  {Boolean} clear = false
    */
   apply (renderer, inputTarget, outputTarget, clear = false) {
+    if (renderer.isOfType('webgl')) {
+      this._applyWebGL(renderer, inputTarget, outputTarget, clear)
+    } else if (renderer.isOfType('canvas')) {
+      this._applyCanvas(renderer, inputTarget, outputTarget, clear)
+    }
+  }
+
+  /**
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the WebGLRenderer
+   * @param  {WebGLRenderer} renderer
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
+   */
+  _applyWebGL (renderer, inputTarget, outputTarget, clear = false) {
     const gl = renderer.getContext()
     const shader = this.getShaderForRenderer(renderer)
 
@@ -113,6 +130,24 @@ export default class Filter {
     gl.activeTexture(gl.TEXTURE0)
     gl.bindTexture(gl.TEXTURE_2D, inputTarget.getTexture())
     gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0)
+  }
+
+  /**
+   * Applies this filter to the given inputTarget and renders it to
+   * the given outputTarget using the WebGLRenderer
+   * @param  {WebGLRenderer} renderer
+   * @param  {RenderTarget} inputTarget
+   * @param  {RenderTarget} outputTarget
+   * @param  {Boolean} clear = false
+   * @private
+   */
+  _applyCanvas (renderer, inputTarget, outputTarget, clear = false) {
+    const canvas = inputTarget.getCanvas()
+    const inputContext = inputTarget.getContext()
+    const outputContext = outputTarget.getContext()
+
+    const imageData = inputContext.getImageData(0, 0, canvas.width, canvas.height)
+    outputContext.putImageData(imageData, 0, 0)
   }
 
   /**

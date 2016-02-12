@@ -145,4 +145,7 @@ export default class BaseRenderer extends EventEmitter {
   dispose () {
     Log.warn(this.constructor.name, '`dispose` is abstract and not implemented in inherited class')
   }
+
+  getFilterManager () { return this._filterManager }
+  setFilterManager (filterManager) { this._filterManager = filterManager }
 }

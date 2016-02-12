@@ -10,7 +10,10 @@
 
 import { Log } from '../../globals'
 import ContextPerformanceHook from '../../utils/context-performance-hook'
+
 import BaseRenderer from '../base-renderer'
+import CanvasBuffer from '../../utils/canvas-buffer'
+import CanvasFilterManager from '../../managers/canvas-filter-manager'
 
 export default class CanvasRenderer extends BaseRenderer {
   constructor (...args) {
@@ -59,6 +62,15 @@ export default class CanvasRenderer extends BaseRenderer {
     } else {
       ctx.imageSmoothingEnabled = true
     }
+
+    this._defaultRenderTarget = new CanvasBuffer(this._width,
+      this._height,
+      this._pixelRatio,
+      this._canvas,
+      this._context)
+    this.setRenderTarget(this._defaultRenderTarget)
+
+    this._filterManager = new CanvasFilterManager(this)
   }
 
   /**
@@ -66,7 +78,7 @@ export default class CanvasRenderer extends BaseRenderer {
    * @param  {DisplayObject} displayObject
    */
   render (displayObject) {
-    const ctx = this._context
+    const ctx = this._renderTarget.getContext()
 
     // Since the given displayObject is the "root" object
     // right now, we need to give it a dummy / fake object
@@ -93,22 +105,34 @@ export default class CanvasRenderer extends BaseRenderer {
       ctx.restore()
     }
 
-    this.renderDisplayObject(displayObject, this._context)
+    this.renderDisplayObject(displayObject, this._renderTarget)
   }
 
   /**
    * Renders the given DisplayObject
    * @param  {DisplayObject} displayObject
-   * @param  {RenderTarget} context
+   * @param  {RenderTarget} renderTarget
    */
-  renderDisplayObject (displayObject, context) {
-    const originalContext = this._context
-    this._context = context
+  renderDisplayObject (displayObject, renderTarget) {
+    const originalRenderTarget = this._renderTarget
+    this._filterManager.setFilterStack(renderTarget.getFilterStack())
+    this.setRenderTarget(renderTarget)
     displayObject.renderCanvas(this)
-    this._context = originalContext
+    this.setRenderTarget(originalRenderTarget)
   }
 
-  getCurrentRenderTarget () { return this._context }
+  /**
+   * Disposes this Renderer
+   */
+  dispose () {
+    this._filterManager.dispose()
+  }
+
+  getCurrentRenderTarget () { return this._renderTarget }
+  setRenderTarget (renderTarget) {
+    this._renderTarget = renderTarget
+  }
+  getContext () { return this._renderTarget.getContext() }
 }
 
 CanvasRenderer.contextId = 0
