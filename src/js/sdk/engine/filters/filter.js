@@ -8,16 +8,65 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Log } from '../globals'
+import Configurable from '../../lib/configurable'
 import Shader from '../shaders/shader'
 import TextureShader from '../shaders/texture-shader'
 
-export default class Filter {
-  constructor (vertexSource, fragmentSource, uniforms, attributes) {
+export default class Filter extends Configurable {
+  constructor (...args) {
+    super(...args)
+
     this._shaders = []
-    this._uniforms = uniforms || TextureShader.defaultUniforms
-    this._attributes = attributes || TextureShader.defaultAttributes
-    this._vertexSource = vertexSource || TextureShader.defaultVertexSource
-    this._fragmentSource = fragmentSource || TextureShader.defaultFragmentSource
+    this._availableUniforms = TextureShader.defaultUniforms
+    this._attributes = TextureShader.defaultAttributes
+    this._vertexSource = TextureShader.defaultVertexSource
+    this._fragmentSource = TextureShader.defaultFragmentSource
+
+    this._initUniforms()
+    this._initOptions()
+  }
+
+  /**
+   * Initializes the uniforms
+   * @private
+   */
+  _initUniforms () {
+    this._uniforms = {}
+    for (let name in this._availableUniforms) {
+      const uniform = this._availableUniforms[name]
+      this._uniforms[name] = {
+        type: uniform.type,
+        value: uniform.default || null
+      }
+    }
+
+    // Options are also turned into uniforms
+    for (let optionName in this.availableOptions) {
+      const optionConfig = this.availableOptions[optionName]
+
+      if (!optionConfig.uniformType) {
+        Log.warn(this.constructor.name, `Option \`${optionName}\` is missing a \`uniformType\`!`)
+      }
+
+      this._uniforms[`u_${optionName}`] = {
+        type: optionConfig.uniformType,
+        value: optionConfig.default || null
+      }
+    }
+  }
+
+  /**
+   * Sets the value for the given option, validates it
+   * @param {String} optionName
+   * @param {*} value
+   * @param {Boolean} update = true
+   * @private
+   */
+  setOption (optionName, value, update = true) {
+    super.setOption(optionName, value, update)
+
+    this.setUniform(`u_${optionName}`, value)
   }
 
   /**
@@ -134,8 +183,8 @@ export default class Filter {
 
   /**
    * Applies this filter to the given inputTarget and renders it to
-   * the given outputTarget using the WebGLRenderer
-   * @param  {WebGLRenderer} renderer
+   * the given outputTarget using the CanvasRenderer
+   * @param  {CanvasRenderer} renderer
    * @param  {RenderTarget} inputTarget
    * @param  {RenderTarget} outputTarget
    * @param  {Boolean} clear = false
