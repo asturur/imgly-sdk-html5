@@ -34,6 +34,8 @@ See the examples folder for implementation examples or play with the [demo on ou
 ## Setting up the development environment
 
 ```shell
+$ xcode-select --install
+$ brew install libtiff jpeg libpng cairo
 $ npm install -g gulp
 $ npm install
 ```
@@ -42,6 +44,11 @@ $ npm install
 
 ```shell
 $ npm test
+```
+
+## Create a new build
+```shell
+$ npm run build
 ```
 
 ## Building the documentation
