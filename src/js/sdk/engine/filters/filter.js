@@ -195,6 +195,8 @@ export default class Filter extends Configurable {
     const inputContext = inputTarget.getContext()
     const outputContext = outputTarget.getContext()
 
+    Log.warn(this.constructor.name, '`_applyCanvas` is not implemented. Just copying image data from `inputTarget` to `outputTarget`.')
+
     const imageData = inputContext.getImageData(0, 0, canvas.width, canvas.height)
     outputContext.putImageData(imageData, 0, 0)
   }
