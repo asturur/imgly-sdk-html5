@@ -21,6 +21,8 @@ export default class Configurable extends EventEmitter {
     this.availableOptions = Utils.extend(this.availableOptions, additionalAvailableOptions)
 
     this._onConfigurableUpdate = this._onConfigurableUpdate.bind(this)
+
+    this._initOptions(options)
   }
 
   /**

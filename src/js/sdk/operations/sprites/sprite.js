@@ -20,8 +20,6 @@ export default class Sprite extends Configurable {
     this._identitySprite = new Engine.Sprite()
     this._sprite = new Engine.Sprite()
 
-    this._initOptions(options)
-
     if (this._options.adjustments) {
       this._onOptionsChange = this._onOptionsChange.bind(this)
       this._options.adjustments.on('updated', this._onOptionsChange)

@@ -14,9 +14,7 @@ import Shader from '../shaders/shader'
 import TextureShader from '../shaders/texture-shader'
 
 export default class Filter extends Configurable {
-  constructor (...args) {
-    super(...args)
-
+  _initOptions () {
     this._shaders = []
     this._availableUniforms = TextureShader.defaultUniforms
     this._attributes = TextureShader.defaultAttributes
@@ -24,7 +22,7 @@ export default class Filter extends Configurable {
     this._fragmentSource = TextureShader.defaultFragmentSource
 
     this._initUniforms()
-    this._initOptions()
+    super._initOptions()
   }
 
   /**
