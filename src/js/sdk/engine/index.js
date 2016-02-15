@@ -15,6 +15,7 @@ import Container from './display/container'
 import BaseTexture from './textures/base-texture'
 import Texture from './textures/texture'
 import RenderTexture from './textures/render-texture'
+import CanvasBuffer from './utils/canvas-buffer'
 import Sprite from './sprites/sprite'
 import Shaders from './shaders/'
 import Shader from './shaders/shader'
@@ -28,6 +29,7 @@ export default {
   BaseTexture,
   Texture,
   RenderTexture,
+  CanvasBuffer,
   Sprite,
   Shaders,
   Shader,

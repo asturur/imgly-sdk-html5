@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import Engine from '../../../engine/'
+import { Engine } from '../../../globals'
 import Utils from '../../../lib/utils'
 import Primitive from './primitive'
 

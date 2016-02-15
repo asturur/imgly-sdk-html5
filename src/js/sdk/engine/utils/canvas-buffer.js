@@ -8,6 +8,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Vector2 } from '../globals'
+
 export default class CanvasBuffer {
   constructor (width, height, pixelRatio, canvas, context) {
     this._width = width
@@ -41,10 +43,15 @@ export default class CanvasBuffer {
    * @param  {Vector2} dimensions
    */
   resizeTo (dimensions) {
-    this._width = dimensions.x
-    this._canvas.width = this._width
-    this._height = dimensions.y
-    this._canvas.height = this._height
+    if (this._width !== dimensions.x) {
+      this._width = dimensions.x
+      this._canvas.width = this._width
+    }
+
+    if (this._height !== dimensions.y) {
+      this._height = dimensions.y
+      this._canvas.height = this._height
+    }
   }
 
   /**
@@ -58,4 +65,9 @@ export default class CanvasBuffer {
   getCanvas () { return this._canvas }
   getContext () { return this._context }
   getFilterStack () { return this._filterStack }
+  getWidth () { return this._width }
+  getHeight () { return this._height }
+  getPixelRatio () { return this._pixelRatio }
+  setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
+  getDimensions () { return new Vector2(this._width, this._height) }
 }
