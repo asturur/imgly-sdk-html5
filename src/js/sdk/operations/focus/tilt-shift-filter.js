@@ -11,14 +11,15 @@
 import { Vector2, Engine } from '../../globals'
 import StackBlur from '../../vendor/stack-blur'
 
-export default class RadialBlurFilter extends Engine.Filter {
+export default class TiltShiftFilter extends Engine.Filter {
   constructor (...args) {
     super(...args)
-    this._fragmentSource = require('raw!../../shaders/focus/radial-blur.frag')
+    this._fragmentSource = require('raw!../../shaders/focus/tilt-shift.frag')
 
     this._lastBlurRadius = null
     this._lastGradientRadius = null
-    this._lastPosition = new Vector2()
+    this._lastStart = new Vector2()
+    this._lastEnd = new Vector2()
 
     this._blurredRenderTarget = new Engine.CanvasBuffer(
       100,
@@ -54,11 +55,13 @@ export default class RadialBlurFilter extends Engine.Filter {
         inputTarget.getPixelRatio())
     }
 
-    if (!this._lastPosition.equals(this._options.position) ||
+    if (!this._lastStart.equals(this._options.start) ||
+        !this._lastEnd.equals(this._options.end) ||
         this._lastGradientRadius !== this._options.gradientRadius) {
       this._renderMask()
 
-      this._lastPosition = this._options.position.clone()
+      this._lastStart = this._options.start.clone()
+      this._lastEnd = this._options.end.clone()
       this._lastGradientRadius = this._options.gradientRadius
     }
 
@@ -98,20 +101,35 @@ export default class RadialBlurFilter extends Engine.Filter {
     const canvasDimensions = new Vector2(canvas.width, canvas.height)
 
     const gradientRadius = this._options.gradientRadius
-    const position = this._options.position.clone()
-      .multiply(this._options.texSize)
+    const start = this._options.start.clone()
+    const end = this._options.end.clone()
+
+    start.multiply(canvasDimensions)
+    end.multiply(canvasDimensions)
+
+    let dist = end.clone().subtract(start)
+    let middle = start.clone().add(dist.clone().divide(2))
+
+    let totalDist = Math.sqrt(Math.pow(dist.x, 2) + Math.pow(dist.y, 2))
+    let factor = dist.clone().divide(totalDist)
+
+    let gradientStart = middle.clone()
+      .add(gradientRadius * factor.y, -gradientRadius * factor.x)
+    let gradientEnd = middle.clone()
+      .add(-gradientRadius * factor.y, gradientRadius * factor.x)
 
     // Build gradient
-    const gradient = context.createRadialGradient(
-      position.x, position.y, 0,
-      position.x, position.y, gradientRadius
+    const gradient = context.createLinearGradient(
+      gradientStart.x, gradientStart.y,
+      gradientEnd.x, gradientEnd.y
     )
-    gradient.addColorStop(0, '#FFFFFF')
+    gradient.addColorStop(0, '#000000')
+    gradient.addColorStop(0.5, '#FFFFFF')
     gradient.addColorStop(1, '#000000')
 
     // Draw gradient
     context.fillStyle = gradient
-    context.fillRect(0, 0, canvasDimensions.x, canvasDimensions.y)
+    context.fillRect(0, 0, canvas.width, canvas.height)
   }
 
   /**
@@ -145,10 +163,11 @@ export default class RadialBlurFilter extends Engine.Filter {
   }
 }
 
-RadialBlurFilter.prototype.availableOptions = {
+TiltShiftFilter.prototype.availableOptions = {
   blurRadius: { type: 'number', default: 30, uniformType: 'f' },
   gradientRadius: { type: 'number', default: 50, uniformType: 'f' },
-  position: { type: 'vector2', default: new Vector2(0.5, 0.5), uniformType: '2f' },
+  start: { type: 'vector2', default: new Vector2(0, 0.5), uniformType: '2f' },
+  end: { type: 'vector2', default: new Vector2(1, 0.5), uniformType: '2f' },
   delta: { type: 'vector2', default: new Vector2(1, 1), uniformType: '2f' },
   texSize: { type: 'vector2', default: new Vector2(100, 100), uniformType: '2f' }
 }

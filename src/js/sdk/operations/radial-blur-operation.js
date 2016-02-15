@@ -39,6 +39,8 @@ class RadialBlurOperation extends Operation {
 
     this._onOperationUpdate = this._onOperationUpdate.bind(this)
     this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
+
+    this._filter = new RadialBlurFilter()
   }
 
   /**
@@ -177,16 +179,12 @@ class RadialBlurOperation extends Operation {
   }
 
   /**
-   * Crops the image using Canvas2D
+   * Renders the radial blur using Canvas2D
    * @param  {PhotoEditorSDK} sdk
    */
   _renderCanvas (sdk) {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
-
-    if (!this._filter) {
-      this._filter = new RadialBlurFilter()
-    }
 
     const { blurRadius, gradientRadius, position } = this._options
     this._filter.set({
