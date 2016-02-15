@@ -165,7 +165,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
     if (rotationEnabled) {
       items = items.concat([
         { identifier: 'rotate-l', onClick: this._onRotateClick.bind(this, 'left') },
-        { identifier: 'rotate-r', onClick: this._onRotateClick.bind(this, 'right') },
+        { identifier: 'rotate-r', onClick: this._onRotateClick.bind(this, 'right') }
       ])
     }
 

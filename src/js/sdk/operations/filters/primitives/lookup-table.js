@@ -11,7 +11,6 @@
 const TEXTURE_GL_UNIT = 3
 
 import Engine from '../../../engine/'
-import Utils from '../../../lib/utils'
 import Primitive from './primitive'
 
 class LookupTableFilter extends Engine.Filter {

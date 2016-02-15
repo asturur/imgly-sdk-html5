@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Log, Vector2 } from '../../globals'
+import { Log } from '../../globals'
 import BaseRenderer from '../base-renderer'
 import RenderTarget from '../../utils/render-target'
 import ObjectRenderer from './object-renderers/object-renderer'

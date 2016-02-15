@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDK, Vector2, SDKUtils, Constants } from '../../../globals'
+import { SDK, Vector2, SDKUtils } from '../../../globals'
 const { Text } = SDK
 import SpritesCanvasControlsComponent from '../sprites/sprites-canvas-controls-component'
 import TextControlsComponent from './text-controls-component'

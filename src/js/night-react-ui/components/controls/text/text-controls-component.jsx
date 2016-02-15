@@ -15,7 +15,7 @@ const ALIGNMENTS = [
   'right'
 ]
 
-import { ReactBEM, Constants } from '../../../globals'
+import { ReactBEM } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'

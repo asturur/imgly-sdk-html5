@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Constants } from '../../../globals'
+import { ReactBEM } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import SliderOverlayComponent from '../slider-overlay-component'

@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Vector2, Constants } from '../../../../globals'
+import { ReactBEM, Vector2 } from '../../../../globals'
 import DraggableComponent from '../../../draggable-component.jsx'
 import CanvasControlsComponent from '../../canvas-controls-component'
 

@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, SDKUtils } from '../../../globals'
+import { ReactBEM } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 

@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDK, SDKUtils, Constants } from '../../../globals'
+import { SDK, SDKUtils } from '../../../globals'
 const { Sticker } = SDK
 import StickersControlsComponent from './stickers-controls-component'
 import SpriteCanvasControlsComponent from '../sprites/sprites-canvas-controls-component'

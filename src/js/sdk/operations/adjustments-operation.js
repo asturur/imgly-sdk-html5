@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Utils, Engine, Vector2 } from '../globals'
+import { Engine, Vector2 } from '../globals'
 import Promise from '../vendor/promise'
 import Operation from './operation'
 
