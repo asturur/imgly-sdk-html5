@@ -32,20 +32,6 @@ export default class NightReactUI extends EventEmitter {
   }
 
   /**
-   * Sets the given image
-   * @param {Image} image
-   * @param {EXIF} exif = null
-   */
-  setImage (image, exif = null) {
-    this._renderer.reset()
-    this._renderer.operationsStack.clear()
-    this._operationsMap = {}
-    this._renderer.setImage(image, exif)
-
-    this.fixOperationsStack()
-  }
-
-  /**
    * Main entry point for the UI
    * @private
    */
@@ -55,33 +41,6 @@ export default class NightReactUI extends EventEmitter {
     // Container has to be position: relative
     this._options.container.style.position = 'relative'
     this._render()
-  }
-
-  /**
-   * Handles error events emitted by the renderer
-   * @private
-   *  @todo Does this belong here?
-   */
-  _handleRendererErrors () {
-    this._renderer.on('error', (e) => {
-      ModalManager.instance.displayError(
-        this.translate(`errors.${e}.title`),
-        this.translate(`errors.${e}.text`)
-      )
-    })
-  }
-
-  /**
-   * Fixes the operation stack by moving the existing operations to
-   * the preferred index
-   * @todo Does this belong here?
-   */
-  fixOperationsStack () {
-    const stack = this._operationsStack.clone()
-    this._operationsStack.clear()
-    stack.forEach((operation) => {
-      this.addOperation(operation)
-    })
   }
 
   /**
@@ -153,7 +112,6 @@ export default class NightReactUI extends EventEmitter {
       })
     }
 
-    // @TODO Move `additionalControls` to `extensions.controls`
     this._options.extensions = SDKUtils.defaults(this._options.extensions || {}, {
       languages: [],
       operations: [],

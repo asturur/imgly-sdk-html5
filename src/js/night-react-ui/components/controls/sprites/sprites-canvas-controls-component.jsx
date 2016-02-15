@@ -9,7 +9,7 @@
  * For commercial usf please contact us at contact@9elements.com
  */
 
-import { Utils, Vector2, SDK, ReactBEM } from '../../../globals'
+import { Utils, SDK, ReactBEM } from '../../../globals'
 import TextItemComponent from './items/text-item-component'
 import StickerItemComponent from './items/sticker-item-component'
 import CanvasControlsComponent from '../canvas-controls-component'
@@ -27,50 +27,6 @@ export default class SpritesCanvasControlsComponent extends CanvasControlsCompon
 
     this._canvasClickDisabled = false
     this._operation = this.getSharedState('operation')
-  }
-
-  // -------------------------------------------------------------------------- HITTEST
-
-  /**
-   * Checks if any other control reacts to a click at the given position
-   * @param  {Vector2} clickPosition
-   * @private
-   * @todo Move this to a BaseCanvasControlsComponent class
-   */
-  _performHitTest (clickPosition) {
-    const { container } = this.refs
-    const containerRect = container.getBoundingClientRect()
-    const containerPosition = new Vector2(
-      containerRect.left,
-      containerRect.top
-    )
-
-    const position = clickPosition
-      .subtract(containerPosition)
-
-    const { editor } = this.context
-    const controls = editor.getAvailableControls()
-
-    // Check if any of the controls responds to a click
-    // at the given position
-    for (let identifier in controls) {
-      const control = controls[identifier]
-      const clickResponse = control.clickAtPosition &&
-        control.clickAtPosition(position, editor)
-
-      if (clickResponse) {
-        // Don't re-select an already selected item
-        if (clickResponse.selectedSprite === this.getSharedState('selectedSprite')) {
-          return true
-        }
-
-        // Responds to click, switch to the controls
-        this.props.onSwitchControls(control, clickResponse)
-        return true
-      }
-    }
-
-    return false
   }
 
   // -------------------------------------------------------------------------- EVENTS

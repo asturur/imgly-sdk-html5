@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Constants } from '../../../globals'
+import { ReactBEM } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import SliderComponent from '../../slider-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'
@@ -81,9 +81,6 @@ export default class FrameControlsComponent extends ControlsComponent {
    */
   _onColorUpdate (color) {
     this._operation.setColor(color)
-
-    // @TODO Do we need this event?
-    this._emitEvent(Constants.EVENTS.OPERATION_UPDATED, this._operation)
 
     const { editor } = this.context
     editor.render()

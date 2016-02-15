@@ -57,7 +57,6 @@ export default class AppComponent extends React.Component {
   /**
    * Gets called when an image is ready for editing
    * @param {Image} image
-   * @todo Move this to a separate Editor class
    */
   setImage (image) {
     const { options } = this.props

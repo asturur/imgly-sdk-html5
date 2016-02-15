@@ -499,7 +499,6 @@ export default class Editor extends EventEmitter {
    * Exports an image
    * @param {Boolean} download = false
    * @return {Promise}
-   * @todo Does this belong here?
    */
   export (download = false) {
     if (this._watermarkOperation) {

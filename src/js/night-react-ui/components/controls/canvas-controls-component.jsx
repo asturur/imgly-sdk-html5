@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { BaseComponent, Constants } from '../../globals'
+import { Vector2, BaseComponent, Constants } from '../../globals'
 
 export default class CanvasControlsComponent extends BaseComponent {
   constructor (...args) {
@@ -18,6 +18,49 @@ export default class CanvasControlsComponent extends BaseComponent {
     this._bindAll(
       '_onCanvasZoomDone'
     )
+  }
+
+  // -------------------------------------------------------------------------- HIT TEST
+
+  /**
+   * Checks if any other control reacts to a click at the given position
+   * @param  {Vector2} clickPosition
+   * @private
+   */
+  _performHitTest (clickPosition) {
+    const { container } = this.refs
+    const containerRect = container.getBoundingClientRect()
+    const containerPosition = new Vector2(
+      containerRect.left,
+      containerRect.top
+    )
+
+    const position = clickPosition
+      .subtract(containerPosition)
+
+    const { editor } = this.context
+    const controls = editor.getAvailableControls()
+
+    // Check if any of the controls responds to a click
+    // at the given position
+    for (let identifier in controls) {
+      const control = controls[identifier]
+      const clickResponse = control.clickAtPosition &&
+        control.clickAtPosition(position, editor)
+
+      if (clickResponse) {
+        // Don't re-select an already selected item
+        if (clickResponse.selectedSprite === this.getSharedState('selectedSprite')) {
+          return true
+        }
+
+        // Responds to click, switch to the controls
+        this.props.onSwitchControls(control, clickResponse)
+        return true
+      }
+    }
+
+    return false
   }
 
   // -------------------------------------------------------------------------- EVENTS
