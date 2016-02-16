@@ -107,9 +107,7 @@ export default class RenderTexture extends Texture {
 
     this._baseTexture.resizeTo(dimensions)
     this._renderTarget.resizeTo(dimensions)
-    if (this._filterManager) {
-      this._filterManager.resizeTo(dimensions)
-    }
+    this._filterManager.resizeTo(dimensions)
   }
 
   /**
@@ -156,10 +154,10 @@ export default class RenderTexture extends Texture {
       child.updateTransform()
     })
 
-    const originalPixelRatio = this._renderer.getPixelRatio()
-    this._renderer.setPixelRatio(this._pixelRatio)
+    const tempFilterManager = this._renderer.getFilterManager()
+    this._renderer.setFilterManager(this._filterManager)
     this._renderer.renderDisplayObject(displayObject, this._renderTarget)
-    this._renderer.setPixelRatio(originalPixelRatio)
+    this._renderer.setFilterManager(tempFilterManager)
   }
 
   getRenderTarget () { return this._renderTarget }
