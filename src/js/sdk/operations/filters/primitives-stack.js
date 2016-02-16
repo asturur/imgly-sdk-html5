@@ -88,7 +88,7 @@ class PrimitivesStack {
   }
 
   /**
-   * Renders this stack using WebGL
+   * Renders this stack
    * @param  {PhotoEditorSDK} sdk
    * @param  {Engine.RenderTexture} outputTexture
    * @return {Promise}
@@ -98,7 +98,7 @@ class PrimitivesStack {
    *           the sprite with the original texture and the blend shader to
    *           the outputTexture
    */
-  renderWebGL (sdk, outputTexture) {
+  render (sdk, outputTexture) {
     if (this._stack.length === 0) return Promise.resolve()
     const renderer = sdk.getRenderer()
 
@@ -117,15 +117,18 @@ class PrimitivesStack {
     outputTexture.resizeTo(spriteDimensions)
     filteredRenderTexture.resizeTo(spriteDimensions)
 
-    // Update primitives
-    this._stack.forEach((p) => p.update(sdk))
+    if (this.isDirtyForRenderer(renderer)) {
+      // Update primitives
+      this._stack.forEach((p) => p.update(sdk))
 
-    // Set filters
-    const filters = this._stack.map((p) => p.getFilter())
-    this._sprite.setFilters(filters)
+      // Set filters
+      const filters = this._stack.map((p) => p.getFilter())
+      this._sprite.setFilters(filters)
 
-    // Render to RenderTexture
-    filteredRenderTexture.render(this._container)
+      // Render to RenderTexture
+      filteredRenderTexture.render(this._container)
+      this.setDirtyForRenderer(false, renderer)
+    }
 
     // Use filteredRenderTexture as uniform for blend shader, blend the two
     // to achieve intensity
@@ -148,30 +151,6 @@ class PrimitivesStack {
 
     outputSprite.setTexture(outputTexture)
     return Promise.resolve()
-  }
-
-  /**
-   * Renders this stack using Canvas2D
-   * @param  {PhotoEditorSDK} sdk
-   * @param  {Engine.RenderTexture} renderTexture
-   * @return {Promise}
-   */
-  renderCanvas (sdk, renderTexture) {
-    return this.renderWebGL(sdk, renderTexture)
-  }
-
-  /**
-   * Renders the stack of primitives on the renderer
-   * @param  {PhotoEditorSDK} sdk
-   * @param  {Engine.RenderTexture} renderTexture
-   * @return {Promise}
-   */
-  render (sdk, renderTexture) {
-    if (sdk.getRenderer().isOfType('webgl')) {
-      return this.renderWebGL(sdk, renderTexture)
-    } else {
-      return this.renderCanvas(sdk, renderTexture)
-    }
   }
 
   setIntensity (intensity) { this._intensity = intensity }

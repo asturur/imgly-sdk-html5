@@ -41,14 +41,6 @@ class Filter {
   }
 
   /**
-   * Sets the PrimitiveStack's dirtiness to the given one
-   * @param {Boolean} dirty
-   */
-  setDirty (dirty) {
-    this._stack.setDirty(dirty)
-  }
-
-  /**
    * Cleans this instance up
    */
   dispose () {
