@@ -102,8 +102,11 @@ export default class CanvasComponent extends BaseComponent {
       .add(diffFromStart)
 
     const { editor } = this.context
+    const lastOffset = editor.getOffset().clone()
     editor.setOffset(newOffset)
-    editor.render()
+    if (!editor.getOffset().equals(lastOffset)) {
+      editor.render()
+    }
   }
 
   /**
