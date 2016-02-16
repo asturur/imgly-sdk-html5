@@ -273,7 +273,7 @@ export default class PhotoEditorSDK extends EventEmitter {
       dimensions = operation.getNewDimensions(dimensions)
     })
 
-    return dimensions
+    return dimensions.round()
   }
 
   /**
