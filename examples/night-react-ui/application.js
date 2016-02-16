@@ -1,37 +1,50 @@
 /* global PhotoEditorSDK, Image */
 window.onload = function () {
-  var myImage = new Image()
-  myImage.addEventListener('load', function () {
-    /**
-     * Initialize the UI
-     */
-    var editor = new PhotoEditorSDK.UI.NightReact({
+  var editor
+  function run (preferredRenderer) {
+    editor = new PhotoEditorSDK.UI.NightReact({
+      preferredRenderer: preferredRenderer || 'canvas',
       container: document.querySelector('#container'),
       image: myImage,
-      responsive: true,
-      logLevel: 'trace',
+      // logLevel: 'info',
       assets: {
         baseUrl: '/build/assets',
         resolver: function (path) {
           return path
         }
       },
-      language: 'en',
-      operations: 'all',
-      controlsOptions: {
-
-      },
-      additionalControls: [
-        // {
-        //   canvasControls: NoiseCanvasControls,
-        //   controls: NoiseControl
-        // }
-      ],
-      webcam: false
+      language: 'en'
     })
-    window.editorComponent = editor.run()
-    window.editor = editor
+  }
+
+  /**
+   * Load initial image, initialize UI
+   */
+  var myImage = new Image()
+  myImage.addEventListener('load', function () {
+    run()
+  })
+  myImage.src = 'test.jpg'
+
+  /**
+   * Handle links
+   */
+  var webglLink = document.body.querySelector('#webgl')
+  var canvasLink = document.body.querySelector('#canvas')
+  webglLink.addEventListener('click', function (e) {
+    e.preventDefault()
+    editor.dispose()
+    canvasLink.classList.remove('active')
+    webglLink.classList.add('active')
+    run('webgl')
   })
 
-  myImage.src = 'test.jpg'
+  canvasLink.addEventListener('click', function (e) {
+    e.preventDefault()
+    editor.dispose()
+    webglLink.classList.remove('active')
+    canvasLink.classList.add('active')
+    run('canvas')
+  })
+
 }
