@@ -1,5 +1,4 @@
 /** @jsx ReactBEM.createElement **/
-/* global PhotoEditorSDK */
 /*
  * Photo Editor SDK - photoeditorsdk.com
  * Copyright (c) 2013-2015 9elements GmbH
@@ -10,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Constants } from '../../../globals'
+import { SDK, ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import SliderOverlayComponent from '../slider-overlay-component'
@@ -40,7 +39,7 @@ export default class FiltersControlsComponent extends ControlsComponent {
    * @private
    */
   _initFilters () {
-    const filtersMap = PhotoEditorSDK.Filters
+    const filtersMap = SDK.Filters
     const filters = []
     for (let key in filtersMap) {
       filters.push(filtersMap[key])

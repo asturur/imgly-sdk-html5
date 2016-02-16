@@ -9,8 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const Vector2 = PhotoEditorSDK.Vector2
-const Utils = PhotoEditorSDK.Utils
+const { Vector2, Utils } = PhotoEditorSDK
 
 export default {
   /**

@@ -9,8 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const EventEmitter = PhotoEditorSDK.EventEmitter
-const SDKUtils = PhotoEditorSDK.Utils
+const { EventEmitter, Utils } = PhotoEditorSDK
 
 export default class SharedState extends EventEmitter {
   constructor (state = {}) {
@@ -28,7 +27,7 @@ export default class SharedState extends EventEmitter {
       console && console.warn('SharedState#set expects an object as first parameter')
     }
 
-    this._state = SDKUtils.extend(this._state, newState)
+    this._state = Utils.extend(this._state, newState)
     if (update) {
       this.broadcastUpdate(newState)
     }
