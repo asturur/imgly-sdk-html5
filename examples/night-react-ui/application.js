@@ -3,7 +3,7 @@ window.onload = function () {
   var editor
   function run (preferredRenderer) {
     editor = new PhotoEditorSDK.UI.NightReact({
-      preferredRenderer: preferredRenderer || 'canvas',
+      preferredRenderer: preferredRenderer || 'webgl',
       container: document.querySelector('#container'),
       image: myImage,
       // logLevel: 'info',
