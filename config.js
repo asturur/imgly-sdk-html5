@@ -7,14 +7,6 @@ var destination = 'build'
 var source = 'src'
 var env = process.env.ENV || 'development'
 
-var aliases
-if (env === 'production') {
-  aliases = {
-    'react': path.resolve(__dirname, 'node_modules/react/dist/react.min'),
-    'react-dom': path.resolve(__dirname, 'node_modules/react-dom/dist/react-dom.min')
-  }
-}
-
 module.exports = {
   // Global environment. Tasks watch for changes in development only
   env: env,
@@ -82,8 +74,7 @@ module.exports = {
     resolve: {
       extensions: ['', '.js', '.jsx'],
       root: path.resolve(source + '/js'),
-      modulesDirectories: ['node_modules'],
-      alias: aliases
+      modulesDirectories: ['node_modules']
     },
     node: {
       fs: 'empty',
