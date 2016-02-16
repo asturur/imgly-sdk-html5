@@ -115,10 +115,13 @@ export default class Editor extends EventEmitter {
    * @private
    */
   _initSDK () {
-    const { image, preferredRenderer, logLevel } = this._options
+    const {
+      image, preferredRenderer, logLevel, displayWelcomeMessage
+    } = this._options
     const rendererOptions = {
       image,
-      logLevel
+      logLevel,
+      displayWelcomeMessage
     }
     this._sdk = new SDK(preferredRenderer, rendererOptions)
   }

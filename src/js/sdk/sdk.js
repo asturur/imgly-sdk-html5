@@ -35,6 +35,7 @@ export default class PhotoEditorSDK extends EventEmitter {
       extensions: {},
       renderMode: 'dynamic',
       versionCheck: true,
+      displayWelcomeMessage: true,
       image: null,
       dimensions: null,
       canvas: null,
@@ -75,7 +76,9 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._initRenderer()
 
     const renderer = this._renderer.constructor.name
-    Log.log('Yo!', `Version: ${this.version} (${renderer}) - https://www.photoeditorsdk.com`)
+    if (this._options.displayWelcomeMessage) {
+      Log.log('Yo!', `Version: ${this.version} (${renderer}) - https://www.photoeditorsdk.com`)
+    }
 
     // Async image handling
     requestAnimationFrame(this._init.bind(this))
