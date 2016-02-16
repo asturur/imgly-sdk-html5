@@ -158,11 +158,11 @@ export default class NightReactUI extends EventEmitter {
       }
     `
 
-    const style = document.createElement('style')
-    style.innerHTML = css
+    this._webFontsStyle = document.createElement('style')
+    this._webFontsStyle.innerHTML = css
 
     const head = document.getElementsByTagName('head')[0]
-    head.appendChild(style)
+    head.appendChild(this._webFontsStyle)
   }
 
   // -------------------------------------------------------------------------- I18N
@@ -209,6 +209,17 @@ export default class NightReactUI extends EventEmitter {
 
     return path
   }
+
+  /**
+   * Disposes the UI
+   */
+  dispose () {
+    // Remove web fonts style
+    this._webFontsStyle.parentNode.removeChild(this._webFontsStyle)
+
+    // Unmount AppComponent
+    ReactDOM.unmountComponentAtNode(this._options.container)
+  }
 }
 
 /**
@@ -232,11 +243,7 @@ NightReactUI.Component = class extends React.Component {
   constructor (...args) {
     super(...args)
 
-    this._renderer = new PhotoEditorSDK.Renderer('webgl', {
-      image: this.props.image
-    })
-
-    this._ui = new NightReactUI(this._renderer, this.props)
+    this._ui = new NightReactUI(this.props)
   }
 
   /**
