@@ -42,7 +42,7 @@ class BlendFilter extends Engine.Filter {
 
 BlendFilter.prototype.availableOptions = {
   filteredImage: { type: 'number', default: 1, uniformType: 'i' },
-  filteredCanvas: { type: 'object', default: null, uniformType: 'x' },
+  filteredCanvas: { type: 'object', default: null },
   intensity: { type: 'number', default: 1, uniformType: 'f' }
 }
 

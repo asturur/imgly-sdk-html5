@@ -93,7 +93,7 @@ export default class Text extends Sprite {
 }
 
 Text.prototype.availableOptions = {
-  fontSize: { type: 'number', default: 0.2 },
+  fontSize: { type: 'number', default: 30 },
   lineHeight: { type: 'number', default: 1.1 },
   fontFamily: { type: 'string', default: 'Times New Roman' },
   fontWeight: { type: 'string', default: 'normal' },

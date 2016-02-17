@@ -81,12 +81,15 @@ export default {
       const sdk = editor.getSDK()
       const renderer = sdk.getRenderer()
 
-      const maxWidth = sdk.getInputDimensions().x / 2
+      const inputDimensions = sdk.getInputDimensions()
+      const maxWidth = inputDimensions.x / 2
+      const fontSize = Math.round(inputDimensions.y * 0.08)
+
       const text = operation.createText({
         text: 'Double-click to edit',
         maxWidth,
         maxHeight: renderer.getMaxTextureSize() || (sdk.getInputDimensions().y * 3),
-        fontSize: 0.15,
+        fontSize,
         fontFamily: 'Impact',
         alignment: 'center',
         anchor: new Vector2(0, 0),

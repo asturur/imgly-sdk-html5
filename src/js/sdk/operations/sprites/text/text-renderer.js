@@ -141,11 +141,7 @@ export default class TextRenderer {
    * @param  {Boolean} considerZoom
    */
   calculateFontStyles (sdk, considerZoom = false) {
-    // @TODO These should be the sprite dimensions
-    const outputCanvas = sdk.getCanvas()
-    const outputCanvasDimensions = new Vector2(outputCanvas.width, outputCanvas.height)
-
-    let fontSize = this._text.getFontSize() * outputCanvasDimensions.y
+    let fontSize = this._text.getFontSize()
     let lineHeight = this._text.getLineHeight() * fontSize
 
     if (considerZoom) {

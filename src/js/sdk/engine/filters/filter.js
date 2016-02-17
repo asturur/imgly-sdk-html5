@@ -44,7 +44,7 @@ export default class Filter extends Configurable {
       const optionConfig = this.availableOptions[optionName]
 
       if (!optionConfig.uniformType) {
-        Log.warn(this.constructor.name, `Option \`${optionName}\` is missing a \`uniformType\`!`)
+        Log.info(this.constructor.name, `Option \`${optionName}\` is missing a \`uniformType\`!`)
       }
 
       this._uniforms[`u_${optionName}`] = {

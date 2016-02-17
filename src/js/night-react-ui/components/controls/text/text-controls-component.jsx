@@ -111,11 +111,8 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _onFontSizeChange (fontSize) {
-    const { editor } = this.context
-    const getOutputDimensions = editor.getOutputDimensions()
-
     const selectedText = this.getSharedState('selectedSprite')
-    selectedText.setFontSize(fontSize / getOutputDimensions.y)
+    selectedText.setFontSize(fontSize)
   }
 
   /**
@@ -208,11 +205,10 @@ export default class TextControlsComponent extends ControlsComponent {
     if (!selectedText) return
 
     const { editor } = this.context
-    const zoom = editor.getZoom()
     const outputDimensions = editor.getOutputDimensions()
 
-    const maxFontSize = Math.round(outputDimensions.y * zoom)
-    const fontSize = Math.round(selectedText.getFontSize() * outputDimensions.y)
+    const maxFontSize = outputDimensions.y
+    const fontSize = selectedText.getFontSize()
     return (<SliderOverlayComponent
       value={fontSize}
       maxValue={maxFontSize}
@@ -229,10 +225,7 @@ export default class TextControlsComponent extends ControlsComponent {
     const selectedText = this.getSharedState('selectedSprite')
     if (!selectedText) return
 
-    const { editor } = this.context
-    const outputDimensions = editor.getOutputDimensions()
-
-    const fontSize = Math.round(selectedText.getFontSize() * outputDimensions.y)
+    const fontSize = selectedText.getFontSize()
     const className = this.state.mode === 'size' ? 'is-active' : null
 
     return (<li
