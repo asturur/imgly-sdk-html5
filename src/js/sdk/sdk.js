@@ -488,6 +488,7 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._sprite.updateTransform()
   }
   getPixelRatio () { return this._options.pixelRatio }
+  getExif () { return this._exif }
 
   // -------------------------------------------------------------------------- DISPOSAL
 
