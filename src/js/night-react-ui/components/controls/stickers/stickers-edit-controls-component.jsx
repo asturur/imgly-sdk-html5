@@ -175,7 +175,7 @@ export default class StickersEditControlsComponent extends ControlsComponent {
     const className = isSelected ? 'is-active' : null
 
     let miniSlider
-    if (!isSelected) {
+    if (!isSelected && false) { // MiniSlider temporarily disable sliders
       const sliderProps = this._buildSliderProps(identifier)
       miniSlider = (<bem specifier='b:adjustmentsControls'>
         <div bem='e:miniSlider'>

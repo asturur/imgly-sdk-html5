@@ -155,7 +155,7 @@ export default class AdjustmentsControlsComponent extends ControlsComponent {
         const className = isSelected ? 'is-active' : null
 
         let miniSlider
-        if (!isSelected) {
+        if (!isSelected && false) { // Mini sliders temporarily disabled
           const sliderProps = this._buildSliderProps(item)
           miniSlider = (<bem specifier='b:adjustmentsControls'>
             <div bem='e:miniSlider'>
