@@ -52,8 +52,10 @@ export default class FileLoader extends EventEmitter {
    * @private
    */
   _onFileChange () {
-    const file = this._input.files[0]
-    this._handleFile(file)
+    const { files } = this._input
+    if (!files.length) return
+
+    this._handleFile(files[0])
   }
 
   /**

@@ -79,9 +79,10 @@ export default class Editor extends EventEmitter {
       maxPixels,
       maxDimensions
     )
+    let exif = null
 
     const done = (image) => {
-      this._setImage(image)
+      this._setImage(image, exif)
       this._ready = true
       this.emit('ready')
     }
@@ -90,8 +91,13 @@ export default class Editor extends EventEmitter {
       done(image)
     } else {
       this.emit('resize')
+      exif = this._sdk.parseExif(image)
       imageResizer.resize()
         .then(({ canvas, dimensions, reason }) => {
+          // Flag canvas as JPEG so that export will recognize that
+          // it needs to restore EXIF data
+          canvas.src = 'data:image/jpeg;base64,'
+
           this.emit('resized', { dimensions, reason })
           done(canvas)
         })
@@ -504,11 +510,12 @@ export default class Editor extends EventEmitter {
   /**
    * Sets the given image
    * @param {Image} image
+   * @param {Exif} exif
    */
-  _setImage (image = this._options.image) {
+  _setImage (image = this._options.image, exif) {
     this._options.image = image
     this.reset()
-    this._sdk.setImage(image)
+    this._sdk.setImage(image, exif)
     this._fixOperationsStack()
 
     this.emit('new-image')

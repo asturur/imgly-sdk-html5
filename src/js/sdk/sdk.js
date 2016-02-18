@@ -368,16 +368,16 @@ export default class PhotoEditorSDK extends EventEmitter {
    * @private
    * @TODO Move this somewhere else
    */
-  _parseExif (image) {
+  parseExif (image) {
     if (!image) return
     if (Exif.isJPEG(image.src)) {
-      this._exif = null
+      let exif = null
       try {
-        this._exif = Exif.fromBase64String(image.src)
+        exif = Exif.fromBase64String(image.src)
       } catch (e) {}
-      if (!this._exif) return
+      if (!exif) return
 
-      this._handleExifOrientation()
+      return exif
     }
   }
 
@@ -443,9 +443,11 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._options.image = image
     this._image = image
     if (!exif) {
-      this._parseExif(image)
+      this._exif = this.parseExif(image)
     } else {
       this._exif = exif
+    }
+    if (this._exif) {
       this._handleExifOrientation()
     }
 
@@ -497,5 +499,8 @@ export default class PhotoEditorSDK extends EventEmitter {
    */
   dispose () {
     this._renderer.dispose()
+    if (this._exif) {
+      this._exif.dispose()
+    }
   }
 }
