@@ -50,4 +50,8 @@ export default class Path extends EventEmitter {
       point.setDirty()
     })
   }
+
+  forEachControlPoint (iterator) {
+    this._controlPoints.forEach(iterator)
+  }
 }

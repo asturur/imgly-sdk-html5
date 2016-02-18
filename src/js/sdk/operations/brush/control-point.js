@@ -36,6 +36,10 @@ export default class ControlPoint {
     this._drawnCanvases.push(canvas)
   }
 
+  setPosition (position) {
+    this._position = position
+  }
+
   getPosition () {
     return this._position.clone()
   }

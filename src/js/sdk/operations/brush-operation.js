@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine, Vector2, Color } from '../globals'
+import { Constants, Engine, Vector2, Color } from '../globals'
 import Operation from './operation'
 import Path from './brush/path'
 import ControlPoint from './brush/control-point'
@@ -35,7 +35,12 @@ class BrushOperation extends Operation {
     this._container.addChild(this._sprite)
 
     this._onPathUpdate = this._onPathUpdate.bind(this)
+
+    this._onOperationUpdate = this._onOperationUpdate.bind(this)
+    this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
   }
+
+  // -------------------------------------------------------------------------- EVENTS
 
   /**
    * Gets called when a path has been updated
@@ -44,6 +49,138 @@ class BrushOperation extends Operation {
   _onPathUpdate () {
     this.setDirty(true)
   }
+
+  /**
+   * Gets called when an operation is about to be updated. If the crop
+   * or rotation operation is updated, this will be recognized and the
+   * stickers will be updated accordingly
+   * @param  {Operation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _onOperationUpdate (operation, options) {
+    const { identifier } = operation.constructor
+
+    if (identifier === 'crop' &&
+        'start' in options &&
+        'end' in options) {
+      this._applyCrop(operation, options)
+    }
+
+    if (identifier === 'orientation') {
+      if ('rotation' in options) {
+        this._applyRotation(operation, options)
+      }
+
+      if ('flipVertically' in options &&
+          operation.getFlipVertically() !== options.flipVertically) {
+        this._applyFlip(operation, 'vertical')
+      }
+
+      if ('flipHorizontally' in options &&
+          operation.getFlipHorizontally() !== options.flipHorizontally) {
+        this._applyFlip(operation, 'horizontal')
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------- UPDATE BY OTHER OPERATION
+
+  /**
+   * Applies the given crop change
+   * @param  {CropOperation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _applyCrop (operation, options) {
+    const inputDimensions = this._sdk.getInputDimensions()
+
+    const oldStart = operation.getStart()
+    const newStart = options.start
+
+    this._options.paths.forEach((path) => {
+      path.forEachControlPoint((controlPoint) => {
+        const position = controlPoint.getPosition().clone()
+        controlPoint.setPosition(
+          position
+            .add(
+              oldStart.clone().subtract(newStart).multiply(inputDimensions)
+            )
+        )
+      })
+    })
+
+    this.setDirty(true)
+    this.clearBrushCanvas()
+  }
+
+  /**
+   * Applies the given rotation change
+   * @param  {RotationOperation} operation
+   * @param  {Object} options
+   * @private
+   */
+  _applyRotation (operation, options) {
+    const oldRotation = operation.getRotation()
+    const newRotation = options.rotation
+    const degreesDifference = newRotation - oldRotation
+
+    const finalDimensions = this._sdk.getFinalDimensions()
+    this._options.paths.forEach((path) => {
+      path.forEachControlPoint((controlPoint) => {
+        const position = controlPoint.getPosition().clone()
+        if (degreesDifference === 90 || (oldRotation === 270 && newRotation === 0)) {
+          position.flip()
+          position.x = finalDimensions.y - position.x
+        } else if (degreesDifference === -90 || (oldRotation === -270 && newRotation === 0)) {
+          position.flip()
+          position.y = finalDimensions.x - position.y
+        }
+        controlPoint.setPosition(position)
+      })
+    })
+
+    this.setDirty(true)
+    this.clearBrushCanvas()
+  }
+
+  /**
+   * Applies a flip with the given direction
+   * @param  {Operation} operation
+   * @param  {String} direction
+   * @private
+   */
+  _applyFlip (operation, direction) {
+    const rotation = operation.getRotation()
+    if (rotation === 90 || rotation === 270) {
+      if (direction === 'vertical') {
+        direction = 'horizontal'
+      } else {
+        direction = 'vertical'
+      }
+    }
+
+    const finalDimensions = this._sdk.getFinalDimensions()
+    this._options.paths.forEach((path) => {
+      path.forEachControlPoint((controlPoint) => {
+        const position = controlPoint.getPosition().clone()
+        switch (direction) {
+          case 'horizontal':
+            position.x = finalDimensions.x - position.x
+            break
+          case 'vertical':
+            position.y = finalDimensions.y - position.y
+            break
+        }
+        controlPoint.setPosition(position)
+      })
+    })
+
+    this.setDirty(true)
+    this.clearBrushCanvas()
+  }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Renders the brush operation
@@ -79,6 +216,7 @@ class BrushOperation extends Operation {
   clearBrushCanvas () {
     if (!this._brushCanvas) return
 
+    this._brushCanvasDirty = true
     const canvas = this._brushCanvas
     const context = canvas.getContext('2d')
     context.clearRect(0, 0, canvas.width, canvas.height)
@@ -132,6 +270,13 @@ class BrushOperation extends Operation {
       path.setDirty()
     })
   }
+
+  /**
+   * Disposes this operation
+   */
+  dispose () {
+    this._sdk.off(Constants.EVENTS.OPERATION_UPDATED, this._onOperationUpdate)
+  }
 }
 
 /**
@@ -152,7 +297,6 @@ BrushOperation.prototype.availableOptions = {
     paths.forEach((path) => {
       path.setDirty(true)
     })
-    this._brushCanvasDirty = true
     this.clearBrushCanvas()
     this.setDirty(true)
     return paths
