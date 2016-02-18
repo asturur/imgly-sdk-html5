@@ -53,7 +53,7 @@ class LookupTableFilter extends Engine.Filter {
 
 LookupTableFilter.prototype.availableOptions = {
   lookupTable: { type: 'number', default: TEXTURE_GL_UNIT, uniformType: 'i' },
-  lookupTableData: { type: 'array', default: [], uniformType: 'x' }
+  lookupTableData: { type: 'array', default: [] }
 }
 
 /**
