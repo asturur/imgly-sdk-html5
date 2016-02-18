@@ -209,16 +209,16 @@ export default class StickersOverviewControlsComponent extends ControlsComponent
         loadTimeout = null
       }
 
+      const { editor } = this.context
       const sticker = this._operation.createSticker({
         image,
-        position: new Vector2(0.5, 0.5),
+        position: editor.getFinalDimensions().divide(2),
         scale: new Vector2(1.0, 1.0),
         rotation: 0
       })
       this._operation.addSprite(sticker)
       this._stickers.push(sticker)
 
-      const { editor } = this.context
       editor.render(() => {
         // Broadcast new state
         this.setSharedState({

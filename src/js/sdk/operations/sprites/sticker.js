@@ -112,7 +112,7 @@ export default class Sticker extends Sprite {
 
 Sticker.prototype.availableOptions = {
   image: { type: 'object', required: true },
-  position: { type: 'vector2', default: new Vector2(0.5, 0.5) },
+  position: { type: 'vector2', default: new Vector2(0, 0) },
   scale: { type: 'vector2', default: new Vector2(1.0, 1.0) },
   anchor: { type: 'vector2', default: new Vector2(0.0, 0.0) },
   pivot: { type: 'vector2', default: new Vector2(0.5, 0.5) },

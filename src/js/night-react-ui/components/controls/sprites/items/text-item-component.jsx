@@ -195,7 +195,6 @@ export default class TextItemComponent extends ItemComponent {
   _getRemoveKnobStyle () {
     const { sprite } = this.props
     const { editor } = this.context
-    const outputDimensions = editor.getOutputDimensions()
 
     const sin = Math.sin(sprite.getRotation())
     const cos = Math.cos(sprite.getRotation())
@@ -204,7 +203,7 @@ export default class TextItemComponent extends ItemComponent {
     const halfDimensions = boundingBox.clone().divide(2)
     const position = sprite.getPosition()
       .clone()
-      .multiply(outputDimensions)
+      .multiply(editor.getZoom())
       .add(
         -halfDimensions.x * cos,
         -halfDimensions.x * sin
@@ -242,18 +241,16 @@ export default class TextItemComponent extends ItemComponent {
    */
   _getItemContainerStyle () {
     const { editor } = this.context
-    const outputDimensions = editor.getOutputDimensions()
+    const zoom = editor.getZoom()
 
     const { sprite } = this.props
-    const textPosition = sprite.getPosition()
-      .clone()
-      .multiply(outputDimensions)
+    const textPosition = sprite.getPosition().clone()
+      .multiply(zoom)
 
     const degrees = sprite.getRotation() * 180 / Math.PI
     const transform = `rotateZ(${degrees.toFixed(2)}deg)`
     const transformOrigin = '50% 0'
 
-    const zoom = editor.getZoom()
     const maxWidth = sprite.getMaxWidth() * zoom
     return {
       width: maxWidth,
@@ -281,7 +278,7 @@ export default class TextItemComponent extends ItemComponent {
   _getRotationKnobPosition () {
     const { sprite } = this.props
     const { editor } = this.context
-    const outputDimensions = editor.getOutputDimensions()
+    const zoom = editor.getZoom()
 
     const sin = Math.sin(sprite.getRotation())
     const cos = Math.cos(sprite.getRotation())
@@ -290,7 +287,7 @@ export default class TextItemComponent extends ItemComponent {
     const halfDimensions = boundingBox.clone().divide(2)
     const position = sprite.getPosition()
       .clone()
-      .multiply(outputDimensions)
+      .multiply(zoom)
       .add(
         halfDimensions.x * cos - boundingBox.y * sin,
         halfDimensions.x * sin + boundingBox.y * cos
@@ -306,7 +303,6 @@ export default class TextItemComponent extends ItemComponent {
   _getResizeKnobPosition () {
     const { sprite } = this.props
     const { editor } = this.context
-    const outputDimensions = editor.getOutputDimensions()
 
     const sin = Math.sin(sprite.getRotation())
     const cos = Math.cos(sprite.getRotation())
@@ -315,7 +311,7 @@ export default class TextItemComponent extends ItemComponent {
     const halfDimensions = boundingBox.clone().divide(2)
     const position = sprite.getPosition()
       .clone()
-      .multiply(outputDimensions)
+      .multiply(editor.getZoom())
       .add(
         halfDimensions.x * cos,
         halfDimensions.x * sin

@@ -32,11 +32,11 @@ export default class ItemComponent extends BaseComponent {
    */
   _getAbsoluteSpritePosition () {
     const { editor } = this.context
-    const outputDimensions = editor.getOutputDimensions()
+    const zoom = editor.getZoom()
 
     return this.props.sprite.getPosition()
       .clone()
-      .multiply(outputDimensions)
+      .multiply(zoom)
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE
@@ -86,10 +86,10 @@ export default class ItemComponent extends BaseComponent {
   _onItemDrag (offset) {
     const { sprite } = this.props
     const { editor } = this.context
+    const zoom = editor.getZoom()
 
-    const outputDimensions = editor.getOutputDimensions()
     const newPosition = this._initialPosition.clone()
-      .add(offset.clone().divide(outputDimensions))
+      .add(offset.divide(zoom))
 
     sprite.setPosition(newPosition)
   }

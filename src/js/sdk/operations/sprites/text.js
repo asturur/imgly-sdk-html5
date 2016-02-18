@@ -101,7 +101,7 @@ Text.prototype.availableOptions = {
   verticalAlignment: { type: 'string', default: 'top', available: ['top', 'center', 'bottom'] },
   color: { type: 'color', default: new Color(1, 0, 0, 1) },
   backgroundColor: { type: 'color', default: new Color(0, 0, 0, 0) },
-  position: { type: 'vector2', default: new Vector2(0.5, 0.5) },
+  position: { type: 'vector2', default: new Vector2(0, 0) },
   anchor: { type: 'vector2', default: new Vector2(0.5, 0.5) },
   pivot: { type: 'vector2', default: new Vector2(0, 0) },
   rotation: { type: 'number', default: 0 },

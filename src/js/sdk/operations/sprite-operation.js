@@ -125,6 +125,7 @@ class SpriteOperation extends Operation {
     const newRotation = options.rotation
     const degreesDifference = newRotation - oldRotation
 
+    const finalDimensions = this._sdk.getFinalDimensions()
     this._options.sprites.forEach((sprite) => {
       // Update sprite rotation
       let spriteDegrees = sprite.getRotation() * 180 / Math.PI
@@ -135,10 +136,10 @@ class SpriteOperation extends Operation {
       const spritePosition = sprite.getPosition().clone()
       if (degreesDifference === 90 || (oldRotation === 270 && newRotation === 0)) {
         spritePosition.flip()
-        spritePosition.x = 1 - spritePosition.x
+        spritePosition.x = finalDimensions.x - spritePosition.x
       } else if (degreesDifference === -90 || (oldRotation === -270 && newRotation === 0)) {
         spritePosition.flip()
-        spritePosition.y = 1 - spritePosition.y
+        spritePosition.y = finalDimensions.y - spritePosition.y
       }
       sprite.setPosition(spritePosition)
     })
