@@ -200,7 +200,7 @@ class Operation extends Configurable {
    */
   setDirty (dirty) {
     for (let rendererId in this._dirtiness) {
-      this._dirtiness[rendererId] = dirty
+      this.setDirtyForRenderer(dirty, { id: rendererId })
     }
   }
 

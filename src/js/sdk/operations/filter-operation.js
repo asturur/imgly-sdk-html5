@@ -28,6 +28,16 @@ class FilterOperation extends Operation {
   _render (sdk) {
     return this._selectedFilter.render(sdk, this._getRenderTexture(sdk))
   }
+
+  /**
+   * Sets the dirtiness for the given renderer
+   * @param {Boolean} dirty
+   * @param {BaseRenderer} renderer
+   */
+  setDirtyForRenderer (dirty, renderer) {
+    super.setDirtyForRenderer(dirty, renderer)
+    this._selectedFilter.setDirtyForRenderer(dirty, renderer)
+  }
 }
 
 /**

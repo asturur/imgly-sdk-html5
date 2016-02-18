@@ -41,6 +41,15 @@ class Filter {
   }
 
   /**
+   * Sets the dirtiness for the given renderer
+   * @param {Boolean} dirty
+   * @param {BaseRenderer} renderer
+   */
+  setDirtyForRenderer (dirty, renderer) {
+    this._stack.setDirtyForRenderer(dirty, renderer)
+  }
+
+  /**
    * Cleans this instance up
    */
   dispose () {

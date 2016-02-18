@@ -44,12 +44,12 @@ export default class Filter extends Configurable {
       const optionConfig = this.availableOptions[optionName]
 
       if (!optionConfig.uniformType) {
-        Log.info(this.constructor.name, `Option \`${optionName}\` is missing a \`uniformType\`!`)
-      }
-
-      this._uniforms[`u_${optionName}`] = {
-        type: optionConfig.uniformType,
-        value: optionConfig.default || null
+        Log.trace(this.constructor.name, `Option \`${optionName}\` is missing a \`uniformType\`!`)
+      } else {
+        this._uniforms[`u_${optionName}`] = {
+          type: optionConfig.uniformType,
+          value: optionConfig.default || null
+        }
       }
     }
   }
@@ -66,6 +66,9 @@ export default class Filter extends Configurable {
 
     let uniformValue = value
     const optionConfig = this.availableOptions[optionName]
+
+    if (!optionConfig.uniformType) return
+
     switch (optionConfig.type) {
       case 'color':
         if (optionConfig.uniformType === '4f') {
