@@ -18,7 +18,6 @@ export default class StickersControlsComponent extends BaseComponent {
     super(...args)
 
     this._bindAll(
-      '_onBackClick',
       '_onSubComponentBack'
     )
     this._operation = this.getSharedState('operation')

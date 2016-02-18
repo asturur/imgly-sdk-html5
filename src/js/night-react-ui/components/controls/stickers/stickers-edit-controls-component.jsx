@@ -52,6 +52,15 @@ export default class StickersEditControlsComponent extends ControlsComponent {
   // -------------------------------------------------------------------------- EVENTS
 
   /**
+   * Gets called when the user clicks the back button
+   * @param {Event} e
+   * @private
+   */
+  _onBackClick (e) {
+    this.props.onBack()
+  }
+
+  /**
    * Gets called when the user clicks on an adjustments button
    * @param {String} identifier
    * @private
