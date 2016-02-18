@@ -113,6 +113,7 @@ export default class TextControlsComponent extends ControlsComponent {
   _onFontSizeChange (fontSize) {
     const selectedText = this.getSharedState('selectedSprite')
     selectedText.setFontSize(fontSize)
+    this.forceUpdate()
   }
 
   /**
@@ -124,6 +125,7 @@ export default class TextControlsComponent extends ControlsComponent {
     const selectedText = this.getSharedState('selectedSprite')
     selectedText.setFontFamily(font.fontFamily)
     selectedText.setFontWeight(font.fontWeight)
+    this.forceUpdate()
   }
 
   /**
