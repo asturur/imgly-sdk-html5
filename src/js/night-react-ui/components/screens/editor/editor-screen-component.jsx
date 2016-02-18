@@ -58,6 +58,7 @@ export default class EditorScreenComponent extends ScreenComponent {
   componentDidMount () {
     super.componentDidMount()
 
+    this._editor.setImage(this.context.options.image)
     window.addEventListener('resize', this._onWindowResize)
   }
 

@@ -63,32 +63,31 @@ export default class Editor extends EventEmitter {
 
     this._fixOperationsStack()
     this._initWatermark()
-    requestAnimationFrame(this._initImage.bind(this))
   }
 
   // -------------------------------------------------------------------------- INITIALIZATION
 
   /**
    * Initializes the image resizing etc.
-   * @private
+   * @param {Image} image
    */
-  _initImage () {
+  setImage (image = this._options.image) {
     const maxPixels = this.getMaxMegapixels() * 1000000
     const maxDimensions = this._sdk.getRenderer().getMaxDimensions()
     const imageResizer = new ImageResizer(
-      this._options.image,
+      image,
       maxPixels,
       maxDimensions
     )
 
     const done = (image) => {
-      this.setImage(image)
+      this._setImage(image)
       this._ready = true
       this.emit('ready')
     }
 
     if (!imageResizer.needsResize()) {
-      done(this._options.image)
+      done(image)
     } else {
       this.emit('resize')
       imageResizer.resize()
@@ -506,7 +505,7 @@ export default class Editor extends EventEmitter {
    * Sets the given image
    * @param {Image} image
    */
-  setImage (image) {
+  _setImage (image = this._options.image) {
     this._options.image = image
     this.reset()
     this._sdk.setImage(image)
