@@ -13,7 +13,7 @@ void main() {
   if (v_texCoord.x < scaledThicknessX ||
     v_texCoord.x > 1.0 - scaledThicknessX ||
     v_texCoord.y < scaledThicknessY || v_texCoord.y > 1.0 - scaledThicknessY) {
-      fragColor = u_color;
+      fragColor = mix(fragColor, u_color, u_color.a);
     }
 
   gl_FragColor = fragColor;
