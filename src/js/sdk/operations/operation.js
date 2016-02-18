@@ -205,6 +205,13 @@ class Operation extends Configurable {
   }
 
   getOptions () { return this._options }
+
+  /**
+   * Disposes this operation
+   */
+  dispose () {
+
+  }
 }
 
 /**

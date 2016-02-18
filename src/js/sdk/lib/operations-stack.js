@@ -164,6 +164,7 @@ export default class OperationsStack extends EventEmitter {
   set (index, operation) {
     if (this._stack[index]) {
       this._stack[index].off('update', this._onOperationUpdate)
+      this._stack[index].dispose()
     }
     this._stack[index] = operation
     operation.on('update', this._onOperationUpdate)
@@ -178,6 +179,7 @@ export default class OperationsStack extends EventEmitter {
     if (index === -1) return
     if (this._stack[index]) {
       this._stack[index].off('update', this._onOperationUpdate)
+      this._stack[index].dispose()
     }
     this._stack.splice(index, 1)
   }
@@ -189,6 +191,7 @@ export default class OperationsStack extends EventEmitter {
   removeAt (index) {
     if (this._stack[index]) {
       this._stack[index].off('update', this._onOperationUpdate)
+      this._stack[index].dispose()
     }
     this._stack[index] = undefined
   }

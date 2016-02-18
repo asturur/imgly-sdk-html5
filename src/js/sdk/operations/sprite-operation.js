@@ -327,6 +327,13 @@ class SpriteOperation extends Operation {
     })
     return intersectingSprite
   }
+
+  /**
+   * Disposes this operation
+   */
+  dispose () {
+    this._sdk.off(Constants.EVENTS.OPERATION_UPDATED, this._onOperationUpdate)
+  }
 }
 
 /**
