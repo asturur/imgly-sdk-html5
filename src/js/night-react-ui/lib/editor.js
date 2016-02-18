@@ -61,6 +61,7 @@ export default class Editor extends EventEmitter {
     this._mediator.on(Constants.EVENTS.ZOOM, this.setZoom)
     this._mediator.on(Constants.EVENTS.ZOOM_UNDO, this.undoZoom)
 
+    this._fixOperationsStack()
     this._initWatermark()
     requestAnimationFrame(this._initImage.bind(this))
   }
@@ -132,6 +133,21 @@ export default class Editor extends EventEmitter {
    */
   _initOperations () {
     this._availableOperations = this._sdk.getOperations()
+  }
+
+  /**
+   * Since the SDK might create some operations upfront (e.g. to fix the EXIF orientation),
+   * we might have operations at array positions where they should not be. This method
+   * moves them to their appropriate position
+   * @private
+   */
+  _fixOperationsStack () {
+    const stack = this._operationsStack.getStack().slice()
+    this._operationsStack.clear()
+
+    stack.forEach((s) => {
+      this.addOperation(s)
+    })
   }
 
   /**
@@ -492,8 +508,9 @@ export default class Editor extends EventEmitter {
    */
   setImage (image) {
     this._options.image = image
-    this._sdk.setImage(image)
     this.reset()
+    this._sdk.setImage(image)
+    this._fixOperationsStack()
 
     this.emit('new-image')
   }

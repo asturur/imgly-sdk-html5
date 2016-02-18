@@ -67,12 +67,13 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._inputBaseTexture = null
     this._inputTexture = null
 
+    this._checkForUpdates()
+    this._registerOperations()
+
     if (this._options.image) {
       this.setImage(this._options.image)
     }
 
-    this._checkForUpdates()
-    this._registerOperations()
     this._initRenderer()
 
     const renderer = this._renderer.constructor.name
