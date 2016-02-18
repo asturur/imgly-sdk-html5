@@ -333,7 +333,7 @@ class SpriteOperation extends Operation {
    * Disposes this operation
    */
   dispose () {
-    this._sdk.off(Constants.EVENTS.OPERATION_UPDATED, this._onOperationUpdate)
+    this._sdk.off(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
   }
 }
 
