@@ -30,6 +30,20 @@ class FilterOperation extends Operation {
   }
 
   /**
+   * Applies this operation
+   * @param  {PhotoEditorSDK} sdk
+   * @return {Promise}
+   * @abstract
+   */
+  render (sdk) {
+    if (!this.getEnabled() || this._selectedFilter.constructor.isIdentity) {
+      return Promise.resolve()
+    }
+
+    super.render(sdk)
+  }
+
+  /**
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
    * @param {BaseRenderer} renderer
