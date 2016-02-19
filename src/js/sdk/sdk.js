@@ -320,7 +320,8 @@ export default class PhotoEditorSDK extends EventEmitter {
   _initRenderer () {
     const rendererOptions = {
       canvas: this._options.canvas,
-      pixelRatio: this._options.pixelRatio
+      pixelRatio: this._options.pixelRatio,
+      debug: this._options.debug
     }
 
     let width, height
