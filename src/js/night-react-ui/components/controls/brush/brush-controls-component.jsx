@@ -20,6 +20,10 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
 
     this._hasDoneButton = false
     this._operation = this.getSharedState('operation')
+    this._brushOptions = {
+      thickness: this._operation.getThickness(),
+      color: this._operation.getColor().clone()
+    }
 
     this._bindAll(
       '_onThicknessUpdated',
@@ -66,7 +70,8 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     // of this control
     const { editor } = this.context
     const newOperation = editor.getOrCreateOperation('brush', {
-      thickness: this.getSharedState('initialThickness')
+      thickness: this._brushOptions.thickness,
+      color: this._brushOptions.color.clone()
     })
     this._operation = newOperation
     this.setSharedState({
@@ -94,6 +99,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
    */
   _onThicknessUpdated (thickness) {
     this._operation.setThickness(thickness)
+    this._brushOptions.thickness = thickness
   }
 
   /**
@@ -103,6 +109,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
    */
   _onColorUpdated (color) {
     this._operation.setColor(color)
+    this._brushOptions.color = color.clone()
   }
 
   // -------------------------------------------------------------------------- RENDERING
@@ -117,7 +124,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
 
     const minThickness = 0
     const maxThickness = Math.round(Math.min(finalDimensions.x, finalDimensions.y) / 2)
-    const currentWidth = this._operation.getThickness()
+    const currentWidth = this._brushOptions.thickness
 
     return [(<div bem='e:cell m:slider'>
       <SliderComponent
@@ -132,7 +139,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     </div>),
     (<div bem='e:cell m:colorPicker'>
       <ColorPickerComponent
-        initialValue={this._operation.getColor().clone()}
+        initialValue={this._brushOptions.color.clone()}
         onChange={this._onColorUpdated} />
     </div>)]
   }

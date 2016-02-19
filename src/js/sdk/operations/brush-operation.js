@@ -47,7 +47,7 @@ class BrushOperation extends Operation {
    * @private
    */
   _onPathUpdate () {
-    this.setDirty(true)
+    this.setDirty(true, false)
   }
 
   /**
@@ -263,19 +263,34 @@ class BrushOperation extends Operation {
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
    * @param {BaseRenderer} renderer
+   * @param {Boolean} setPathsToDirty = false
    */
-  setDirtyForRenderer (dirty, renderer) {
+  setDirtyForRenderer (dirty, renderer, setPathsToDirty = false) {
     super.setDirtyForRenderer(dirty, renderer)
-    this._options.paths.forEach((path) => {
-      path.setDirty()
-    })
+
+    if (setPathsToDirty) {
+      this._options.paths.forEach((path) => {
+        path.setDirty()
+      })
+    }
+  }
+
+  /**
+   * Sets the dirtiness for all renderers
+   * @param {Boolean} dirty
+   * @param {Boolean} setPathsToDirty = false
+   */
+  setDirty (dirty, setPathsToDirty = false) {
+    for (let rendererId in this._dirtiness) {
+      this.setDirtyForRenderer(dirty, { id: rendererId }, setPathsToDirty)
+    }
   }
 
   /**
    * Disposes this operation
    */
   dispose () {
-    this._sdk.off(Constants.EVENTS.OPERATION_UPDATED, this._onOperationUpdate)
+    this._sdk.off(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
   }
 }
 
