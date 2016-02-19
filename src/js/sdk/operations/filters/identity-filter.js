@@ -19,9 +19,11 @@ import Filter from './filter'
 class IdentityFilter extends Filter {
   /**
    * Renders the filter
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Engine.RenderTexture}
    * @return {Promise}
    */
-  render () {
+  render (sdk, renderTexture) {
     return Promise.resolve()
   }
 }

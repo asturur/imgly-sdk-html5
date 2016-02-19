@@ -25,6 +25,7 @@ class Filter {
   /**
    * Renders the filter
    * @param  {PhotoEditorSDK} sdk
+   * @param  {Engine.RenderTexture}
    * @return {Promise}
    */
   render (sdk, renderTexture) {
