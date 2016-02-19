@@ -157,7 +157,7 @@ class CropOperation extends Operation {
     const end = this._options.end.clone()
       .multiply(outputDimensions)
 
-    const newDimensions = end.clone().subtract(start)
+    const newDimensions = end.clone().subtract(start).floor()
     renderTexture.resizeTo(newDimensions)
 
     this._sprite.setPosition(-start.x, -start.y)
