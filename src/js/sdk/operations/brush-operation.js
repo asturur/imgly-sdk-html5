@@ -110,7 +110,7 @@ class BrushOperation extends Operation {
       })
     })
 
-    this.setDirty(true)
+    this.setDirty(true, true)
     this.clearBrushCanvas()
   }
 
@@ -140,7 +140,7 @@ class BrushOperation extends Operation {
       })
     })
 
-    this.setDirty(true)
+    this.setDirty(true, true)
     this.clearBrushCanvas()
   }
 
@@ -176,7 +176,7 @@ class BrushOperation extends Operation {
       })
     })
 
-    this.setDirty(true)
+    this.setDirty(true, true)
     this.clearBrushCanvas()
   }
 
