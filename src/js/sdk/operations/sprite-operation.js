@@ -156,25 +156,15 @@ class SpriteOperation extends Operation {
   _applyCrop (operation, options) {
     const inputDimensions = this._sdk.getInputDimensions()
 
-    const oldEnd = operation.getEnd()
     const oldStart = operation.getStart()
-    const newEnd = options.end
     const newStart = options.start
-
-    const oldDimensions = oldEnd.clone().subtract(oldStart)
-      .multiply(inputDimensions)
-    const newDimensions = newEnd.clone().subtract(newStart)
-      .multiply(inputDimensions)
 
     this._options.sprites.forEach((sprite) => {
       const position = sprite.getPosition().clone()
       sprite.set({
         position: position
           .add(
-            oldStart.clone().subtract(newStart)
-          )
-          .divide(
-            newDimensions.clone().divide(oldDimensions)
+            oldStart.clone().subtract(newStart).multiply(inputDimensions)
           )
       }, false)
     })
