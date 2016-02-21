@@ -100,7 +100,7 @@ class SpriteOperation extends Operation {
     }
 
     this._options.sprites.forEach((sprite) => {
-      sprite.applyFlip(direction)
+      sprite.applyFlip(this._sdk, direction)
     })
   }
 
@@ -135,11 +135,13 @@ class SpriteOperation extends Operation {
       // Flip X and Y unless we're rotating by 180 degrees
       const spritePosition = sprite.getPosition().clone()
       if (degreesDifference === 90 || (oldRotation === 270 && newRotation === 0)) {
-        spritePosition.flip()
-        spritePosition.x = finalDimensions.x - spritePosition.x
+        const tempX = spritePosition.x
+        spritePosition.x = finalDimensions.y - spritePosition.y
+        spritePosition.y = tempX
       } else if (degreesDifference === -90 || (oldRotation === -270 && newRotation === 0)) {
-        spritePosition.flip()
-        spritePosition.y = finalDimensions.y - spritePosition.y
+        const tempY = spritePosition.y
+        spritePosition.y = finalDimensions.x - spritePosition.x
+        spritePosition.x = tempY
       }
       sprite.setPosition(spritePosition)
     })

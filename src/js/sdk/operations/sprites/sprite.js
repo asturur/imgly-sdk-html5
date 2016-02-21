@@ -72,20 +72,22 @@ export default class Sprite extends Configurable {
 
   /**
    * Applies a flip in the given direction
+   * @param  {PhotoEditorSDK} sdk
    * @param  {String} direction
    */
-  applyFlip (direction) {
+  applyFlip (sdk, direction) {
+    const finalDimensions = sdk.getFinalDimensions()
     const position = this._options.position
     switch (direction) {
       case 'horizontal':
-        position.x = 1 - position.x
+        position.x = finalDimensions.x - position.x
         this.set({
           flipHorizontally: !this._options.flipHorizontally,
           position
         })
         break
       case 'vertical':
-        position.y = 1 - position.y
+        position.y = finalDimensions.y - position.y
         this.set({
           flipVertically: !this._options.flipVertically,
           position
