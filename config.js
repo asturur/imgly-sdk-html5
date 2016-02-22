@@ -102,7 +102,6 @@ module.exports = {
           test: /\.jsx?$/,
           include: /src\/js/,
           loaders: [
-            path.resolve(__dirname, 'loaders', 'dotjs-loader'),
             'babel-loader?cacheDirectory&sourceMap&externalHelpers'
           ]
         }
