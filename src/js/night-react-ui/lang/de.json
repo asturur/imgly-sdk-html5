@@ -39,7 +39,7 @@
       "4-3": "4:3",
       "16-9": "16:9"
     },
-    "blur": {
+    "focus": {
       "radial-blur": "Kreisförmig",
       "tilt-shift": "Tilt-Shift",
       "blurRadius": "Radius"
