@@ -10,9 +10,9 @@
  */
 
 /**
- * Base class for primitives. Extendable via {@link PhotoEditorSDK.Filter.Primitive#extend}
+ * Base class for filter primitives.
  * @class
- * @alias PhotoEditorSDK.Filter.Primitive
+ * @alias PhotoEditorSDK.Filters.Primitive
  */
 class Primitive {
   constructor (options) {

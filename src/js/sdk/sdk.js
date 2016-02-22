@@ -20,6 +20,12 @@ import PerformanceTest from './lib/performance-test'
 
 const { RenderType, ImageFormat, Events } = Constants
 
+/**
+ * The main SDK class which handles rendering and manages
+ * operations.
+ * @class
+ * @alias PhotoEditorSDK
+ */
 export default class PhotoEditorSDK extends EventEmitter {
   constructor (preferredRenderer, options = {}) {
     super()

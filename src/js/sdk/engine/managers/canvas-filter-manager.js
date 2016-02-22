@@ -11,7 +11,13 @@
 import { Rectangle } from '../globals'
 import CanvasBuffer from '../utils/canvas-buffer'
 
-export default class CanvasFilterManager {
+/**
+ * Manages the filters for a {@link PhotoEditorSDK.Engine.CanvasRenderer}
+ * @class
+ * @alias Engine.CanvasFilterManager
+ * @memberof PhotoEditorSDK
+ */
+class CanvasFilterManager {
   constructor (renderer) {
     this._renderer = renderer
     this._filterStack = [{
@@ -29,7 +35,7 @@ export default class CanvasFilterManager {
 
   /**
    * Resizes this FilterManager and its textures to the given dimensions
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     this._textureFrame.width = dimensions.x
@@ -40,7 +46,7 @@ export default class CanvasFilterManager {
 
   /**
    * Pushes the given filters to the
-   * @param  {DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    * @param  {Array.<Filter>} filters
    */
   pushFilters (displayObject, filters) {
@@ -75,9 +81,10 @@ export default class CanvasFilterManager {
   /**
    * Applies the given filters to the given inputRenderTarget and outputs
    * the filtered content to the outputRenderTarget
-   * @param  {Array.<Filter>} filters
-   * @param  {CanvasBuffer} inputRenderTarget
-   * @param  {CanvasBuffer} outputRenderTarget
+   * @param  {PhotoEditorSDK.Engine.Filter[]} filters
+   * @param  {PhotoEditorSDK.Engine.CanvasBuffer} inputRenderTarget
+   * @param  {PhotoEditorSDK.Engine.CanvasBuffer} outputRenderTarget
+   * @private
    */
   _applyFilters (filters, inputRenderTarget, outputRenderTarget) {
     let flipRenderTarget = inputRenderTarget
@@ -109,7 +116,7 @@ export default class CanvasFilterManager {
   /**
    * Returns a render target from the pool or creates a new one
    * @param  {Boolean} clear
-   * @return {RenderTexture}
+   * @return {PhotoEditorSDK.Engine.RenderTexture}
    * @private
    */
   _getOrCreateRenderTarget (clear) {
@@ -129,16 +136,18 @@ export default class CanvasFilterManager {
 
   /**
    * Sets the filter stack to the given stack
-   * @param {Array.<Object>} filterStack
+   * @param {Object[]} filterStack
    */
   setFilterStack (filterStack) {
     this._filterStack = filterStack
   }
 
   /**
-   * Disposes this FilterManager
+   * Disposes this CanvasFilterManager
    */
   dispose () {
 
   }
 }
+
+export default CanvasFilterManager

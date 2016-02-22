@@ -37,3 +37,6 @@ exports.Semired = require('./semired-filter')
 exports.Sunny = require('./sunny-filter')
 exports.Texas = require('./texas-filter')
 exports.X400 = require('./x400-filter')
+
+exports.Primitive = require('./primitives/primitive')
+exports.Primitives = require('./primitives/')

@@ -10,7 +10,22 @@
 
 import { Vector2 } from '../globals'
 
-export default class CanvasBuffer {
+/**
+ * A canvas render target that you can render to.
+ * Canvas equivalent of {@link PhotoEditorSDK.Engine.RenderTarget}
+ * @class
+ * @alias Engine.CanvasBuffer
+ * @memberof PhotoEditorSDK
+ */
+class CanvasBuffer {
+  /**
+   * Creates a CanvasBuffer
+   * @param  {Number} width
+   * @param  {Number} height
+   * @param  {Number} pixelRatio
+   * @param  {HTMLCanvasElement} canvas
+   * @param  {CanvasRenderingContext2D} context
+   */
   constructor (width, height, pixelRatio, canvas, context) {
     this._width = width
     this._height = height
@@ -40,7 +55,7 @@ export default class CanvasBuffer {
 
   /**
    * Resizes this canvas buffer to the given dimensions
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     if (this._width !== dimensions.x) {
@@ -55,19 +70,60 @@ export default class CanvasBuffer {
   }
 
   /**
+   * Returns the canvas
+   * @return {HTMLCanvasElement}
+   */
+  getCanvas () { return this._canvas }
+
+  /**
+   * Returns the rendering context
+   * @return {CanvasRenderingContext2D} [description]
+   */
+  getContext () { return this._context }
+
+  /**
+   * Returns the filter stack
+   * @return {Object[]}
+   */
+  getFilterStack () { return this._filterStack }
+
+  /**
+   * Returns the width
+   * @return {Number}
+   */
+  getWidth () { return this._width }
+
+  /**
+   * Returns the height
+   * @return {Number}
+   */
+  getHeight () { return this._height }
+
+  /**
+   * Returns the pixel ratio
+   * @return {Number}
+   */
+  getPixelRatio () { return this._pixelRatio }
+
+  /**
+   * Sets the pixel ratio
+   * @param {Number} pixelRatio
+   */
+  setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
+
+  /**
+   * Returns the dimensions
+   * @return {PhotoEditorSDK.Math.Vector2}
+   */
+  getDimensions () { return new Vector2(this._width, this._height) }
+
+  /**
    * Cleans up this canvas buffer
    */
   dispose () {
     this._canvas = null
     this._context = null
   }
-
-  getCanvas () { return this._canvas }
-  getContext () { return this._context }
-  getFilterStack () { return this._filterStack }
-  getWidth () { return this._width }
-  getHeight () { return this._height }
-  getPixelRatio () { return this._pixelRatio }
-  setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
-  getDimensions () { return new Vector2(this._width, this._height) }
 }
+
+export default CanvasBuffer

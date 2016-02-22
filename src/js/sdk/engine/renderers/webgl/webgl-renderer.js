@@ -18,7 +18,18 @@ import DisplayObject from '../../display/display-object'
 import WebGLFilterManager from '../../managers/webgl-filter-manager'
 import ContextPerformanceHook from '../../utils/context-performance-hook'
 
-export default class WebGLRenderer extends BaseRenderer {
+/**
+ * The renderer that is used for WebGL rendering
+ * @class
+ * @alias Engine.WebGLRenderer
+ * @extends PhotoEditorSDK.Engine.BaseRenderer
+ * @memberof PhotoEditorSDK
+ */
+class WebGLRenderer extends BaseRenderer {
+  /**
+   * Creates a WebGLRenderer
+   * @override
+   */
   constructor (...args) {
     super(...args)
 
@@ -74,7 +85,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Sets the given shader to active
-   * @param {Shader} shader
+   * @param {PhotoEditorSDK.Engine.Shader} shader
    */
   setShader (shader) {
     this._currentShader = shader
@@ -84,7 +95,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Sets the canvas to the given one
-   * @param {Canvas} canvas
+   * @param {HTMLCanvasElement} canvas
    */
   setCanvas (canvas) {
     if (this._canvas) {
@@ -100,7 +111,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Uploads the given shader's attributes to the GPU
-   * @param {Shader} shader
+   * @param {PhotoEditorSDK.Engine.Shader} shader
    */
   _setAttributesForShader (shader) {
     const gl = this._context
@@ -115,7 +126,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Initializes the default shaders
-   * @return {Object.<String,Shader>}
+   * @return {Object}
    * @private
    */
   _initShaders () {
@@ -126,7 +137,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Initializes the available object renderers
-   * @return {Object.<String,ObjectRenderer>}
+   * @return {Object}
    * @private
    */
   _initRenderers () {
@@ -190,7 +201,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Resizes the context and view to the given size
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     super.resizeTo(dimensions)
@@ -202,7 +213,7 @@ export default class WebGLRenderer extends BaseRenderer {
   /**
    * Sets the current render target to the passed one and activates
    * it for rendering
-   * @param {RenderTarget} renderTarget
+   * @param {PhotoEditorSDK.Engine.RenderTarget} renderTarget
    */
   setRenderTarget (renderTarget) {
     this._currentRenderTarget = renderTarget
@@ -211,7 +222,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Sets the current object renderer to the given one
-   * @param {ObjectRenderer} objectRenderer
+   * @param {PhotoEditorSDK.Engine.ObjectRenderer} objectRenderer
    */
   setObjectRenderer (objectRenderer) {
     this._currentObjectRenderer.stop()
@@ -221,7 +232,7 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Renders the given DisplayObject
-   * @param  {DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    */
   render (displayObject) {
     this.setRenderTarget(this._defaultRenderTarget)
@@ -244,8 +255,8 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Renders the given DisplayObject
-   * @param  {DisplayObject} displayObject
-   * @param  {RenderTarget} renderTarget
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} renderTarget
    */
   renderDisplayObject (displayObject, renderTarget) {
     this.setRenderTarget(renderTarget)
@@ -266,8 +277,8 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Returns and/or creates a WebGLTexture for the given BaseTexture object
-   * @param  {BaseTexture} texture
-   * @return {WebGLTexture}
+   * @param  {PhotoEditorSDK.Engine.BaseTexture} texture
+   * @return {PhotoEditorSDK.Engine.WebGLTexture}
    */
   getOrCreateGLTexture (texture) {
     const gl = this._context
@@ -286,8 +297,8 @@ export default class WebGLRenderer extends BaseRenderer {
 
   /**
    * Updates the given texture
-   * @param  {BaseTexture} texture
-   * @param  {Boolean} upload = true
+   * @param  {PhotoEditorSDK.Engine.BaseTexture} texture
+   * @param  {Boolean} [upload = true]
    */
   updateTexture (texture, upload = true) {
     const source = texture.getSource()
@@ -331,7 +342,16 @@ export default class WebGLRenderer extends BaseRenderer {
     }
   }
 
+  /**
+   * Returns the current render target
+   * @return {PhotoEditorSDK.Engine.RenderTarget}
+   */
   getCurrentRenderTarget () { return this._currentRenderTarget }
+
+  /**
+   * Returns the current object renderer
+   * @return {PhotoEditorSDK.Engine.ObjectRenderer}
+   */
   getCurrentObjectRenderer () { return this._currentObjectRenderer }
 
   /**
@@ -360,3 +380,5 @@ export default class WebGLRenderer extends BaseRenderer {
 }
 
 WebGLRenderer.contextId = 0
+
+export default WebGLRenderer

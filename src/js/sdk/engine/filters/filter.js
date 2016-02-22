@@ -13,7 +13,20 @@ import Configurable from '../../lib/configurable'
 import Shader from '../shaders/shader'
 import TextureShader from '../shaders/texture-shader'
 
-export default class Filter extends Configurable {
+/**
+ * A filter can be attached to a DisplayObject and affects the way it is displayed.
+ * @class
+ * @alias Engine.Filter
+ * @extends PhotoEditorSDK.Configurable
+ * @memberof PhotoEditorSDK
+ */
+class Filter extends Configurable {
+  /**
+   * Goes through the available options, sets _options defaults
+   * @param {Object} userOptions
+   * @override
+   * @protected
+   */
   _initOptions () {
     this._shaders = []
     this._availableUniforms = TextureShader.defaultUniforms
@@ -59,7 +72,7 @@ export default class Filter extends Configurable {
    * @param {String} optionName
    * @param {*} value
    * @param {Boolean} update = true
-   * @private
+   * @override
    */
   setOption (optionName, value, update = true) {
     super.setOption(optionName, value, update)
@@ -130,8 +143,8 @@ export default class Filter extends Configurable {
 
   /**
    * Returns the shader for the given renderer
-   * @param  {WebGLRenderer} renderer
-   * @return {Shader}
+   * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
+   * @return {PhotoEditorSDK.Engine.Shader}
    */
   getShaderForRenderer (renderer) {
     const gl = renderer.getContext()
@@ -154,9 +167,9 @@ export default class Filter extends Configurable {
   /**
    * Applies this filter to the given inputTarget and renders it to
    * the given outputTarget
-   * @param  {BaseRenderer} renderer
-   * @param  {RenderTarget} inputTarget
-   * @param  {RenderTarget} outputTarget
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} inputTarget
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} outputTarget
    * @param  {Boolean} clear = false
    */
   apply (renderer, inputTarget, outputTarget, clear = false) {
@@ -170,9 +183,9 @@ export default class Filter extends Configurable {
   /**
    * Applies this filter to the given inputTarget and renders it to
    * the given outputTarget using the WebGLRenderer
-   * @param  {WebGLRenderer} renderer
-   * @param  {RenderTarget} inputTarget
-   * @param  {RenderTarget} outputTarget
+   * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} inputTarget
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} outputTarget
    * @param  {Boolean} clear = false
    * @private
    */
@@ -200,9 +213,9 @@ export default class Filter extends Configurable {
   /**
    * Applies this filter to the given inputTarget and renders it to
    * the given outputTarget using the CanvasRenderer
-   * @param  {CanvasRenderer} renderer
-   * @param  {RenderTarget} inputTarget
-   * @param  {RenderTarget} outputTarget
+   * @param  {PhotoEditorSDK.Engine.CanvasRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} inputTarget
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} outputTarget
    * @param  {Boolean} clear = false
    * @private
    */
@@ -218,10 +231,12 @@ export default class Filter extends Configurable {
   }
 
   /**
-   * Cleans up this instance
+   * Disposes this Filter
    */
   dispose () {
     this._shaders.forEach((shader) => shader.dispose())
     this._shaders = []
   }
 }
+
+export default Filter

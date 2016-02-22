@@ -11,7 +11,21 @@
 import Globals from '../globals'
 const { Log } = Globals
 
-export default class Shader {
+/**
+ * Represents a WebGL shader with a vertex shader, a fragment shader, uniforms and attributes
+ * @class
+ * @alias Engine.Shader
+ * @memberof PhotoEditorSDK
+ */
+class Shader {
+  /**
+   * Creates a Shader
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer} renderer
+   * @param  {String} vertexSource
+   * @param  {String} fragmentSource
+   * @param  {Object} uniforms
+   * @param  {String[]} attributes
+   */
   constructor (renderer, vertexSource, fragmentSource, uniforms, attributes) {
     this._renderer = renderer
     this._vertexSource = vertexSource
@@ -24,13 +38,14 @@ export default class Shader {
     this._onContextChange = this._onContextChange.bind(this)
     this._renderer.on('context', this._onContextChange)
 
-    this.init()
+    this._init()
   }
 
   /**
    * Compiles this shader and caches the uniform locations
+   * @private
    */
-  init () {
+  _init () {
     this._compile()
 
     const gl = this._renderer.getContext()
@@ -45,7 +60,7 @@ export default class Shader {
    * @private
    */
   _onContextChange () {
-    this.init()
+    this._init()
   }
 
   /**
@@ -222,6 +237,30 @@ export default class Shader {
   }
 
   /**
+   * Returns the uniforms
+   * @return {Object}
+   */
+  getUniforms () { return this._uniforms }
+
+  /**
+   * Returns the attributes
+   * @return {String[]}
+   */
+  getAttributes () { return this._attributes }
+
+  /**
+   * Returns the attribute locations
+   * @return {Object}
+   */
+  getAttributeLocations () { return this._attributeLocations }
+
+  /**
+   * Returns this shader's WebGL program
+   * @return {WebGLProgram}
+   */
+  getProgram () { return this._program }
+
+  /**
    * Cleans up this shader
    */
   dispose () {
@@ -235,9 +274,6 @@ export default class Shader {
 
     this._renderer.off('context', this._onContextChange)
   }
-
-  getUniforms () { return this._uniforms }
-  getAttributes () { return this._attributes }
-  getAttributeLocations () { return this._attributeLocations }
-  getProgram () { return this._program }
 }
+
+export default Shader

@@ -57,8 +57,8 @@ BrightnessFilter.prototype.availableOptions = {
 /**
  * Brightness primitive
  * @class
- * @alias PhotoEditorSDK.Filter.Primitives.Brightness
- * @extends {PhotoEditorSDK.Filter.Primitive}
+ * @alias PhotoEditorSDK.Filters.Primitives.Brightness
+ * @extends {PhotoEditorSDK.Filters.Primitive}
  */
 class Brightness extends Primitive {
   constructor (...args) {

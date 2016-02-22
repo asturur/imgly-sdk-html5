@@ -10,7 +10,17 @@
 
 import { Log, Matrix, Vector2, Rectangle } from '../globals'
 
-export default class DisplayObject {
+/**
+ * The base class for all objects that can be displayed
+ * on the screen
+ * @class
+ * @alias Engine.DisplayObject
+ * @memberof PhotoEditorSDK
+ */
+class DisplayObject {
+  /**
+   * Creates a DisplayObject
+   */
   constructor () {
     this._position = new Vector2(0, 0)
     this._scale = new Vector2(1, 1)
@@ -31,7 +41,7 @@ export default class DisplayObject {
 
   /**
    * Renders this DisplayObject using the given WebGLRenderer
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
    * @abstract
    */
   renderWebGL (renderer) {
@@ -40,7 +50,7 @@ export default class DisplayObject {
 
   /**
    * Renders this DisplayObject using the given CanvasRenderer
-   * @param  {CanvasRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.CanvasRenderer} renderer
    * @abstract
    */
   renderCanvas (renderer) {
@@ -84,7 +94,7 @@ export default class DisplayObject {
 
   /**
    * Pushes the given shader to the list of shaders
-   * @param {Shader} shader
+   * @param {PhotoEditorSDK.Engine.Shader} shader
    */
   addShader (shader) {
     this._shaders.push(shader)
@@ -92,7 +102,7 @@ export default class DisplayObject {
 
   /**
    * Removes the given shader from the list of shaders
-   * @param  {Shader} shader
+   * @param  {PhotoEditorSDK.Engine.Shader} shader
    * @return {Boolean}
    */
   removeShader (shader) {
@@ -119,7 +129,7 @@ export default class DisplayObject {
 
   /**
    * Returns the bounds for this DisplayObject
-   * @return {Rectangle}
+   * @return {PhotoEditorSDK.Math.Rectangle}
    */
   getBounds () {
     return this._bounds.clone()
@@ -127,7 +137,17 @@ export default class DisplayObject {
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
+  /**
+   * Returns the current position
+   * @return {PhotoEditorSDK.Math.Vector2}
+   */
   getPosition () { return this._position }
+
+  /**
+   * Sets the position to the given one
+   * @param {PhotoEditorSDK.Math.Vector2|Number} x
+   * @param {Number} [y]
+   */
   setPosition (position, y) {
     if (position instanceof Vector2) {
       this._position.copy(position)
@@ -137,7 +157,18 @@ export default class DisplayObject {
     this._boundsNeedUpdate = true
     this._localBoundsNeedUpdate = true
   }
+
+  /**
+   * Returns the current scale
+   * @return {PhotoEditorSDK.Math.Vector2}
+   */
   getScale () { return this._scale }
+
+  /**
+   * Sets the scale to the given one
+   * @param {PhotoEditorSDK.Math.Vector2|Number} x
+   * @param {Number} [y]
+   */
   setScale (scale, y) {
     if (scale instanceof Vector2) {
       this._scale.copy(scale)
@@ -147,7 +178,18 @@ export default class DisplayObject {
     this._boundsNeedUpdate = true
     this._localBoundsNeedUpdate = true
   }
+
+  /**
+   * Returns the current pivot (The point that this Displayobject rotates around)
+   * @return {PhotoEditorSDK.Math.Vector2}
+   */
   getPivot () { return this._pivot }
+
+  /**
+   * Sets the pivot (The point that this DisplayObject rotates around)
+   * @param {PhotoEditorSDK.Math.Vector2|Number} pivot
+   * @param {Number} [y]
+   */
   setPivot (pivot, y) {
     if (pivot instanceof Vector2) {
       this._pivot.copy(pivot)
@@ -157,19 +199,76 @@ export default class DisplayObject {
     this._boundsNeedUpdate = true
     this._localBoundsNeedUpdate = true
   }
+
+  /**
+   * Returns the current rotation in radians
+   * @return {Number}
+   */
   getRotation () { return this._rotation }
+
+  /**
+   * Sets this object's rotation (in radians)
+   * @param {Number} rotation
+   */
   setRotation (rotation) {
     this._rotation = rotation
     this._boundsNeedUpdate = true
     this._localBoundsNeedUpdate = true
   }
+
+  /**
+   * Returns the current alpha (0...1)
+   * @return {Number}
+   */
   getAlpha () { return this._alpha }
+
+  /**
+   * Sets the alpha (0...1)
+   * @param {Number} alpha
+   */
   setAlpha (alpha) { this._alpha = alpha }
+
+  /**
+   * Returns the current world transformation matrix
+   * @return {PhotoEditorSDK.Math.Matrix}
+   */
   getWorldTransform () { return this._worldTransform }
+
+  /**
+   * Returns the parent object
+   * @return {PhotoEditorSDK.Engine.DisplayObject}
+   */
   getParent () { return this._parent }
+
+  /**
+   * Sets this object's parent object
+   * @param {PhotoEditorSDK.Engine.DisplayObject} parent
+   */
   setParent (parent) { this._parent = parent }
-  setTint (tint) { this._tint = tint }
+
+  /**
+   * Returns the current tint color
+   * @return {Number}
+   */
   getTint () { return this._tint }
-  setVisible (visible) { this._visible = visible }
+
+  /**
+   * Sets the tint color
+   * @param {Number} tint
+   */
+  setTint (tint) { this._tint = tint }
+
+  /**
+   * Checks whether this object is currently visible
+   * @return {Boolean} [description]
+   */
   isVisible () { return this._visible }
+
+  /**
+   * Sets this object's visibility
+   * @param {Boolean} visible
+   */
+  setVisible (visible) { this._visible = visible }
 }
+
+export default DisplayObject

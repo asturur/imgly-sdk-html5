@@ -8,7 +8,11 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-export default {
+/**
+ * A couple of utility functions
+ * @type {Object}
+ */
+const Utils = {
   /**
    * Assigns own enumerable properties of source object(s) to the destination
    * object for all destination properties that resolve to undefined. Once a
@@ -63,3 +67,5 @@ export default {
     return newObject
   }
 }
+
+export default Utils

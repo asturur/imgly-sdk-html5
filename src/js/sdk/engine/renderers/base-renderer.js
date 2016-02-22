@@ -11,7 +11,22 @@
 import { Log, Vector2, EventEmitter, Color } from '../globals'
 import Utils from '../utils/utils'
 
-export default class BaseRenderer extends EventEmitter {
+/**
+ * The base class for all renderers
+ * @class
+ * @alias Engine.BaseRenderer
+ * @memberof PhotoEditorSDK
+ */
+class BaseRenderer extends EventEmitter {
+  /**
+   * Create a BaseRenderer instance
+   * @param  {Number} width
+   * @param  {Number} height
+   * @param  {Object} options = {}
+   * @param  {Number} [options.pixelRatio = 1]
+   * @param  {PhotoEditorSDK.Color} [options.clearColor = PhotoEditorSDK.Color.TRANSPARENT]
+   * @param  {Boolean} [options.debug = false]
+   */
   constructor (width, height, options = {}) {
     super()
 
@@ -31,7 +46,7 @@ export default class BaseRenderer extends EventEmitter {
 
   /**
    * Sets the canvas to the given one
-   * @param {Canvas} canvas
+   * @param {HTMLCanvasElement} canvas
    */
   setCanvas (canvas) {
     this._canvas = canvas
@@ -45,7 +60,7 @@ export default class BaseRenderer extends EventEmitter {
 
   /**
    * Returns the current canvas
-   * @return {Canvas}
+   * @return {HTMLCanvasElement}
    */
   getCanvas () {
     return this._canvas
@@ -53,7 +68,7 @@ export default class BaseRenderer extends EventEmitter {
 
   /**
    * Gets called before the context has been set up
-   * @private
+   * @protected
    */
   _onBeforeContext () {
 
@@ -61,7 +76,7 @@ export default class BaseRenderer extends EventEmitter {
 
   /**
    * Resizes the context and view to the given size
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     const { pixelRatio } = this._options
@@ -82,7 +97,7 @@ export default class BaseRenderer extends EventEmitter {
   /**
    * Gets the rendering context for this renderer
    * @returns {Object}
-   * @private
+   * @protected
    * @abstract
    */
   _createContext () {
@@ -91,7 +106,7 @@ export default class BaseRenderer extends EventEmitter {
 
   /**
    * Sets up the rendering context for this renderer
-   * @private
+   * @protected
    * @abstract
    */
   _setupContext () {
@@ -100,7 +115,7 @@ export default class BaseRenderer extends EventEmitter {
 
   /**
    * Renders the given displayObject
-   * @param  {DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    * @abstract
    */
   render (displayObject) {
@@ -115,13 +130,59 @@ export default class BaseRenderer extends EventEmitter {
     return null
   }
 
+  /**
+   * Returns the current rendering context
+   * @return {RenderingContext}
+   */
   getContext () { return this._context }
+
+  /**
+   * Returns the current width
+   * @return {Number}
+   */
   getWidth () { return this._dimensions.x }
+
+  /**
+   * Returns the current height
+   * @return {Number}
+   */
   getHeight () { return this._dimensions.y }
+
+  /**
+   * Returns the current dimensions
+   * @return {PhotoEditorSDK.Math.Vector2}
+   */
   getDimensions () { return this._dimensions }
+
+  /**
+   * Returns the current pixel ratio
+   * @return {Number}
+   */
   getPixelRatio () { return this._pixelRatio }
+
+  /**
+   * Sets the pixel ratio
+   * @return {Number}
+   */
   setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
+
+  /**
+   * Returns the maximum texture size
+   * @return {Number}
+   */
   getMaxTextureSize () { return this._maxTextureSize }
+
+  /**
+   * Returns the current filter manager
+   * @return {PhotoEditorSDK.Engine.FilterManager}
+   */
+  getFilterManager () { return this._filterManager }
+
+  /**
+   * Sets the filter manager
+   * @param {PhotoEditorSDK.Engine.FilterManager} filterManager
+   */
+  setFilterManager (filterManager) { this._filterManager = filterManager }
 
   /**
    * Checks if this renderer is supported on the current device and browser
@@ -145,7 +206,6 @@ export default class BaseRenderer extends EventEmitter {
   dispose () {
     Log.warn(this.constructor.name, '`dispose` is abstract and not implemented in inherited class')
   }
-
-  getFilterManager () { return this._filterManager }
-  setFilterManager (filterManager) { this._filterManager = filterManager }
 }
+
+export default BaseRenderer

@@ -10,7 +10,18 @@
 
 import { Rectangle, EventEmitter } from '../globals'
 
-export default class BaseTexture extends EventEmitter {
+/**
+ * A BaseTexture holds and handles the raw source of a texture
+ * @class
+ * @alias Engine.BaseTexture
+ * @extends EventEmitter
+ * @memberof PhotoEditorSDK
+ */
+class BaseTexture extends EventEmitter {
+  /**
+   * Creates a BaseTexture
+   * @param  {*} source
+   */
   constructor (source) {
     super()
 
@@ -31,7 +42,7 @@ export default class BaseTexture extends EventEmitter {
 
   /**
    * Resizes this BaseTexture to the given dimensions
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     this._frame.width = dimensions.x
@@ -73,8 +84,82 @@ export default class BaseTexture extends EventEmitter {
   }
 
   /**
-   * Disposes the WebGL textures for the given ID
-   * @param  {WebGLRenderer} renderer
+   * Checks if this BaseTexture has been loaded
+   * @return {Boolean}
+   */
+  isLoaded () { return this._loaded }
+
+  /**
+   * Sets the loaded state
+   * @param {Boolean} loaded
+   */
+  setLoaded (loaded) { this._loaded = loaded }
+
+  /**
+   * Returns the source
+   * @return {*} s
+   */
+  getSource () { return this._source }
+
+  /**
+   * Sets the source
+   * @param {*} source
+   */
+  setSource (source) { this._source = source }
+
+  /**
+   * Returns the WebGL texture for the given renderer ID
+   * @param  {Number} id
+   * @return {WebGLTexture}
+   */
+  getGLTextureForId (id) { return this._glTextures[id] }
+
+  /**
+   * Sets the WebGLTexture for the given renderer ID
+   * @param {WebGLTexture} texture
+   * @param {Number} id
+   */
+  setGLTextureForId (texture, id) { this._glTextures[id] = texture }
+
+  /**
+   * Returns the frame
+   * @return {PhotoEditorSDK.Math.Rectangle}
+   */
+  getFrame () { return this._frame }
+
+  /**
+   * Sets the frame
+   * @param {PhotoEditorSDK.Math.Rectangle} frame
+   */
+  setFrame (frame) { this._frame = frame }
+
+  /**
+   * Returns the pixel ratio
+   * @return {Number}
+   */
+  getPixelRatio () { return this._pixelRatio }
+
+  /**
+   * Sets the pixel ratio
+   * @param {Number} pixelRatio
+   */
+  setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
+
+  /**
+   * Returns the WebGL texture unit
+   * @return {Number}
+   */
+  getGLUnit () { return this._glUnit }
+
+  /**
+   * Sets the WebGL texture unit
+   * @param {Number} glUnit
+   */
+  setGLUnit (glUnit) { this._glUnit = glUnit }
+
+  /**
+   * Disposes the WebGL textures for the given renderer ID
+   * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
    */
   disposeGLTextures (renderer) {
     if (renderer.isOfType('webgl')) {
@@ -86,22 +171,11 @@ export default class BaseTexture extends EventEmitter {
 
   /**
    * Cleans up this object
-   * @param  {WebGLRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
    */
   dispose (renderer) {
     this.disposeGLTextures(renderer)
   }
-
-  isLoaded () { return this._loaded }
-  setLoaded (loaded) { this._loaded = loaded }
-  getSource () { return this._source }
-  setSource (source) { this._source = source }
-  setGLTextureForId (texture, id) { this._glTextures[id] = texture }
-  getGLTextureForId (id) { return this._glTextures[id] }
-  getFrame () { return this._frame }
-  setFrame (frame) { this._frame = frame }
-  getPixelRatio () { return this._pixelRatio }
-  setPixelRatio (pixelRatio) { this._pixelRatio = pixelRatio }
-  getGLUnit () { return this._glUnit }
-  setGLUnit (glUnit) { this._glUnit = glUnit }
 }
+
+export default BaseTexture

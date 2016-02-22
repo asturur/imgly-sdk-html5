@@ -12,7 +12,13 @@ import { Rectangle } from '../globals'
 import RenderTarget from '../utils/render-target'
 import Quad from '../utils/quad'
 
-export default class WebGLFilterManager {
+/**
+ * Manages the filters for a {@link PhotoEditorSDK.Engine.WebGLRenderer}
+ * @class
+ * @alias Engine.WebGLFilterManager
+ * @memberof PhotoEditorSDK
+ */
+class WebGLFilterManager {
   constructor (renderer) {
     this._renderer = renderer
     this._filterStack = [{
@@ -33,7 +39,7 @@ export default class WebGLFilterManager {
 
   /**
    * Resizes this FilterManager and its textures to the given dimensions
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     this._textureFrame.width = dimensions.x
@@ -44,7 +50,7 @@ export default class WebGLFilterManager {
 
   /**
    * Sets the filter stack to the given stack
-   * @param {Array.<Object>} filterStack
+   * @param {Object[]} filterStack
    */
   setFilterStack (filterStack) {
     this._filterStack = filterStack
@@ -53,7 +59,7 @@ export default class WebGLFilterManager {
   /**
    * Returns a render target from the pool or creates a new one
    * @param  {Boolean} clear
-   * @return {RenderTarget}
+   * @return {PhotoEditorSDK.Engine.RenderTarget}
    * @private
    */
   _getOrCreateRenderTarget (clear) {
@@ -75,8 +81,8 @@ export default class WebGLFilterManager {
 
   /**
    * Pushes the given filters to the
-   * @param  {DisplayObject} displayObject
-   * @param  {Array.<Filter>} filters
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.Filter[]} filters
    */
   pushFilters (displayObject, filters) {
     const bounds = displayObject.getBounds()
@@ -132,9 +138,9 @@ export default class WebGLFilterManager {
   /**
    * Applies the given filters to the given inputRenderTarget and outputs
    * the filtered content to the outputRenderTarget
-   * @param  {Array.<Filter>} filters
-   * @param  {RenderTarget} inputRenderTarget
-   * @param  {RenderTarget} outputRenderTarget
+   * @param  {PhotoEditorSDK.Engine.Filter[]} filters
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} inputRenderTarget
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} outputRenderTarget
    */
   _applyFilters (filters, inputRenderTarget, outputRenderTarget) {
     let flipRenderTarget = inputRenderTarget
@@ -175,7 +181,7 @@ export default class WebGLFilterManager {
   }
 
   /**
-   * Cleans up
+   * Disposes this WebGLFilterManager
    */
   dispose () {
     this._renderer.off('context', this._onContextChange)
@@ -184,3 +190,5 @@ export default class WebGLFilterManager {
     }
   }
 }
+
+export default WebGLFilterManager

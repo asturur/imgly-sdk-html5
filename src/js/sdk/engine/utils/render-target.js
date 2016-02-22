@@ -10,7 +10,21 @@
 
 import { Color, Vector2, Matrix, Rectangle } from '../globals'
 
-export default class RenderTarget {
+/**
+ * An object that you can render to. WebGL equivalent of {@link PhotoEditorSDK.Engine.CanvasBuffer}
+ * @class
+ * @alias Engine.RenderTarget
+ * @memberof PhotoEditorSDK
+ */
+class RenderTarget {
+  /**
+   * Creates a RenderTarget
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer}  renderer
+   * @param  {Number}  width
+   * @param  {Number}  height
+   * @param  {Number}  pixelRatio
+   * @param  {Boolean} [isRoot = false]
+   */
   constructor (renderer, width, height, pixelRatio, isRoot = false) {
     this._renderer = renderer
     this._gl = renderer.getContext()
@@ -37,7 +51,7 @@ export default class RenderTarget {
 
   /**
    * Resizes this RenderTarget to the given dimensions
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     this._width = dimensions.x | 0 // rounded
@@ -52,7 +66,7 @@ export default class RenderTarget {
 
   /**
    * Resizes the FBO's texture to the given dimensions
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    * @private
    */
   _resizeTexture (dimensions) {
@@ -147,17 +161,43 @@ export default class RenderTarget {
   }
 
   /**
-   * Cleans up this render target
+   * Returns the projection matrix
+   * @return {PhotoEditorSDK.Math.Matrix}
+   */
+  getProjectionMatrix () { return this._projectionMatrix }
+
+  /**
+   * Returns the texture
+   * @return {PhotoEditorSDK.Engine.Texture}
+   */
+  getTexture () { return this._texture }
+
+  /**
+   * Returns the frame
+   * @return {PhotoEditorSDK.Math.Rectangle}
+   */
+  getFrame () { return this._frame }
+
+  /**
+   * Sets the frame
+   * @param {PhotoEditorSDK.Math.Rectangle} frame
+   */
+  setFrame (frame) { this._frame = frame }
+
+  /**
+   * Returns the filter stack
+   * @return {Object[]}
+   */
+  getFilterStack () { return this._filterStack }
+
+  /**
+   * Disposes this RenderTarget
    */
   dispose () {
     const gl = this._gl
     gl.deleteTexture(this._texture)
     gl.deleteFramebuffer(this._framebuffer)
   }
-
-  getProjectionMatrix () { return this._projectionMatrix }
-  getTexture () { return this._texture }
-  getFrame () { return this._frame }
-  setFrame (frame) { this._frame = frame }
-  getFilterStack () { return this._filterStack }
 }
+
+export default RenderTarget

@@ -16,7 +16,21 @@ import CanvasBuffer from '../utils/canvas-buffer'
 import WebGLFilterManager from '../managers/webgl-filter-manager'
 import CanvasFilterManager from '../managers/canvas-filter-manager'
 
-export default class RenderTexture extends Texture {
+/**
+ * A texture that you can render to
+ * @class
+ * @alias Engine.RenderTexture
+ * @extends PhotoEditorSDK.Engine.Texture
+ * @memberof PhotoEditorSDK
+ */
+class RenderTexture extends Texture {
+  /**
+   * Creates a RenderTexture
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer} renderer
+   * @param  {Number} [width = 100]
+   * @param  {Number} [height = 100]
+   * @param  {Number} [pixelRatio = 1]
+   */
   constructor (renderer, width = 100, height = 100, pixelRatio = 1) {
     const baseTexture = new BaseTexture()
     const frame = baseTexture.getFrame()
@@ -87,7 +101,7 @@ export default class RenderTexture extends Texture {
 
   /**
    * Clears this texture's RenderTarget
-   * @param {SDK.Color} color
+   * @param {PhotoEditorSDK.Color} color
    */
   clear (color) {
     this._renderTarget.clear(color)
@@ -95,7 +109,7 @@ export default class RenderTexture extends Texture {
 
   /**
    * Resizes this RenderTexture to the given dimensions
-   * @param  {Vector2} dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
     if (this._width === dimensions.x && this._height === dimensions.y) return
@@ -112,7 +126,7 @@ export default class RenderTexture extends Texture {
 
   /**
    * Renders the given DisplayObject
-   * @param  {DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    */
   render (displayObject) {
     if (this._renderer.isOfType('webgl')) {
@@ -126,7 +140,7 @@ export default class RenderTexture extends Texture {
 
   /**
    * Renders the given DisplayObject using WebGL
-   * @param  {DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    * @private
    */
   _renderWebGL (displayObject) {
@@ -145,7 +159,7 @@ export default class RenderTexture extends Texture {
 
   /**
    * Renders the given DisplayObject using Canvas2D
-   * @param  {displayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    * @private
    */
   _renderCanvas (displayObject) {
@@ -160,10 +174,14 @@ export default class RenderTexture extends Texture {
     this._renderer.setFilterManager(tempFilterManager)
   }
 
+  /**
+   * Returns the render target
+   * @return {PhotoEditorSDK.Engine.RenderTarget}
+   */
   getRenderTarget () { return this._renderTarget }
 
   /**
-   * Cleans this instance up
+   * Disposes this RenderTexture
    */
   dispose () {
     this._baseTexture.dispose(this._renderer)
@@ -171,3 +189,5 @@ export default class RenderTexture extends Texture {
     this._filterManager.dispose()
   }
 }
+
+export default RenderTexture

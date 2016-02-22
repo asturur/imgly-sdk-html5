@@ -10,7 +10,15 @@
 
 import { Log } from '../globals'
 
-export default class ContextPerformanceHook {
+/**
+ * Hooks into a rendering context (WebGLRenderingContext or CanvasRenderingContext2D),
+ * mocks its methods and measures the time consumed by the method calls. When `endFrame`
+ * is called, it prints a performance report
+ * @class
+ * @memberof PhotoEditorSDK
+ * @ignore
+ */
+class ContextPerformanceHook {
   constructor (context) {
     this._context = context
     this._tracking = false
@@ -84,3 +92,5 @@ export default class ContextPerformanceHook {
     })
   }
 }
+
+export default ContextPerformanceHook

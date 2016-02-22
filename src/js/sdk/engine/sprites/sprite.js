@@ -11,7 +11,18 @@
 import { Vector2 } from '../globals'
 import Container from '../display/container'
 
-export default class Sprite extends Container {
+/**
+ * A drawable rectangle with a texture
+ * @class
+ * @alias Engine.Sprite
+ * @extends PhotoEditorSDK.Engine.Container
+ * @memberof PhotoEditorSDK
+ */
+class Sprite extends Container {
+  /**
+   * Creates a Sprite
+   * @param  {PhotoEditorSDK.Engine.Texture} texture
+   */
   constructor (texture) {
     super()
 
@@ -28,6 +39,19 @@ export default class Sprite extends Container {
 
     this.setTexture(texture)
   }
+
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when this sprite's texture has been updated
+   * @private
+   */
+  _onTextureUpdate () {
+    this._boundsNeedUpdate = true
+    this._localBoundsNeedUpdate = true
+  }
+
+  // -------------------------------------------------------------------------- RENDERING
 
   /**
    * Renders the contents of this container
@@ -83,9 +107,11 @@ export default class Sprite extends Container {
     )
   }
 
+  // -------------------------------------------------------------------------- PUBLIC API
+
   /**
    * Returns the non-global bounds of this DisplayObject
-   * @return {Rectangle}
+   * @return {PhotoEditorSDK.Math.Rectangle}
    */
   getLocalBounds () {
     if (this._localBoundsNeedUpdate) {
@@ -104,7 +130,7 @@ export default class Sprite extends Container {
 
   /**
    * Returns the bounds for this DisplayObject
-   * @return {Rectangle}
+   * @return {PhotoEditorSDK.Math.Rectangle}
    */
   getBounds () {
     if (this._boundsNeedUpdate) {
@@ -139,18 +165,17 @@ export default class Sprite extends Container {
     return this._bounds.clone()
   }
 
-  /**
-   * Gets called when this sprite's texture has been updated
-   * @private
-   */
-  _onTextureUpdate () {
-    this._boundsNeedUpdate = true
-    this._localBoundsNeedUpdate = true
-  }
+  // -------------------------------------------------------------------------- GETTERS / SETTERS
 
   /**
-   * Sets the texture to the given texture
-   * @param {Texture} texture
+   * Returns the current texture
+   * @return {PhotoEditorSDK.Engine.Texture} [description]
+   */
+  getTexture () { return this._texture }
+
+  /**
+   * Sets the texture
+   * @param {PhotoEditorSDK.Engine.Texture} texture
    */
   setTexture (texture) {
     if (!texture) return
@@ -166,24 +191,62 @@ export default class Sprite extends Container {
     texture.on('update', this._onTextureUpdate)
   }
 
-  getTexture () { return this._texture }
-  setShader (shader) { this._shader = shader }
+  /**
+   * Returns the shader
+   * @return {PhotoEditorSDK.Engine.Shader}
+   */
   getShader () { return this._shader }
+
+  /**
+   * Sets the shader
+   * @param {PhotoEditorSDK.Engine.Shader} shader
+   */
+  setShader (shader) { this._shader = shader }
+
+  /**
+   * Returns the width
+   * @return {Number}
+   */
+  getWidth () { return this._width }
+
+  /**
+   * Sets the width
+   * @param {Number} width
+   */
   setWidth (width) {
     this._scale.x = width / this._texture.getFrame().width
     this._width = width
     this._boundsNeedUpdate = true
     this._localBoundsNeedUpdate = true
   }
-  getWidth () { return this._width }
+
+  /**
+   * Returns the height
+   * @return {Number}
+   */
+  getHeight () { return this._height }
+
+  /**
+   * Sets the height
+   * @param {Number} height
+   */
   setHeight (height) {
     this._scale.y = height / this._texture.getFrame().height
     this._height = height
     this._boundsNeedUpdate = true
     this._localBoundsNeedUpdate = true
   }
-  getHeight () { return this._height }
+
+  /**
+   * Returns the anchor
+   * @return {PhotoEditorSDK.Math.Vector2}
+   */
   getAnchor () { return this._anchor }
+
+  /**
+   * Sets the anchor
+   * @param {PhotoEditorSDK.Math.Vector2} anchor
+   */
   setAnchor (anchor, y) {
     if (anchor instanceof Vector2) {
       this._anchor.copy(anchor)
@@ -194,9 +257,14 @@ export default class Sprite extends Container {
     this._localBoundsNeedUpdate = true
   }
 
+  /**
+   * Disposes this Sprite
+   */
   dispose () {
     if (this._texture) {
       this._texture.off('update', this._onTextureUpdate)
     }
   }
 }
+
+export default Sprite

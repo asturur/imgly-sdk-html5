@@ -15,7 +15,18 @@ import BaseRenderer from '../base-renderer'
 import CanvasBuffer from '../../utils/canvas-buffer'
 import CanvasFilterManager from '../../managers/canvas-filter-manager'
 
-export default class CanvasRenderer extends BaseRenderer {
+/**
+ * The renderer that is used for Canvas2D rendering
+ * @class
+ * @alias Engine.CanvasRenderer
+ * @extends PhotoEditorSDK.Engine.BaseRenderer
+ * @memberof PhotoEditorSDK
+ */
+class CanvasRenderer extends BaseRenderer {
+  /**
+   * Creates a CanvasRenderer
+   * @override
+   */
   constructor (...args) {
     super(...args)
     this._type = 'canvas'
@@ -75,7 +86,7 @@ export default class CanvasRenderer extends BaseRenderer {
 
   /**
    * Renders the given DisplayObject
-   * @param  {DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    */
   render (displayObject) {
     const ctx = this._renderTarget.getContext()
@@ -110,8 +121,8 @@ export default class CanvasRenderer extends BaseRenderer {
 
   /**
    * Renders the given DisplayObject
-   * @param  {DisplayObject} displayObject
-   * @param  {RenderTarget} renderTarget
+   * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} renderTarget
    */
   renderDisplayObject (displayObject, renderTarget) {
     const originalRenderTarget = this._renderTarget
@@ -122,17 +133,33 @@ export default class CanvasRenderer extends BaseRenderer {
   }
 
   /**
+   * Returns the current render target
+   * @return {PhotoEditorSDK.Engine.RenderTarget}
+   */
+  getCurrentRenderTarget () { return this._renderTarget }
+
+  /**
+   * Sets the render target
+   * @param {PhotoEditorSDK.Engine.RenderTarget} renderTarget
+   */
+  setRenderTarget (renderTarget) {
+    this._renderTarget = renderTarget
+  }
+
+  /**
+   * Returns the current rendering context
+   * @return {RenderingContext}
+   */
+  getContext () { return this._renderTarget.getContext() }
+
+  /**
    * Disposes this Renderer
    */
   dispose () {
     this._filterManager.dispose()
   }
-
-  getCurrentRenderTarget () { return this._renderTarget }
-  setRenderTarget (renderTarget) {
-    this._renderTarget = renderTarget
-  }
-  getContext () { return this._renderTarget.getContext() }
 }
 
 CanvasRenderer.contextId = 0
+
+export default CanvasRenderer

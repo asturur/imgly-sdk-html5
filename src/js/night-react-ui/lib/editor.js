@@ -180,7 +180,7 @@ export default class Editor extends EventEmitter {
 
   /**
    * Enables the features with the given identifiers
-   * @param  {String...} identifiers
+   * @param  {Array.<String>} identifiers
    */
   enableFeatures (...identifiers) {
     identifiers.forEach((identifier) => {
@@ -192,7 +192,7 @@ export default class Editor extends EventEmitter {
 
   /**
    * Disables the features with the given identifiers
-   * @param  {String...} identifiers
+   * @param  {Array.<String>} identifiers
    */
   disableFeatures (...identifiers) {
     identifiers.forEach((identifier) => {

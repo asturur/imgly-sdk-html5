@@ -11,7 +11,18 @@
 import Globals from '../../../globals'
 import ObjectRenderer from './object-renderer'
 
-export default class SpriteRenderer extends ObjectRenderer {
+/**
+ * The ObjectRenderer that is responsible for rendering Sprite instances
+ * @class
+ * @alias Engine.SpriteRenderer
+ * @extends PhotoEditorSDK.Engine.ObjectRenderer
+ * @memberof PhotoEditorSDK
+ */
+class SpriteRenderer extends ObjectRenderer {
+  /**
+   * Creates a SpriteRenderer
+   * @override
+   */
   constructor (...args) {
     super(...args)
 
@@ -42,7 +53,7 @@ export default class SpriteRenderer extends ObjectRenderer {
 
   /**
    * Adds the given sprite to the batch
-   * @param  {Sprite} sprite
+   * @param  {PhotoEditorSDK.Engine.Sprite} sprite
    */
   render (sprite) {
     const texture = sprite.getTexture()
@@ -72,7 +83,7 @@ export default class SpriteRenderer extends ObjectRenderer {
 
   /**
    * Adds the color to the positions array for the given sprite
-   * @param {Sprite} sprite
+   * @param {PhotoEditorSDK.Engine.Sprite} sprite
    * @param {Number} index
    * @private
    */
@@ -88,9 +99,9 @@ export default class SpriteRenderer extends ObjectRenderer {
 
   /**
    * Adds the texture UV coordinates to the positions array for the given sprite
-   * @param {Sprite} sprite
+   * @param {PhotoEditorSDK.Engine.Sprite} sprite
    * @param {Number} index
-   * @param {TextureUVs} uvs
+   * @param {PhotoEditorSDK.Engine.TextureUVs} uvs
    * @private
    */
   _addTextureUVs (sprite, index, uvs) {
@@ -117,9 +128,9 @@ export default class SpriteRenderer extends ObjectRenderer {
   /**
    * Adds the vertex coordinates to the positions array for the given
    * sprite and texture frame
-   * @param {Sprite} sprite
+   * @param {PhotoEditorSDK.Engine.Sprite} sprite
    * @param {Number} index
-   * @param {Rectangle} textureFrame
+   * @param {PhotoEditorSDK.Math.Rectangle} textureFrame
    * @private
    */
   _addVertexCoordinates (sprite, index, textureFrame) {
@@ -234,7 +245,7 @@ export default class SpriteRenderer extends ObjectRenderer {
 
   /**
    * Renders the current batch
-   * @param  {BaseTexture} baseTexture
+   * @param  {PhotoEditorSDK.Engine.BaseTexture} baseTexture
    * @param  {Number} batchSize
    * @param  {Number} batchStartIndex
    * @private
@@ -276,3 +287,5 @@ export default class SpriteRenderer extends ObjectRenderer {
     super.dispose()
   }
 }
+
+export default SpriteRenderer

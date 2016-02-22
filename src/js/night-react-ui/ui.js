@@ -19,6 +19,12 @@ import ScrollbarComponent from './components/scrollbar-component'
 import ControlsComponent from './components/controls/controls-component'
 import ModalManager from './lib/modal-manager'
 
+/**
+ * The React UI
+ * @class
+ * @alias PhotoEditorSDK.UI.NightReact
+ * @extends {PhotoEditorSDK.EventEmitter}
+ */
 export default class NightReactUI extends EventEmitter {
   constructor (options) {
     super()

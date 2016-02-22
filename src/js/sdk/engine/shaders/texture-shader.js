@@ -11,7 +11,20 @@
 import { Matrix } from '../globals'
 import Shader from './shader'
 
-export default class TextureShader extends Shader {
+/**
+ * The default texture shader
+ * @class
+ * @alias Engine.TextureShader
+ * @extends PhotoEditorSDK.Engine.Shader
+ * @memberof PhotoEditorSDK
+ */
+class TextureShader extends Shader {
+  /**
+   * Creates a TextureShader
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer} renderer
+   * @param  {String} vertexSource
+   * @param  {String} fragmentSource
+   */
   constructor (renderer, vertexSource, fragmentSource) {
     vertexSource = vertexSource || TextureShader.defaultVertexSource
     fragmentSource = fragmentSource || TextureShader.defaultFragmentSource
@@ -22,10 +35,24 @@ export default class TextureShader extends Shader {
   }
 }
 
+/**
+ * The default vertex shader source code
+ * @type {String}
+ */
 TextureShader.defaultVertexSource = require('raw!./source/texture.vert')
+
+/**
+ * The default fragment shader source code
+ * @type {String}
+ */
 TextureShader.defaultFragmentSource = require('raw!./source/texture.frag')
 
 const matrix = new Matrix()
+
+/**
+ * The default uniforms
+ * @type {Object}
+ */
 TextureShader.defaultUniforms = {
   u_image: {
     type: 'sampler2d',
@@ -36,8 +63,15 @@ TextureShader.defaultUniforms = {
     value: matrix.toArray()
   }
 }
+
+/**
+ * The default WebGL attributes
+ * @type {String[]}
+ */
 TextureShader.defaultAttributes = [
   'a_position',
   'a_texCoord',
   'a_color'
 ]
+
+export default TextureShader

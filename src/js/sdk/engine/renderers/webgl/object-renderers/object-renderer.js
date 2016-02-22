@@ -8,7 +8,17 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-export default class ObjectRenderer {
+/**
+ * The base class for all ObjectRenderer classes
+ * @class
+ * @alias Engine.ObjectRenderer
+ * @memberof PhotoEditorSDK
+ */
+class ObjectRenderer {
+  /**
+   * Creates an ObjectRenderer
+   * @param  {BaseRenderer} renderer
+   */
   constructor (renderer) {
     this._renderer = renderer
 
@@ -46,10 +56,12 @@ export default class ObjectRenderer {
   }
 
   /**
-   * Cleans up
+   * Disposes this ObjectRenderer
    */
   dispose () {
     this._renderer.off('context', this._onContextChange)
     this._renderer = null
   }
 }
+
+export default ObjectRenderer

@@ -14,7 +14,14 @@ import Vector2 from './math/vector2'
 import Color from './color'
 import Utils from './utils'
 
-export default class Configurable extends EventEmitter {
+/**
+ * Adds `set{OptionName}` and `get{OptionName}` methods to an object. Method names
+ * are specified via the `availableOptions` object.
+ * @class
+ * @extends EventEmitter
+ * @memberof PhotoEditorSDK
+ */
+class Configurable extends EventEmitter {
   constructor (options = {}, additionalAvailableOptions = {}) {
     super()
     this.availableOptions = this.availableOptions || {}
@@ -42,14 +49,14 @@ export default class Configurable extends EventEmitter {
 
   /**
    * Gets called when options have been changed
-   * @private
+   * @protected
    */
   _onOptionsChange () {
 
   }
 
   /**
-   * Checks whether this Operation can be applied the way it is configured
+   * Checks whether all required options are specified
    * @return {Promise}
    */
   validateSettings () {
@@ -71,7 +78,7 @@ export default class Configurable extends EventEmitter {
   /**
    * Goes through the available options, sets _options defaults
    * @param {Object} userOptions
-   * @private
+   * @protected
    */
   _initOptions (userOptions) {
     this._options = {}
@@ -140,7 +147,6 @@ export default class Configurable extends EventEmitter {
    * Returns the value for the given option
    * @param {String} optionName
    * @return {*}
-   * @private
    */
   getOption (optionName) {
     return this._options[optionName]
@@ -284,7 +290,6 @@ export default class Configurable extends EventEmitter {
    * @param {String} optionName
    * @param {*} value
    * @param {Boolean} update = true
-   * @private
    */
   setOption (optionName, value, update = true) {
     if (update) {
@@ -393,3 +398,5 @@ export default class Configurable extends EventEmitter {
     this.emit('update', ...args)
   }
 }
+
+export default Configurable

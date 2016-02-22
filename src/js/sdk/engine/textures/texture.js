@@ -12,7 +12,14 @@ import { Rectangle, EventEmitter } from '../globals'
 import BaseTexture from './base-texture'
 import TextureUVs from '../utils/texture-uvs'
 
-export default class Texture extends EventEmitter {
+/**
+ * A texture that can be applied to a {@link PhotoEditorSDK.Engine.Sprite}
+ * @class
+ * @alias Engine.Texture
+ * @extends EventEmitter
+ * @memberof PhotoEditorSDK
+ */
+class Texture extends EventEmitter {
   constructor (baseTexture, frame) {
     super()
 
@@ -47,7 +54,7 @@ export default class Texture extends EventEmitter {
 
   /**
    * Creates a texture from the given canvas
-   * @param  {CanvasElement} canvas
+   * @param  {HTMLCanvasElement} canvas
    */
   static fromCanvas (canvas) {
     const baseTexture = new BaseTexture(canvas)
@@ -87,15 +94,50 @@ export default class Texture extends EventEmitter {
     )
   }
 
+  /**
+   * Returns the base texture
+   * @return {PhotoEditorSDK.Engine.BaseTexture}
+   */
   getBaseTexture () { return this._baseTexture }
-  setBaseTexture (texture) { this._baseTexture = texture }
+
+  /**
+   * Sets the base texture
+   * @param {PhotoEditorSDK.Engine.BaseTexture} baseTexture
+   */
+  setBaseTexture (baseTexture) { this._baseTexture = baseTexture }
+
+  /**
+   * Returns the frame
+   * @return {PhotoEditorSDK.Math.Rectangle}
+   */
   getFrame () { return this._frame }
+
+  /**
+   * Sets the frame
+   * @param {PhotoEditorSDK.Math.Rectangle} frame
+   */
   setFrame (frame) {
     this._frame = frame
-
     this._updateUVs()
   }
+
+  /**
+   * Returns the width
+   * @return {Number}
+   */
   getWidth () { return this._frame.width }
+
+  /**
+   * Returns the height
+   * @return {Number}
+   */
   getHeight () { return this._frame.height }
+
+  /**
+   * Returns the texture UVs
+   * @return {PhotoEditorSDK.Engine.TextureUVs}
+   */
   getUVs () { return this._uvs }
 }
+
+export default Texture

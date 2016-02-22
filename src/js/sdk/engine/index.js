@@ -10,6 +10,8 @@
 
 import CanvasRenderer from './renderers/canvas/canvas-renderer'
 import WebGLRenderer from './renderers/webgl/webgl-renderer'
+import CanvasFilterManager from './managers/canvas-filter-manager'
+import WebGLFilterManager from './managers/webgl-filter-manager'
 import DisplayObject from './display/display-object'
 import Container from './display/container'
 import BaseTexture from './textures/base-texture'
@@ -24,6 +26,8 @@ import Filter from './filters/filter'
 export default {
   WebGLRenderer,
   CanvasRenderer,
+  WebGLFilterManager,
+  CanvasFilterManager,
   DisplayObject,
   Container,
   BaseTexture,

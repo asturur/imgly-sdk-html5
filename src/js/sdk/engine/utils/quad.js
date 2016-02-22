@@ -8,7 +8,14 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-export default class Quad {
+/**
+ * Represents a rectangle that is rendered using WebGL
+ * @class
+ * @alias Engine.Quad
+ * @memberof PhotoEditorSDK
+ * @ignore
+ */
+class Quad {
   constructor (renderer) {
     this._renderer = renderer
 
@@ -114,5 +121,6 @@ export default class Quad {
     gl.deleteBuffer(this._vertexBuffer)
     gl.deleteBuffer(this._indexBuffer)
   }
-
 }
+
+export default Quad
