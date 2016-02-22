@@ -5,7 +5,17 @@
 
 const KEY_STR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
 
-export default {
+/**
+ * Provides Base64 encode and decode methods
+ * @type {Object}
+ * @ignore
+ */
+const Base64 = {
+  /**
+   * Encodes the given input into a Base64 string
+   * @param  {String} input
+   * @return {String}
+   */
   encode (input) {
     let output = ''
     let chr1, chr2, chr3
@@ -40,6 +50,11 @@ export default {
     return output
   },
 
+  /**
+   * Decodes the given Base64 string
+   * @param  {String} input
+   * @return {String}
+   */
   decode (input) {
     let chr1, chr2, chr3
     let enc1, enc2, enc3, enc4
@@ -81,3 +96,5 @@ export default {
     return buf
   }
 }
+
+export default Base64

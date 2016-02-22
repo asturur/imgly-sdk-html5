@@ -12,12 +12,15 @@
  * Represents a 2-dimensional vector while providing math functions to
  * modify / clone the vector. Fully chainable.
  * @class
- * @alias PhotoEditorSDK.Vector2
- * @param {number} x
- * @param {number} y
- * @private
+ * @alias Math.Vector2
+ * @memberof PhotoEditorSDK
  */
 class Vector2 {
+  /**
+   * Creates a Vector2
+   * @param  {Number} x
+   * @param  {Number} y
+   */
   constructor (x, y) {
     this.x = x
     this.y = y
@@ -31,9 +34,9 @@ class Vector2 {
 
   /**
    * Sets the given values
-   * @param {number} x
-   * @param {number} y
-   * @return {Vector2}
+   * @param {Number} x
+   * @param {Number} y
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   set (x, y) {
     this.x = x
@@ -43,7 +46,7 @@ class Vector2 {
 
   /**
    * Creates a clone of this vector
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   clone () {
     return new Vector2(this.x, this.y)
@@ -51,8 +54,8 @@ class Vector2 {
 
   /**
    * Copies the values of the given vector
-   * @param  {Vector2} other
-   * @return {Vector2}
+   * @param  {PhotoEditorSDK.Math.Vector2} other
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   copy (other) {
     this.x = other.x
@@ -61,10 +64,10 @@ class Vector2 {
   }
 
   /**
-   * Clamps this vector with the given Vector2 / number
-   * @param  {(number|Vector2)} minimum
-   * @param  {(number|Vector2)} maximum
-   * @return {Vector2}
+   * Clamps this vector with the given Vector2 / Number
+   * @param  {(Number|PhotoEditorSDK.Math.Vector2)} minimum
+   * @param  {(Number|PhotoEditorSDK.Math.Vector2)} maximum
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   clamp (minimum, maximum) {
     let minimumSet = minimum !== null && typeof minimum !== 'undefined'
@@ -92,10 +95,10 @@ class Vector2 {
   }
 
   /**
-   * Divides this vector by the given Vector2 / number
-   * @param  {(number|Vector2)} divisor
-   * @param  {number} [y]
-   * @return {Vector2}
+   * Divides this vector by the given Vector2 / Number
+   * @param  {(Number|PhotoEditorSDK.Math.Vector2)} divisor
+   * @param  {Number} [y]
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   divide (divisor, y) {
     if (divisor instanceof Vector2) {
@@ -109,10 +112,10 @@ class Vector2 {
   }
 
   /**
-   * Subtracts the given Vector2 / number from this vector
-   * @param  {(number|Vector2)} subtrahend
-   * @param  {number} [y]
-   * @return {Vector2}
+   * Subtracts the given Vector2 / Number from this vector
+   * @param  {(Number|PhotoEditorSDK.Math.Vector2)} subtrahend
+   * @param  {Number} [y]
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   subtract (subtrahend, y) {
     if (subtrahend instanceof Vector2) {
@@ -126,10 +129,10 @@ class Vector2 {
   }
 
   /**
-   * Multiplies the given Vector2 / number with this vector
-   * @param  {(number|Vector2)} subtrahend
-   * @param  {number} [y]
-   * @return {Vector2}
+   * Multiplies the given Vector2 / Number with this vector
+   * @param  {(Number|PhotoEditorSDK.Math.Vector2)} subtrahend
+   * @param  {Number} [y]
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   multiply (factor, y) {
     if (factor instanceof Vector2) {
@@ -143,9 +146,10 @@ class Vector2 {
   }
 
   /**
-   * Adds the given Vector2 / numbers to this vector
-   * @param {(number|Vector2)} addend
-   * @param {number} [y]
+   * Adds the given Vector2 / Numbers to this vector
+   * @param {(Number|PhotoEditorSDK.Math.Vector2)} addend
+   * @param {Number} [y]
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   add (addend, y) {
     if (addend instanceof Vector2) {
@@ -160,9 +164,9 @@ class Vector2 {
 
   /**
    * Checks whether the x and y value are the same as the given ones
-   * @param  {(number|Vector2)} vec
-   * @param  {number} y
-   * @return {boolean}
+   * @param  {(Number|PhotoEditorSDK.Math.Vector2)} vec
+   * @param  {Number} y
+   * @return {Boolean}
    */
   equals (vec, y) {
     if (vec instanceof Vector2) {
@@ -174,7 +178,7 @@ class Vector2 {
 
   /**
    * Flips the x and y values of this vector
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   flip () {
     let tempX = this.x
@@ -185,7 +189,7 @@ class Vector2 {
 
   /**
    * Rounds the values of this vector
-   * @returns {Vector2}
+   * @returns {PhotoEditorSDK.Math.Vector2}
    */
   round () {
     this.x = Math.round(this.x)
@@ -195,7 +199,7 @@ class Vector2 {
 
   /**
    * Rounds up the values of this vector
-   * @returns {Vector2}
+   * @returns {PhotoEditorSDK.Math.Vector2}
    */
   ceil () {
     this.x = Math.ceil(this.x)
@@ -205,7 +209,7 @@ class Vector2 {
 
   /**
    * Rounds down the values of this vector
-   * @returns {Vector2}
+   * @returns {PhotoEditorSDK.Math.Vector2}
    */
   floor () {
     this.x = this.x | 0
@@ -215,7 +219,7 @@ class Vector2 {
 
   /**
    * Makes both numbers of this vector positive
-   * @returns {Vector2}
+   * @returns {PhotoEditorSDK.Math.Vector2}
    */
   abs () {
     this.x = Math.abs(this.x)

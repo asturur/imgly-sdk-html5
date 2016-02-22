@@ -13,7 +13,17 @@ import { Log } from '../globals'
 const VERSION_CHECK_FN = 'imglySDKVersionCallback'
 const VERSION_CHECK_URL = `https://www.photoeditorsdk.com/version.json?sdk=html5&jsoncallback=${VERSION_CHECK_FN}`
 
-export default class VersionChecker {
+/**
+ * Checks whether there is a new version of the SDK available
+ * @class
+ * @memberof PhotoEditorSDK
+ * @ignore
+ */
+class VersionChecker {
+  /**
+   * Creates a new VersionChecker
+   * @param  {String} version
+   */
   constructor (version) {
     this._version = version
     this._check()
@@ -37,3 +47,5 @@ export default class VersionChecker {
     document.getElementsByTagName('head')[0].appendChild(script)
   }
 }
+
+export default VersionChecker

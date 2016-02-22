@@ -19,7 +19,13 @@ import Exif from './exif'
  * @private
  */
 class ImageExporter {
-
+  /**
+   * Validates the given RenderType and ImageFormat
+   * @param  {PhotoEditorSDK.RenderType} renderType
+   * @param  {PhotoEditorSDK.ImageFormat} imageFormat
+   * @return {Promise}
+   * @todo Clean this mess up
+   */
   static validateSettings (renderType, imageFormat) {
     return new Promise((resolve, reject) => {
       var settings = {
@@ -57,10 +63,10 @@ class ImageExporter {
    * Exports the image from the given canvas with the given options
    * @param  {PhotoEditorSDK} sdk
    * @param  {Image} image
-   * @param  {Canvas} canvas
+   * @param  {HTMLCanvasElement} canvas
    * @param  {PhotoEditorSDK.RenderType} renderType
    * @param  {PhotoEditorSDK.ImageFormat} imageFormat
-   * @param  {Number} quality = 0.8
+   * @param  {Number} [quality = 0.8]
    * @return {Promise}
    */
   static export (sdk, image, canvas, renderType, imageFormat, quality = 0.8) {

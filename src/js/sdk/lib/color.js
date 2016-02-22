@@ -11,19 +11,17 @@
 /**
  * Represents a color
  * @class
- * @alias PhotoEditorSDK.Color
- * @param {Number} r
- * @param {Number} g
- * @param {Number} b
- * @param {Number} [a]
- * @private
+ * @memberof PhotoEditorSDK
  */
 class Color {
-  constructor (r, g, b, a) {
-    if (typeof a === 'undefined') {
-      a = 1.0
-    }
-
+  /**
+   * Creates a color
+   * @param  {Number} r
+   * @param  {Number} g
+   * @param  {Number} b
+   * @param  {Number} [a = 1]
+   */
+  constructor (r, g, b, a = 1.0) {
     this.r = r
     this.g = g
     this.b = b
@@ -59,7 +57,7 @@ class Color {
 
   /**
    * Returns an array with 4 values (0...1)
-   * @return {Array.<Number>}
+   * @return {Number[]}
    */
   toGLColor () {
     return [this.r, this.g, this.b, this.a]
@@ -67,7 +65,7 @@ class Color {
 
   /**
    * Returns an array with 3 values (0...1)
-   * @return {Array.<Number>}
+   * @return {Number[]}
    */
   toRGBGLColor () {
     return [this.r, this.g, this.b]
@@ -75,7 +73,7 @@ class Color {
 
   /**
    * Converts the RGB value to HSV
-   * @return {Array.<Number>}
+   * @return {Number[]}
    */
   toHSV () {
     let max = Math.max(this.r, this.g, this.b)
@@ -107,11 +105,11 @@ class Color {
   }
 
   /**
-   * Sets the RGB values of this color to match the given HSV values
+   * Creates an RGBA color from the given HSV and alpha values
    * @param {Number} h
    * @param {Number} s
    * @param {Number} v
-   * @param {Number} a = 1
+   * @param {Number} [a = 1]
    */
   static fromHSV (h, s, v, a = 1) {
     let [r, g, b] = []
@@ -165,7 +163,7 @@ class Color {
 
   /**
    * Returns a clone of the current color
-   * @return {Color}
+   * @return {PhotoEditorSDK.Color}
    */
   clone () {
     return new Color(this.r, this.g, this.b, this.a)
@@ -173,7 +171,7 @@ class Color {
 
   /**
    * Checks if this color equals the given one
-   * @param  {Color} color
+   * @param  {PhotoEditorSDK.Color} color
    * @return {Boolean}
    */
   equals (color) {
@@ -202,8 +200,19 @@ class Color {
     return `Color(${this.r}, ${this.g}, ${this.b}, ${this.a})`
   }
 
+  /**
+   * @type {PhotoEditorSDK.Color}
+   */
   static get TRANSPARENT () { return new Color(0, 0, 0, 0) }
+
+  /**
+   * @type {PhotoEditorSDK.Color}
+   */
   static get WHITE () { return new Color(1, 1, 1, 1) }
+
+  /**
+   * @type {PhotoEditorSDK.Color}
+   */
   static get BLACK () { return new Color(0, 0, 0, 1) }
 }
 

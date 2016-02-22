@@ -13,18 +13,21 @@ import Vector2 from './vector2'
 /**
  * Represents a 3-dimensional matrix
  * @class
- * @alias PhotoEditorSDK.Matrix
- * @private
+ * @alias Math.Matrix
+ * @memberof PhotoEditorSDK
  */
-export default class Matrix {
+class Matrix {
+  /**
+   * Creates a Matrix
+   */
   constructor () {
     this.reset()
   }
 
   /**
    * Multiplies this matrix with the given one
-   * @param  {Matrix} matrix
-   * @return {Matrix}
+   * @param  {PhotoEditorSDK.Math.Matrix} matrix
+   * @return {PhotoEditorSDK.Math.Matrix}
    */
   multiply (matrix) {
     let a, b, c, d, tx, ty
@@ -46,9 +49,9 @@ export default class Matrix {
 
   /**
    * Turns the given rectangle into vector coordinates by applying this Matrix
-   * @param  {Rectangle}  rectangle
-   * @param  {Vector2} anchor
-   * @return {Array.<Vector2>}
+   * @param  {PhotoEditorSDK.Math.Rectangle} rectangle
+   * @param  {PhotoEditorSDK.Math.Vector2} anchor
+   * @return {PhotoEditorSDK.Math.Vector2[]}
    */
   rectangleToCoordinates (rectangle, anchor = new Vector2(0, 0)) {
     // Anchor offsets (w0 = right, w1 = left, h0 = up, h1 = down)
@@ -100,7 +103,7 @@ export default class Matrix {
 
   /**
    * Returns an array representation of this matrix
-   * @return {Array}
+   * @return {Float32Array}
    */
   toArray () {
     return new Float32Array(
@@ -112,5 +115,12 @@ export default class Matrix {
     )
   }
 
+  /**
+   * The identity matrix
+   * @static
+   * @type {PhotoEditorSDK.Math.Matrix}
+   */
   static get IDENTITY () { return new Matrix() }
 }
+
+export default Matrix

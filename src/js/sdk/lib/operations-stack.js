@@ -12,7 +12,16 @@ import { Log, Constants } from '../globals'
 import Promise from '../vendor/promise'
 import EventEmitter from './event-emitter'
 
-export default class OperationsStack extends EventEmitter {
+/**
+ * Holds an array of {@link PhotoEditorSDK.Operation} instances and handles their dirtiness
+ * @class
+ * @memberof PhotoEditorSDK
+ */
+class OperationsStack extends EventEmitter {
+  /**
+   * Creates an OperationsStack
+   * @param  {PhotoEditorSDK.Operation[]} [operations = []]
+   */
   constructor (operations = []) {
     super()
 
@@ -34,7 +43,7 @@ export default class OperationsStack extends EventEmitter {
 
   /**
    * Gets called when an operation is about to be updated
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -112,9 +121,8 @@ export default class OperationsStack extends EventEmitter {
   }
 
   /**
-   * Finds the first dirty operation and sets all following operations
-   * to dirty
-   * @param {BaseRenderer} renderer
+   * Finds the first dirty operation and sets all following operations to dirty
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
    */
   updateDirtinessForRenderer (renderer) {
     let dirtyFound = false
@@ -133,7 +141,7 @@ export default class OperationsStack extends EventEmitter {
 
   /**
    * Adds the given operation to this stack
-   * @return {Operation}
+   * @return {PhotoEditorSDK.Operation}
    */
   push (operation) {
     this._stack.push(operation)
@@ -141,7 +149,7 @@ export default class OperationsStack extends EventEmitter {
 
   /**
    * Returns a cloned instance of this stack
-   * @return {OperationsStack}
+   * @return {PhotoEditorSDK.OperationsStack}
    */
   clone () {
     return new OperationsStack(this._stack.slice(0))
@@ -150,7 +158,7 @@ export default class OperationsStack extends EventEmitter {
   /**
    * Returns the operation at the given index
    * @param  {Number} index
-   * @return {operation}
+   * @return {PhotoEditorSDK.Operation}
    */
   get (index) {
     return this._stack[index]
@@ -159,7 +167,7 @@ export default class OperationsStack extends EventEmitter {
   /**
    * Sets the operation at the given index to the given one
    * @param  {Number} index
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    */
   set (index, operation) {
     if (this._stack[index]) {
@@ -172,7 +180,7 @@ export default class OperationsStack extends EventEmitter {
 
   /**
    * Removes the given operation
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    */
   remove (operation) {
     const index = this._stack.indexOf(operation)
@@ -198,9 +206,11 @@ export default class OperationsStack extends EventEmitter {
 
   /**
    * Returns the stack
-   * @return {Array.<Operation>}
+   * @return {PhotoEditorSDK.Operation[]}
    */
   getStack () {
     return this._stack
   }
 }
+
+export default OperationsStack

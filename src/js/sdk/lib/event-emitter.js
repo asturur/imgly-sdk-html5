@@ -6,23 +6,45 @@
 import Log from '../../shared/log'
 const DEFAULT_MAX_LISTENERS = 12
 
+/**
+ * Receives and emits events
+ * @class
+ * @memberof PhotoEditorSDK
+ * @ignore
+ */
 class EventEmitter {
+  /**
+   * Creates an EventEmitter
+   */
   constructor () {
     this._maxListeners = DEFAULT_MAX_LISTENERS
     this._events = {}
     this._pipeDestinations = []
   }
 
+  /**
+   * Pipes all events to the given EventEmitter
+   * @param  {EventEmitter} destination
+   */
   pipeEvents (destination) {
     this._pipeDestinations.push(destination)
   }
 
+  /**
+   * Stops piping events to the given EventEmitter
+   * @param  {EventEmitter} destination
+   */
   unpipeEvents (destination) {
     const i = this._pipeDestinations.indexOf(destination)
     if (i === -1) return
     this._pipeDestinations.splice(i, 1)
   }
 
+  /**
+   * Adds the given listener to the given type of events
+   * @param  {String} type
+   * @param  {Function} listener
+   */
   on (type, listener) {
     if (typeof listener !== 'function') {
       throw new TypeError()
@@ -43,6 +65,12 @@ class EventEmitter {
     return this
   }
 
+  /**
+   * Adds the given listener to the given type of events and removes it
+   * once it has been triggered
+   * @param  {String} type
+   * @param  {Function} listener
+   */
   once (type, listener) {
     let eventsInstance = this
     function onceCallback () {
@@ -52,6 +80,11 @@ class EventEmitter {
     return this.on(type, onceCallback)
   }
 
+  /**
+   * Removes the given listener from the given type of events
+   * @param  {String} type
+   * @param  {*} ...args
+   */
   off (type, ...args) {
     if (args.length === 0) {
       this._events[type] = null
@@ -77,6 +110,11 @@ class EventEmitter {
     return this
   }
 
+  /**
+   * Emits an event with the given type and arguments
+   * @param  {String} type
+   * @param  {*} ...args
+   */
   emit (type, ...args) {
     this._pipeDestinations.forEach((dest) => {
       dest.emit(type, ...args)
@@ -92,6 +130,10 @@ class EventEmitter {
     return true
   }
 
+  /**
+   * Sets the maximum amonut of listeners before a warning is printed
+   * @param {Number} newMaxListeners
+   */
   setMaxListeners (newMaxListeners) {
     if (parseInt(newMaxListeners, 10) !== newMaxListeners) {
       throw new TypeError()

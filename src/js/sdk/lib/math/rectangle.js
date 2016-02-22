@@ -11,14 +11,17 @@
 /**
  * Represents a Rectangle
  * @class
- * @alias PhotoEditorSDK.Rectangle
- * @param {Number} x = 0
- * @param {Number} y = 0
- * @param {Number} width  = 0
- * @param {Number} height = 0
- * @private
+ * @alias Math.Rectangle
+ * @memberof PhotoEditorSDK
  */
-export default class Rectangle {
+class Rectangle {
+  /**
+   * Creartes a Rectangle
+   * @param {Number} [x = 0]
+   * @param {Number} [y = 0]
+   * @param {Number} [width  = 0]
+   * @param {Number} [height = 0]
+   */
   constructor (x = 0, y = 0, width = 0, height = 0) {
     this.x = x
     this.y = y
@@ -28,9 +31,9 @@ export default class Rectangle {
 
   /**
    * Sets the given values
-   * @param {number} x
-   * @param {number} y
-   * @return {Rectangle}
+   * @param {Number} x
+   * @param {Number} y
+   * @return {PhotoEditorSDK.Math.Rectangle}
    */
   set (x, y, width, height) {
     this.x = x
@@ -42,7 +45,7 @@ export default class Rectangle {
 
   /**
    * Creates a clone of this rectangle
-   * @return {Rectangle}
+   * @return {PhotoEditorSDK.Math.Rectangle}
    */
   clone () {
     return new Rectangle(this.x, this.y, this.width, this.height)
@@ -50,8 +53,8 @@ export default class Rectangle {
 
   /**
    * Copies the values of the given rectangle
-   * @param  {Rectangle} other
-   * @return {Rectangle}
+   * @param  {PhotoEditorSDK.Math.Rectangle} other
+   * @return {PhotoEditorSDK.Math.Rectangle}
    */
   copy (other) {
     this.x = other.x
@@ -63,11 +66,11 @@ export default class Rectangle {
 
   /**
    * Checks whether this rectangle's values are the same as the given ones
-   * @param  {(Number|Rectangle)} rect
+   * @param  {(Number|PhotoEditorSDK.Math.Rectangle)} rect
    * @param  {Number} y
    * @param  {Number} width
    * @param  {Number} height
-   * @return {boolean}
+   * @return {Boolean}
    */
   equals (rect, y, width, height) {
     if (rect instanceof Rectangle) {
@@ -86,7 +89,7 @@ export default class Rectangle {
 
   /**
    * Rounds this rectangle's values
-   * @return {Rectangle}
+   * @return {PhotoEditorSDK.Math.Rectangle}
    */
   round () {
     this.x = Math.round(this.x)
@@ -104,3 +107,5 @@ export default class Rectangle {
     return `Rectangle({ x: ${this.x}, y: ${this.y}, width: ${this.width}, height: ${this.height} })`
   }
 }
+
+export default Rectangle

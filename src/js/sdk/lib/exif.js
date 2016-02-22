@@ -56,7 +56,17 @@ const JPEG_REGEX = new RegExp(`^${DATA_JPEG_PREFIX}`, 'i')
 
 import ArrayStream from './array-stream'
 
-export default class Exif {
+/**
+ * Reads EXIF tags from the given byte array and restores them
+ * @class
+ * @memberof PhotoEditorSDK
+ * @ignore
+ */
+class Exif {
+  /**
+   * Creates an EXIF object
+   * @param  {Array} buf
+   */
   constructor (buf) {
     this._buf = buf
     this._stream = new ArrayStream(this._buf)
@@ -67,9 +77,6 @@ export default class Exif {
     this._exifStream = new ArrayStream(this._exifBuffer)
     this._parseExif()
   }
-
-  getTags () { return this._tags }
-  getTagData () { return this._tagData }
 
   /**
    * Restores the exif tags into the given data url
@@ -118,7 +125,7 @@ export default class Exif {
    * Creates a new instance of Exif from the given base64-encoded
    * string
    * @param  {String} base64String
-   * @return {Exif}
+   * @return {PhotoEditorSDK.Exif}
    */
   static fromBase64String (base64String) {
     const raw = base64String.replace(DATA_JPEG_PREFIX, '')
@@ -324,9 +331,26 @@ export default class Exif {
     return segments
   }
 
+  /**
+   * Returns the tags
+   * @return {Object}
+   */
+  getTags () { return this._tags }
+
+  /**
+   * Returns the tag data (key, value, byte position etc.)
+   * @return {Object[]}
+   */
+  getTagData () { return this._tagData }
+
+  /**
+   * Disposes this EXIF object
+   */
   dispose () {
     this._buf = []
     this._exifBuffer = []
     this._segments = []
   }
 }
+
+export default Exif

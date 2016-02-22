@@ -10,7 +10,18 @@
 
 import { Log } from '../globals'
 
-export default class PerformanceTest {
+/**
+ * A simple class that tracks the time between start and end and renders it as FPS
+ * @class
+ * @memberof PhotoEditorSDK
+ * @ignore
+ */
+class PerformanceTest {
+  /**
+   * Creates a PerformanceTest
+   * @param  {String} tag
+   * @param  {String} name
+   */
   constructor (tag, name) {
     this._tag = tag
     this._name = name
@@ -35,3 +46,5 @@ export default class PerformanceTest {
     return Log.canLog('info')
   }
 }
+
+export default PerformanceTest
