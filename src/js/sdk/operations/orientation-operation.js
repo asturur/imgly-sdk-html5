@@ -15,12 +15,16 @@ import Operation from './operation'
 
 /**
  * An operation that can rotate and flip an image
- *
  * @class
- * @alias PhotoEditorSDK.Operations.OrientationOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
 class OrientationOperation extends Operation {
+  /**
+   * Creates a new OrientationOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -68,10 +72,10 @@ class OrientationOperation extends Operation {
   }
 
   /**
-   * Returns the dimensions that an image with the given `dimensions`
-   * would have after this operation has been applied
-   * @param  {Vector2} dimensions
-   * @return {Vector2}
+   * Returns the dimensions the given dimensions will have after this operation
+   * has been applied
+   * @param {PhotoEditorSDK.Math.Vector2} dimensions
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getNewDimensions (dimensions) {
     dimensions = dimensions.clone()

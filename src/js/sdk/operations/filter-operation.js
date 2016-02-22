@@ -13,10 +13,9 @@ import IdentityFilter from './filters/identity-filter'
 
 /**
  * An operation that can apply a selected filter
- *
  * @class
- * @alias PhotoEditorSDK.Operations.FilterOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
 class FilterOperation extends Operation {
   /**
@@ -46,7 +45,7 @@ class FilterOperation extends Operation {
   /**
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
-   * @param {BaseRenderer} renderer
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
    */
   setDirtyForRenderer (dirty, renderer) {
     super.setDirtyForRenderer(dirty, renderer)

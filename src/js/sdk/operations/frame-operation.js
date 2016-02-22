@@ -51,12 +51,16 @@ FrameFilter.prototype.availableOptions = {
 
 /**
  * An operation that can draw a frame on the canvas
- *
  * @class
- * @alias PhotoEditorSDK.Operations.FrameOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
-export default class FrameOperation extends Operation {
+class FrameOperation extends Operation {
+  /**
+   * Creates a new FrameOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -113,3 +117,5 @@ FrameOperation.prototype.availableOptions = {
   color: { type: 'color', default: new Color(0, 0, 0, 1) },
   thickness: { type: 'number', default: 5 }
 }
+
+export default FrameOperation

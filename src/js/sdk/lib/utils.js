@@ -14,7 +14,6 @@ import Base64 from './base64'
 /**
  * Provides utility functions for internal use
  * @class
- * @alias PhotoEditorSDK.Utils
  * @memberof PhotoEditorSDK
  * @private
  */

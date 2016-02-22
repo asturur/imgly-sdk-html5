@@ -14,13 +14,17 @@ import Promise from '../vendor/promise'
 import TiltShiftFilter from './focus/tilt-shift-filter'
 
 /**
- * An operation that can crop out a part of the image
- *
+ * An operation that can draw a tilt shift
  * @class
- * @alias PhotoEditorSDK.Operations.TiltShiftOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
 class TiltShiftOperation extends Operation {
+  /**
+   * Creates a new TiltShiftOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -47,7 +51,7 @@ class TiltShiftOperation extends Operation {
    * Gets called when an operation is about to be updated. If the crop
    * or rotation operation is updated, this will be recognized and the
    * blur will be updated accordingly
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -67,7 +71,7 @@ class TiltShiftOperation extends Operation {
 
   /**
    * Applies the given rotation change
-   * @param  {RotationOperation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -96,7 +100,7 @@ class TiltShiftOperation extends Operation {
 
   /**
    * Applies the given flip change
-   * @param  {RotationOperation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -114,7 +118,7 @@ class TiltShiftOperation extends Operation {
 
   /**
    * Applies a flip with the given direction
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {String} direction
    * @private
    */

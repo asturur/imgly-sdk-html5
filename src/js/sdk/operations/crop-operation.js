@@ -14,12 +14,16 @@ import Promise from '../vendor/promise'
 
 /**
  * An operation that can crop out a part of the image
- *
  * @class
- * @alias PhotoEditorSDK.Operations.CropOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
 class CropOperation extends Operation {
+  /**
+   * Creates a new CropOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -35,7 +39,7 @@ class CropOperation extends Operation {
    * Gets called when an operation is about to be updated. If the crop
    * or rotation operation is updated, this will be recognized and the
    * crop will be updated accordingly
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -56,7 +60,7 @@ class CropOperation extends Operation {
 
   /**
    * Applies the rotation done by an orientation operation
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -82,7 +86,7 @@ class CropOperation extends Operation {
 
   /**
    * Applies the flip done by an orientation operation
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -100,7 +104,7 @@ class CropOperation extends Operation {
 
   /**
    * Applies a flip with the given direction
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {String} direction
    * @private
    */
@@ -169,9 +173,10 @@ class CropOperation extends Operation {
   }
 
   /**
-   * Gets the new dimensions
-   * @param {Vector2} [dimensions]
-   * @return {Vector2}
+   * Returns the dimensions the given dimensions will have after this operation
+   * has been applied
+   * @param {PhotoEditorSDK.Math.Vector2} dimensions
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getNewDimensions (dimensions) {
     dimensions = dimensions.clone()

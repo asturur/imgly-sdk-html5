@@ -17,12 +17,16 @@ import Text from './sprites/text'
 
 /**
  * An operation that can draw sprites (text and stickers) on the canvas
- *
  * @class
- * @alias PhotoEditorSDK.Operations.SpriteOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
 class SpriteOperation extends Operation {
+  /**
+   * Creates a new SpriteOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -40,7 +44,7 @@ class SpriteOperation extends Operation {
   /**
    * Returns the sprites that are instances of the given class
    * @param  {Class} Klass
-   * @return {Array.<Sprite>}
+   * @return {PhotoEditorSDK.Sprite[]}
    * @todo   Do we still need this?
    */
   getSpritesOfType (Klass) {
@@ -53,7 +57,7 @@ class SpriteOperation extends Operation {
    * Gets called when an operation is about to be updated. If the crop
    * or rotation operation is updated, this will be recognized and the
    * stickers will be updated accordingly
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -85,7 +89,7 @@ class SpriteOperation extends Operation {
 
   /**
    * Applies a flip with the given direction
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {String} direction
    * @private
    */
@@ -106,7 +110,7 @@ class SpriteOperation extends Operation {
 
   /**
    * Gets called when a sprite is flagged as dirty / its options changed
-   * @param  {Sprite} sprite
+   * @param  {PhotoEditorSDK.Sprite} sprite
    * @param  {Object} options
    * @private
    */
@@ -116,7 +120,7 @@ class SpriteOperation extends Operation {
 
   /**
    * Applies the given rotation change
-   * @param  {RotationOperation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -149,7 +153,7 @@ class SpriteOperation extends Operation {
 
   /**
    * Applies the given crop change
-   * @param  {CropOperation} operation
+   * @param  {PhotoEditorSDK.Operations.CropOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -190,7 +194,7 @@ class SpriteOperation extends Operation {
   /**
    * Creates a new sticker object and returns it
    * @param  {Object} options
-   * @return {Sticker}
+   * @return {PhotoEditorSDK.Sticker}
    */
   createSticker (options) {
     return new Sticker(this, options)
@@ -199,7 +203,7 @@ class SpriteOperation extends Operation {
   /**
    * Creates a new sticker object and returns it
    * @param  {Object} options
-   * @return {Text}
+   * @return {PhotoEditorSDK.Text}
    */
   createText (options) {
     return new Text(this, options)
@@ -207,7 +211,7 @@ class SpriteOperation extends Operation {
 
   /**
    * Gets called when a sprite has been added
-   * @param {Sprite} sprite
+   * @param {PhotoEditorSDK.Sprite} sprite
    */
   addSprite (sprite) {
     this._options.sprites.push(sprite)
@@ -221,7 +225,7 @@ class SpriteOperation extends Operation {
 
   /**
    * Removes the given sprite from the list of sprites
-   * @param  {Sprite} sprite
+   * @param  {PhotoEditorSDK.Sprite} sprite
    * @return {Boolean}
    */
   removeSprite (sprite) {
@@ -269,10 +273,10 @@ class SpriteOperation extends Operation {
 
   /**
    * Returns the sprite at the given position on the canvas
-   * @param  {SDK} sdk
-   * @param  {Vector2} position
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {PhotoEditorSDK.Math.Vector2} position
    * @param  {Class} [type]
-   * @return {Sprite}
+   * @return {PhotoEditorSDK.Sprite}
    */
   getSpriteAtPosition (sdk, position, type) {
     let intersectingSprite = null

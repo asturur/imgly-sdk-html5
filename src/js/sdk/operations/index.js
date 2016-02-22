@@ -8,13 +8,18 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-exports.Filter = require('./filter-operation')
-exports.Crop = require('./crop-operation')
-exports.Orientation = require('./orientation-operation')
-exports.Adjustments = require('./adjustments-operation')
-exports.TiltShift = require('./tilt-shift-operation')
-exports.RadialBlur = require('./radial-blur-operation')
-exports.Frame = require('./frame-operation')
-exports.Sprite = require('./sprite-operation')
-exports.Watermark = require('./watermark-operation')
-exports.Brush = require('./brush-operation')
+/**
+ * @namespace PhotoEditorSDK.Operations
+ */
+export default {
+  Filter: require('./filter-operation'),
+  Crop: require('./crop-operation'),
+  Orientation: require('./orientation-operation'),
+  Adjustments: require('./adjustments-operation'),
+  TiltShift: require('./tilt-shift-operation'),
+  RadialBlur: require('./radial-blur-operation'),
+  Frame: require('./frame-operation'),
+  Sprite: require('./sprite-operation'),
+  Watermark: require('./watermark-operation'),
+  Brush: require('./brush-operation')
+}

@@ -166,6 +166,14 @@ class Configurable extends EventEmitter {
   }
 
   /**
+   * Returns the options
+   * @return {Object}
+   */
+  getOptions () {
+    return this._options
+  }
+
+  /**
    * Returns a hash with the default options
    * @return {Object}
    */
@@ -227,6 +235,7 @@ class Configurable extends EventEmitter {
    * @param  {String} optionName
    * @param  {Array} arr
    * @return {Boolean}
+   * @private
    */
   _arrayOptionEquals (optionName, arr) {
     let thisArr = this._options[optionName]

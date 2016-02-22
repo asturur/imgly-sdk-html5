@@ -11,7 +11,18 @@
 import { Engine, Utils, Vector2 } from '../globals'
 import Operation from './operation'
 
+/**
+ * An operation that can draw a watermark on top of the image
+ * @class
+ * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
+ */
 class WatermarkOperation extends Operation {
+  /**
+   * Creates a new WatermarkOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -22,7 +33,7 @@ class WatermarkOperation extends Operation {
 
   /**
    * Renders the watermark using Canvas2d
-   * @param  {CanvasRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.CanvasRenderer} renderer
    * @return {Promise}
    */
   _renderCanvas (renderer) {

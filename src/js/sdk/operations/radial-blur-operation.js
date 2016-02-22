@@ -14,13 +14,17 @@ import Promise from '../vendor/promise'
 import RadialBlurFilter from './focus/radial-blur-filter'
 
 /**
- * An operation that can crop out a part of the image
- *
+ * An operation that can draw a radial blur
  * @class
- * @alias PhotoEditorSDK.Operations.RadialBlurOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
 class RadialBlurOperation extends Operation {
+  /**
+   * Creates a new RadialBlurOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -47,7 +51,7 @@ class RadialBlurOperation extends Operation {
    * Gets called when an operation is about to be updated. If the crop
    * or rotation operation is updated, this will be recognized and the
    * blur will be updated accordingly
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -67,7 +71,7 @@ class RadialBlurOperation extends Operation {
 
   /**
    * Applies the given rotation change
-   * @param  {RotationOperation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -91,7 +95,7 @@ class RadialBlurOperation extends Operation {
 
   /**
    * Applies the given flip change
-   * @param  {RotationOperation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -109,7 +113,7 @@ class RadialBlurOperation extends Operation {
 
   /**
    * Applies a flip with the given direction
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {String} direction
    * @private
    */
@@ -138,8 +142,9 @@ class RadialBlurOperation extends Operation {
   }
 
   /**
-   * Crops this image using WebGL
+   * Renders the radial blur using WebGL
    * @param  {PhotoEditorSDK} sdk
+   * @private
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
@@ -181,6 +186,7 @@ class RadialBlurOperation extends Operation {
   /**
    * Renders the radial blur using Canvas2D
    * @param  {PhotoEditorSDK} sdk
+   * @private
    */
   _renderCanvas (sdk) {
     const outputSprite = sdk.getSprite()

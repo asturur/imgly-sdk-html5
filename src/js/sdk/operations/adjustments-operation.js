@@ -14,11 +14,21 @@ import Operation from './operation'
 import AdjustmentsFilter from './adjustments/adjustments-filter'
 
 /**
+ * Applies adjustments (brightness, saturation, contrast) to the image
  * @class
- * @alias PhotoEditorSDK.Operations.AdjustmentsOperation
+ * @alias Operations.AdjustmentsOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK
  */
 class AdjustmentsOperation extends Operation {
+  /**
+   * Creates a new AdjustmentsOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   * @param  {Number} [options.brightness = 0]
+   * @param  {Number} [options.saturation = 1]
+   * @param  {Number} [options.contrast = 1]
+   */
   constructor (...args) {
     super(...args)
 

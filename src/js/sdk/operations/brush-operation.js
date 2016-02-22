@@ -15,12 +15,16 @@ import ControlPoint from './brush/control-point'
 
 /**
  * An operation that can draw brushes on the canvas
- *
  * @class
- * @alias PhotoEditorSDK.Operations.BrushOperation
  * @extends PhotoEditorSDK.Operation
+ * @memberof PhotoEditorSDK.Operations
  */
 class BrushOperation extends Operation {
+  /**
+   * Creates a new BrushOperation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -54,7 +58,7 @@ class BrushOperation extends Operation {
    * Gets called when an operation is about to be updated. If the crop
    * or rotation operation is updated, this will be recognized and the
    * stickers will be updated accordingly
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {Object} options
    * @private
    */
@@ -88,7 +92,7 @@ class BrushOperation extends Operation {
 
   /**
    * Applies the given crop change
-   * @param  {CropOperation} operation
+   * @param  {PhotoEditorSDK.Operations.CropOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -116,7 +120,7 @@ class BrushOperation extends Operation {
 
   /**
    * Applies the given rotation change
-   * @param  {RotationOperation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {Object} options
    * @private
    */
@@ -146,7 +150,7 @@ class BrushOperation extends Operation {
 
   /**
    * Applies a flip with the given direction
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {String} direction
    * @private
    */
@@ -225,7 +229,7 @@ class BrushOperation extends Operation {
   /**
    * Renders the brush canvas that will be used as a texture in WebGL
    * and as an image in canvas
-   * @param {Canvas} canvas
+   * @param {HTMLCanvasElement} canvas
    * @private
    */
   renderBrushCanvas (sdk, canvas = this._brushCanvas) {
@@ -249,7 +253,7 @@ class BrushOperation extends Operation {
    * Creates and adds a new path
    * @param {Number} thickness
    * @param {Color} color
-   * @return {BrushOperation.Path}
+   * @return {PhotoEditorSDK.Operations.BrushOperation.Path}
    */
   createPath (thickness, color) {
     const path = new BrushOperation.Path(this, thickness, color)
@@ -262,8 +266,8 @@ class BrushOperation extends Operation {
   /**
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
-   * @param {BaseRenderer} renderer
-   * @param {Boolean} setPathsToDirty = false
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
+   * @param {Boolean} [setPathsToDirty = false]
    */
   setDirtyForRenderer (dirty, renderer, setPathsToDirty = false) {
     super.setDirtyForRenderer(dirty, renderer)
@@ -278,7 +282,7 @@ class BrushOperation extends Operation {
   /**
    * Sets the dirtiness for all renderers
    * @param {Boolean} dirty
-   * @param {Boolean} setPathsToDirty = false
+   * @param {Boolean} [setPathsToDirty = false]
    */
   setDirty (dirty, setPathsToDirty = false) {
     for (let rendererId in this._dirtiness) {

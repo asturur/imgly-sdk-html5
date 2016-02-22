@@ -17,10 +17,13 @@ gulp.task('jsdoc', function () {
       },
       opts: {
         destination: './doc',
-        template: 'node_modules/jaguarjs-jsdoc'
+        template: 'node_modules/jaguarjs-jsdoc',
+        access: 'public,undefined',
+        query: 'inherits=false'
       },
       plugins: [
-        'plugins/markdown'
+        'node_modules/jsdoc/plugins/markdown',
+        'plugins/configurable'
       ],
       templates: {
         cleverLinks: false,

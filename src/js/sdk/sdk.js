@@ -26,7 +26,22 @@ const { RenderType, ImageFormat, Events } = Constants
  * @class
  * @alias PhotoEditorSDK
  */
-export default class PhotoEditorSDK extends EventEmitter {
+class PhotoEditorSDK extends EventEmitter {
+  /**
+   * Creates a PhotoEditorSDK instance
+   * @param  {String} [preferredRenderer = webgl] - `webgl` or `canvas`
+   * @param  {Object} [options = {}]
+   * @param  {Image} [options.image] - The image that should be rendered
+   * @param  {String} [options.renderMode = dynamic] - `dynamic` or `export`
+   * @param  {Boolean} [options.versionCheck = true] - Should a version check be performed?
+   * @param  {Boolean} [options.displayWelcomeMessage = true] - Should a welcome message be printed
+   *   in the console?
+   * @param  {HTMLCanvasElement} [options.canvas] - The canvas element the SDK should render to
+   * @param  {Number} [options.zoom = 1] - The zoom level. Only available in `dynamic` mode
+   * @param  {String} [options.logLevel = warn] - `trace`, `info`, `warn`, `error` or `log`
+   * @param  {Number} [options.pixelRatio = 1] - If none is given, PhotoEditorSDK automatically
+   *   detects the current device's pixel ratio
+   */
   constructor (preferredRenderer, options = {}) {
     super()
 
@@ -43,7 +58,6 @@ export default class PhotoEditorSDK extends EventEmitter {
       versionCheck: true,
       displayWelcomeMessage: true,
       image: null,
-      dimensions: null,
       canvas: null,
       zoom: 1,
       logLevel: 'warn',
@@ -93,6 +107,7 @@ export default class PhotoEditorSDK extends EventEmitter {
 
   /**
    * Initializes the SDK
+   * @private
    */
   _init () {
     if (this._options.image) {
@@ -126,7 +141,7 @@ export default class PhotoEditorSDK extends EventEmitter {
   // -------------------------------------------------------------------------- RENDERING
 
   /**
-   * Exports the image
+   * Exports the image with the given options. Result of the Promise is the exported image or data url.
    * @param  {PhotoEditorSDK.RenderType} [renderType=PhotoEditorSDK.RenderType.DATAURL] - The output type
    * @param  {PhotoEditorSDK.ImageFormat} [imageFormat=PhotoEditorSDK.ImageFormat.PNG] - The output image format
    * @param  {Number} [quality=0.8] - The image quality, between 0 and 1
@@ -160,7 +175,7 @@ export default class PhotoEditorSDK extends EventEmitter {
   }
 
   /**
-   * Renders the current image
+   * Renders the current image to the canvas
    * @return {Promise}
    */
   render () {
@@ -235,9 +250,9 @@ export default class PhotoEditorSDK extends EventEmitter {
   /**
    * Creates an operation with the given identifier
    * @param {String} identifier
-   * @param {Object} options = {}
-   * @param {Boolean} addToStack = true
-   * @returns {Operation}
+   * @param {Object} [options = {}]
+   * @param {Boolean} [addToStack = true]
+   * @returns {PhotoEditorSDK.Operation}
    */
   createOperation (identifier, options = {}, addToStack = true) {
     const Operation = this._operations[identifier]
@@ -254,7 +269,7 @@ export default class PhotoEditorSDK extends EventEmitter {
 
   /**
    * Adds the given operation to the operations stack
-   * @param {Operation} operation
+   * @param {PhotoEditorSDK.Operation} operation
    */
   addOperation (operation) {
     this._operationsStack.push(operation)
@@ -264,7 +279,7 @@ export default class PhotoEditorSDK extends EventEmitter {
 
   /**
    * Returns the initial image dimensions
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getInputDimensions () {
     return new Vector2(this._image.width, this._image.height)
@@ -273,7 +288,7 @@ export default class PhotoEditorSDK extends EventEmitter {
   /**
    * Returns the final dimensions that the input image would have
    * after all existing operations have been applied
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getFinalDimensions () {
     let dimensions = this.getInputDimensions()
@@ -309,7 +324,7 @@ export default class PhotoEditorSDK extends EventEmitter {
 
   /**
    * Creates a render texture for the current renderer
-   * @return {Engine.RenderTexture}
+   * @return {PhotoEditorSDK.Engine.RenderTexture}
    * @TODO  This does probably not belong here
    */
   createRenderTexture () {
@@ -356,6 +371,10 @@ export default class PhotoEditorSDK extends EventEmitter {
     }
   }
 
+  /**
+   * Resizes the renderer to the given dimensions
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
+   */
   resizeTo (dimensions) {
     this._renderer.resizeTo(dimensions)
   }
@@ -442,9 +461,21 @@ export default class PhotoEditorSDK extends EventEmitter {
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
   /**
+   * Checks if an image is provided
+   * @return {Boolean} [description]
+   */
+  hasImage () { return this._image !== null && typeof this._image !== 'undefined' }
+
+  /**
+   * Returns the image
+   * @return {Image}
+   */
+  getImage () { return this._image }
+
+  /**
    * Sets the image and parses the exif data
    * @param {Image} image
-   * @param {Exif} exif = null
+   * @param {PhotoEditorSDK.Exif} [exif = null]
    */
   setImage (image, exif = null) {
     this._options.image = image
@@ -462,11 +493,40 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._sprite.setTexture(this._inputTexture)
   }
 
-  setCanvas (canvas) { this._renderer.setCanvas(canvas) }
+  /**
+   * Returns the canvas
+   * @return {HTMLCanvasElement}
+   */
   getCanvas () { return this._renderer.getCanvas() }
+
+  /**
+   * Sets the canvas
+   * @param {HTMLCanvasElement} canvas
+   */
+  setCanvas (canvas) { this._renderer.setCanvas(canvas) }
+
+  /**
+   * Returns the sprite
+   * @return {PhotoEditorSDK.Engine.Sprite}
+   */
   getSprite () { return this._sprite }
+
+  /**
+   * Returns the container
+   * @return {PhotoEditorSDK.Engine.Container}
+   */
   getContainer () { return this._container }
+
+  /**
+   * Returns the operation stack
+   * @return {PhotoEditorSDK.OperationsStack}
+   */
   getOperationsStack () { return this._operationsStack }
+
+  /**
+   * Sets the operations stack
+   * @param {PhotoEditorSDK.OperationsStack} operationsStack
+   */
   setOperationsStack (operationsStack) {
     if (this._operationsStack) {
       this._operationsStack.off(Events.OPERATION_UPDATED, this._onOperationUpdate)
@@ -475,14 +535,30 @@ export default class PhotoEditorSDK extends EventEmitter {
     this._operationsStack = operationsStack
     this._operationsStack.on(Events.OPERATION_UPDATED, this._onOperationUpdate)
   }
+
+  /**
+   * Returns the available operations
+   * @return {Operation[]}
+   */
   getOperations () { return this._operations }
-  getImage () { return this._image }
-  hasImage () { return this._image !== null && typeof this._image !== 'undefined' }
-  getRenderer () {
-    if (!this._renderer) this._initRenderer()
-    return this._renderer
-  }
+
+  /**
+   * Returns the renderer
+   * @return {PhotoEditorSDK.Engine.BaseRenderer}
+   */
+  getRenderer () { return this._renderer }
+
+  /**
+   * Returns the rendering offset
+   * @return {PhotoEditorSDK.Math.Vector2}
+   */
   getOffset () { return this._offset }
+
+  /**
+   * Sets the rendering offset
+   * @param {PhotoEditorSDK.Vector2|Number} offset
+   * @param {Number} y
+   */
   setOffset (offset, y) {
     if (offset instanceof Vector2) {
       this._offset.copy(offset)
@@ -490,13 +566,33 @@ export default class PhotoEditorSDK extends EventEmitter {
       this._offset.set(offset, y)
     }
   }
+
+  /**
+   * Returns the zoom level
+   * @return {Number}
+   */
   getZoom () { return this._zoom }
+
+  /**
+   * Sets the zoom level
+   * @param {Number} zoom
+   */
   setZoom (zoom) {
     this._zoom = zoom
     this._sprite.setScale(this._zoom, this._zoom)
     this._sprite.updateTransform()
   }
+
+  /**
+   * Returns the pixel ratio
+   * @return {Number}
+   */
   getPixelRatio () { return this._options.pixelRatio }
+
+  /**
+   * Returns the Exif instance
+   * @return {PhotoEditorSDK.Exif} [description]
+   */
   getExif () { return this._exif }
 
   // -------------------------------------------------------------------------- DISPOSAL
@@ -511,3 +607,5 @@ export default class PhotoEditorSDK extends EventEmitter {
     }
   }
 }
+
+export default PhotoEditorSDK

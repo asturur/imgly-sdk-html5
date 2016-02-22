@@ -16,14 +16,20 @@ import Configurable from '../lib/configurable'
 import PerformanceTest from '../lib/performance-test'
 
 /**
- * Base class for Operations. Extendable via {@link PhotoEditorSDK.Operation#extend}.
+ * Base class for Operations
  * @class
- * @alias PhotoEditorSDK.Operation
+ * @alias Operation
+ * @extends PhotoEditorSDK.Configurable
+ * @memberof PhotoEditorSDK
  */
 class Operation extends Configurable {
-  constructor (sdk, options) {
+  /**
+   * Creates an Operation
+   * @param  {PhotoEditorSDK} sdk
+   * @param  {Object} [options]
+   */
+  constructor (sdk, options = {}) {
     super(options, {
-      numberFormat: { type: 'string', default: 'relative', available: ['absolute', 'relative'] },
       enabled: { type: 'boolean', default: true }
     })
 
@@ -52,20 +58,14 @@ class Operation extends Configurable {
   /**
    * Creates and returns a render texture
    * @param  {PhotoEditorSDK} sdk
-   * @return {RenderTexture}
+   * @return {PhotoEditorSDK.Engine.RenderTexture}
+   * @protected
    */
   _getRenderTexture (sdk) {
     if (!this._renderTexture) {
       this._renderTexture = sdk.createRenderTexture()
     }
     return this._renderTexture
-  }
-
-  /**
-   * Disposes the RenderTexture
-   */
-  disposeRenderTexture () {
-    this._renderTexture = null
   }
 
   /**
@@ -135,10 +135,10 @@ class Operation extends Configurable {
   /**
    * Applies this operation using WebGL
    * @param  {PhotoEditorSDK} sdk
-   * @return {WebGLRenderer} renderer
-   * @private
+   * @return {PhotoEditorSDK.Engine.WebGLRenderer} renderer
+   * @protected
+   * @abstract
    */
-  /* istanbul ignore next */
   _renderWebGL (sdk) {
     throw new Error('Operation#_renderWebGL is abstract and not implemented in inherited class.')
   }
@@ -146,8 +146,9 @@ class Operation extends Configurable {
   /**
    * Applies this operation using Canvas2D
    * @param  {PhotoEditorSDK} sdk
-   * @return {CanvasRenderer} renderer
-   * @private
+   * @return {PhotoEditorSDK.Engine.CanvasRenderer} renderer
+   * @protected
+   * @abstract
    */
   _renderCanvas (sdk) {
     throw new Error('Operation#_renderCanvas is abstract and not implemented in inherited class.')
@@ -156,8 +157,8 @@ class Operation extends Configurable {
   /**
    * Returns the dimensions that an image with the given `dimensions`
    * would have after this operation has been applied
-   * @param  {Vector2} dimensions
-   * @return {Vector2}
+   * @param  {PhotoEditorSDK.Math.Vector2} dimensions
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getNewDimensions (dimensions) {
     return dimensions.clone()
@@ -175,7 +176,7 @@ class Operation extends Configurable {
 
   /**
    * Checks if this operation is dirty for the given renderer
-   * @param  {BaseRenderer}  renderer
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer}  renderer
    * @return {Boolean}
    */
   isDirtyForRenderer (renderer) {
@@ -188,7 +189,7 @@ class Operation extends Configurable {
   /**
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
-   * @param {BaseRenderer} renderer
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
    */
   setDirtyForRenderer (dirty, renderer) {
     this._dirtiness[renderer.id] = dirty
@@ -204,7 +205,12 @@ class Operation extends Configurable {
     }
   }
 
-  getOptions () { return this._options }
+  /**
+   * Disposes the RenderTexture
+   */
+  disposeRenderTexture () {
+    this._renderTexture = null
+  }
 
   /**
    * Disposes this operation
