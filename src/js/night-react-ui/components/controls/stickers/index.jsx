@@ -9,7 +9,7 @@
  */
 
 import { SDK, SDKUtils } from '../../../globals'
-const { Sticker } = SDK
+const { Sticker } = SDK.Operations.SpriteOperation
 import StickersControlsComponent from './stickers-controls-component'
 import SpriteCanvasControlsComponent from '../sprites/sprites-canvas-controls-component'
 

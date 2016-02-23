@@ -9,7 +9,8 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Vector2, Utils } = PhotoEditorSDK
+const { Utils } = PhotoEditorSDK
+const { Vector2 } = PhotoEditorSDK.Math
 
 const UIUtils = {
   /**

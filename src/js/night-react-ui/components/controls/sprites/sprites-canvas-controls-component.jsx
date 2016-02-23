@@ -13,7 +13,7 @@ import { Utils, SDK, ReactBEM } from '../../../globals'
 import TextItemComponent from './items/text-item-component'
 import StickerItemComponent from './items/sticker-item-component'
 import CanvasControlsComponent from '../canvas-controls-component'
-const { Sticker, Text } = SDK
+const { Sticker, Text } = SDK.Operations.SpriteOperation
 
 export default class SpritesCanvasControlsComponent extends CanvasControlsComponent {
   constructor (...args) {

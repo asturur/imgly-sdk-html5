@@ -9,7 +9,7 @@
  */
 
 import { SDK, Vector2, SDKUtils } from '../../../globals'
-const { Text } = SDK
+const { Text } = SDK.Operations.SpriteOperation
 import SpritesCanvasControlsComponent from '../sprites/sprites-canvas-controls-component'
 import TextControlsComponent from './text-controls-component'
 
