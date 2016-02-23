@@ -30,6 +30,43 @@ class NightReactUI extends EventEmitter {
   /**
    * Creates an UI instance
    * @param  {Object} [options = {}]
+   * @param  {DOMElement} [options.container] - The container that the UI should be rendered to
+   * @param  {Boolean} [options.showNewButton] - Should the `new` button be displayed?
+   * @param  {String} [options.preferredRenderer = 'webgl'] - `webgl` or `canvas`
+   * @param  {String} [options.language = 'en'] - Currently `en` and `de` are supported
+   * @param  {String} [options.title = 'PhotoEditor SDK'] - Only available for licensees
+   * @param  {Boolen} [options.responsive = false] - Should the editor re-render on window resize?
+   * @param  {Boolean} [options.webcam = true] - Enables webcam support. Disabled on mobile devices.
+   * @param  {String[]} [options.tools] - The enabled tools. Available are: `crop`, `rotation`,
+   *                                    `flip`, `filter`, `brightness`, `saturation`, `contrast`,
+   *                                    `text`, `sticker`, `brush`, `radial-blur`, `tilt-shift`
+   *                                    and `frame`
+   * @param  {(String[]|Array[])} [options.controlsOrder] - The order in which the controls are displayed.
+   *                                           Available are `crop`, `orientation`, `filter`,
+   *                                           `adjustments`, `text`, `sticker`, `brush`, `focus`,
+   *                                           `frame`. Can be grouped in arrays which will be
+   *                                           displayed with separators.
+   * @param  {String[]} [options.operationsOrder] - The order in which operations are added to
+   *                                              the stack. Changing this may affect the
+   *                                              performance.
+   * @param  {Object} [options.controlsOptions] - Options that are passed to specific controls. See
+   *                                            the documentation for each control to learn more
+   *                                            about available values.
+   * @param  {Object} [options.maxMegaPixels] - Maximum amount of megapixels per device type
+   * @param  {Number} [options.maxMegaPixels.desktop = 10]
+   * @param  {Number} [options.maxMegaPixels.mobile = 5]
+   * @param  {Object} [options.assets]
+   * @param  {String} [options.assets.baseUrl = '/'] - Path that is prepended to all asset paths
+   * @param  {Function} [options.assets.resolver] - A function resolving a path to another path.
+   * @param  {Object} [options.export]
+   * @param  {Boolean} [options.export.showButton = true] - Should the `export` button be displayed?
+   * @param  {String} [options.export.format = 'image/png'] - The export format. Available formats
+   *                                         vary by browser.
+   * @param  {PhotoEditorSDK.RenderType} [options.export.type] - The export type (image or data url)
+   * @param  {Boolean} [options.export.download] - Should the result be presented as a download?
+   * @param  {String} [options.logLevel] - `trace`, `info`, `warn`, `error` or `log`
+   * @param  {Number} [options.pixelRatio = 1] - If none is given, PhotoEditorSDK automatically
+   *   detects the current device's pixel ratio
    */
   constructor (options = {}) {
     super()
