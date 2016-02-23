@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Promise from '../vendor/promise'
 import Log from '../../shared/log'
 import EventEmitter from './event-emitter'
 import Vector2 from './math/vector2'

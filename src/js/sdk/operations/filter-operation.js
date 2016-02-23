@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Promise } from '../globals'
 import Operation from './operation'
 import IdentityFilter from './filters/identity-filter'
 

@@ -16,6 +16,7 @@ import Configurable from './lib/configurable'
 import Color from './lib/color'
 import Constants from './constants'
 import Log from '../shared/log'
+import Promise from './vendor/promise'
 
 import Vector2 from './lib/math/vector2'
 import Rectangle from './lib/math/rectangle'
@@ -34,6 +35,7 @@ const Globals = {
   Log,
 
   Vector2, Rectangle, Matrix,
+  Promise,
 
   requestAnimationFrame, cancelAnimationFrame
 }

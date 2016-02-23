@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Log, Constants, Vector2 } from '../globals'
+import { Promise, Log, Constants, Vector2 } from '../globals'
 import Operation from './operation'
 
 import Sprite from './sprites/sprite'

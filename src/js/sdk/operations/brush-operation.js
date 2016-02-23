@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Constants, Engine, Vector2, Color } from '../globals'
+import { Promise, Constants, Engine, Vector2, Color } from '../globals'
 import Operation from './operation'
 import Path from './brush/path'
 import ControlPoint from './brush/control-point'

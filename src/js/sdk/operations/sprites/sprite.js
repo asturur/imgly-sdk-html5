@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Vector2, Engine, Utils, Configurable } from '../../globals'
+import { Promise, Vector2, Engine, Utils, Configurable } from '../../globals'
 
 class Sprite extends Configurable {
   constructor (operation, options) {

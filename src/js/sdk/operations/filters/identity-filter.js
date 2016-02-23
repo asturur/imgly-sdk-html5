@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Promise } from '../../globals'
 import Filter from './filter'
 
 /**

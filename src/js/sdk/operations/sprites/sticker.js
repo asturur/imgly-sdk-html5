@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine, Vector2 } from '../../globals'
+import { Promise, Engine, Vector2 } from '../../globals'
 import Sprite from './sprite'
 import AdjustmentsFilter from '../adjustments/adjustments-filter'
 

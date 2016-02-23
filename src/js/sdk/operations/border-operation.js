@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Engine, Vector2, Color } from '../globals'
+import { Promise, Engine, Vector2, Color } from '../globals'
 import Operation from './operation'
 
 class BorderFilter extends Engine.Filter {
