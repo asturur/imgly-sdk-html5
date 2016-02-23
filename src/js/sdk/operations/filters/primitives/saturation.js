@@ -58,7 +58,7 @@ SaturationFilter.prototype.availableOptions = {
  * Saturation primitive
  * @class
  * @extends PhotoEditorSDK.Filters.Primitive
- * @memberof PhotoEditorSDK.Filters.Primitives
+ * @memberof PhotoEditorSDK.FilterPrimitives
  */
 class Saturation extends Primitive {
   constructor (...args) {

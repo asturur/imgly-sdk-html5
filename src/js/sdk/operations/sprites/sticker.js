@@ -12,7 +12,7 @@ import { Engine, Vector2 } from '../../globals'
 import Sprite from './sprite'
 import AdjustmentsFilter from '../adjustments/adjustments-filter'
 
-export default class Sticker extends Sprite {
+class Sticker extends Sprite {
   constructor (...args) {
     super(...args)
 
@@ -125,3 +125,5 @@ Sticker.prototype.availableOptions = {
     contrast: { type: 'number', default: 1 }
   }}
 }
+
+export default Sticker

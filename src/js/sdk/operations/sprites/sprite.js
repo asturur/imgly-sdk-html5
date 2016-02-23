@@ -10,7 +10,7 @@
 
 import { Vector2, Engine, Utils, Configurable } from '../../globals'
 
-export default class Sprite extends Configurable {
+class Sprite extends Configurable {
   constructor (operation, options) {
     super(options)
     this._operation = operation
@@ -136,3 +136,5 @@ export default class Sprite extends Configurable {
     }
   }
 }
+
+export default Sprite

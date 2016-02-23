@@ -53,7 +53,7 @@ class GrayscaleFilter extends Engine.Filter {
  * Grayscale primitive
  * @class
  * @extends PhotoEditorSDK.Filters.Primitive
- * @memberof PhotoEditorSDK.Filters.Primitives
+ * @memberof PhotoEditorSDK.FilterPrimitives
  */
 class Grayscale extends Primitive {
   constructor (...args) {

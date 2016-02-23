@@ -12,7 +12,7 @@
 /**
  * Base class for filter primitives.
  * @class
- * @memberof PhotoEditorSDK.Filters.Primitives
+ * @memberof PhotoEditorSDK.FilterPrimitives
  */
 class Primitive {
   constructor (options) {

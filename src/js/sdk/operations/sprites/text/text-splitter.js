@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-export default class TextSplitter {
+class TextSplitter {
   constructor (context) {
     this._context = context
     this._lastFontStyle = {}
@@ -178,3 +178,5 @@ export default class TextSplitter {
    */
   setMaxWidth (maxWidth) { this._maxWidth = maxWidth }
 }
+
+export default TextSplitter

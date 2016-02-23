@@ -57,7 +57,7 @@ SoftColorOverlayFilter.prototype.availableOptions = {
  * SoftColorOverlay primitive
  * @class
  * @extends PhotoEditorSDK.Filters.Primitive
- * @memberof PhotoEditorSDK.Filters.Primitives
+ * @memberof PhotoEditorSDK.FilterPrimitives
  */
 class SoftColorOverlay extends Primitive {
   constructor (...args) {

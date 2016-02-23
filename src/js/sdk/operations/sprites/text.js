@@ -12,7 +12,7 @@ import { Color, Vector2 } from '../../globals'
 import Sprite from './sprite'
 import TextRenderer from './text/text-renderer'
 
-export default class Text extends Sprite {
+class Text extends Sprite {
   constructor (...args) {
     super(...args)
 
@@ -111,3 +111,5 @@ Text.prototype.availableOptions = {
   flipHorizontally: { type: 'boolean', default: false },
   flipVertically: { type: 'boolean', default: false }
 }
+
+export default Text

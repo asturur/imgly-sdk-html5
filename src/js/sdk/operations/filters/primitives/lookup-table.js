@@ -61,7 +61,7 @@ LookupTableFilter.prototype.availableOptions = {
  * used to look up the corresponding value for each channel.
  * @class
  * @extends PhotoEditorSDK.Filters.Primitive
- * @memberof PhotoEditorSDK.Filters.Primitives
+ * @memberof PhotoEditorSDK.FilterPrimitives
  */
 class LookupTable extends Primitive {
   constructor (...args) {

@@ -53,7 +53,7 @@ class GobblinFilter extends Engine.Filter {
  * Gobblin primitive
  * @class
  * @extends PhotoEditorSDK.Filters.Primitive
- * @memberof PhotoEditorSDK.Filters.Primitives
+ * @memberof PhotoEditorSDK.FilterPrimitives
  */
 class Gobblin extends Primitive {
   constructor (...args) {

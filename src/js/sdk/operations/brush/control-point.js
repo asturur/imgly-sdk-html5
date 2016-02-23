@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-export default class ControlPoint {
+class ControlPoint {
   constructor (path, position) {
     this._path = path
     this._drawnCanvases = []
@@ -48,3 +48,5 @@ export default class ControlPoint {
     this._drawnCanvases = []
   }
 }
+
+export default ControlPoint

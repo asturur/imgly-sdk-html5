@@ -11,7 +11,7 @@
 import { Engine, Vector2 } from '../../../globals'
 import TextSplitter from './text-splitter'
 
-export default class TextRenderer {
+class TextRenderer {
   constructor (text, operation) {
     this._text = text
     this._operation = operation
@@ -210,3 +210,5 @@ export default class TextRenderer {
     return boundingBox
   }
 }
+
+export default TextRenderer

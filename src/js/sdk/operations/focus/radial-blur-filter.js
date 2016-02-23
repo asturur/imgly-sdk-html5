@@ -11,7 +11,7 @@
 import { Vector2, Engine } from '../../globals'
 import StackBlur from '../../vendor/stack-blur'
 
-export default class RadialBlurFilter extends Engine.Filter {
+class RadialBlurFilter extends Engine.Filter {
   constructor (...args) {
     super(...args)
     this._fragmentSource = require('raw!../../shaders/focus/radial-blur.frag')
@@ -152,3 +152,5 @@ RadialBlurFilter.prototype.availableOptions = {
   delta: { type: 'vector2', default: new Vector2(1, 1), uniformType: '2f' },
   texSize: { type: 'vector2', default: new Vector2(100, 100), uniformType: '2f' }
 }
+
+export default RadialBlurFilter

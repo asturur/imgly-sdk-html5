@@ -72,7 +72,7 @@ GlowFilter.prototype.availableOptions = {
  * Glow primitive
  * @class
  * @extends PhotoEditorSDK.Filters.Primitive
- * @memberof PhotoEditorSDK.Filters.Primitives
+ * @memberof PhotoEditorSDK.FilterPrimitives
  */
 class Glow extends Primitive {
   constructor (...args) {

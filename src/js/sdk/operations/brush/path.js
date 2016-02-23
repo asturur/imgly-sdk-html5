@@ -11,7 +11,7 @@
 import { EventEmitter } from '../../globals'
 import ControlPoint from './control-point'
 
-export default class Path extends EventEmitter {
+class Path extends EventEmitter {
   constructor (operation, thickness, color) {
     super()
     this._thickness = thickness
@@ -55,3 +55,5 @@ export default class Path extends EventEmitter {
     this._controlPoints.forEach(iterator)
   }
 }
+
+export default Path

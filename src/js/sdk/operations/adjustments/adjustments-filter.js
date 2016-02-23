@@ -10,7 +10,7 @@
 
 import { Engine } from '../../globals'
 
-export default class AdjustmentsFilter extends Engine.Filter {
+class AdjustmentsFilter extends Engine.Filter {
   constructor () {
     super()
     this._fragmentSource = require('raw!../../shaders/generic/adjustments.frag')
@@ -82,3 +82,5 @@ AdjustmentsFilter.prototype.availableOptions = {
   saturation: { type: 'number', default: 1, uniformType: 'f' },
   contrast: { type: 'number', default: 1, uniformType: 'f' }
 }
+
+export default AdjustmentsFilter
