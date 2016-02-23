@@ -97,10 +97,11 @@ class TiltShiftFilter extends Engine.Filter {
   _renderMask () {
     const canvas = this._maskRenderTarget.getCanvas()
     const context = this._maskRenderTarget.getContext()
+    const pixelRatio = this._maskRenderTarget.getPixelRatio()
 
     const canvasDimensions = new Vector2(canvas.width, canvas.height)
 
-    const gradientRadius = this._options.gradientRadius
+    const gradientRadius = this._options.gradientRadius * pixelRatio
     const start = this._options.start.clone()
     const end = this._options.end.clone()
 

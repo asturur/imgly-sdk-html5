@@ -96,15 +96,17 @@ class RadialBlurFilter extends Engine.Filter {
     const context = this._maskRenderTarget.getContext()
 
     const canvasDimensions = new Vector2(canvas.width, canvas.height)
+    const pixelRatio = this._maskRenderTarget.getPixelRatio()
 
     const gradientRadius = this._options.gradientRadius
     const position = this._options.position.clone()
       .multiply(this._options.texSize)
+      .multiply(pixelRatio)
 
     // Build gradient
     const gradient = context.createRadialGradient(
       position.x, position.y, 0,
-      position.x, position.y, gradientRadius
+      position.x, position.y, gradientRadius * pixelRatio
     )
     gradient.addColorStop(0, '#FFFFFF')
     gradient.addColorStop(1, '#000000')
