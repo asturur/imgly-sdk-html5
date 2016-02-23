@@ -31,6 +31,16 @@ class Text extends Sprite {
   }
 
   /**
+   * Returns a serialized version of this configurable
+   * @return {Object}
+   */
+  serializeOptions () {
+    const options = super.serializeOptions()
+    options.type = 'text'
+    return options
+  }
+
+  /**
    * Returns a style object for this text
    * @param {PhotoEditorSDK} SDK
    * @param {PhotoEditorSDK.Math.Vector2} outputDimensions

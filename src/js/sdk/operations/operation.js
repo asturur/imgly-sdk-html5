@@ -39,8 +39,6 @@ class Operation extends Configurable {
     this._sprite = new Engine.Sprite()
     this._container = new Engine.Container()
     this._container.addChild(this._sprite)
-
-    this._initOptions(options)
   }
 
   // -------------------------------------------------------------------------- EVENTS

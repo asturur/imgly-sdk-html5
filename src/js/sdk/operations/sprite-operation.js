@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Constants, Engine, Vector2 } from '../globals'
+import { Log, Constants, Vector2 } from '../globals'
 import Operation from './operation'
 
 import Sprite from './sprites/sprite'
@@ -36,9 +36,13 @@ class SpriteOperation extends Operation {
     this._onSpriteUpdate = this._onSpriteUpdate.bind(this)
     this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
 
-    this._container = new Engine.Container()
-    this._inputSprite = new Engine.Sprite()
-    this._container.addChild(this._inputSprite)
+    const sprites = this._options.sprites.slice()
+    sprites.forEach((sprite) => {
+      this.removeSprite(sprite)
+      this.addSprite(sprite)
+    })
+
+    window.spritesContainer = this._container
   }
 
   /**
@@ -253,7 +257,7 @@ class SpriteOperation extends Operation {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
-    this._inputSprite.setTexture(outputSprite.getTexture())
+    this._sprite.setTexture(outputSprite.getTexture())
 
     const container = this._container
     const sprites = this._options.sprites
@@ -351,34 +355,37 @@ SpriteOperation.identifier = 'sprite'
 SpriteOperation.prototype.availableOptions = {
   sprites: {
     type: 'array', default: [],
-    setter: function (sprites) {
+    setter: function (sprites, initial) {
       sprites = sprites.map((sprite, i) => {
         if (sprite instanceof Sprite) return sprite
 
-        // Update and return sprites if they already exist
-        if (this._options.sprites[i]) {
-          this._options.sprites[i].set(sprite)
-          return this._options.sprites[i]
-        }
+        const { type } = sprite
+        delete sprite.type
 
-        // Create sprite from the given _options
-        switch (sprite.type) {
+        // Create sprite from the given options
+        switch (type) {
           case 'text':
             return new Text(this, sprite)
           case 'sticker':
             return new Sticker(this, sprite)
+          default:
+            Log.error(this.constructor.name, 'Invalid sprite type: ' + sprite.type)
         }
       })
 
-      // Remove sprites that are no longer there
-      if (this._options.sprites) {
-        let removedSprites = []
-        this._options.sprites.forEach((sprite) => {
-          if (sprites.indexOf(sprite) === -1) {
-            removedSprites.push(sprite)
-          }
+      // Remove all sprites
+      if (!initial) {
+        if (this._options.sprites) {
+          const spritesToRemove = this._options.sprites.slice()
+          spritesToRemove.forEach((sprite) => {
+            this.removeSprite(sprite)
+          })
+        }
+
+        // Add all sprites
+        sprites.forEach((sprite) => {
+          this.addSprite(sprite)
         })
-        removedSprites.forEach((sprite) => this.removeSprite(sprite))
       }
 
       return sprites

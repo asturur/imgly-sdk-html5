@@ -35,6 +35,16 @@ class Sticker extends Sprite {
   }
 
   /**
+   * Returns a serialized version of this configurable
+   * @return {Object}
+   */
+  serializeOptions () {
+    const options = super.serializeOptions()
+    options.type = 'sticker'
+    return options
+  }
+
+  /**
    * Updates this sprite
    * @param  {PhotoEditorSDK} sdk
    * @returns {Promise}
