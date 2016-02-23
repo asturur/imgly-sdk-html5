@@ -12,14 +12,14 @@
  * @namespace PhotoEditorSDK.Operations
  */
 export default {
-  Filter: require('./filter-operation'),
-  Crop: require('./crop-operation'),
-  Orientation: require('./orientation-operation'),
-  Adjustments: require('./adjustments-operation'),
-  TiltShift: require('./tilt-shift-operation'),
-  RadialBlur: require('./radial-blur-operation'),
-  Frame: require('./frame-operation'),
-  Sprite: require('./sprite-operation'),
-  Watermark: require('./watermark-operation'),
-  Brush: require('./brush-operation')
+  FilterOperation: require('./filter-operation'),
+  CropOperation: require('./crop-operation'),
+  OrientationOperation: require('./orientation-operation'),
+  AdjustmentsOperation: require('./adjustments-operation'),
+  TiltShiftOperation: require('./tilt-shift-operation'),
+  RadialBlurOperation: require('./radial-blur-operation'),
+  FrameOperation: require('./frame-operation'),
+  SpriteOperation: require('./sprite-operation'),
+  WatermarkOperation: require('./watermark-operation'),
+  BrushOperation: require('./brush-operation')
 }
