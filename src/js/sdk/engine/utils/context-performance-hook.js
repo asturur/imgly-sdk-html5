@@ -15,7 +15,7 @@ import { Log } from '../globals'
  * mocks its methods and measures the time consumed by the method calls. When `endFrame`
  * is called, it prints a performance report
  * @class
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  * @ignore
  */
 class ContextPerformanceHook {

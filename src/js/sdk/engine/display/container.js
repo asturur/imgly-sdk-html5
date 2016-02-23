@@ -13,9 +13,8 @@ import DisplayObject from './display-object'
 /**
  * A container for DisplayObject instances
  * @class
- * @alias Engine.Container
  * @extends PhotoEditorSDK.Engine.DisplayObject
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class Container extends DisplayObject {
   /**

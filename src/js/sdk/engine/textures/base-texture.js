@@ -13,9 +13,8 @@ import { Rectangle, EventEmitter } from '../globals'
 /**
  * A BaseTexture holds and handles the raw source of a texture
  * @class
- * @alias Engine.BaseTexture
  * @extends EventEmitter
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class BaseTexture extends EventEmitter {
   /**

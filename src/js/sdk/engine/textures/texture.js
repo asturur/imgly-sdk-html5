@@ -15,9 +15,8 @@ import TextureUVs from '../utils/texture-uvs'
 /**
  * A texture that can be applied to a {@link PhotoEditorSDK.Engine.Sprite}
  * @class
- * @alias Engine.Texture
  * @extends EventEmitter
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class Texture extends EventEmitter {
   constructor (baseTexture, frame) {

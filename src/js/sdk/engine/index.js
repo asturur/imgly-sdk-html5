@@ -23,6 +23,9 @@ import Shaders from './shaders/'
 import Shader from './shaders/shader'
 import Filter from './filters/filter'
 
+/**
+ * @namespace PhotoEditorSDK.Engine
+ */
 export default {
   WebGLRenderer,
   CanvasRenderer,

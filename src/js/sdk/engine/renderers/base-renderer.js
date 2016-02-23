@@ -14,8 +14,7 @@ import Utils from '../utils/utils'
 /**
  * The base class for all renderers
  * @class
- * @alias Engine.BaseRenderer
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class BaseRenderer extends EventEmitter {
   /**

@@ -21,9 +21,8 @@ import ContextPerformanceHook from '../../utils/context-performance-hook'
 /**
  * The renderer that is used for WebGL rendering
  * @class
- * @alias Engine.WebGLRenderer
  * @extends PhotoEditorSDK.Engine.BaseRenderer
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class WebGLRenderer extends BaseRenderer {
   /**

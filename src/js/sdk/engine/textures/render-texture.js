@@ -19,9 +19,8 @@ import CanvasFilterManager from '../managers/canvas-filter-manager'
 /**
  * A texture that you can render to
  * @class
- * @alias Engine.RenderTexture
  * @extends PhotoEditorSDK.Engine.Texture
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class RenderTexture extends Texture {
   /**

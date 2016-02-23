@@ -14,9 +14,8 @@ import Shader from './shader'
 /**
  * The default texture shader
  * @class
- * @alias Engine.TextureShader
  * @extends PhotoEditorSDK.Engine.Shader
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class TextureShader extends Shader {
   /**

@@ -15,8 +15,7 @@ import Quad from '../utils/quad'
 /**
  * Manages the filters for a {@link PhotoEditorSDK.Engine.WebGLRenderer}
  * @class
- * @alias Engine.WebGLFilterManager
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class WebGLFilterManager {
   constructor (renderer) {

@@ -14,8 +14,7 @@ import { Log, Matrix, Vector2, Rectangle } from '../globals'
  * The base class for all objects that can be displayed
  * on the screen
  * @class
- * @alias Engine.DisplayObject
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class DisplayObject {
   /**

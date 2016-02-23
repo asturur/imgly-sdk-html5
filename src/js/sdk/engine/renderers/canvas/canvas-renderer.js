@@ -18,9 +18,8 @@ import CanvasFilterManager from '../../managers/canvas-filter-manager'
 /**
  * The renderer that is used for Canvas2D rendering
  * @class
- * @alias Engine.CanvasRenderer
  * @extends PhotoEditorSDK.Engine.BaseRenderer
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class CanvasRenderer extends BaseRenderer {
   /**

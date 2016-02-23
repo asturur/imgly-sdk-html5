@@ -14,8 +14,7 @@ import { Vector2 } from '../globals'
  * A canvas render target that you can render to.
  * Canvas equivalent of {@link PhotoEditorSDK.Engine.RenderTarget}
  * @class
- * @alias Engine.CanvasBuffer
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class CanvasBuffer {
   /**

@@ -16,9 +16,8 @@ import TextureShader from '../shaders/texture-shader'
 /**
  * A filter can be attached to a DisplayObject and affects the way it is displayed.
  * @class
- * @alias Engine.Filter
  * @extends PhotoEditorSDK.Configurable
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class Filter extends Configurable {
   /**

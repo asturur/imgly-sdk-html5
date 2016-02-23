@@ -14,9 +14,8 @@ import Container from '../display/container'
 /**
  * A drawable rectangle with a texture
  * @class
- * @alias Engine.Sprite
  * @extends PhotoEditorSDK.Engine.Container
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class Sprite extends Container {
   /**

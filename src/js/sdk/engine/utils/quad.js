@@ -11,8 +11,7 @@
 /**
  * Represents a rectangle that is rendered using WebGL
  * @class
- * @alias Engine.Quad
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  * @ignore
  */
 class Quad {

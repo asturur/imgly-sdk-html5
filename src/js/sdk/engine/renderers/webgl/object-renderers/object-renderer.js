@@ -11,8 +11,7 @@
 /**
  * The base class for all ObjectRenderer classes
  * @class
- * @alias Engine.ObjectRenderer
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class ObjectRenderer {
   /**

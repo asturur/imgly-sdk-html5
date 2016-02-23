@@ -14,9 +14,8 @@ import ObjectRenderer from './object-renderer'
 /**
  * The ObjectRenderer that is responsible for rendering Sprite instances
  * @class
- * @alias Engine.SpriteRenderer
  * @extends PhotoEditorSDK.Engine.ObjectRenderer
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class SpriteRenderer extends ObjectRenderer {
   /**

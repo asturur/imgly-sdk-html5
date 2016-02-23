@@ -14,8 +14,7 @@ const { Log } = Globals
 /**
  * Represents a WebGL shader with a vertex shader, a fragment shader, uniforms and attributes
  * @class
- * @alias Engine.Shader
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class Shader {
   /**

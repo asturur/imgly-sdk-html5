@@ -14,8 +14,7 @@ import CanvasBuffer from '../utils/canvas-buffer'
 /**
  * Manages the filters for a {@link PhotoEditorSDK.Engine.CanvasRenderer}
  * @class
- * @alias Engine.CanvasFilterManager
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class CanvasFilterManager {
   constructor (renderer) {

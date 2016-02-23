@@ -13,8 +13,7 @@ import { Color, Vector2, Matrix, Rectangle } from '../globals'
 /**
  * An object that you can render to. WebGL equivalent of {@link PhotoEditorSDK.Engine.CanvasBuffer}
  * @class
- * @alias Engine.RenderTarget
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
 class RenderTarget {
   /**

@@ -13,10 +13,9 @@ import { Vector2 } from '../globals'
 /**
  * Represents the UV coordinates of a texture
  * @class
- * @alias Engine.TextureUVs
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Engine
  */
-export default class TextureUVs {
+class TextureUVs {
   /**
    * Creates a TextureUVs instance
    */
@@ -63,3 +62,5 @@ export default class TextureUVs {
    */
   getUVs (index) { return this._uvs[index] }
 }
+
+export default TextureUVs
