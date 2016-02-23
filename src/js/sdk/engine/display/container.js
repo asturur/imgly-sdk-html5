@@ -8,6 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import { Log } from '../globals'
 import DisplayObject from './display-object'
 
 /**
@@ -91,7 +92,16 @@ class Container extends DisplayObject {
     const index = this._children.indexOf(child)
     if (index !== -1) {
       this._children.splice(index, 1)
+    } else {
+      Log.info(this.constructor.name, 'Tried to remove a child that does not exist')
     }
+  }
+
+  /**
+   * Removes all children
+   */
+  clearChildren () {
+    this._children = []
   }
 
   /**
