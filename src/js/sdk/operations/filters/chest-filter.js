@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * Chest Filter
@@ -20,7 +21,7 @@ class ChestFilter extends Filter {
   constructor (...args) {
     super(...args)
     // Tone curve
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 0],

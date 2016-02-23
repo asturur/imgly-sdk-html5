@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * Food Filter
@@ -19,11 +20,11 @@ import Filter from './filter'
 class FoodFilter extends Filter {
   constructor (...args) {
     super(...args)
-    this._stack.push(new Filter.Primitives.Saturation({
+    this._stack.push(new FilterPrimitives.Saturation({
       saturation: 1.35
     }))
 
-    this._stack.push(new Filter.Primitives.Contrast({
+    this._stack.push(new FilterPrimitives.Contrast({
       contrast: 1.1
     }))
   }

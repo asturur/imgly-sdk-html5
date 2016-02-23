@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * Quozi Filter
@@ -21,12 +22,12 @@ class QuoziFilter extends Filter {
     super(...args)
 
     // Desaturation
-    this._stack.push(new Filter.Primitives.Desaturation({
+    this._stack.push(new FilterPrimitives.Desaturation({
       desaturation: 0.65
     }))
 
     // Tone curve
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 50],

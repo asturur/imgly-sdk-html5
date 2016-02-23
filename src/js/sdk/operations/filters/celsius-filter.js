@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * Celsius Filter
@@ -19,7 +20,7 @@ import Filter from './filter'
 class CelsiusFilter extends Filter {
   constructor (...args) {
     super(...args)
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 69],

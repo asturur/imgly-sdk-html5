@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * BWHard Filter
@@ -20,8 +21,8 @@ class BWHardFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.push(new Filter.Primitives.Grayscale())
-    this._stack.push(new Filter.Primitives.Contrast({
+    this._stack.push(new FilterPrimitives.Grayscale())
+    this._stack.push(new FilterPrimitives.Contrast({
       contrast: 1.5
     }))
   }

@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * KDynamic Filter
@@ -21,7 +22,7 @@ class KDynamicFilter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [17, 27],
@@ -34,7 +35,7 @@ class KDynamicFilter extends Filter {
     }))
 
     // Saturation
-    this._stack.push(new Filter.Primitives.Saturation({
+    this._stack.push(new FilterPrimitives.Saturation({
       saturation: 0.7
     }))
   }

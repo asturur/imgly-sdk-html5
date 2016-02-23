@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * Orchid Filter
@@ -21,7 +22,7 @@ class OrchidFilter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 0],
@@ -45,7 +46,7 @@ class OrchidFilter extends Filter {
     }))
 
     // Tone curve
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [117, 151],
@@ -55,7 +56,7 @@ class OrchidFilter extends Filter {
     }))
 
     // Desaturation
-    this._stack.push(new Filter.Primitives.Desaturation({
+    this._stack.push(new FilterPrimitives.Desaturation({
       desaturation: 0.65
     }))
   }

@@ -41,7 +41,7 @@ class Sprite extends Configurable {
 
   /**
    * Returns the DisplayObject of this Sprite
-   * @return {Engine.Sprite}
+   * @return {PhotoEditorSDK.Engine.Sprite}
    */
   getDisplayObject () {
     return this._sprite
@@ -98,7 +98,7 @@ class Sprite extends Configurable {
 
   /**
    * Checks if this operation is dirty for the given renderer
-   * @param  {BaseRenderer}  renderer
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer}  renderer
    * @return {Boolean}
    */
   isDirtyForRenderer (renderer) {
@@ -111,7 +111,7 @@ class Sprite extends Configurable {
   /**
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
-   * @param {BaseRenderer} renderer
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
    */
   setDirtyForRenderer (dirty, renderer) {
     this._dirtiness[renderer.id] = dirty

@@ -25,7 +25,7 @@ class Filter {
   /**
    * Renders the filter
    * @param  {PhotoEditorSDK} sdk
-   * @param  {Engine.RenderTexture}
+   * @param  {PhotoEditorSDK.Engine.RenderTexture}
    * @return {Promise}
    */
   render (sdk, renderTexture) {
@@ -44,7 +44,7 @@ class Filter {
   /**
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
-   * @param {BaseRenderer} renderer
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
    */
   setDirtyForRenderer (dirty, renderer) {
     this._stack.setDirtyForRenderer(dirty, renderer)
@@ -86,17 +86,5 @@ Filter.extend = require('../../lib/extend')
 
 // Exposed classes
 Filter.PrimitivesStack = PrimitivesStack
-Filter.Primitives = {}
-Filter.Primitives.Saturation = require('./primitives/saturation')
-Filter.Primitives.LookupTable = require('./primitives/lookup-table')
-Filter.Primitives.ToneCurve = require('./primitives/tone-curve')
-Filter.Primitives.SoftColorOverlay = require('./primitives/soft-color-overlay')
-Filter.Primitives.Desaturation = require('./primitives/desaturation')
-Filter.Primitives.X400 = require('./primitives/x400')
-Filter.Primitives.Grayscale = require('./primitives/grayscale')
-Filter.Primitives.Contrast = require('./primitives/contrast')
-Filter.Primitives.Glow = require('./primitives/glow')
-Filter.Primitives.Gobblin = require('./primitives/gobblin')
-Filter.Primitives.Brightness = require('./primitives/brightness')
 
 export default Filter

@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * K1 Filter
@@ -21,7 +22,7 @@ class K1Filter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [53, 32],
@@ -32,7 +33,7 @@ class K1Filter extends Filter {
     }))
 
     // Saturation
-    this._stack.push(new Filter.Primitives.Saturation({
+    this._stack.push(new FilterPrimitives.Saturation({
       saturation: 0.9
     }))
   }

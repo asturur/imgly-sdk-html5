@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * X400 Filter
@@ -20,7 +21,7 @@ class X400Filter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.push(new Filter.Primitives.X400())
+    this._stack.push(new FilterPrimitives.X400())
   }
 }
 

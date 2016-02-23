@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 import Color from '../../lib/color'
 
 /**
@@ -22,7 +23,7 @@ class K2Filter extends Filter {
     super(...args)
 
     // Tone curve
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       controlPoints: [
         [0, 0],
         [54, 33],
@@ -36,7 +37,7 @@ class K2Filter extends Filter {
     }))
 
     // Soft color overlay
-    this._stack.push(new Filter.Primitives.SoftColorOverlay({
+    this._stack.push(new FilterPrimitives.SoftColorOverlay({
       color: new Color(40 / 255, 40 / 255, 40 / 255)
     }))
   }

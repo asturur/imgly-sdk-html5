@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * Gobblin Filter
@@ -20,7 +21,7 @@ class GobblinFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.push(new Filter.Primitives.Gobblin())
+    this._stack.push(new FilterPrimitives.Gobblin())
   }
 }
 

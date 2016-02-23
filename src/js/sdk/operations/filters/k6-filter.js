@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * K6 Filter
@@ -21,7 +22,7 @@ class K6Filter extends Filter {
     super(...args)
 
     // Saturation
-    this._stack.push(new Filter.Primitives.Saturation({
+    this._stack.push(new FilterPrimitives.Saturation({
       saturation: 0.5
     }))
   }

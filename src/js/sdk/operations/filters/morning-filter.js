@@ -9,6 +9,7 @@
  */
 
 import Filter from './filter'
+import FilterPrimitives from './primitives'
 
 /**
  * Morning Filter
@@ -20,7 +21,7 @@ class MorningFilter extends Filter {
   constructor (...args) {
     super(...args)
 
-    this._stack.push(new Filter.Primitives.ToneCurve({
+    this._stack.push(new FilterPrimitives.ToneCurve({
       rgbControlPoints: {
         red: [
           [0, 40],
@@ -37,7 +38,7 @@ class MorningFilter extends Filter {
       }
     }))
 
-    this._stack.push(new Filter.Primitives.Glow())
+    this._stack.push(new FilterPrimitives.Glow())
   }
 }
 
