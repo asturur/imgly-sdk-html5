@@ -24,7 +24,7 @@ import Log from '../shared/log'
 
 const Promise = PhotoEditorSDK.Promise
 const Color = PhotoEditorSDK.Color
-const Vector2 = PhotoEditorSDK.Vector2
+const Vector2 = PhotoEditorSDK.Math.Vector2
 const SDKUtils = PhotoEditorSDK.Utils
 const EventEmitter = PhotoEditorSDK.EventEmitter
 const Base64 = PhotoEditorSDK.Base64
