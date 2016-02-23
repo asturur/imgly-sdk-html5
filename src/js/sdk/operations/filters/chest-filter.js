@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Chest Filter
  * @class
- * @alias PhotoEditorSDK.Filters.ChestFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class ChestFilter extends Filter {
   constructor (...args) {

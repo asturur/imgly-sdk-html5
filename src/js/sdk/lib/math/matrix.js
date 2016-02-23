@@ -13,8 +13,7 @@ import Vector2 from './vector2'
 /**
  * Represents a 3-dimensional matrix
  * @class
- * @alias Math.Matrix
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Math
  */
 class Matrix {
   /**

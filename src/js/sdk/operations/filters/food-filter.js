@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Food Filter
  * @class
- * @alias PhotoEditorSDK.Filters.FoodFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class FoodFilter extends Filter {
   constructor (...args) {

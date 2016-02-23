@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * X400 Filter
  * @class
- * @alias PhotoEditorSDK.Filters.X400Filter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class X400Filter extends Filter {
   constructor (...args) {

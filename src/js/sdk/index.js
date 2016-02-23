@@ -25,18 +25,20 @@ PhotoEditorSDK.version = require('../../../package.json').version
 PhotoEditorSDK.Color = require('./lib/color')
 PhotoEditorSDK.Filter = require('./operations/filters/filter')
 PhotoEditorSDK.Operation = require('./operations/operation')
-PhotoEditorSDK.Vector2 = require('./lib/math/vector2')
-PhotoEditorSDK.Matrix = require('./lib/math/matrix')
 PhotoEditorSDK.Rectangle = require('./lib/math/rectangle')
 PhotoEditorSDK.EventEmitter = require('./lib/event-emitter')
 PhotoEditorSDK.Utils = require('./lib/utils')
 PhotoEditorSDK.OperationsStack = require('./lib/operations-stack')
 PhotoEditorSDK.EXIF = require('./lib/exif')
-PhotoEditorSDK.Operations = require('./operations/')
-PhotoEditorSDK.Filters = require('./operations/filters/')
 PhotoEditorSDK.Promise = require('./vendor/promise')
 PhotoEditorSDK.Sticker = require('./operations/sprites/sticker')
 PhotoEditorSDK.Text = require('./operations/sprites/text')
+
+// Namespaces
+PhotoEditorSDK.Math = require('./lib/math/')
+PhotoEditorSDK.Operations = require('./operations/')
+PhotoEditorSDK.Filters = require('./operations/filters/')
+PhotoEditorSDK.FilterPrimitives = require('./operations/filters/primitives/')
 
 // Exposed constants
 PhotoEditorSDK.RenderType = RenderType

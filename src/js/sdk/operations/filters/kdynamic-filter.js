@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * KDynamic Filter
  * @class
- * @alias PhotoEditorSDK.Filters.KDynamicFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class KDynamicFilter extends Filter {
   constructor (...args) {

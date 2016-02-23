@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Lenin Filter
  * @class
- * @alias PhotoEditorSDK.Filters.LeninFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class LeninFilter extends Filter {
   constructor (...args) {

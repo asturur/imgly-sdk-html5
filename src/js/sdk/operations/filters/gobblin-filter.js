@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Gobblin Filter
  * @class
- * @alias PhotoEditorSDK.Filters.GobblinFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class GobblinFilter extends Filter {
   constructor (...args) {

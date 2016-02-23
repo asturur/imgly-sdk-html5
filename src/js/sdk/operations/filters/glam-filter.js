@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Glam Filter
  * @class
- * @alias PhotoEditorSDK.Filters.GlamFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class GlamFilter extends Filter {
   constructor (...args) {

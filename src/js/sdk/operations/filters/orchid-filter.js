@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Orchid Filter
  * @class
- * @alias PhotoEditorSDK.Filters.OrchidFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class OrchidFilter extends Filter {
   constructor (...args) {

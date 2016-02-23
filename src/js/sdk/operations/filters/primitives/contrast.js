@@ -55,8 +55,8 @@ ContrastFilter.prototype.availableOptions = {
 /**
  * Contrast primitive
  * @class
- * @alias PhotoEditorSDK.Filter.Primitives.Contrast
- * @extends {PhotoEditorSDK.Filter.Primitive}
+ * @extends PhotoEditorSDK.Filters.Primitive
+ * @memberof PhotoEditorSDK.Filters.Primitives
  */
 class Contrast extends Primitive {
   constructor (...args) {

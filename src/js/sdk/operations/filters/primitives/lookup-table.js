@@ -60,8 +60,8 @@ LookupTableFilter.prototype.availableOptions = {
  * Stores a 256 byte long lookup table in a 2d texture which will be
  * used to look up the corresponding value for each channel.
  * @class
- * @alias PhotoEditorSDK.Filter.Primitives.LookupTable
- * @extends {PhotoEditorSDK.Filter.Primitive}
+ * @extends PhotoEditorSDK.Filters.Primitive
+ * @memberof PhotoEditorSDK.Filters.Primitives
  */
 class LookupTable extends Primitive {
   constructor (...args) {

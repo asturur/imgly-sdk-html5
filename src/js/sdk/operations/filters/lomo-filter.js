@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Lomo Filter
  * @class
- * @alias PhotoEditorSDK.Filters.LomoFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class LomoFilter extends Filter {
   constructor (...args) {

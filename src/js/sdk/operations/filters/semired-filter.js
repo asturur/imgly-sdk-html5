@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Semired Filter
  * @class
- * @alias PhotoEditorSDK.Filters.SemiredFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class SemiredFilter extends Filter {
   constructor (...args) {

@@ -55,8 +55,8 @@ DesaturationFilter.prototype.availableOptions = {
 /**
  * Desaturation primitive
  * @class
- * @alias PhotoEditorSDK.Filter.Primitives.Desaturation
- * @extends {PhotoEditorSDK.Filter.Primitive}
+ * @extends PhotoEditorSDK.Filters.Primitive
+ * @memberof PhotoEditorSDK.Filters.Primitives
  */
 class Desaturation extends Primitive {
   constructor (...args) {

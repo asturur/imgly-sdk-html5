@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Fixie Filter
  * @class
- * @alias PhotoEditorSDK.Filters.FixieFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class FixieFilter extends Filter {
   constructor (...args) {

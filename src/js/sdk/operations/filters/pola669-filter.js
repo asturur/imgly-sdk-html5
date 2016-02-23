@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Pola669 Filter
  * @class
- * @alias PhotoEditorSDK.Filters.Pola669Filter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class Pola669Filter extends Filter {
   constructor (...args) {

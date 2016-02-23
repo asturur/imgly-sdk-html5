@@ -12,8 +12,7 @@
  * Represents a 2-dimensional vector while providing math functions to
  * modify / clone the vector. Fully chainable.
  * @class
- * @alias Math.Vector2
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Math
  */
 class Vector2 {
   /**

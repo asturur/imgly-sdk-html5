@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Quozi Filter
  * @class
- * @alias PhotoEditorSDK.Filters.QuoziFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class QuoziFilter extends Filter {
   constructor (...args) {

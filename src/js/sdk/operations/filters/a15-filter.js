@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * A15 Filter
  * @class
- * @alias PhotoEditorSDK.Filters.A15Filter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class A15Filter extends Filter {
   constructor (...args) {

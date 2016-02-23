@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * BW Filter
  * @class
- * @alias PhotoEditorSDK.Filters.BWFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class BWFilter extends Filter {
   constructor (...args) {

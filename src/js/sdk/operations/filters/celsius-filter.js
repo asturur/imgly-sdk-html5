@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Celsius Filter
  * @class
- * @alias PhotoEditorSDK.Filters.CelsiusFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class CelsiusFilter extends Filter {
   constructor (...args) {

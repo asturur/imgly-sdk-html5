@@ -14,7 +14,7 @@ import PrimitivesStack from './primitives-stack'
 /**
  * Base class for filters. Extendable via {@link PhotoEditorSDK.Filter#extend}
  * @class
- * @alias PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK
  */
 class Filter {
   constructor (intensity = 1.0) {
@@ -58,8 +58,23 @@ class Filter {
   }
 }
 
+/**
+ * A unique string that identifies this filter
+ * @type {String}
+ */
 Filter.identifier = null
+
+/**
+ * If `isIdentity` is true, this filter does not do anything and can be seen as
+ * the default filter.
+ * @type {Boolean}
+ */
 Filter.isIdentity = false
+
+/**
+ * This string is used by the UI
+ * @type {String}
+ */
 Filter.displayName = null
 
 /**

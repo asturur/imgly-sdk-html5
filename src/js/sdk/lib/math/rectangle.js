@@ -11,8 +11,7 @@
 /**
  * Represents a Rectangle
  * @class
- * @alias Math.Rectangle
- * @memberof PhotoEditorSDK
+ * @memberof PhotoEditorSDK.Math
  */
 class Rectangle {
   /**

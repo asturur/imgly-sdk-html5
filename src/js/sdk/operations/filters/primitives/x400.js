@@ -57,8 +57,8 @@ class X400Filter extends Engine.Filter {
 /**
  * X400 primitive
  * @class
- * @alias PhotoEditorSDK.Filter.Primitives.X400
- * @extends {PhotoEditorSDK.Filter.Primitive}
+ * @extends PhotoEditorSDK.Filters.Primitive
+ * @memberof PhotoEditorSDK.Filters.Primitives
  */
 class X400 extends Primitive {
   constructor (...args) {

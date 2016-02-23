@@ -24,6 +24,7 @@ import Shader from './shaders/shader'
 import Filter from './filters/filter'
 
 /**
+ * The heart of PhotoEditorSDK. Handles all the rendering in a scene-graph fashion
  * @namespace PhotoEditorSDK.Engine
  */
 export default {
@@ -41,6 +42,14 @@ export default {
   Shaders,
   Shader,
   Filter,
+
+  /**
+   * If WebGL is supported, this returns a WebGLRenderer and falls back to CanvasRenderer
+   * @param  {Number} width
+   * @param  {Number} height
+   * @param  {Object} [options = {} ]
+   * @return {(PhotoEditorSDK.Engine.WebGLRenderer|PhotoEditorSDK.Engine.CanvasRenderer)}
+   */
   autoDetectRenderer: function (width, height, options = {}) {
     if (WebGLRenderer.isSupported()) {
       return new WebGLRenderer(width, height, options)

@@ -8,6 +8,12 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+/**
+ * Filter primitives are the core of filters. One filter consists of multiple filter primitives.
+ * For an example, look at the implementation of a filter, e.g. {@link PhotoEditorSDK.Filters.A15Filter}
+ * or see our documentation at {@link https://www.photoeditorsdk.com/docs}.
+ * @namespace PhotoEditorSDK.FilterPrimitives
+ */
 export default {
   Brightness: require('./brightness'),
   Contrast: require('./contrast'),

@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Mellow Filter
  * @class
- * @alias PhotoEditorSDK.Filters.MellowFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class MellowFilter extends Filter {
   constructor (...args) {

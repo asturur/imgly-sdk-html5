@@ -15,6 +15,7 @@
  * @param  {Object} prototypeProperties
  * @param  {Object} classProperties
  * @return {Object}
+ * @ignore
  */
 module.exports = function (prototypeProperties, classProperties) {
   /* jshint validthis:true */

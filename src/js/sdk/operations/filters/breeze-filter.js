@@ -13,8 +13,8 @@ import Filter from './filter'
 /**
  * Breeze Filter
  * @class
- * @alias PhotoEditorSDK.Filters.BreezeFilter
- * @extends {PhotoEditorSDK.Filter}
+ * @extends PhotoEditorSDK.Filter
+ * @memberof PhotoEditorSDK.Filters
  */
 class BreezeFilter extends Filter {
   constructor (...args) {

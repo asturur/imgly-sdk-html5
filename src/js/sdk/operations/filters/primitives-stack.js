@@ -20,9 +20,9 @@ class BlendFilter extends Engine.Filter {
   /**
    * Applies this filter to the given inputTarget and renders it to
    * the given outputTarget using the CanvasRenderer
-   * @param  {CanvasRenderer} renderer
-   * @param  {RenderTarget} inputTarget
-   * @param  {RenderTarget} outputTarget
+   * @param  {PhotoEditorSDK.Engine.CanvasRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} inputTarget
+   * @param  {PhotoEditorSDK.Engine.RenderTarget} outputTarget
    * @param  {Boolean} clear = false
    * @private
    */
@@ -50,13 +50,7 @@ BlendFilter.prototype.availableOptions = {
  * A helper class that can collect {@link Primitive} instances and render
  * the stack
  * @class
- * @alias PhotoEditorSDK.Filter.PrimitivesStack
- */
-
-/**
- * @TODO
- * Add a dirtiness hash for each renderer, have a RenderTexture for each renderer
- * to make this Stack renderer independent.
+ * @memberof PhotoEditorSDK.Filter
  */
 class PrimitivesStack {
   constructor (intensity = 1) {
@@ -90,13 +84,13 @@ class PrimitivesStack {
   /**
    * Renders this stack
    * @param  {PhotoEditorSDK} sdk
-   * @param  {Engine.RenderTexture} outputTexture
+   * @param  {PhotoEditorSDK.Engine.RenderTexture} outputTexture
    * @return {Promise}
-   * @internal This takes the output sprite's current texture and renders
-   *           it to this stack's internal render texture. It then uses the
-   *           internal texture as a uniform for a blend shader and renders
-   *           the sprite with the original texture and the blend shader to
-   *           the outputTexture
+   * @description This takes the output sprite's current texture and renders
+   *              it to this stack's internal render texture. It then uses the
+   *              internal texture as a uniform for a blend shader and renders
+   *              the sprite with the original texture and the blend shader to
+   *              the outputTexture
    */
   render (sdk, outputTexture) {
     if (this._stack.length === 0) return Promise.resolve()
@@ -157,7 +151,7 @@ class PrimitivesStack {
 
   /**
    * Checks if this operation is dirty for the given renderer
-   * @param  {BaseRenderer}  renderer
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer}  renderer
    * @return {Boolean}
    */
   isDirtyForRenderer (renderer) {
@@ -170,7 +164,7 @@ class PrimitivesStack {
   /**
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
-   * @param {BaseRenderer} renderer
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
    */
   setDirtyForRenderer (dirty, renderer) {
     this._dirtiness[renderer.id] = dirty
