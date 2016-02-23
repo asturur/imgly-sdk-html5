@@ -39,6 +39,7 @@ class OperationsStack extends EventEmitter {
   clear () {
     this.forEach(operation =>
       this.remove(operation))
+    this._stack = []
   }
 
   /**
