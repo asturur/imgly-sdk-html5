@@ -1,4 +1,4 @@
-Copyright (c) 2013-2015 9elements GmbH.
+Copyright (c) 2013-2016 9elements GmbH.
 
 PhotoEditor SDK for HTML5 is an Open Source project. Do you want to use this product for a personal or non-profit project?
 Then you can use it for free under the
