@@ -22,11 +22,16 @@ import ModalManager from './lib/modal-manager'
 /**
  * The React UI
  * @class
- * @alias PhotoEditorSDK.UI.NightReact
- * @extends {PhotoEditorSDK.EventEmitter}
+ * @alias NightReact
+ * @extends PhotoEditorSDK.EventEmitter
+ * @memberof PhotoEditorSDK.UI
  */
-export default class NightReactUI extends EventEmitter {
-  constructor (options) {
+class NightReactUI extends EventEmitter {
+  /**
+   * Creates an UI instance
+   * @param  {Object} [options = {}]
+   */
+  constructor (options = {}) {
     super()
 
     this._mediator = new EventEmitter()
@@ -264,3 +269,5 @@ NightReactUI.Component = class extends React.Component {
 // Extend PhotoEditorSDK object
 PhotoEditorSDK.UI = PhotoEditorSDK.UI || {}
 PhotoEditorSDK.UI.NightReact = NightReactUI
+
+export default NightReactUI

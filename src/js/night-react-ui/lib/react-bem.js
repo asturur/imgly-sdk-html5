@@ -29,8 +29,7 @@ const BEM_TYPES = {
   e: 'element',
   m: 'modifier'
 }
-
-export default {
+const ReactBEM = {
   /**
    * Parses the given ReactBEM specifier and returns an array of
    * BEM information (type, name, pass)
@@ -223,3 +222,5 @@ export default {
     return root
   }
 }
+
+export default ReactBEM

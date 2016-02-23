@@ -11,7 +11,7 @@
 
 const { Vector2, Utils } = PhotoEditorSDK
 
-export default {
+const UIUtils = {
   /**
    * Returns the inner dimensions (size - padding) of the given
    * DOM element
@@ -101,3 +101,5 @@ export default {
     /* eslint-enable */
   }
 }
+
+export default UIUtils

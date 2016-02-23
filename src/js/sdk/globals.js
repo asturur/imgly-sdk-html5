@@ -23,7 +23,7 @@ import Matrix from './lib/math/matrix'
 
 import { requestAnimationFrame, cancelAnimationFrame } from '../shared/animation-frame'
 
-export default {
+const Globals = {
   Engine,
 
   EventEmitter,
@@ -37,3 +37,5 @@ export default {
 
   requestAnimationFrame, cancelAnimationFrame
 }
+
+export default Globals

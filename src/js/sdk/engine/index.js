@@ -27,7 +27,7 @@ import Filter from './filters/filter'
  * The heart of PhotoEditorSDK. Handles all the rendering in a scene-graph fashion
  * @namespace PhotoEditorSDK.Engine
  */
-export default {
+const Engine = {
   WebGLRenderer,
   CanvasRenderer,
   WebGLFilterManager,
@@ -58,3 +58,5 @@ export default {
     }
   }
 }
+
+export default Engine

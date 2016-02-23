@@ -22,7 +22,7 @@ const MIN_ZOOM_DIMENSIONS = 300
  * The Editor class is an interface to the SDK, managing operations, rendering,
  * history, zoom etc.
  */
-export default class Editor extends EventEmitter {
+class Editor extends EventEmitter {
   constructor (options, mediator) {
     super()
     this._options = options
@@ -700,3 +700,5 @@ export default class Editor extends EventEmitter {
   getLastOutputBounds () { return this._lastOutputBounds }
   getInputDimensions () { return this._sdk.getInputDimensions() }
 }
+
+export default Editor
