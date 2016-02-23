@@ -12,7 +12,17 @@ import { Engine, Vector2 } from '../../globals'
 import Sprite from './sprite'
 import AdjustmentsFilter from '../adjustments/adjustments-filter'
 
+/**
+ * A sticker that can be drawn by SpriteOperation. Should only be created via {@link PhotoEditorSDK.Operations.SpriteOperation#createSticker}
+ * @class
+ * @memberof PhotoEditorSDK.Operations.SpriteOperation
+ */
 class Sticker extends Sprite {
+  /**
+   * Creates a new Sticker
+   * @param  {PhotoEditorSDK.Operations.SpriteOperation} operation
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -74,8 +84,9 @@ class Sticker extends Sprite {
 
   /**
    * Creates and/or returns a RenderTexture
-   * @param {Engine.BaseRenderer} renderer
-   * @return {Engine.RenderTexture}
+   * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
+   * @return {PhotoEditorSDK.Engine.RenderTexture}
+   * @private
    */
   _getRenderTexture (renderer) {
     if (!this._renderTextures[renderer.id]) {

@@ -12,7 +12,17 @@ import { Color, Vector2 } from '../../globals'
 import Sprite from './sprite'
 import TextRenderer from './text/text-renderer'
 
+/**
+ * A text that can be drawn by SpriteOperation. Should only be created via {@link PhotoEditorSDK.Operations.SpriteOperation#createText}
+ * @class
+ * @memberof PhotoEditorSDK.Operations.SpriteOperation
+ */
 class Text extends Sprite {
+  /**
+   * Creates a new Text
+   * @param  {PhotoEditorSDK.Operations.SpriteOperation} operation
+   * @param  {Object} [options]
+   */
   constructor (...args) {
     super(...args)
 
@@ -23,7 +33,7 @@ class Text extends Sprite {
   /**
    * Returns a style object for this text
    * @param {PhotoEditorSDK} SDK
-   * @param {Vector2} outputDimensions
+   * @param {PhotoEditorSDK.Math.Vector2} outputDimensions
    * @return {Object}
    */
   getDOMStyle (sdk, outputDimensions) {
@@ -44,7 +54,7 @@ class Text extends Sprite {
    * Returns the bounding box for this text
    * @param  {PhotoEditorSDK} sdk
    * @param  {Boolean} considerZoom = false
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getBoundingBox (sdk, considerZoom = false) {
     return this._textRenderer.getBoundingBox(sdk, considerZoom)
@@ -72,7 +82,7 @@ class Text extends Sprite {
 
   /**
    * Updates this sprite
-   * @param  {SDK} sdk
+   * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
    */
   update (sdk) {

@@ -194,7 +194,7 @@ class SpriteOperation extends Operation {
   /**
    * Creates a new sticker object and returns it
    * @param  {Object} options
-   * @return {PhotoEditorSDK.Sticker}
+   * @return {PhotoEditorSDK.Operations.SpriteOperation.Sticker}
    */
   createSticker (options) {
     return new Sticker(this, options)
@@ -203,7 +203,7 @@ class SpriteOperation extends Operation {
   /**
    * Creates a new sticker object and returns it
    * @param  {Object} options
-   * @return {PhotoEditorSDK.Text}
+   * @return {PhotoEditorSDK.Operations.SpriteOperation.Text}
    */
   createText (options) {
     return new Text(this, options)
@@ -332,6 +332,9 @@ class SpriteOperation extends Operation {
     this._sdk.off(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
   }
 }
+
+SpriteOperation.Sticker = Sticker
+SpriteOperation.Text = Text
 
 /**
  * A unique string that identifies this operation. Can be used to select

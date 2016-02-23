@@ -31,8 +31,6 @@ PhotoEditorSDK.Utils = require('./lib/utils')
 PhotoEditorSDK.OperationsStack = require('./lib/operations-stack')
 PhotoEditorSDK.EXIF = require('./lib/exif')
 PhotoEditorSDK.Promise = require('./vendor/promise')
-PhotoEditorSDK.Sticker = require('./operations/sprites/sticker')
-PhotoEditorSDK.Text = require('./operations/sprites/text')
 
 // Namespaces
 PhotoEditorSDK.Math = require('./lib/math/')
