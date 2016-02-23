@@ -250,7 +250,14 @@ NightReactUI.Utils = Utils
 NightReactUI.ScrollbarComponent = ScrollbarComponent
 NightReactUI.ModalManager = ModalManager
 
-NightReactUI.Component = class extends React.Component {
+/**
+ * The PhotoEditorSDK UI can also be integrated as a React.js component
+ * @class
+ * @extends React.Component
+ * @memberof PhotoEditorSDK.UI.NightReact
+ */
+
+class ReactComponent extends React.Component {
   constructor (...args) {
     super(...args)
 
@@ -259,12 +266,14 @@ NightReactUI.Component = class extends React.Component {
 
   /**
    * Renders this component
-   * @return {React.Component}
+   * @return {React.Element}
    */
   render () {
     return this._ui.render()
   }
 }
+
+NightReactUI.ReactComponent = ReactComponent
 
 // Extend PhotoEditorSDK object
 PhotoEditorSDK.UI = PhotoEditorSDK.UI || {}
