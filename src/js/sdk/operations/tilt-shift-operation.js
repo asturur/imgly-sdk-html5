@@ -167,10 +167,8 @@ class TiltShiftOperation extends Operation {
     const start = this._options.start.clone()
     const end = this._options.end.clone()
 
-    if (this._options.numberFormat === 'relative') {
-      start.multiply(outputDimensions)
-      end.multiply(outputDimensions)
-    }
+    start.multiply(outputDimensions)
+    end.multiply(outputDimensions)
 
     const commonOptions = {
       blurRadius: this._options.blurRadius,

@@ -185,9 +185,7 @@ class CropOperation extends Operation {
       .clone()
       .subtract(this._options.start)
 
-    if (this._options.numberFormat === 'relative') {
-      newDimensions.multiply(dimensions)
-    }
+    newDimensions.multiply(dimensions)
 
     return newDimensions
   }

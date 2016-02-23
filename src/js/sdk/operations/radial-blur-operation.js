@@ -159,9 +159,7 @@ class RadialBlurOperation extends Operation {
     // Invert Y
     const position = this._options.position.clone()
 
-    if (this._options.numberFormat === 'relative') {
-      position.multiply(outputDimensions)
-    }
+    position.multiply(outputDimensions)
 
     const commonOptions = {
       blurRadius: this._options.blurRadius,
