@@ -62,7 +62,7 @@ import ArrayStream from './array-stream'
  * @memberof PhotoEditorSDK
  * @ignore
  */
-class Exif {
+class EXIF {
   /**
    * Creates an EXIF object
    * @param  {Array} buf
@@ -130,7 +130,7 @@ class Exif {
   static fromBase64String (base64String) {
     const raw = base64String.replace(DATA_JPEG_PREFIX, '')
     const data = Base64.decode(raw)
-    return new Exif(data)
+    return new EXIF(data)
   }
 
   /**
@@ -353,4 +353,4 @@ class Exif {
   }
 }
 
-export default Exif
+export default EXIF
