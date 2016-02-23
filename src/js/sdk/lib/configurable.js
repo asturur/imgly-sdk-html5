@@ -80,7 +80,7 @@ class Configurable extends EventEmitter {
    * @param {Object} userOptions
    * @protected
    */
-  _initOptions (userOptions) {
+  _initOptions (userOptions = {}) {
     this._options = {}
 
     // Set defaults, create getters and setters
@@ -92,8 +92,8 @@ class Configurable extends EventEmitter {
 
       // Create setter and getter
       let fn = function (optionName, option) {
-        self['set' + capitalized] = function (value, update) {
-          self.setOption(optionName, value, update)
+        self['set' + capitalized] = function (value, update, initial) {
+          self.setOption(optionName, value, update, initial)
         }
 
         // Default getter
@@ -104,13 +104,13 @@ class Configurable extends EventEmitter {
       fn(optionName, option)
 
       // Set default if available
-      if (typeof option.default !== 'undefined') {
-        this['set' + capitalized](option.default, false)
+      if (typeof option.default !== 'undefined' && !(optionName in userOptions)) {
+        this['set' + capitalized](option.default, false, true)
       }
 
       // Handle configurable initialization
       if (option.type === 'configurable') {
-        this._options[optionName] = new Configurable(null, option.structure)
+        this._options[optionName] = new Configurable(undefined, option.structure)
         this._options[optionName].on('update', this._onConfigurableUpdate)
       }
     }
@@ -124,7 +124,7 @@ class Configurable extends EventEmitter {
 
       // Call setter
       capitalized = optionName.charAt(0).toUpperCase() + optionName.slice(1)
-      this['set' + capitalized](userOptions[optionName], false)
+      this['set' + capitalized](userOptions[optionName], false, true)
     }
   }
 
@@ -298,9 +298,10 @@ class Configurable extends EventEmitter {
    * Sets the value for the given option, validates it
    * @param {String} optionName
    * @param {*} value
-   * @param {Boolean} update = true
+   * @param {Boolean} [update = true] - Should an `update` event be emitted?
+   * @param {Boolean} [initial = false] - Is this the first time this option is set?
    */
-  setOption (optionName, value, update = true) {
+  setOption (optionName, value, update = true, initial = false) {
     if (update) {
       this.emit('update', this, { [optionName]: value })
     }
@@ -312,7 +313,7 @@ class Configurable extends EventEmitter {
     }
 
     if (typeof optionConfig.setter !== 'undefined') {
-      value = optionConfig.setter.call(this, value)
+      value = optionConfig.setter.call(this, value, initial)
     }
 
     if (typeof optionConfig.validation !== 'undefined') {
