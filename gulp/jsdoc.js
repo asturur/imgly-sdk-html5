@@ -4,6 +4,7 @@ var handleErrors = require('./util/handleErrors')
 
 gulp.task('jsdoc', function () {
   return gulp.src([
+    './README.md',
     './src/js/sdk/**/*.js',
     './src/js/night-react-ui/**/*.js',
     '!./src/js/sdk/vendor/**/*.js'

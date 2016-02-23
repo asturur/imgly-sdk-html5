@@ -38,7 +38,7 @@
     "gulp-webserver": "^0.9.1",
     "gulp-yuicompressor": "0.0.3",
     "istanbul": "^0.3.2",
-    "jaguarjs-jsdoc": "0.0.1",
+    "jaguarjs-jsdoc": "git://github.com/imgly/jaguarjs-jsdoc.git#master",
     "jsdoc": "git://github.com/jsdoc3/jsdoc.git#master",
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "0.0.1",
