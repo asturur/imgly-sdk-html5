@@ -16,7 +16,7 @@
 class ObjectRenderer {
   /**
    * Creates an ObjectRenderer
-   * @param  {BaseRenderer} renderer
+   * @param  {PhotoEditorSDK.Engine.BaseRenderer} renderer
    */
   constructor (renderer) {
     this._renderer = renderer
