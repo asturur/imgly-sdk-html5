@@ -76,6 +76,7 @@ class OrientationOperation extends Operation {
    * has been applied
    * @param {PhotoEditorSDK.Math.Vector2} dimensions
    * @return {PhotoEditorSDK.Math.Vector2}
+   * @override
    */
   getNewDimensions (dimensions) {
     dimensions = dimensions.clone()

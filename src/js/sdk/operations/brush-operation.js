@@ -268,6 +268,7 @@ class BrushOperation extends Operation {
    * @param {Boolean} dirty
    * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
    * @param {Boolean} [setPathsToDirty = false]
+   * @override
    */
   setDirtyForRenderer (dirty, renderer, setPathsToDirty = false) {
     super.setDirtyForRenderer(dirty, renderer)
@@ -283,6 +284,7 @@ class BrushOperation extends Operation {
    * Sets the dirtiness for all renderers
    * @param {Boolean} dirty
    * @param {Boolean} [setPathsToDirty = false]
+   * @override
    */
   setDirty (dirty, setPathsToDirty = false) {
     for (let rendererId in this._dirtiness) {
@@ -292,6 +294,7 @@ class BrushOperation extends Operation {
 
   /**
    * Disposes this operation
+   * @override
    */
   dispose () {
     this._sdk.off(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)

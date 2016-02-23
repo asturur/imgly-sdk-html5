@@ -35,6 +35,8 @@ class WatermarkOperation extends Operation {
    * Renders the watermark using Canvas2d
    * @param  {PhotoEditorSDK.Engine.CanvasRenderer} renderer
    * @return {Promise}
+   * @private
+   * @override
    */
   _renderCanvas (renderer) {
     return new Promise((resolve, reject) => {
@@ -65,6 +67,7 @@ class WatermarkOperation extends Operation {
    * Renders the watermark using WebGL
    * @param  {PhotoEditorSDK} sdk
    * @private
+   * @override
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {

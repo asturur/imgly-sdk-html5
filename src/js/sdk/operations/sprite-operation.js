@@ -179,6 +179,7 @@ class SpriteOperation extends Operation {
    * @param {String} optionName
    * @return {*} optionName
    * @private
+   * @override
    */
   _serializeOption (optionName) {
     // Since `sprites` is an array of configurables, we need

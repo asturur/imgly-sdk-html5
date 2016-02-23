@@ -145,6 +145,7 @@ class RadialBlurOperation extends Operation {
    * Renders the radial blur using WebGL
    * @param  {PhotoEditorSDK} sdk
    * @private
+   * @override
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
@@ -185,6 +186,7 @@ class RadialBlurOperation extends Operation {
    * Renders the radial blur using Canvas2D
    * @param  {PhotoEditorSDK} sdk
    * @private
+   * @override
    */
   _renderCanvas (sdk) {
     const outputSprite = sdk.getSprite()

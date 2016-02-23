@@ -32,7 +32,7 @@ class FilterOperation extends Operation {
    * Applies this operation
    * @param  {PhotoEditorSDK} sdk
    * @return {Promise}
-   * @abstract
+   * @override
    */
   render (sdk) {
     if (!this.getEnabled() || this._selectedFilter.constructor.isIdentity) {
@@ -46,6 +46,7 @@ class FilterOperation extends Operation {
    * Sets the dirtiness for the given renderer
    * @param {Boolean} dirty
    * @param {PhotoEditorSDK.Engine.BaseRenderer} renderer
+   * @override
    */
   setDirtyForRenderer (dirty, renderer) {
     super.setDirtyForRenderer(dirty, renderer)

@@ -152,6 +152,8 @@ class TiltShiftOperation extends Operation {
   /**
    * Crops this image using WebGL
    * @param  {PhotoEditorSDK} sdk
+   * @override
+   * @private
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
@@ -194,6 +196,8 @@ class TiltShiftOperation extends Operation {
   /**
    * Renders the radial blur using Canvas2D
    * @param  {PhotoEditorSDK} sdk
+   * @override
+   * @private
    */
   _renderCanvas (sdk) {
     const outputSprite = sdk.getSprite()

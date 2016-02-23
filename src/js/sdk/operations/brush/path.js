@@ -11,7 +11,20 @@
 import { EventEmitter } from '../../globals'
 import ControlPoint from './control-point'
 
+/**
+ * A path that can be drawn on a {@link PhotoEditorSDK.Operations.BrushOperation}. Should only be
+ * created using {@link PhotoEditorSDK.Operations.BrushOperation#createPath}
+ * @class
+ * @extends PhotoEditorSDK.EventEmitter
+ * @memberof PhotoEditorSDK.Operations.BrushOperation
+ */
 class Path extends EventEmitter {
+  /**
+   * Creates a Path
+   * @param  {PhotoEditorSDK.Operations.BrushOperation} operation
+   * @param  {Number} thickness
+   * @param  {PhotoEditorSDK.Color} color
+   */
   constructor (operation, thickness, color) {
     super()
     this._thickness = thickness
@@ -19,6 +32,10 @@ class Path extends EventEmitter {
     this._controlPoints = []
   }
 
+  /**
+   * Draws this path onto the given canvas
+   * @param  {HTMLCanvasElement} canvas
+   */
   renderToCanvas (canvas) {
     if (this._controlPoints.length < 2) return
 
@@ -31,26 +48,45 @@ class Path extends EventEmitter {
     }
   }
 
+  /**
+   * Adds a control point at the given position to this path
+   * @param {PhotoEditorSDK.Math.Vector2} position
+   */
   addControlPoint (position) {
     const controlPoint = new ControlPoint(this, position)
     this._controlPoints.push(controlPoint)
     this.emit('update')
   }
 
+  /**
+   * Returns the path color
+   * @return {PhotoEditorSDK.Color}
+   */
   getColor () {
     return this._color
   }
 
+  /**
+   * Returns the path's stroke thickness
+   * @return {Number}
+   */
   getThickness () {
     return this._thickness
   }
 
+  /**
+   * Sets this path to dirty
+   */
   setDirty () {
     this._controlPoints.forEach((point) => {
       point.setDirty()
     })
   }
 
+  /**
+   * Calls `iterator` for each control point
+   * @param  {Function} iterator
+   */
   forEachControlPoint (iterator) {
     this._controlPoints.forEach(iterator)
   }
