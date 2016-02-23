@@ -98,7 +98,7 @@ export default class EditorScreenComponent extends ScreenComponent {
       this._t('errors.renderingError.text'),
       true
     )
-    Log.error(this.constructor.name, 'An error occurred while rendering:')
+    Log.error(this.constructor.name, 'An error occurred while rendering: ' + e.message)
     Log.printError(e)
   }
 
