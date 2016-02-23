@@ -9,7 +9,7 @@
  * For commercial usf please contact us at contact@9elements.com
  */
 
-import { Utils, SDK, ReactBEM } from '../../../globals'
+import { Constants, Utils, SDK, ReactBEM } from '../../../globals'
 import TextItemComponent from './items/text-item-component'
 import StickerItemComponent from './items/sticker-item-component'
 import CanvasControlsComponent from '../canvas-controls-component'
@@ -22,14 +22,65 @@ export default class SpritesCanvasControlsComponent extends CanvasControlsCompon
     this._bindAll(
       '_onCanvasClick',
       '_onSpriteDragStart',
-      '_onSpriteDragStop'
+      '_onSpriteDragStop',
+      '_onOperationUpdated',
+      '_onOperationRemoved'
     )
 
     this._canvasClickDisabled = false
     this._operation = this.getSharedState('operation')
+
+    this._events = {
+      [Constants.EVENTS.OPERATION_UPDATED]: this._onOperationUpdated,
+      [Constants.EVENTS.OPERATION_REMOVED]: this._onOperationRemoved
+    }
   }
 
   // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Gets called when an operation has been removed
+   * @param  {Operation} operation
+   * @private
+   */
+  _onOperationRemoved (operation) {
+    const selectedSprite = this.getSharedState('selectedSprite')
+    if (operation !== this._operation || !selectedSprite) return
+
+    // Operation can be removed by the undo button. We need
+    // to make sure we re-create the operation for the lifetime
+    // of this control
+    const { editor } = this.context
+    const newOperation = editor.getOrCreateOperation('sprite', {
+      sprites: [selectedSprite],
+      enabled: false
+    })
+    this._operation = newOperation
+    this.setSharedState({
+      operation: newOperation,
+      operationExistedBefore: false,
+      initialOptions: {}
+    })
+  }
+
+  /**
+   * Gets called when an operation has been updated
+   * @param  {Operation} operation
+   * @private
+   */
+  _onOperationUpdated (operation) {
+    const selectedSprite = this.getSharedState('selectedSprite')
+    if (operation !== this._operation || !selectedSprite) return
+
+    // If the currently selected sprite is no longer existent,
+    // re-add it
+    const sprites = operation.getSprites()
+    if (sprites.indexOf(selectedSprite) === -1) {
+      sprites.push(selectedSprite)
+    }
+
+    this.forceUpdate()
+  }
 
   /**
    * Gets called when the user clicks somewhere on the canvas

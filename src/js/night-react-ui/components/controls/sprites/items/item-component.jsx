@@ -57,6 +57,15 @@ export default class ItemComponent extends BaseComponent {
     this.props.sprite.off('update', this._onSpriteUpdate)
   }
 
+  /**
+   * Gets called when this component will receive new props
+   * @param  {Object} nextProps
+   */
+  componentWillReceiveProps (nextProps) {
+    this.props.sprite.off('update', this._onSpriteUpdate)
+    nextProps.sprite.on('update', this._onSpriteUpdate)
+  }
+
   // -------------------------------------------------------------------------- EVENTS
 
   /**
