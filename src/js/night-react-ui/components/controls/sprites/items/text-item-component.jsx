@@ -374,8 +374,12 @@ export default class TextItemComponent extends ItemComponent {
     let textBEM = '$e:text'
     if (this.props.selected) {
       textBEM += ' m:selected'
-    } else {
-      content.push(<div bem='e:disabledOverlay' />)
+    }
+
+    if (!this.state.editMode) {
+      content.push(<div
+        bem='e:disabledOverlay'
+        onDoubleClick={this._onItemDoubleClick} />)
     }
 
     return (<DraggableComponent
@@ -386,7 +390,6 @@ export default class TextItemComponent extends ItemComponent {
         <div
           bem='$e:text'
           style={this._getItemContainerStyle()}
-          onDoubleClick={this._onItemDoubleClick}
           className={this.props.selected ? 'is-selected' : null}>
           {content}
         </div>
