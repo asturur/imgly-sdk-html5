@@ -225,7 +225,7 @@ export default class RadialBlurCanvasControlsComponent extends CanvasControlsCom
    */
   _getContainerStyle () {
     const { editor } = this.context
-    const { x, y, width, height } = editor.getLastOutputBounds()
+    const { x, y, width, height } = editor.getSDK().getSprite().getBounds()
     return {
       left: x,
       top: y,

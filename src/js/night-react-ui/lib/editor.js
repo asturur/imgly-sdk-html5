@@ -21,6 +21,8 @@ const MIN_ZOOM_DIMENSIONS = 300
 /**
  * The Editor class is an interface to the SDK, managing operations, rendering,
  * history, zoom etc.
+ * @class
+ * @memberof PhotoEditorSDK.UI.NightReact
  */
 class Editor extends EventEmitter {
   constructor (options, mediator) {
@@ -68,7 +70,9 @@ class Editor extends EventEmitter {
   // -------------------------------------------------------------------------- INITIALIZATION
 
   /**
-   * Initializes the image resizing etc.
+   * Sets the given image to be rendered. If the image needs to be resized to fit into a
+   * WebGL texture or to match the `maxMegaPixels` option, resizing is done before setting
+   * the image.
    * @param {Image} image
    */
   setImage (image = this._options.image) {
@@ -180,7 +184,7 @@ class Editor extends EventEmitter {
 
   /**
    * Enables the features with the given identifiers
-   * @param  {Array.<String>} identifiers
+   * @param  {String[]} identifiers
    */
   enableFeatures (...identifiers) {
     identifiers.forEach((identifier) => {
@@ -192,7 +196,7 @@ class Editor extends EventEmitter {
 
   /**
    * Disables the features with the given identifiers
-   * @param  {Array.<String>} identifiers
+   * @param  {String[]} identifiers
    */
   disableFeatures (...identifiers) {
     identifiers.forEach((identifier) => {
@@ -330,7 +334,7 @@ class Editor extends EventEmitter {
 
   /**
    * Adds the given data to the history
-   * @param {Operation} operation
+   * @param {PhotoEditorSDK.Operation} operation
    * @param {Object} options
    * @param {Boolean} existent
    * @return {Object}
@@ -369,7 +373,7 @@ class Editor extends EventEmitter {
 
   /**
    * Returns the available controls
-   * @return {Array.<Object>}
+   * @return {Object[]}
    */
   getAvailableControls () {
     return this._availableControls
@@ -406,7 +410,7 @@ class Editor extends EventEmitter {
 
   /**
    * Adds the given operation to the stack
-   * @param {Operation} operation
+   * @param {PhotoEditorSDK.Operation} operation
    */
   addOperation (operation) {
     const identifier = operation.constructor.identifier
@@ -423,7 +427,7 @@ class Editor extends EventEmitter {
 
   /**
    * Removes the given operation from the stack
-   * @param  {Operation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    */
   removeOperation (operation) {
     const identifier = operation.constructor.identifier
@@ -483,7 +487,7 @@ class Editor extends EventEmitter {
 
   /**
    * Returns the output sprite's current dimensions
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getOutputDimensions () {
     return this._sdk.getOutputDimensions()
@@ -492,7 +496,7 @@ class Editor extends EventEmitter {
   /**
    * Returns the final dimensions that the input image would have
    * after all existing operations have been applied
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getFinalDimensions () {
     return this._sdk.getFinalDimensions()
@@ -500,7 +504,7 @@ class Editor extends EventEmitter {
 
   /**
    * Returns the canvas dimensions
-   * @return {Vector2}
+   * @return {PhotoEditorSDK.Math.Vector2}
    */
   getCanvasDimensions () {
     const canvas = this._sdk.getCanvas()
@@ -510,7 +514,8 @@ class Editor extends EventEmitter {
   /**
    * Sets the given image
    * @param {Image} image
-   * @param {Exif} exif
+   * @param {PhotoEditorSDK.EXIF} [exif]
+   * @private
    */
   _setImage (image = this._options.image, exif) {
     this._options.image = image
@@ -585,7 +590,7 @@ class Editor extends EventEmitter {
 
   /**
    * Sets the offset to the given one
-   * @param {Vector2} offset
+   * @param {PhotoEditorSDK.Math.Vector2} offset
    */
   setOffset (offset) {
     offset = this._clampOffset(offset)
@@ -594,7 +599,7 @@ class Editor extends EventEmitter {
 
   /**
    * Returns the current offset
-   * @returns {Vector2}
+   * @returns {PhotoEditorSDK.Math.Vector2}
    */
   getOffset () {
     return this._sdk.getOffset()
@@ -654,7 +659,7 @@ class Editor extends EventEmitter {
 
   /**
    * Triggers a render
-   * @internal
+   * @private
    */
   _render () {
     if (!this._ready) return Promise.resolve()
@@ -693,11 +698,34 @@ class Editor extends EventEmitter {
 
   // -------------------------------------------------------------------------- GETTERS / SETTERS
 
+  /**
+   * Checks if the Editor is ready to render
+   * @return {Boolean}
+   */
   isReady () { return this._ready }
+
+  /**
+   * Returns the renderer
+   * @return {PhotoEditorSDK.Engine.BaseRenderer}
+   */
   getRenderer () { return this._sdk.getRenderer() }
+
+  /**
+   * Returns the SDK
+   * @return {PhotoEditorSDK}
+   */
   getSDK () { return this._sdk }
+
+  /**
+   * Checks if the editor is at the default zoom level
+   * @return {Boolean}
+   */
   isDefaultZoom () { return this._isDefaultZoom }
-  getLastOutputBounds () { return this._lastOutputBounds }
+
+  /**
+   * Returns the input image dimensions
+   * @return {PhotoEditorSDK.Math.Vector2}s
+   */
   getInputDimensions () { return this._sdk.getInputDimensions() }
 }
 
