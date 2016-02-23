@@ -369,6 +369,18 @@ SpriteOperation.prototype.availableOptions = {
             return new Sticker(this, sprite)
         }
       })
+
+      // Remove sprites that are no longer there
+      if (this._options.sprites) {
+        let removedSprites = []
+        this._options.sprites.forEach((sprite) => {
+          if (sprites.indexOf(sprite) === -1) {
+            removedSprites.push(sprite)
+          }
+        })
+        removedSprites.forEach((sprite) => this.removeSprite(sprite))
+      }
+
       return sprites
     }
   }
