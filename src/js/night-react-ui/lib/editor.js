@@ -126,12 +126,13 @@ class Editor extends EventEmitter {
    */
   _initSDK () {
     const {
-      image, preferredRenderer, logLevel, displayWelcomeMessage
+      image, preferredRenderer, logLevel, displayWelcomeMessage, pixelRatio
     } = this._options
     const rendererOptions = {
       image,
       logLevel,
-      displayWelcomeMessage
+      displayWelcomeMessage,
+      pixelRatio
     }
     this._sdk = new SDK(preferredRenderer, rendererOptions)
   }

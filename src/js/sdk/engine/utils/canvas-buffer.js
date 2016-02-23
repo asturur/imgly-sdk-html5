@@ -33,8 +33,8 @@ class CanvasBuffer {
     this._canvas = canvas || document.createElement('canvas')
     this._context = context || this._canvas.getContext('2d')
 
-    this._canvas.width = this._width
-    this._canvas.height = this._height
+    this._canvas.width = this._width * this._pixelRatio
+    this._canvas.height = this._height * this._pixelRatio
     this._filterStack = [
       {
         renderTarget: this,
@@ -49,7 +49,7 @@ class CanvasBuffer {
   clear () {
     const ctx = this._context
     ctx.setTransform(1, 0, 0, 1, 0, 0)
-    ctx.clearRect(0, 0, this._width, this._height)
+    ctx.clearRect(0, 0, this._width * this._pixelRatio, this._height * this._pixelRatio)
   }
 
   /**
@@ -59,12 +59,12 @@ class CanvasBuffer {
   resizeTo (dimensions) {
     if (this._width !== dimensions.x) {
       this._width = dimensions.x
-      this._canvas.width = this._width
+      this._canvas.width = this._width * this._pixelRatio
     }
 
     if (this._height !== dimensions.y) {
       this._height = dimensions.y
-      this._canvas.height = this._height
+      this._canvas.height = this._height * this._pixelRatio
     }
   }
 
