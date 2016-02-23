@@ -11,10 +11,10 @@
 import { Engine, Vector2, Color } from '../globals'
 import Operation from './operation'
 
-class FrameFilter extends Engine.Filter {
+class BorderFilter extends Engine.Filter {
   constructor () {
     super()
-    this._fragmentSource = require('raw!../shaders/operations/frame.frag')
+    this._fragmentSource = require('raw!../shaders/operations/border.frag')
   }
 
   /**
@@ -43,33 +43,33 @@ class FrameFilter extends Engine.Filter {
   }
 }
 
-FrameFilter.prototype.availableOptions = {
+BorderFilter.prototype.availableOptions = {
   color: { type: 'color', default: Color.BLACK, uniformType: '4f' },
   thickness: { type: 'number', default: 0, uniformType: 'f' },
   textureSize: { type: 'vector2', default: new Vector2(0, 0), uniformType: '2f' }
 }
 
 /**
- * An operation that can draw a frame on the canvas
+ * An operation that can draw a border around the canvas
  * @class
  * @extends PhotoEditorSDK.Operation
  * @memberof PhotoEditorSDK.Operations
  */
-class FrameOperation extends Operation {
+class BorderOperation extends Operation {
   /**
-   * Creates a new FrameOperation
+   * Creates a new BorderOperation
    * @param  {PhotoEditorSDK} sdk
    * @param  {Object} [options]
    */
   constructor (...args) {
     super(...args)
 
-    this._filter = new FrameFilter()
+    this._filter = new BorderFilter()
     this._sprite.setFilters([this._filter])
   }
 
   /**
-   * Renders the frame operation
+   * Renders the border operation
    * @param  {PhotoEditorSDK} sdk
    * @private
    */
@@ -107,15 +107,15 @@ class FrameOperation extends Operation {
  * operations.
  * @type {String}
  */
-FrameOperation.identifier = 'frame'
+BorderOperation.identifier = 'border'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
  */
-FrameOperation.prototype.availableOptions = {
+BorderOperation.prototype.availableOptions = {
   color: { type: 'color', default: new Color(0, 0, 0, 1) },
   thickness: { type: 'number', default: 5 }
 }
 
-export default FrameOperation
+export default BorderOperation

@@ -6,12 +6,12 @@
       "adjustments": "Korrekturen",
       "crop": "Zuschneiden",
       "blur": "Weichzeichnen",
-      "frame": "Rahmen",
+      "border": "Rahmen",
       "stickers": "Sticker",
       "text": "Text",
       "brush": "Malen"
     },
-    "frame": {
+    "border": {
       "color": "Farbe",
       "thickness": "Dicke"
     },

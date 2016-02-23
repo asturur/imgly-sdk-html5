@@ -18,7 +18,7 @@ export default {
   AdjustmentsOperation: require('./adjustments-operation'),
   TiltShiftOperation: require('./tilt-shift-operation'),
   RadialBlurOperation: require('./radial-blur-operation'),
-  FrameOperation: require('./frame-operation'),
+  BorderOperation: require('./border-operation'),
   SpriteOperation: require('./sprite-operation'),
   WatermarkOperation: require('./watermark-operation'),
   BrushOperation: require('./brush-operation')

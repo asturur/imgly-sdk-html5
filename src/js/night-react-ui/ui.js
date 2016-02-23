@@ -40,11 +40,11 @@ class NightReactUI extends EventEmitter {
    * @param  {String[]} [options.tools] - The enabled tools. Available are: `crop`, `rotation`,
    *                                    `flip`, `filter`, `brightness`, `saturation`, `contrast`,
    *                                    `text`, `sticker`, `brush`, `radial-blur`, `tilt-shift`
-   *                                    and `frame`
+   *                                    and `border`
    * @param  {(String[]|Array[])} [options.controlsOrder] - The order in which the controls are displayed.
    *                                           Available are `crop`, `orientation`, `filter`,
    *                                           `adjustments`, `text`, `sticker`, `brush`, `focus`,
-   *                                           `frame`. Can be grouped in arrays which will be
+   *                                           `border`. Can be grouped in arrays which will be
    *                                           displayed with separators.
    * @param  {String[]} [options.operationsOrder] - The order in which operations are added to
    *                                              the stack. Changing this may affect the
@@ -124,13 +124,13 @@ class NightReactUI extends EventEmitter {
       webcam: true,
       assets: {},
       tools: [
-        'crop', 'rotation', 'flip', 'filter', 'brightness', 'saturation', 'contrast', 'text', 'sticker', 'brush', 'radial-blur', 'tilt-shift', 'frame'
+        'crop', 'rotation', 'flip', 'filter', 'brightness', 'saturation', 'contrast', 'text', 'sticker', 'brush', 'radial-blur', 'tilt-shift', 'border'
       ],
       controlsOrder: [
         ['crop', 'orientation'],
         ['filter', 'adjustments'],
         ['text', 'sticker', 'brush'],
-        ['focus', 'frame']
+        ['focus', 'border']
       ],
       operationsOrder: [
         // First, all operations that affect the image dimensions
@@ -144,7 +144,7 @@ class NightReactUI extends EventEmitter {
         // Then post-processing
         'radial-blur',
         'tilt-shift',
-        'frame',
+        'border',
         'sprite',
         'brush',
         'watermark'

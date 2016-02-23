@@ -13,7 +13,7 @@ export default [
   require('./crop'),
   require('./filters'),
   require('./focus'),
-  require('./frame'),
+  require('./border'),
   require('./orientation'),
   require('./stickers'),
   require('./text'),

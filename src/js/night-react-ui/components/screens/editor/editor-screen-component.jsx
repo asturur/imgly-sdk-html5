@@ -48,6 +48,7 @@ export default class EditorScreenComponent extends ScreenComponent {
     this._editor.on('ready', this._startEditor)
     this._editor.on('resize', this._onImageResize)
     this._editor.on('render-error', this._onRenderError)
+    window.editor = this._editor
   }
 
   // -------------------------------------------------------------------------- LIFECYCLE

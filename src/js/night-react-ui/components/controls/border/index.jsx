@@ -8,14 +8,14 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import FrameControlsComponent from './frame-controls-component'
+import BorderControlsComponent from './border-controls-component'
 
 export default {
   canvasControls: null,
-  controls: FrameControlsComponent,
-  identifier: 'frame',
-  icon: 'controls/overview/frame@2x.png',
-  label: 'controls.overview.frame',
+  controls: BorderControlsComponent,
+  identifier: 'border',
+  icon: 'controls/overview/border@2x.png',
+  label: 'controls.overview.border',
 
   /**
    * Gets called when the user leaves these controls
@@ -48,8 +48,8 @@ export default {
     const inputDimensions = editor.getInputDimensions()
     const defaultThickness = Math.min(inputDimensions.x, inputDimensions.y) * 0.05
 
-    const operationExistedBefore = editor.operationExists('frame')
-    const operation = editor.getOrCreateOperation('frame', {
+    const operationExistedBefore = editor.operationExists('border')
+    const operation = editor.getOrCreateOperation('border', {
       thickness: defaultThickness
     })
     const initialOptions = {
@@ -67,6 +67,6 @@ export default {
    * @return {Boolean}
    */
   isAvailable: (editor) => {
-    return editor.isToolEnabled('frame')
+    return editor.isToolEnabled('border')
   }
 }

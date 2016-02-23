@@ -6,12 +6,12 @@
       "adjustments": "Adjust",
       "crop": "Crop",
       "focus": "Focus",
-      "frame": "Frame",
+      "border": "Border",
       "stickers": "Stickers",
       "text": "Text",
       "brush": "Brush"
     },
-    "frame": {
+    "border": {
       "color": "Color",
       "thickness": "Thickness"
     },

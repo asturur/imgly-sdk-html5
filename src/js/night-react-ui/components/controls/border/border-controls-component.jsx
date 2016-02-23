@@ -14,7 +14,7 @@ import ControlsComponent from '../controls-component'
 import SliderComponent from '../../slider-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'
 
-export default class FrameControlsComponent extends ControlsComponent {
+export default class BorderControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 
@@ -107,7 +107,7 @@ export default class FrameControlsComponent extends ControlsComponent {
         maxValue={maxThickness}
         valueUnit='px'
         middleDot={false}
-        label={this._t('controls.frame.thickness')}
+        label={this._t('controls.border.thickness')}
         onChange={this._onThicknessUpdate}
         value={currentWidth} />
     </div>),
