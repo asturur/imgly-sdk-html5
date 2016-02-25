@@ -30,6 +30,7 @@ class NightReactUI extends EventEmitter {
   /**
    * Creates an UI instance
    * @param  {Object} [options = {}]
+   * @param  {Image} [options.image] - The image that the user can edit
    * @param  {DOMElement} [options.container] - The container that the UI should be rendered to
    * @param  {Boolean} [options.showNewButton] - Should the `new` button be displayed?
    * @param  {String} [options.preferredRenderer = 'webgl'] - `webgl` or `canvas`
@@ -56,7 +57,7 @@ class NightReactUI extends EventEmitter {
    * @param  {Number} [options.maxMegaPixels.desktop = 10]
    * @param  {Number} [options.maxMegaPixels.mobile = 5]
    * @param  {Object} [options.assets]
-   * @param  {String} [options.assets.baseUrl = '/'] - Path that is prepended to all asset paths
+   * @param  {String} [options.assets.baseUrl = '/assets'] - Path that is prepended to all asset paths
    * @param  {Function} [options.assets.resolver] - A function resolving a path to another path.
    * @param  {Object} [options.export]
    * @param  {Boolean} [options.export.showButton = true] - Should the `export` button be displayed?
@@ -167,7 +168,7 @@ class NightReactUI extends EventEmitter {
     })
 
     this._options.assets = SDKUtils.defaults(this._options.assets || {}, {
-      baseUrl: '/',
+      baseUrl: '/assets',
       resolver: null
     })
 
