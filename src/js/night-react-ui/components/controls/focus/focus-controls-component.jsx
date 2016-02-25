@@ -50,8 +50,8 @@ export default class FocusControlsComponent extends ControlsComponent {
           key={item.identifier}>
           <bem specifier='$b:controls'>
             <div bem='$e:button m:withLabel' onClick={this._onButtonClick.bind(this, item)}>
-              <img bem='e:icon' src={this._getAssetPath(item.icon, true)} />
-              <div bem='e:label'>{this._t(item.label)}</div>
+              <img bem='e:icon' src={this._getAssetPath(item.iconPath, true)} />
+              <div bem='e:label'>{this._t(item.languageKey)}</div>
             </div>
           </bem>
         </li>)

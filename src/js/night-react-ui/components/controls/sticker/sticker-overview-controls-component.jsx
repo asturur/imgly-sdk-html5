@@ -14,7 +14,7 @@ import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ModalManager from '../../../lib/modal-manager'
 
-export default class StickersOverviewControlsComponent extends ControlsComponent {
+export default class StickerOverviewControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 

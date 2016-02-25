@@ -7,7 +7,7 @@
       "crop": "Zuschneiden",
       "blur": "Weichzeichnen",
       "border": "Rahmen",
-      "stickers": "Sticker",
+      "sticker": "Sticker",
       "text": "Text",
       "brush": "Malen"
     },
@@ -47,7 +47,7 @@
     "filters": {
       "intensity": "Intensität"
     },
-    "stickers": {
+    "sticker": {
       "brightness": "Helligkeit",
       "contrast": "Kontrast",
       "saturation": "Sättigung",

@@ -10,21 +10,23 @@
 
 import { SDK, Vector2, SDKUtils } from '../../../globals'
 const { Text } = SDK.Operations.SpriteOperation
+import Controls from '../controls'
 import SpritesCanvasControlsComponent from '../sprites/sprites-canvas-controls-component'
 import TextControlsComponent from './text-controls-component'
 
-export default {
-  canvasControls: SpritesCanvasControlsComponent,
-  controls: TextControlsComponent,
-  identifier: 'text',
-  icon: 'controls/overview/text@2x.png',
-  label: 'controls.overview.text',
-
+/**
+ * The text controls
+ * @class
+ * @extends PhotoEditorSDK.UI.NightReact.Control
+ * @memberof PhotoEditorSDK.UI.NightReact.Controls
+ */
+class TextControls extends Controls {
   /**
    * Gets called when the user leaves these controls
    * @this {StickersControlsComponent}
+   * @ignore
    */
-  onExit: function () {
+  static onExit () {
     const { editor } = this.context
     const operation = this.getSharedState('operation')
 
@@ -39,16 +41,17 @@ export default {
     editor.undoZoom()
     editor.enableFeatures('zoom', 'drag')
     editor.render()
-  },
+  }
 
   /**
    * Checks if there is something at the given position that
    * would cause the UI to switch to this control on click
-   * @param  {Vector2} position
-   * @param  {Editor} editor
+   * @param  {PhotoEditorSDK.Math.Vector2} position
+   * @param  {PhotoEditorSDK.UI.NightReact.Editor} editor
    * @return {*}
+   * @ignore
    */
-  clickAtPosition: (position, editor) => {
+  static clickAtPosition (position, editor) {
     if (!editor.operationExists('sprite')) return false
 
     const sdk = editor.getSDK()
@@ -59,15 +62,16 @@ export default {
     } else {
       return false
     }
-  },
+  }
 
   /**
    * Returns the initial shared state for this control
-   * @param  {Editor} editor
+   * @param  {PhotoEditorSDK.UI.NightReact.Editor} editor
    * @param  {Object} additionalState = {}
    * @return {Object}
+   * @ignore
    */
-  getInitialSharedState: (editor, additionalState = {}) => {
+  static getInitialSharedState (editor, additionalState = {}) {
     const operationExistedBefore = editor.operationExists('sprite')
     const operation = editor.getOrCreateOperation('sprite')
     const sprites = operation.getSprites()
@@ -103,14 +107,60 @@ export default {
     }
 
     return SDKUtils.extend({}, state, additionalState)
-  },
+  }
 
   /**
    * Checks if this control is available to the user
-   * @param  {Editor} editor
+   * @param  {PhotoEditorSDK.UI.NightReact.Editor} editor
    * @return {Boolean}
+   * @ignore
    */
-  isAvailable: (editor) => {
+  static isAvailable (editor) {
     return editor.isToolEnabled('text')
   }
 }
+
+/**
+ * This control's controls component. Used for the lower controls part of the editor.
+ * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
+ * @ignore
+ */
+TextControls.controlsComponent = TextControlsComponent
+
+/**
+ * This control's canvas component. Used for the upper controls part of the editor (on
+ * top of the canvas)
+ * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
+ */
+TextControls.canvasControlsComponent = SpritesCanvasControlsComponent
+
+/**
+ * This control's identifier
+ * @type {String}
+ * @default
+ */
+TextControls.identifier = 'text'
+
+/**
+ * This control's icon path
+ * @type {String}
+ * @ignore
+ */
+TextControls.iconPath = 'controls/overview/text@2x.png'
+
+/**
+ * The language key that should be used when displaying this filter
+ * @type {String}
+ * @ignore
+ */
+TextControls.languageKey = 'controls.overview.text'
+
+/**
+ * The default options for this control
+ * @type {Object}
+ */
+TextControls.defaultOptions = {
+
+}
+
+export default TextControls

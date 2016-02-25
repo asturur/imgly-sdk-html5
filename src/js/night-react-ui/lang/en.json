@@ -7,7 +7,7 @@
       "crop": "Crop",
       "focus": "Focus",
       "border": "Border",
-      "stickers": "Stickers",
+      "sticker": "Sticker",
       "text": "Text",
       "brush": "Brush"
     },
@@ -47,7 +47,7 @@
     "filters": {
       "intensity": "Intensity"
     },
-    "stickers": {
+    "sticker": {
       "brightness": "Brightness",
       "contrast": "Contrast",
       "saturation": "Saturation",

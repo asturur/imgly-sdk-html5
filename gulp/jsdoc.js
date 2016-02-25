@@ -7,6 +7,7 @@ gulp.task('jsdoc', function () {
     './README.md',
     './src/js/sdk/**/*.js',
     './src/js/night-react-ui/**/*.js',
+    './src/js/night-react-ui/**/*.jsx',
     '!./src/js/sdk/vendor/**/*.js'
   ])
     .pipe(jsdoc({

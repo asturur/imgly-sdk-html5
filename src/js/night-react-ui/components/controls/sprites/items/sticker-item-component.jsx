@@ -312,7 +312,8 @@ export default class StickerItemComponent extends ItemComponent {
 
   /**
    * Renders the SVG filters
-   * @return {[type]} [description]
+   * @return {ReactBEM.Element}
+   * @private
    */
   _renderSVGFilter () {
     const { sprite } = this.props

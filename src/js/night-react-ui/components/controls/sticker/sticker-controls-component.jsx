@@ -10,10 +10,10 @@
  */
 
 import { ReactBEM, BaseComponent } from '../../../globals'
-import StickersOverviewControlsComponent from './stickers-overview-controls-component'
-import StickersEditControlsComponent from './stickers-edit-controls-component'
+import StickerOverviewControlsComponent from './sticker-overview-controls-component'
+import StickerEditControlsComponent from './sticker-edit-controls-component'
 
-export default class StickersControlsComponent extends BaseComponent {
+export default class StickerControlsComponent extends BaseComponent {
   constructor (...args) {
     super(...args)
 
@@ -94,9 +94,9 @@ export default class StickersControlsComponent extends BaseComponent {
   renderWithBEM () {
     const selectedSprite = this.getSharedState('selectedSprite')
 
-    let ControlsComponent = StickersOverviewControlsComponent
+    let ControlsComponent = StickerOverviewControlsComponent
     if (selectedSprite) {
-      ControlsComponent = StickersEditControlsComponent
+      ControlsComponent = StickerEditControlsComponent
     }
 
     return (<ControlsComponent

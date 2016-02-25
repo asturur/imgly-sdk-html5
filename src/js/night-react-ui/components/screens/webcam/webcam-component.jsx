@@ -96,7 +96,7 @@ export default class WebcamComponent extends BaseComponent {
 
   /**
    * Resizes the video to fit the container
-   * @return {[type]} [description]
+   * @private
    */
   _resizeVideo () {
     const { video, container } = this.refs

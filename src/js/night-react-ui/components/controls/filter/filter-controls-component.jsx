@@ -14,7 +14,7 @@ import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import SliderOverlayComponent from '../slider-overlay-component'
 
-export default class FiltersControlsComponent extends ControlsComponent {
+export default class FilterControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 

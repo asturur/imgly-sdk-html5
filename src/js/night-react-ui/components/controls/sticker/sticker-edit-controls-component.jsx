@@ -36,7 +36,7 @@ const ADJUSTMENTS_ITEMS = {
   }
 }
 
-export default class StickersEditControlsComponent extends ControlsComponent {
+export default class StickerEditControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 
@@ -211,7 +211,7 @@ export default class StickersEditControlsComponent extends ControlsComponent {
         <bem specifier='$b:controls'>
           <div bem='$e:button m:withLabel'>
             <img bem='e:icon' src={this._getAssetPath(`controls/orientation/flip-${direction}@2x.png`, true)} />
-            <div bem='e:label'>{this._t(`controls.stickers.flip-${direction}`)}</div>
+            <div bem='e:label'>{this._t(`controls.sticker.flip-${direction}`)}</div>
           </div>
         </bem>
     </li>)

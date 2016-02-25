@@ -10,7 +10,7 @@
 
 import {
   EventEmitter, SDK, SDKUtils, Constants, Vector2, Utils,
-  requestAnimationFrame, cancelAnimationFrame, Promise
+  requestAnimationFrame, cancelAnimationFrame, Promise, Log
 } from '../globals'
 import Exporter from './exporter'
 import Controls from '../components/controls'
@@ -165,11 +165,7 @@ class Editor extends EventEmitter {
    * @private
    */
   _initControls () {
-    const defaultControls = {}
-    Controls.forEach((control) => {
-      defaultControls[control.identifier] = control
-    })
-    this._availableControls = SDKUtils.extend(defaultControls, this._options.extensions.controls)
+    this._availableControls = SDKUtils.extend({}, Controls, this._options.extensions.controls)
   }
 
   // -------------------------------------------------------------------------- FEATURES
@@ -358,7 +354,11 @@ class Editor extends EventEmitter {
    */
   isControlEnabled (identifier) {
     const control = this.getControl(identifier)
-    if (!control) return false
+
+    if (!control) {
+      Log.info(this.constructor.name, '#isControlEnabled: Unknown control: ' + identifier)
+      return false
+    }
 
     return control.isAvailable && control.isAvailable(this)
   }

@@ -230,26 +230,26 @@ export default class EditorScreenComponent extends ScreenComponent {
    * @return {ReactBEM.Element}
    */
   renderWithBEM () {
-    const Controls = this.state.controls.controls
+    const ControlsComponent = this.state.controls.controlsComponent
     const controlsIdentifier = this.state.controls.identifier
     const controlsOptions = this.context.options.controlsOptions[controlsIdentifier] || {}
-    let CanvasControls = this.state.controls.canvasControls
-    if (!CanvasControls) {
-      CanvasControls = OverviewControls.canvasControls
+    let CanvasControlsComponent = this.state.controls.canvasControlsComponent
+    if (!CanvasControlsComponent) {
+      CanvasControlsComponent = OverviewControls.canvasControlsComponent
     }
 
     let controls, canvasControls
 
-    if (Controls) {
-      controls = (<Controls
+    if (ControlsComponent) {
+      controls = (<ControlsComponent
         onSwitchControls={this.switchToControls}
         sharedState={this.state.sharedState}
         options={controlsOptions}
         ref='controls' />)
     }
 
-    if (CanvasControls) {
-      canvasControls = (<CanvasControls
+    if (CanvasControlsComponent) {
+      canvasControls = (<CanvasControlsComponent
         onSwitchControls={this.switchToControls}
         sharedState={this.state.sharedState}
         ref='canvasControls' />)
