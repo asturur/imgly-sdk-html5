@@ -42,7 +42,13 @@ class TexasFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 TexasFilter.identifier = 'texas'
+
 TexasFilter.displayName = 'Texas'
 
 export default TexasFilter

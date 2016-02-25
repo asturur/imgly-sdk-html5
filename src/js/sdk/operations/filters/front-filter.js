@@ -51,7 +51,13 @@ class FrontFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 FrontFilter.identifier = 'front'
+
 FrontFilter.displayName = 'Front'
 
 export default FrontFilter

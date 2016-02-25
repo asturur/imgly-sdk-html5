@@ -52,7 +52,13 @@ class FixieFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 FixieFilter.identifier = 'fixie'
+
 FixieFilter.displayName = 'Fixie'
 
 export default FixieFilter

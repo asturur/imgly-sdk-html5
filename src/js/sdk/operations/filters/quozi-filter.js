@@ -59,7 +59,13 @@ class QuoziFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 QuoziFilter.identifier = 'quozi'
+
 QuoziFilter.displayName = 'Quozi'
 
 export default QuoziFilter

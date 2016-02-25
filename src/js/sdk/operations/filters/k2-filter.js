@@ -43,7 +43,13 @@ class K2Filter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 K2Filter.identifier = 'k2'
+
 K2Filter.displayName = 'K2'
 
 export default K2Filter

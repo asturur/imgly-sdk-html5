@@ -54,7 +54,13 @@ class A15Filter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 A15Filter.identifier = 'a15'
+
 A15Filter.displayName = '15'
 
 export default A15Filter

@@ -54,7 +54,13 @@ class SunnyFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 SunnyFilter.identifier = 'sunny'
+
 SunnyFilter.displayName = 'Sunny'
 
 export default SunnyFilter

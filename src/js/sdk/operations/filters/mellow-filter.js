@@ -42,7 +42,13 @@ class MellowFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 MellowFilter.identifier = 'mellow'
+
 MellowFilter.displayName = 'Mellow'
 
 export default MellowFilter

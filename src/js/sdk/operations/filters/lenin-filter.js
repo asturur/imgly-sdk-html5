@@ -61,7 +61,13 @@ class LeninFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 LeninFilter.identifier = 'lenin'
+
 LeninFilter.displayName = 'Lenin'
 
 export default LeninFilter

@@ -30,7 +30,13 @@ class FoodFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 FoodFilter.identifier = 'food'
+
 FoodFilter.displayName = 'Food'
 
 export default FoodFilter

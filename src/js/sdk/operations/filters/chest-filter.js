@@ -47,7 +47,13 @@ class ChestFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 ChestFilter.identifier = 'chest'
+
 ChestFilter.displayName = 'Chest'
 
 export default ChestFilter

@@ -42,7 +42,13 @@ class MorningFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 MorningFilter.identifier = 'morning'
+
 MorningFilter.displayName = 'Morning'
 
 export default MorningFilter

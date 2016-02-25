@@ -31,6 +31,12 @@ class IdentityFilter extends Filter {
 
 IdentityFilter.isIdentity = true
 IdentityFilter.displayName = 'Original'
+
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 IdentityFilter.identifier = 'identity'
 
 export default IdentityFilter

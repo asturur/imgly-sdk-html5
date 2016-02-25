@@ -33,7 +33,13 @@ class LomoFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 LomoFilter.identifier = 'lomo'
+
 LomoFilter.displayName = 'Lomo'
 
 export default LomoFilter

@@ -25,7 +25,13 @@ class GobblinFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 GobblinFilter.identifier = 'gobblin'
+
 GobblinFilter.displayName = 'Gobblin'
 
 export default GobblinFilter

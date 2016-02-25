@@ -25,7 +25,13 @@ class BWFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 BWFilter.identifier = 'bw'
+
 BWFilter.displayName = 'B&W'
 
 export default BWFilter

@@ -45,7 +45,13 @@ class CelsiusFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 CelsiusFilter.identifier = 'celsius'
+
 CelsiusFilter.displayName = 'Celsius'
 
 export default CelsiusFilter

@@ -48,7 +48,13 @@ class SemiredFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 SemiredFilter.identifier = 'semired'
+
 SemiredFilter.displayName = 'Semired'
 
 export default SemiredFilter

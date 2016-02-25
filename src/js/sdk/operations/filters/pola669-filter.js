@@ -53,7 +53,13 @@ class Pola669Filter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 Pola669Filter.identifier = 'pola669'
+
 Pola669Filter.displayName = 'Pola 669'
 
 export default Pola669Filter

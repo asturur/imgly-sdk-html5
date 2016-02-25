@@ -28,7 +28,13 @@ class K6Filter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 K6Filter.identifier = 'k6'
+
 K6Filter.displayName = 'K6'
 
 export default K6Filter

@@ -39,7 +39,13 @@ class K1Filter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 K1Filter.identifier = 'k1'
+
 K1Filter.displayName = 'K1'
 
 export default K1Filter

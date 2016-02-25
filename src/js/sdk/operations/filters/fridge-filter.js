@@ -49,7 +49,13 @@ class FridgeFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 FridgeFilter.identifier = 'fridge'
+
 FridgeFilter.displayName = 'Fridge'
 
 export default FridgeFilter

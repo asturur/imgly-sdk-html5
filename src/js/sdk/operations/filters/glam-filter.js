@@ -49,7 +49,13 @@ class GlamFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 GlamFilter.identifier = 'glam'
+
 GlamFilter.displayName = 'Glam'
 
 export default GlamFilter

@@ -62,7 +62,13 @@ class OrchidFilter extends Filter {
   }
 }
 
+/**
+ * This filter's identifier
+ * @type {String}
+ * @default
+ */
 OrchidFilter.identifier = 'orchid'
+
 OrchidFilter.displayName = 'Orchid'
 
 export default OrchidFilter
