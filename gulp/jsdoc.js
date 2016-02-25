@@ -40,6 +40,6 @@ gulp.task('jsdoc', function () {
         dateFormat: 'MMMM Do YYYY, h:mm:ss a'
       }
     }
-, () => {}))
+, function () {}))
     .on('error', handleErrors)
 })
