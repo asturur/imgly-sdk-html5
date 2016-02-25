@@ -59,12 +59,14 @@ class FilterOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 FilterOperation.identifier = 'filter'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 FilterOperation.prototype.availableOptions = {
   intensity: {

@@ -72,12 +72,14 @@ class AdjustmentsOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 AdjustmentsOperation.identifier = 'adjustments'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 AdjustmentsOperation.prototype.availableOptions = {
   brightness: { type: 'number', default: 0 },

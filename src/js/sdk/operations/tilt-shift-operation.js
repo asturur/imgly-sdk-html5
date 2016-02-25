@@ -225,12 +225,14 @@ class TiltShiftOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 TiltShiftOperation.identifier = 'tilt-shift'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 TiltShiftOperation.prototype.availableOptions = {
   start: { type: 'vector2', default: new Vector2(0.0, 0.5) },

@@ -305,12 +305,14 @@ class BrushOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 BrushOperation.identifier = 'brush'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 BrushOperation.prototype.availableOptions = {
   thickness: { type: 'number', default: 10 },

@@ -91,12 +91,14 @@ class OrientationOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 OrientationOperation.identifier = 'orientation'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 OrientationOperation.prototype.availableOptions = {
   rotation: { type: 'number', default: 0, validation: function (value) {

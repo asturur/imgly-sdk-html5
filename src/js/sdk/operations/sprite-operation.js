@@ -345,12 +345,14 @@ SpriteOperation.Text = Text
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 SpriteOperation.identifier = 'sprite'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 SpriteOperation.prototype.availableOptions = {
   sprites: {

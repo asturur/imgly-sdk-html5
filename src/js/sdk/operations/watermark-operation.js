@@ -106,12 +106,14 @@ class WatermarkOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 WatermarkOperation.identifier = 'watermark'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 WatermarkOperation.prototype.availableOptions = {
   image: { type: 'object', required: true }

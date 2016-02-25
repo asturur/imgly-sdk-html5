@@ -106,12 +106,14 @@ class BorderOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 BorderOperation.identifier = 'border'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 BorderOperation.prototype.availableOptions = {
   color: { type: 'color', default: new Color(0, 0, 0, 1) },

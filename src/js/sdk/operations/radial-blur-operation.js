@@ -214,12 +214,14 @@ class RadialBlurOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 RadialBlurOperation.identifier = 'radial-blur'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 RadialBlurOperation.prototype.availableOptions = {
   position: { type: 'vector2', default: new Vector2(0.5, 0.5) },

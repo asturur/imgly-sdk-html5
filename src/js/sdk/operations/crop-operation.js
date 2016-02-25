@@ -196,12 +196,14 @@ class CropOperation extends Operation {
  * A unique string that identifies this operation. Can be used to select
  * operations.
  * @type {String}
+ * @default
  */
 CropOperation.identifier = 'crop'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
+ * @ignore
  */
 CropOperation.prototype.availableOptions = {
   start: { type: 'vector2', required: true, default: new Vector2(0, 0) },
