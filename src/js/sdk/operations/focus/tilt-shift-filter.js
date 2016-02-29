@@ -111,7 +111,7 @@ class TiltShiftFilter extends Engine.Filter {
     const dist = end.clone().subtract(start)
     const middle = start.clone().add(dist.clone().divide(2))
 
-    const totalDist = Math.sqrt(Math.pow(dist.x, 2) + Math.pow(dist.y, 2))
+    const totalDist = dist.len()
     const factor = dist.clone().divide(totalDist)
 
     const gradientStart = middle.clone()
