@@ -8,12 +8,13 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-/**
- * The available render types
- * @enum {string}
- * @alias PhotoEditorSDK.RenderType
- */
 export default {
+  /**
+   * The available render types
+   * @enum {String}
+   * @alias RenderType
+   * @memberof PhotoEditorSDK
+   */
   RenderType: {
     IMAGE: 'image',
     DATAURL: 'data-url',
@@ -21,6 +22,13 @@ export default {
     BLOB: 'blob',
     MSBLOB: 'ms-blob'
   },
+
+  /**
+   * The available image types
+   * @enum {String}
+   * @alias ImageFormat
+   * @memberof PhotoEditorSDK
+   */
   ImageFormat: {
     PNG: 'image/png',
     JPEG: 'image/jpeg'
