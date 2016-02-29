@@ -174,6 +174,8 @@ export default class EditorScreenComponent extends ScreenComponent {
       this._previousControlsStack.push(this.state.controls)
     }
 
+    this.context.mediator.emit(Constants.EVENTS.CONTROLS_SWITCHED, newControls)
+
     // If the controls have an `onExit` method, call it
     // with the controls as `this`
     if (this.state.controls.onExit) {

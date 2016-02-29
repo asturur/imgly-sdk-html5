@@ -15,6 +15,26 @@ window.onload = function () {
       },
       language: 'en'
     })
+
+    editor.on(PhotoEditorSDK.UI.NightReact.Constants.EVENTS.OPERATION_CREATED, function () {
+      console.log('operation created', arguments)
+    })
+
+    editor.on(PhotoEditorSDK.UI.NightReact.Constants.EVENTS.OPERATION_UPDATED, function () {
+      console.log('operation updated', arguments)
+    })
+
+    editor.on(PhotoEditorSDK.UI.NightReact.Constants.EVENTS.CONTROLS_SWITCHED, function (controls) {
+      console.log('controls switched to', controls)
+    })
+
+    editor.on(PhotoEditorSDK.UI.NightReact.Constants.EVENTS.HISTORY_UNDO, function (controls) {
+      console.log('history undone')
+    })
+
+    editor.on(PhotoEditorSDK.UI.NightReact.Constants.EVENTS.EXPORT, function (result) {
+      console.log('export', result)
+    })
   }
 
   /**

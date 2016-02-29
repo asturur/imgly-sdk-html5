@@ -76,6 +76,7 @@ class NightReactUI extends EventEmitter {
     this._options = options
     this._initOptions()
     this._initLanguage()
+    this._initEvents()
 
     this.run()
   }
@@ -214,6 +215,24 @@ class NightReactUI extends EventEmitter {
     head.appendChild(this._webFontsStyle)
   }
 
+  // -------------------------------------------------------------------------- EVENTS
+
+  /**
+   * Catches mediator events and emits them here
+   * @private
+   */
+  _initEvents () {
+    this._mediator.pipeEvents(this)
+  }
+
+  /**
+   * Unpipes the vents
+   * @private
+   */
+  _disposeEvents () {
+    this._mediator.unpipeEvents(this)
+  }
+
   // -------------------------------------------------------------------------- I18N
 
   /**
@@ -268,8 +287,44 @@ class NightReactUI extends EventEmitter {
 
     // Unmount AppComponent
     ReactDOM.unmountComponentAtNode(this._options.container)
+
+    this._disposeEvents()
   }
 }
+
+/**
+ * Export event
+ *
+ * @event PhotoEditorSDK.UI.NightReact#export
+ * @type {Image|String|Blob}
+ */
+
+/**
+ * Operation created event
+ *
+ * @event PhotoEditorSDK.UI.NightReact#operation:created
+ * @type {PhotoEditorSDK.Operation}
+ */
+
+/**
+ * Operation removed event
+ *
+ * @event PhotoEditorSDK.UI.NightReact#operation:removed
+ * @type {PhotoEditorSDK.Operation}
+ */
+
+/**
+ * History undo event
+ *
+ * @event PhotoEditorSDK.UI.NightReact#history:undo
+ */
+
+/**
+ * Controls switched event
+ *
+ * @event PhotoEditorSDK.UI.NightReact#controls:switched
+ * @type {PhotoEditorSDK.UI.NightReact.Controls}
+ */
 
 /**
  * A unique string that represents this UI

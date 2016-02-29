@@ -424,6 +424,8 @@ class Editor extends EventEmitter {
     }
     this._operationsStack.set(index, operation)
     this._operationsMap[identifier] = operation
+
+    this._mediator.emit(Constants.EVENTS.OPERATION_CREATED, operation)
   }
 
   /**
@@ -451,6 +453,8 @@ class Editor extends EventEmitter {
         if (!operation) continue
         operation.setDirty(true)
       }
+
+      this._mediator.emit(Constants.EVENTS.OPERATION_REMOVED, operation)
     }
   }
 
@@ -545,6 +549,7 @@ class Editor extends EventEmitter {
     return exporter.export()
       .then((output) => {
         this.emit('export', output)
+        this._mediator.emit(Constants.EVENTS.EXPORT, output)
 
         if (this._watermarkOperation) {
           this._watermarkOperation.setEnabled(true)

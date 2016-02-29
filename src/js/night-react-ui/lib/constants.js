@@ -11,10 +11,12 @@
 export default {
   EVENTS: {
     RENDER: 'render',
+    EXPORT: 'export',
     ZOOM: 'zoom',
     ZOOM_DONE: 'zoom:done',
     ZOOM_UNDO: 'zoom:undo',
-    OPERATION_UPDATED: 'operation:update',
+    OPERATION_CREATED: 'operation:created',
+    OPERATION_UPDATED: 'operation:updated',
     OPERATION_REMOVED: 'operation:removed',
     FEATURES_DISABLED: 'editor:features:disabled',
     FEATURES_ENABLED: 'editor:features:enabled',
@@ -22,6 +24,7 @@ export default {
     COLORPICKER_OPEN: 'colorpicker:open',
     HISTORY_UPDATED: 'history:update',
     HISTORY_UNDO: 'history:undo',
-    WINDOW_RESIZE: 'window:resize'
+    WINDOW_RESIZE: 'window:resize',
+    CONTROLS_SWITCHED: 'controls:switched'
   }
 }
