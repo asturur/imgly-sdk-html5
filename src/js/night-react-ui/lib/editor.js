@@ -652,15 +652,18 @@ class Editor extends EventEmitter {
    */
   _tick () {
     if (this._renderRequested) {
+      const callbacks = this._renderCallbacks.slice(0)
+      this._renderCallbacks = []
+
       this._render()
         .then(() => {
-          this._renderCallbacks.forEach((r) => r())
-          this._renderCallbacks = []
+          callbacks.forEach((r) => r())
+          this._animationFrameRequest = requestAnimationFrame(this._tick)
         })
-
       this._renderRequested = false
+    } else {
+      this._animationFrameRequest = requestAnimationFrame(this._tick)
     }
-    this._animationFrameRequest = requestAnimationFrame(this._tick)
   }
 
   /**
