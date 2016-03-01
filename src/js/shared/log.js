@@ -31,7 +31,10 @@ Log.canLog = (type) => {
 }
 Log.hasColorfulOutput = () => {
   return (!process || (process && process.browser)) &&
-    navigator && navigator.userAgent.match(/Gecko|WebKit/i)
+    navigator && (
+      navigator.userAgent.match(/Gecko|WebKit/i) &&
+      navigator.userAgent.indexOf('like Gecko') === -1
+    )
 }
 
 Log.printError = (e) => {
@@ -46,7 +49,9 @@ LEVELS.forEach((level) => {
   Log[type] = function (tag, ...args) {
     if (!Log.canLog(type)) return
 
-    const output = args.map((a) => a.toString()).join(' ')
+    const output = args
+      .map((a) => (typeof a === 'string') ? a : a.toString())
+      .join(' ')
     if (!Log.hasColorfulOutput()) {
       return console.log(`PhotoEditorSDK | ${tag} | ${output}`)
     }
