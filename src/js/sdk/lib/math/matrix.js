@@ -105,13 +105,13 @@ class Matrix {
    * @return {Float32Array}
    */
   toArray () {
-    return new Float32Array(
-      [
-        this.a, this.b, 0,
-        this.c, this.d, 0,
-        this.tx, this.ty, 1
-      ]
-    )
+    const arr = [
+      this.a, this.b, 0,
+      this.c, this.d, 0,
+      this.tx, this.ty, 1
+    ]
+    if (typeof Float32Array === 'undefined') return arr
+    return new Float32Array(arr)
   }
 
   /**
