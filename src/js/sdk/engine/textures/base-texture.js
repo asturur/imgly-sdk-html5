@@ -194,7 +194,6 @@ class BaseTexture extends EventEmitter {
    */
   getMinFilter () { return this._minFilter }
 
-
   /**
    * Sets the mag filter to the given one
    * @param {Number} magFilter
