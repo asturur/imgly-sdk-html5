@@ -55,15 +55,31 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
    * @private
    */
   _loadExternalStickers () {
+    // Display loading modal after 100ms
+    let loadingModal = null
+    let loadTimeout = setTimeout(() => {
+      loadingModal = ModalManager.instance.displayLoading(this._t('loading.loading'))
+    }, 100)
+
+    // Called when loading is done. Cancels the loading timeout
+    // or closes the loadingModal in case it has been opened
+    const doneLoading = () => {
+      if (loadTimeout) {
+        clearTimeout(loadTimeout)
+        loadTimeout = null
+      }
+      if (loadingModal) loadingModal.close()
+    }
+
     // Make sure not to show any stickers
     this._availableStickers = []
     this.forceUpdate()
 
     const url = this.props.options.stickersJSONPath
-    const loadingModal = ModalManager.instance.displayLoading(this._t('loading.loading'))
     Utils.getJSONP(url)
       .then((result) => {
-        loadingModal.close()
+        doneLoading()
+
         this._initStickers(result.stickers)
         this.forceUpdate(() => {
           this.refs.scrollbar.update()
@@ -71,7 +87,8 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
         })
       })
       .catch((e) => {
-        loadingModal.close()
+        doneLoading()
+
         const errorModal = ModalManager.instance.displayError(
           this._t('errors.loadingStickersFailed.title'),
           e.message
