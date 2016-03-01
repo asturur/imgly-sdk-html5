@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Vector2 } from '../../../globals'
+import { Utils, ReactBEM, Vector2 } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 
@@ -39,19 +39,24 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @private
    */
   _initRatios () {
-    const additionalRatios = this.props.options.ratios || []
-    const replaceRatios = !!this.props.options.replaceRatios
+    let { additionalRatios, replaceRatios, selectableRatios } = this.props.options
+    additionalRatios = additionalRatios || []
+
     this._ratios = [
-      { identifier: 'custom', ratio: '*', selected: true },
-      { identifier: 'square', ratio: 1 },
-      { identifier: '4-3', ratio: 1.33 },
-      { identifier: '16-9', ratio: 1.77 }
+      { name: 'custom', ratio: '*', selected: true },
+      { name: 'square', ratio: 1 },
+      { name: '4-3', ratio: 1.33 },
+      { name: '16-9', ratio: 1.77 }
     ]
 
     if (replaceRatios) {
       this._ratios = additionalRatios
     } else {
       this._ratios = this._ratios.concat(additionalRatios)
+    }
+
+    if (selectableRatios && selectableRatios.length) {
+      this._ratios = Utils.select(this._ratios, selectableRatios, r => r.name)
     }
   }
 
@@ -195,7 +200,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
    * @param {Object} ratio
    * @private
    */
-  _setDefaultOptionsForRatio ({ ratio, identifier }) {
+  _setDefaultOptionsForRatio ({ ratio, name }) {
     const { editor } = this.context
     let start = new Vector2()
     let end = new Vector2()
@@ -230,13 +235,13 @@ export default class OrientationControlsComponent extends ControlsComponent {
     const listItems = this._ratios.map((ratio) => {
       return (<li
         bem='e:item'
-        key={ratio.identifier}>
+        key={ratio.name}>
         <bem specifier='$b:controls'>
           <div bem='$e:button m:withLabel'
             className={this._operation._ratio === ratio.ratio ? 'is-active' : null}
             onClick={this._selectRatio.bind(this, ratio)}>
-              <img bem='e:icon' src={this._getAssetPath(`controls/crop/${ratio.identifier}@2x.png`, true)} />
-              <div bem='e:label'>{this._t(`controls.crop.${ratio.identifier}`)}</div>
+              <img bem='e:icon' src={this._getAssetPath(`controls/crop/${ratio.name}@2x.png`, true)} />
+              <div bem='e:label'>{this._t(`controls.crop.${ratio.name}`)}</div>
           </div>
         </bem>
       </li>)
