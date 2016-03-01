@@ -30,6 +30,8 @@ class BaseTexture extends EventEmitter {
     this._source = source
 
     this._glUnit = 0
+    this._magFilter = BaseTexture.LinearFilter
+    this._minFilter = BaseTexture.LinearFilter
     this._pixelRatio = 1
     this._loaded = false
     this._frame = new Rectangle(0, 0, 100, 100)
@@ -80,6 +82,30 @@ class BaseTexture extends EventEmitter {
   update () {
     this._frame = new Rectangle(0, 0, this._source.width, this._source.height)
     this.emit('update')
+  }
+
+  /**
+   * Returns the filter for the given direction from the given WebGL context
+   * @param  {WebGLRenderingContext} gl
+   * @param  {String} minOrMag
+   * @return {Number}
+   */
+  getGLFilter (gl, minOrMag) {
+    const filter = (value) => {
+      switch (value) {
+        case BaseTexture.LinearFilter:
+          return gl.LINEAR
+        case BaseTexture.NearestFilter:
+          return gl.NEAREST
+      }
+    }
+
+    switch (minOrMag) {
+      case 'min':
+        return filter(this._minFilter)
+      case 'mag':
+        return filter(this._magFilter)
+    }
   }
 
   /**
@@ -157,6 +183,31 @@ class BaseTexture extends EventEmitter {
   setGLUnit (glUnit) { this._glUnit = glUnit }
 
   /**
+   * Sets the min filter to the given one
+   * @param {Number} minFilter
+   */
+  setMinFilter (minFilter) { this._minFilter = minFilter }
+
+  /**
+   * Returns this texture's min filter
+   * @return {Number}
+   */
+  getMinFilter () { return this._minFilter }
+
+
+  /**
+   * Sets the mag filter to the given one
+   * @param {Number} magFilter
+   */
+  setMagFilter (magFilter) { this._magFilter = magFilter }
+
+  /**
+   * Returns this texture's mag filter
+   * @return {Number}
+   */
+  getMagFilter () { return this._magFilter }
+
+  /**
    * Disposes the WebGL textures for the given renderer ID
    * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
    */
@@ -176,5 +227,8 @@ class BaseTexture extends EventEmitter {
     this.disposeGLTextures(renderer)
   }
 }
+
+BaseTexture.NearestFilter = 0
+BaseTexture.LinearFilter = 0
 
 export default BaseTexture
