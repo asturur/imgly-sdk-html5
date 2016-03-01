@@ -15,7 +15,7 @@ const ALIGNMENTS = [
   'right'
 ]
 
-import { ReactBEM } from '../../../globals'
+import { Utils, ReactBEM } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'
@@ -51,19 +51,24 @@ export default class TextControlsComponent extends ControlsComponent {
    * @private
    */
   _initFonts () {
-    const additionalFonts = this.props.options.fonts || []
-    const replaceFonts = !!this.props.options.replaceFonts
+    let { additionalFonts, replaceFonts, selectableFonts } = this.props.options
+    additionalFonts = additionalFonts || []
+
     const fonts = [
-      { fontFamily: 'Helvetica', fontWeight: 'normal' },
-      { fontFamily: 'Verdana', fontWeight: 'normal' },
-      { fontFamily: 'Times New Roman', fontWeight: 'normal' },
-      { fontFamily: 'Impact', fontWeight: 'normal' }
+      { name: 'helvetica', fontFamily: 'Helvetica', fontWeight: 'normal' },
+      { name: 'verdana', fontFamily: 'Verdana', fontWeight: 'normal' },
+      { name: 'timesnewroman', fontFamily: 'Times New Roman', fontWeight: 'normal' },
+      { name: 'impact', fontFamily: 'Impact', fontWeight: 'normal', default: true }
     ]
 
     if (replaceFonts) {
       this._fonts = additionalFonts
     } else {
       this._fonts = fonts.concat(additionalFonts)
+    }
+
+    if (selectableFonts && selectableFonts.length) {
+      this._fonts = Utils.select(this._fonts, selectableFonts, r => r.name)
     }
   }
 
