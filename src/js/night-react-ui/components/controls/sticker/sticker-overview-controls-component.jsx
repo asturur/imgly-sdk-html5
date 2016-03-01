@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { ReactBEM, Vector2 } from '../../../globals'
+import { Utils, Constants, ReactBEM, Vector2 } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ModalManager from '../../../lib/modal-manager'
@@ -50,11 +50,9 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
    * @private
    */
   _renderStickers () {
-    const stickers = this._availableStickers
-    for (let i = 0; i < stickers.length; i++) {
-      const stickerPaths = stickers[i]
-      this._renderSticker(i, stickerPaths)
-    }
+    this._availableStickers.forEach((sticker, i) =>
+      this._renderSticker(i, sticker)
+    )
   }
 
   /**
@@ -96,14 +94,14 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
   /**
    * Renders the given sticker on the canvas with the given index
    * @param  {Number} index
-   * @param  {Array.<String>} stickerPaths
+   * @param  {Object} sticker
    * @private
    */
-  _renderSticker (index, stickerPaths) {
+  _renderSticker (index, sticker) {
     const { editor } = this.context
     const sdk = editor.getSDK()
 
-    const resolvedStickerPath = this._getAssetPath(stickerPaths[0])
+    const resolvedStickerPath = this._getAssetPath(sticker.images.mediaThumb.uri)
     const canvas = this.refs[`canvas-${index}`]
 
     const pixelRatio = sdk.getPixelRatio()
@@ -140,38 +138,18 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
    * @private
    */
   _initStickers () {
-    const additionalStickers = this.props.options.stickers || []
-    const replaceStickers = !!this.props.options.replaceStickers
-
-    const stickers = [
-      'glasses-nerd.png',
-      'glasses-normal.png',
-      'glasses-shutter-green.png',
-      'glasses-shutter-yellow.png',
-      'glasses-sun.png',
-      'hat-cap.png',
-      'hat-cylinder.png',
-      'hat-party.png',
-      'hat-sheriff.png',
-      'heart.png',
-      'mustache-long.png',
-      'mustache1.png',
-      'mustache2.png',
-      'mustache3.png',
-      'pipe.png',
-      'snowflake.png',
-      'star.png'
-    ].map((stickerName) =>
-      [
-        `stickers/small/${stickerName}`,
-        `stickers/large/${stickerName}`
-      ]
-    )
+    let { additionalStickers, replaceStickers, selectableStickers } = this.props.options
+    additionalStickers = additionalStickers || []
+    let stickers = Constants.DEFAULTS.STICKERS
 
     if (replaceStickers) {
       this._availableStickers = additionalStickers
     } else {
       this._availableStickers = stickers.concat(additionalStickers)
+    }
+
+    if (selectableStickers && selectableStickers.length) {
+      this._availableStickers = Utils.select(this._availableStickers, selectableStickers, r => r.name)
     }
   }
 
@@ -188,13 +166,11 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
 
   /**
    * Gets called when a sticker has been clicked
-   * @param  {Array.<String>} stickerPaths
+   * @param  {Object} sticker
    * @private
    */
-  _onStickerClick (stickerPaths) {
-    const largePath = stickerPaths[1]
-
-    const resolvedStickerPath = this._getAssetPath(largePath)
+  _onStickerClick (sticker) {
+    const resolvedStickerPath = this._getAssetPath(sticker.images.mediaBase.uri)
     const image = new window.Image()
 
     let loadingModal
@@ -301,22 +277,20 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
    * @private
    */
   _renderListItems () {
-    return this._availableStickers.map((paths, i) => {
-      const smallPath = paths[0]
-      const largePath = paths[1]
+    return this._availableStickers.map((sticker, i) => {
       const { options } = this.props
 
       const itemEvents = options.tooltips
         ? {
-          onMouseEnter: this._onStickerMouseEnter.bind(this, smallPath),
+          onMouseEnter: this._onStickerMouseEnter.bind(this, sticker),
           onMouseLeave: this._onStickerMouseLeave
         }
         : null
 
       return (<li
         bem='e:item'
-        key={largePath}
-        onClick={this._onStickerClick.bind(this, [smallPath, largePath])}
+        key={sticker.name}
+        onClick={this._onStickerClick.bind(this, sticker)}
         {...itemEvents}>
         <bem specifier='$b:controls'>
           <div bem='$e:button m:withLabel'>
