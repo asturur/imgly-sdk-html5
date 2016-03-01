@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Utils, ReactBEM, Vector2 } from '../../../globals'
+import { Constants, Utils, ReactBEM, Vector2 } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 
@@ -42,13 +42,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
     let { additionalRatios, replaceRatios, selectableRatios } = this.props.options
     additionalRatios = additionalRatios || []
 
-    this._ratios = [
-      { name: 'custom', ratio: '*', selected: true },
-      { name: 'square', ratio: 1 },
-      { name: '4-3', ratio: 1.33 },
-      { name: '16-9', ratio: 1.77 }
-    ]
-
+    this._ratios = Constants.DEFAULTS.CROP_RATIOS
     if (replaceRatios) {
       this._ratios = additionalRatios
     } else {

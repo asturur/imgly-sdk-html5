@@ -15,7 +15,7 @@ const ALIGNMENTS = [
   'right'
 ]
 
-import { Utils, ReactBEM } from '../../../globals'
+import { Constants, Utils, ReactBEM } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'
@@ -54,13 +54,7 @@ export default class TextControlsComponent extends ControlsComponent {
     let { additionalFonts, replaceFonts, selectableFonts } = this.props.options
     additionalFonts = additionalFonts || []
 
-    const fonts = [
-      { name: 'helvetica', fontFamily: 'Helvetica', fontWeight: 'normal' },
-      { name: 'verdana', fontFamily: 'Verdana', fontWeight: 'normal' },
-      { name: 'timesnewroman', fontFamily: 'Times New Roman', fontWeight: 'normal' },
-      { name: 'impact', fontFamily: 'Impact', fontWeight: 'normal', default: true }
-    ]
-
+    const fonts = Constants.DEFAULTS.FONTS
     if (replaceFonts) {
       this._fonts = additionalFonts
     } else {

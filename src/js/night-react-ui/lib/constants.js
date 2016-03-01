@@ -26,5 +26,37 @@ export default {
     HISTORY_UNDO: 'history:undo',
     WINDOW_RESIZE: 'window:resize',
     CONTROLS_SWITCHED: 'controls:switched'
+  },
+  DEFAULTS: {
+    CROP_RATIOS: [
+      { name: 'custom', ratio: '*', selected: true },
+      { name: 'square', ratio: 1 },
+      { name: '4-3', ratio: 1.33 },
+      { name: '16-9', ratio: 1.77 }
+    ],
+    FONTS: [
+      { name: 'helvetica', fontFamily: 'Helvetica', fontWeight: 'normal' },
+      { name: 'verdana', fontFamily: 'Verdana', fontWeight: 'normal' },
+      { name: 'timesnewroman', fontFamily: 'Times New Roman', fontWeight: 'normal' },
+      { name: 'impact', fontFamily: 'Impact', fontWeight: 'normal', default: true }
+    ],
+    STICKERS: [
+      {
+        'name': 'glasses-nerd',
+        'label': 'Nerd glasses',
+        'images': {
+          'mediaThumb': {
+            'uri': 'stickers/thumb/glasses-nerd.png',
+            'width': 100,
+            'height': 100
+          },
+          'mediaBase': {
+            'uri': 'stickers/base/glasses-nerd.png',
+            'width': 221,
+            'height': 91
+          }
+        }
+      }
+    ]
   }
 }
