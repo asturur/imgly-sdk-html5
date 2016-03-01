@@ -60,9 +60,9 @@ export default class CanvasComponent extends BaseComponent {
     const { editor } = this.context
     const renderer = editor.getRenderer()
 
-    const { canvas } = this.refs
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
+    const { canvasCell, canvas } = this.refs
+    const width = canvasCell.offsetWidth
+    const height = canvasCell.offsetHeight
     renderer.setCanvas(canvas)
     renderer.resizeTo(new Vector2(width, height))
   }
