@@ -358,7 +358,7 @@ class PhotoEditorSDK extends EventEmitter {
 
     switch (this._preferredRenderer) {
       case 'webgl':
-        this._renderer = new Engine.WebGLRenderer(width, height, rendererOptions)
+        this._renderer = Engine.autoDetectRenderer(width, height, rendererOptions)
         this._renderer.on('context-restored', this._onContextRestored)
         break
       case 'canvas':
