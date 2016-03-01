@@ -33,7 +33,7 @@ Log.hasColorfulOutput = () => {
   return (!process || (process && process.browser)) &&
     navigator && (
       navigator.userAgent.match(/Gecko|WebKit/i) &&
-      navigator.userAgent.indexOf('like Gecko') === -1
+      !navigator.userAgent.match(/Trident/)
     )
 }
 
