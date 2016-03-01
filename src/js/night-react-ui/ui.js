@@ -11,7 +11,7 @@
 
 import {
   SDKUtils, EventEmitter, Constants, Utils, RenderType, BaseComponent,
-  React, ReactDOM, ReactBEM, SharedState
+  React, ReactDOM, ReactBEM, SharedState, Log
 } from './globals'
 
 import AppComponent from './components/app-component'
@@ -163,7 +163,7 @@ class NightReactUI extends EventEmitter {
     }
 
     this._options.extensions = SDKUtils.defaults(this._options.extensions || {}, {
-      languages: [],
+      languages: {},
       operations: [],
       controls: []
     })
@@ -240,11 +240,14 @@ class NightReactUI extends EventEmitter {
    * @private
    */
   _initLanguage () {
-    this._languages = {
+    this._languages = SDKUtils.defaults({
       de: require('./lang/de.json'),
       en: require('./lang/en.json')
-    }
+    }, this._options.extensions.languages)
     this._language = this._languages[this._options.language]
+    if (!this._language) {
+      Log.error(this.constructor.name, `Language \`${this._options.language}\` not found!`)
+    }
   }
 
   /**

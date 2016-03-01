@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Utils } = PhotoEditorSDK
+import Log from '../../shared/log'
 const { Vector2 } = PhotoEditorSDK.Math
 import JSONLoader from './json-loader'
 
@@ -85,11 +85,44 @@ const UIUtils = {
    * @return {String}
    */
   translate (phrases, key, interpolationOptions = {}) {
-    let response = Utils.fetch(phrases, key, key)
+    let response = this.fetch(phrases, key)
+    if (!response) {
+      Log.warn('Utils#translate', `Unable to translate \`${key}\``)
+      return key
+    }
     for (let key in interpolationOptions) {
       response = response.replace(`\${${key}}`, interpolationOptions[key])
     }
     return response
+  },
+
+  /**
+   * Gets the property value at `path` of `object`
+   * @param  {Object} object
+   * @param  {String} path
+   * @param  {?} [defaultValue]
+   * @return {?}
+   */
+  fetch (object, path, defaultValue) {
+    // Replace indexes with property accessors
+    path = path.replace(/\[(\w+)\]/g, '.$1')
+    // Strip leading dot (when path begins with [0] for example)
+    path = path.replace(/^\./, '')
+
+    const pathSegments = path.split('.')
+    for (let i = 0; i < pathSegments.length; i++) {
+      const segment = pathSegments[i]
+      object = object[segment]
+      if (!object) {
+        break
+      }
+    }
+
+    if (typeof object === 'undefined') {
+      return false
+    }
+
+    return object
   },
 
   /**
