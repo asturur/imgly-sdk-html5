@@ -25,8 +25,8 @@ class FocusControls extends Controls {
    * @ignore
    */
   static isAvailable (editor) {
-    return editor.isToolEnabled('radial-blur') ||
-      editor.isToolEnabled('tilt-shift')
+    return editor.isToolEnabled('radial-focus') ||
+      editor.isToolEnabled('linear-focus')
   }
 }
 

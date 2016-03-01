@@ -9,16 +9,16 @@
  */
 
 import Controls from '../../controls'
-import RadialBlurControlsComponent from './radial-blur-controls-component'
-import RadialBlurCanvasControlsComponent from './radial-blur-canvas-controls-component'
+import RadialFocusControlsComponent from './radial-focus-controls-component'
+import RadialFocusCanvasControlsComponent from './radial-focus-canvas-controls-component'
 
 /**
- * The radial blur controls
+ * The radial focus controls
  * @class
  * @extends PhotoEditorSDK.UI.NightReact.Control
  * @memberof PhotoEditorSDK.UI.NightReact.Controls
  */
-class RadialBlurControls extends Controls {
+class RadialFocusControls extends Controls {
   /**
    * Returns the initial shared state for this control
    * @param  {PhotoEditorSDK.UI.NightReact.Editor} editor
@@ -27,8 +27,8 @@ class RadialBlurControls extends Controls {
    * @ignore
    */
   static getInitialSharedState (editor) {
-    const operationExistedBefore = editor.operationExists('radial-blur')
-    const operation = editor.getOrCreateOperation('radial-blur')
+    const operationExistedBefore = editor.operationExists('radial-focus')
+    const operation = editor.getOrCreateOperation('radial-focus')
     const initialOptions = {
       position: operation.getPosition().clone(),
       gradientRadius: operation.getGradientRadius(),
@@ -46,7 +46,7 @@ class RadialBlurControls extends Controls {
    * @ignore
    */
   static isAvailable (editor) {
-    return editor.isToolEnabled('radial-blur')
+    return editor.isToolEnabled('radial-focus')
   }
 }
 
@@ -55,7 +55,7 @@ class RadialBlurControls extends Controls {
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
  * @ignore
  */
-RadialBlurControls.controlsComponent = RadialBlurControlsComponent
+RadialFocusControls.controlsComponent = RadialFocusControlsComponent
 
 /**
  * This control's canvas component. Used for the upper controls part of the editor (on
@@ -63,35 +63,35 @@ RadialBlurControls.controlsComponent = RadialBlurControlsComponent
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
  * @ignore
  */
-RadialBlurControls.canvasControlsComponent = RadialBlurCanvasControlsComponent
+RadialFocusControls.canvasControlsComponent = RadialFocusCanvasControlsComponent
 
 /**
  * This control's identifier
  * @type {String}
  * @default
  */
-RadialBlurControls.identifier = 'radial-blur'
+RadialFocusControls.identifier = 'radial-focus'
 
 /**
  * This control's icon path
  * @type {String}
  * @ignore
  */
-RadialBlurControls.iconPath = 'controls/focus/radial-blur@2x.png'
+RadialFocusControls.iconPath = 'controls/focus/radial@2x.png'
 
 /**
  * The language key that should be used when displaying this filter
  * @type {String}
  * @ignore
  */
-RadialBlurControls.languageKey = 'controls.focus.radial-blur'
+RadialFocusControls.languageKey = 'controls.focus.radial'
 
 /**
  * The default options for this control
  * @type {Object}
  */
-RadialBlurControls.defaultOptions = {
+RadialFocusControls.defaultOptions = {
 
 }
 
-export default RadialBlurControls
+export default RadialFocusControls

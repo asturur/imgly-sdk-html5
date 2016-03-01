@@ -40,7 +40,7 @@ class NightReactUI extends EventEmitter {
    * @param  {Boolean} [options.webcam = true] - Enables webcam support. Disabled on mobile devices.
    * @param  {String[]} [options.tools] - The enabled tools. Available are: `crop`, `rotation`,
    *                                    `flip`, `filter`, `brightness`, `saturation`, `contrast`,
-   *                                    `text`, `sticker`, `brush`, `radial-blur`, `tilt-shift`
+   *                                    `text`, `sticker`, `brush`, `radial-focus`, `linear-focus`
    *                                    and `border`
    * @param  {(String[]|Array[])} [options.controlsOrder] - The order in which the controls are displayed.
    *                                           Available are `crop`, `orientation`, `filter`,
@@ -126,7 +126,7 @@ class NightReactUI extends EventEmitter {
       webcam: true,
       assets: {},
       tools: [
-        'crop', 'rotation', 'flip', 'filter', 'brightness', 'saturation', 'contrast', 'text', 'sticker', 'brush', 'radial-blur', 'tilt-shift', 'border'
+        'crop', 'rotation', 'flip', 'filter', 'brightness', 'saturation', 'contrast', 'text', 'sticker', 'brush', 'radial-focus', 'linear-focus', 'border'
       ],
       controlsOrder: [
         ['crop', 'orientation'],
@@ -144,8 +144,8 @@ class NightReactUI extends EventEmitter {
         'adjustments',
 
         // Then post-processing
-        'radial-blur',
-        'tilt-shift',
+        'radial-focus',
+        'linear-focus',
         'border',
         'sprite',
         'brush',

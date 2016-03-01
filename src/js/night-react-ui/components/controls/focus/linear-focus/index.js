@@ -10,8 +10,8 @@
 
 import { Vector2 } from '../../../../globals'
 import Controls from '../../controls'
-import TiltShiftControlsComponent from './tilt-shift-controls-component'
-import TiltShiftCanvasControlsComponent from './tilt-shift-canvas-controls-component'
+import LinearFocusControlsComponent from './linear-focus-controls-component'
+import LinearFocusCanvasControlsComponent from './linear-focus-canvas-controls-component'
 
 /**
  * The radial blur controls
@@ -19,7 +19,7 @@ import TiltShiftCanvasControlsComponent from './tilt-shift-canvas-controls-compo
  * @extends PhotoEditorSDK.UI.NightReact.Control
  * @memberof PhotoEditorSDK.UI.NightReact.Controls
  */
-class TiltShiftControls extends Controls {
+class LinearFocusControls extends Controls {
   /**
    * Returns the initial shared state for this control
    * @param  {PhotoEditorSDK.UI.NightReact.Editor} editor
@@ -28,8 +28,8 @@ class TiltShiftControls extends Controls {
    * @ignore
    */
   static getInitialSharedState (editor) {
-    const operationExistedBefore = editor.operationExists('tilt-shift')
-    const operation = editor.getOrCreateOperation('tilt-shift', {
+    const operationExistedBefore = editor.operationExists('linear-focus')
+    const operation = editor.getOrCreateOperation('linear-focus', {
       start: new Vector2(0.49, 0.5),
       end: new Vector2(0.51, 0.5)
     })
@@ -51,7 +51,7 @@ class TiltShiftControls extends Controls {
    * @ignore
    */
   static isAvailable (editor) {
-    return editor.isToolEnabled('tilt-shift')
+    return editor.isToolEnabled('linear-focus')
   }
 }
 
@@ -60,7 +60,7 @@ class TiltShiftControls extends Controls {
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
  * @ignore
  */
-TiltShiftControls.controlsComponent = TiltShiftControlsComponent
+LinearFocusControls.controlsComponent = LinearFocusControlsComponent
 
 /**
  * This control's canvas component. Used for the upper controls part of the editor (on
@@ -68,35 +68,35 @@ TiltShiftControls.controlsComponent = TiltShiftControlsComponent
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
  * @ignore
  */
-TiltShiftControls.canvasControlsComponent = TiltShiftCanvasControlsComponent
+LinearFocusControls.canvasControlsComponent = LinearFocusCanvasControlsComponent
 
 /**
  * This control's identifier
  * @type {String}
  * @default
  */
-TiltShiftControls.identifier = 'tilt-shift'
+LinearFocusControls.identifier = 'linear-focus'
 
 /**
  * This control's icon path
  * @type {String}
  * @ignore
  */
-TiltShiftControls.iconPath = 'controls/focus/tilt-shift@2x.png'
+LinearFocusControls.iconPath = 'controls/focus/linear@2x.png'
 
 /**
  * The language key that should be used when displaying this filter
  * @type {String}
  * @ignore
  */
-TiltShiftControls.languageKey = 'controls.focus.tilt-shift'
+LinearFocusControls.languageKey = 'controls.focus.linear'
 
 /**
  * The default options for this control
  * @type {Object}
  */
-TiltShiftControls.defaultOptions = {
+LinearFocusControls.defaultOptions = {
 
 }
 
-export default TiltShiftControls
+export default LinearFocusControls

@@ -13,7 +13,7 @@ import { ReactBEM, Constants } from '../../../../globals'
 import ControlsComponent from '../../controls-component'
 import SliderComponent from '../../../slider-component'
 
-export default class RadialBlurControlsComponent extends ControlsComponent {
+export default class LinearFocusControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 
@@ -46,7 +46,7 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
     // to make sure we re-create the operation for the lifetime
     // of this control
     const { editor } = this.context
-    const newOperation = editor.getOrCreateOperation('radial-blur')
+    const newOperation = editor.getOrCreateOperation('linear-focus')
     this._operation = newOperation
     this.setSharedState({
       operation: newOperation,
@@ -70,7 +70,6 @@ export default class RadialBlurControlsComponent extends ControlsComponent {
       this._operation.set(this.getSharedState('initialOptions'))
     }
 
-    editor.render()
     editor.undoZoom()
     editor.enableFeatures('zoom', 'drag')
   }

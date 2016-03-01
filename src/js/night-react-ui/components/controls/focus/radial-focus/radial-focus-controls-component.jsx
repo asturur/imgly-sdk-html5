@@ -13,7 +13,7 @@ import { ReactBEM, Constants } from '../../../../globals'
 import ControlsComponent from '../../controls-component'
 import SliderComponent from '../../../slider-component'
 
-export default class TiltShiftControlsComponent extends ControlsComponent {
+export default class RadialFocusControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 
@@ -46,7 +46,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
     // to make sure we re-create the operation for the lifetime
     // of this control
     const { editor } = this.context
-    const newOperation = editor.getOrCreateOperation('tilt-shift')
+    const newOperation = editor.getOrCreateOperation('radial-blur')
     this._operation = newOperation
     this.setSharedState({
       operation: newOperation,
@@ -70,6 +70,7 @@ export default class TiltShiftControlsComponent extends ControlsComponent {
       this._operation.set(this.getSharedState('initialOptions'))
     }
 
+    editor.render()
     editor.undoZoom()
     editor.enableFeatures('zoom', 'drag')
   }

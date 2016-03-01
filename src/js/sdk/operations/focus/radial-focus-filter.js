@@ -11,15 +11,14 @@
 import { Vector2, Engine } from '../../globals'
 import StackBlur from '../../vendor/stack-blur'
 
-class TiltShiftFilter extends Engine.Filter {
+class RadialFocusFilter extends Engine.Filter {
   constructor (...args) {
     super(...args)
-    this._fragmentSource = require('raw!../../shaders/focus/tilt-shift.frag')
+    this._fragmentSource = require('raw!../../shaders/focus/radial-focus.frag')
 
     this._lastBlurRadius = null
     this._lastGradientRadius = null
-    this._lastStart = new Vector2()
-    this._lastEnd = new Vector2()
+    this._lastPosition = new Vector2()
 
     this._blurredRenderTarget = new Engine.CanvasBuffer(
       100,
@@ -55,13 +54,11 @@ class TiltShiftFilter extends Engine.Filter {
         inputTarget.getPixelRatio())
     }
 
-    if (!this._lastStart.equals(this._options.start) ||
-        !this._lastEnd.equals(this._options.end) ||
+    if (!this._lastPosition.equals(this._options.position) ||
         this._lastGradientRadius !== this._options.gradientRadius) {
       this._renderMask()
 
-      this._lastStart = this._options.start.clone()
-      this._lastEnd = this._options.end.clone()
+      this._lastPosition = this._options.position.clone()
       this._lastGradientRadius = this._options.gradientRadius
     }
 
@@ -97,40 +94,26 @@ class TiltShiftFilter extends Engine.Filter {
   _renderMask () {
     const canvas = this._maskRenderTarget.getCanvas()
     const context = this._maskRenderTarget.getContext()
-    const pixelRatio = this._maskRenderTarget.getPixelRatio()
 
     const canvasDimensions = new Vector2(canvas.width, canvas.height)
+    const pixelRatio = this._maskRenderTarget.getPixelRatio()
 
-    const gradientRadius = this._options.gradientRadius * pixelRatio
-    const start = this._options.start.clone()
-    const end = this._options.end.clone()
-
-    start.multiply(canvasDimensions)
-    end.multiply(canvasDimensions)
-
-    const dist = end.clone().subtract(start)
-    const middle = start.clone().add(dist.clone().divide(2))
-
-    const totalDist = dist.len()
-    const factor = dist.clone().divide(totalDist)
-
-    const gradientStart = middle.clone()
-      .add(gradientRadius * factor.y, -gradientRadius * factor.x)
-    const gradientEnd = middle.clone()
-      .add(-gradientRadius * factor.y, gradientRadius * factor.x)
+    const gradientRadius = this._options.gradientRadius
+    const position = this._options.position.clone()
+      .multiply(this._options.texSize)
+      .multiply(pixelRatio)
 
     // Build gradient
-    const gradient = context.createLinearGradient(
-      gradientStart.x, gradientStart.y,
-      gradientEnd.x, gradientEnd.y
+    const gradient = context.createRadialGradient(
+      position.x, position.y, 0,
+      position.x, position.y, gradientRadius * pixelRatio
     )
-    gradient.addColorStop(0, '#000000')
-    gradient.addColorStop(0.5, '#FFFFFF')
+    gradient.addColorStop(0, '#FFFFFF')
     gradient.addColorStop(1, '#000000')
 
     // Draw gradient
     context.fillStyle = gradient
-    context.fillRect(0, 0, canvas.width, canvas.height)
+    context.fillRect(0, 0, canvasDimensions.x, canvasDimensions.y)
   }
 
   /**
@@ -164,13 +147,12 @@ class TiltShiftFilter extends Engine.Filter {
   }
 }
 
-TiltShiftFilter.prototype.availableOptions = {
+RadialFocusFilter.prototype.availableOptions = {
   blurRadius: { type: 'number', default: 30, uniformType: 'f' },
   gradientRadius: { type: 'number', default: 50, uniformType: 'f' },
-  start: { type: 'vector2', default: new Vector2(0, 0.5), uniformType: '2f' },
-  end: { type: 'vector2', default: new Vector2(1, 0.5), uniformType: '2f' },
+  position: { type: 'vector2', default: new Vector2(0.5, 0.5), uniformType: '2f' },
   delta: { type: 'vector2', default: new Vector2(1, 1), uniformType: '2f' },
   texSize: { type: 'vector2', default: new Vector2(100, 100), uniformType: '2f' }
 }
 
-export default TiltShiftFilter
+export default RadialFocusFilter

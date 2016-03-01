@@ -40,8 +40,8 @@
       "16-9": "16:9"
     },
     "focus": {
-      "radial-blur": "Radial Blur",
-      "tilt-shift": "Tilt-Shift",
+      "radial": "Radial",
+      "linear": "Linear",
       "blurRadius": "Blur radius"
     },
     "filters": {

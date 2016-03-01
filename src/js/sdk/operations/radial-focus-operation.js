@@ -11,17 +11,17 @@
 import { Constants, Vector2 } from '../globals'
 import Operation from './operation'
 import Promise from '../vendor/promise'
-import TiltShiftFilter from './focus/tilt-shift-filter'
+import RadialFocusFilter from './focus/radial-focus-filter'
 
 /**
- * An operation that can draw a tilt shift
+ * An operation that can draw a radial focus
  * @class
  * @extends PhotoEditorSDK.Operation
  * @memberof PhotoEditorSDK.Operations
  */
-class TiltShiftOperation extends Operation {
+class RadialFocusOperation extends Operation {
   /**
-   * Creates a new TiltShiftOperation
+   * Creates a new RadialFocusOperation
    * @param  {PhotoEditorSDK} sdk
    * @param  {Object} [options]
    */
@@ -31,8 +31,8 @@ class TiltShiftOperation extends Operation {
     this._lastBlurRadius = this._options.blurRadius
     this._lastGradientRadius = this._options.gradientRadius
 
-    this._horizontalFilter = new TiltShiftFilter()
-    this._verticalFilter = new TiltShiftFilter()
+    this._horizontalFilter = new RadialFocusFilter()
+    this._verticalFilter = new RadialFocusFilter()
     this._sprite.setFilters([
       this._horizontalFilter,
       this._verticalFilter
@@ -44,7 +44,7 @@ class TiltShiftOperation extends Operation {
     this._onOperationUpdate = this._onOperationUpdate.bind(this)
     this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
 
-    this._filter = new TiltShiftFilter()
+    this._filter = new RadialFocusFilter()
   }
 
   /**
@@ -80,22 +80,17 @@ class TiltShiftOperation extends Operation {
     const newRotation = options.rotation
     const degreesDifference = newRotation - oldRotation
 
-    const start = this._options.start
-    const end = this._options.end
+    const position = this._options.position
 
     if (degreesDifference === 90 || (oldRotation === 270 && newRotation === 0)) {
-      start.flip()
-      start.x = 1 - start.x
-      end.flip()
-      end.x = 1 - end.x
+      position.flip()
+      position.x = 1 - position.x
     } else if (degreesDifference === -90 || (oldRotation === -270 && newRotation === 0)) {
-      start.flip()
-      start.y = 1 - start.y
-      end.flip()
-      end.y = 1 - end.y
+      position.flip()
+      position.y = 1 - position.y
     }
 
-    this.set({ start, end })
+    this.set({ position })
   }
 
   /**
@@ -118,7 +113,7 @@ class TiltShiftOperation extends Operation {
 
   /**
    * Applies a flip with the given direction
-   * @param  {PhotoEditorSDK.Operation} operation
+   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
    * @param  {String} direction
    * @private
    */
@@ -132,28 +127,25 @@ class TiltShiftOperation extends Operation {
       }
     }
 
-    const start = this._options.start
-    const end = this._options.end
+    const position = this._options.position
 
     switch (direction) {
       case 'horizontal':
-        start.x = 1 - start.x
-        end.x = 1 - end.x
+        position.x = 1 - position.x
         break
       case 'vertical':
-        start.y = 1 - start.y
-        end.y = 1 - end.y
+        position.y = 1 - position.y
         break
     }
 
-    this.set({ start, end })
+    this.set({ position })
   }
 
   /**
-   * Crops this image using WebGL
+   * Renders the radial blur using WebGL
    * @param  {PhotoEditorSDK} sdk
-   * @override
    * @private
+   * @override
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
@@ -162,21 +154,18 @@ class TiltShiftOperation extends Operation {
     const renderTexture = this._getRenderTexture(sdk)
 
     this._sprite.setTexture(outputSprite.getTexture())
-
     const spriteBounds = outputSprite.getBounds()
     const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
 
-    const start = this._options.start.clone()
-    const end = this._options.end.clone()
+    // Invert Y
+    const position = this._options.position.clone()
 
-    start.multiply(outputDimensions)
-    end.multiply(outputDimensions)
+    position.multiply(outputDimensions)
 
     const commonOptions = {
       blurRadius: this._options.blurRadius,
       gradientRadius: this._options.gradientRadius,
-      start,
-      end,
+      position: position,
       texSize: outputDimensions
     }
 
@@ -185,8 +174,8 @@ class TiltShiftOperation extends Operation {
 
     const bounds = this._sprite.getBounds()
     renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
-    renderTexture.render(this._container)
 
+    renderTexture.render(this._container)
     outputSprite.setTexture(renderTexture)
     this.setDirtyForRenderer(false, renderer)
 
@@ -196,16 +185,16 @@ class TiltShiftOperation extends Operation {
   /**
    * Renders the radial blur using Canvas2D
    * @param  {PhotoEditorSDK} sdk
-   * @override
    * @private
+   * @override
    */
   _renderCanvas (sdk) {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
-    const { blurRadius, gradientRadius, start, end } = this._options
+    const { blurRadius, gradientRadius, position } = this._options
     this._filter.set({
-      blurRadius, gradientRadius, start, end,
+      blurRadius, gradientRadius, position,
       texSize: sdk.getOutputDimensions()
     })
 
@@ -227,18 +216,17 @@ class TiltShiftOperation extends Operation {
  * @type {String}
  * @default
  */
-TiltShiftOperation.identifier = 'tilt-shift'
+RadialFocusOperation.identifier = 'radial-focus'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
  * @ignore
  */
-TiltShiftOperation.prototype.availableOptions = {
-  start: { type: 'vector2', default: new Vector2(0.0, 0.5) },
-  end: { type: 'vector2', default: new Vector2(1.0, 0.5) },
-  blurRadius: { type: 'number', default: 30 },
-  gradientRadius: { type: 'number', default: 50 }
+RadialFocusOperation.prototype.availableOptions = {
+  position: { type: 'vector2', default: new Vector2(0.5, 0.5) },
+  gradientRadius: { type: 'number', default: 50 },
+  blurRadius: { type: 'number', default: 20 }
 }
 
-export default TiltShiftOperation
+export default RadialFocusOperation

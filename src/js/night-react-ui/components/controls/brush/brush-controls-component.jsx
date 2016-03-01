@@ -14,7 +14,7 @@ import ControlsComponent from '../controls-component'
 import SliderComponent from '../../slider-component'
 import ColorPickerComponent from '../../color-picker/color-picker-component'
 
-export default class TiltShiftControlsComponent extends ControlsComponent {
+export default class BrushControlsComponent extends ControlsComponent {
   constructor (...args) {
     super(...args)
 

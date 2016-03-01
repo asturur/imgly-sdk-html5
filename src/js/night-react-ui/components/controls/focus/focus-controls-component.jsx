@@ -13,12 +13,12 @@ import { ReactBEM } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 
-import RadialBlurControls from './radial-blur/'
-import TiltShiftControls from './tilt-shift/'
+import RadialFocusControls from './radial-focus/'
+import LinearFocusControls from './linear-focus/'
 
 const ITEMS = [
-  RadialBlurControls,
-  TiltShiftControls
+  RadialFocusControls,
+  LinearFocusControls
 ]
 
 export default class FocusControlsComponent extends ControlsComponent {

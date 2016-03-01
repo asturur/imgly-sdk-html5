@@ -11,17 +11,17 @@
 import { Constants, Vector2 } from '../globals'
 import Operation from './operation'
 import Promise from '../vendor/promise'
-import RadialBlurFilter from './focus/radial-blur-filter'
+import LinearFocusFilter from './focus/linear-focus-filter'
 
 /**
- * An operation that can draw a radial blur
+ * An operation that can draw a linear focus
  * @class
  * @extends PhotoEditorSDK.Operation
  * @memberof PhotoEditorSDK.Operations
  */
-class RadialBlurOperation extends Operation {
+class LinearFocusOperation extends Operation {
   /**
-   * Creates a new RadialBlurOperation
+   * Creates a new LinearFocusOperation
    * @param  {PhotoEditorSDK} sdk
    * @param  {Object} [options]
    */
@@ -31,8 +31,8 @@ class RadialBlurOperation extends Operation {
     this._lastBlurRadius = this._options.blurRadius
     this._lastGradientRadius = this._options.gradientRadius
 
-    this._horizontalFilter = new RadialBlurFilter()
-    this._verticalFilter = new RadialBlurFilter()
+    this._horizontalFilter = new LinearFocusFilter()
+    this._verticalFilter = new LinearFocusFilter()
     this._sprite.setFilters([
       this._horizontalFilter,
       this._verticalFilter
@@ -44,7 +44,7 @@ class RadialBlurOperation extends Operation {
     this._onOperationUpdate = this._onOperationUpdate.bind(this)
     this._sdk.on(Constants.Events.OPERATION_UPDATED, this._onOperationUpdate)
 
-    this._filter = new RadialBlurFilter()
+    this._filter = new LinearFocusFilter()
   }
 
   /**
@@ -80,17 +80,22 @@ class RadialBlurOperation extends Operation {
     const newRotation = options.rotation
     const degreesDifference = newRotation - oldRotation
 
-    const position = this._options.position
+    const start = this._options.start
+    const end = this._options.end
 
     if (degreesDifference === 90 || (oldRotation === 270 && newRotation === 0)) {
-      position.flip()
-      position.x = 1 - position.x
+      start.flip()
+      start.x = 1 - start.x
+      end.flip()
+      end.x = 1 - end.x
     } else if (degreesDifference === -90 || (oldRotation === -270 && newRotation === 0)) {
-      position.flip()
-      position.y = 1 - position.y
+      start.flip()
+      start.y = 1 - start.y
+      end.flip()
+      end.y = 1 - end.y
     }
 
-    this.set({ position })
+    this.set({ start, end })
   }
 
   /**
@@ -113,7 +118,7 @@ class RadialBlurOperation extends Operation {
 
   /**
    * Applies a flip with the given direction
-   * @param  {PhotoEditorSDK.Operations.RotationOperation} operation
+   * @param  {PhotoEditorSDK.Operation} operation
    * @param  {String} direction
    * @private
    */
@@ -127,25 +132,28 @@ class RadialBlurOperation extends Operation {
       }
     }
 
-    const position = this._options.position
+    const start = this._options.start
+    const end = this._options.end
 
     switch (direction) {
       case 'horizontal':
-        position.x = 1 - position.x
+        start.x = 1 - start.x
+        end.x = 1 - end.x
         break
       case 'vertical':
-        position.y = 1 - position.y
+        start.y = 1 - start.y
+        end.y = 1 - end.y
         break
     }
 
-    this.set({ position })
+    this.set({ start, end })
   }
 
   /**
-   * Renders the radial blur using WebGL
+   * Crops this image using WebGL
    * @param  {PhotoEditorSDK} sdk
-   * @private
    * @override
+   * @private
    */
   /* istanbul ignore next */
   _renderWebGL (sdk) {
@@ -154,18 +162,21 @@ class RadialBlurOperation extends Operation {
     const renderTexture = this._getRenderTexture(sdk)
 
     this._sprite.setTexture(outputSprite.getTexture())
+
     const spriteBounds = outputSprite.getBounds()
     const outputDimensions = new Vector2(spriteBounds.width, spriteBounds.height)
 
-    // Invert Y
-    const position = this._options.position.clone()
+    const start = this._options.start.clone()
+    const end = this._options.end.clone()
 
-    position.multiply(outputDimensions)
+    start.multiply(outputDimensions)
+    end.multiply(outputDimensions)
 
     const commonOptions = {
       blurRadius: this._options.blurRadius,
       gradientRadius: this._options.gradientRadius,
-      position: position,
+      start,
+      end,
       texSize: outputDimensions
     }
 
@@ -174,8 +185,8 @@ class RadialBlurOperation extends Operation {
 
     const bounds = this._sprite.getBounds()
     renderTexture.resizeTo(new Vector2(bounds.width, bounds.height))
-
     renderTexture.render(this._container)
+
     outputSprite.setTexture(renderTexture)
     this.setDirtyForRenderer(false, renderer)
 
@@ -185,16 +196,16 @@ class RadialBlurOperation extends Operation {
   /**
    * Renders the radial blur using Canvas2D
    * @param  {PhotoEditorSDK} sdk
-   * @private
    * @override
+   * @private
    */
   _renderCanvas (sdk) {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
-    const { blurRadius, gradientRadius, position } = this._options
+    const { blurRadius, gradientRadius, start, end } = this._options
     this._filter.set({
-      blurRadius, gradientRadius, position,
+      blurRadius, gradientRadius, start, end,
       texSize: sdk.getOutputDimensions()
     })
 
@@ -216,17 +227,18 @@ class RadialBlurOperation extends Operation {
  * @type {String}
  * @default
  */
-RadialBlurOperation.identifier = 'radial-blur'
+LinearFocusOperation.identifier = 'linear-focus'
 
 /**
  * Specifies the available options for this operation
  * @type {Object}
  * @ignore
  */
-RadialBlurOperation.prototype.availableOptions = {
-  position: { type: 'vector2', default: new Vector2(0.5, 0.5) },
-  gradientRadius: { type: 'number', default: 50 },
-  blurRadius: { type: 'number', default: 20 }
+LinearFocusOperation.prototype.availableOptions = {
+  start: { type: 'vector2', default: new Vector2(0.0, 0.5) },
+  end: { type: 'vector2', default: new Vector2(1.0, 0.5) },
+  blurRadius: { type: 'number', default: 30 },
+  gradientRadius: { type: 'number', default: 50 }
 }
 
-export default RadialBlurOperation
+export default LinearFocusOperation
