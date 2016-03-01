@@ -11,6 +11,7 @@
 
 const { Utils } = PhotoEditorSDK
 const { Vector2 } = PhotoEditorSDK.Math
+import JSONLoader from './json-loader'
 
 const UIUtils = {
   /**
@@ -123,6 +124,16 @@ const UIUtils = {
       })
     })
     return newItems
+  },
+
+  /**
+   * Gets the given URL using JSON(P)
+   * @param  {String} url
+   * @return {Promise}
+   */
+  getJSONP (url) {
+    const loader = new JSONLoader(url)
+    return loader.load()
   }
 }
 

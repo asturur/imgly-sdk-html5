@@ -125,6 +125,9 @@
     "context_lost_limit": {
       "title": "An error has occurred",
       "text": "Your browser failed multiple times while rendering the image."
+    },
+    "loadingStickersFailed": {
+      "title": "Failed to load stickers"
     }
   }
 }

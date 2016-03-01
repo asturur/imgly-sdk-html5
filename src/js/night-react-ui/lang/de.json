@@ -125,6 +125,9 @@
     "context_lost_limit": {
       "title": "Es ist ein Fehler aufgetreten",
       "text": "Bild-Generierung ist mehrmals fehlgeschlagen."
+    },
+    "loadingStickersFailed": {
+      "title": "Laden der Sticker fehlgeschlagen"
     }
   }
 }

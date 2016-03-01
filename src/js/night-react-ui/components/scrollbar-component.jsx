@@ -40,20 +40,7 @@ export default class ScrollbarComponent extends BaseComponent {
    * Gets called after the component has been mounted
    */
   componentDidMount () {
-    const { root, list } = this.refs
-    this._node = root
-    this._list = list
-    this._listDefaultHeight = this._list.clientHeight
-
-    this._updateButtonWidth(() => {
-      let parentNodeHeight = this._listDefaultHeight
-      if (this.state.buttonVisible) {
-        parentNodeHeight += NATIVE_SCROLLBAR_HEIGHT
-      }
-      this._list.style.height = `${parentNodeHeight}px`
-    })
-
-    this._list.addEventListener('scroll', this._onListScroll)
+    this.update()
   }
 
   // -------------------------------------------------------------------------- EVENTS
@@ -197,6 +184,29 @@ export default class ScrollbarComponent extends BaseComponent {
     buttonVisible = parentScrollWidth > parentWidth
 
     this.setState({ buttonWidth, buttonVisible }, cb)
+  }
+
+  // -------------------------------------------------------------------------- PUBLIC API
+
+  /**
+   * Updates the dimensions and stuff
+   */
+  update () {
+    const { root, list } = this.refs
+    this._node = root
+    this._list = list
+    this._list.style.height = 'auto'
+    this._listDefaultHeight = this._list.clientHeight
+
+    this._updateButtonWidth(() => {
+      let parentNodeHeight = this._listDefaultHeight
+      if (this.state.buttonVisible) {
+        parentNodeHeight += NATIVE_SCROLLBAR_HEIGHT
+      }
+      this._list.style.height = `${parentNodeHeight}px`
+    })
+
+    this._list.addEventListener('scroll', this._onListScroll)
   }
 
   // -------------------------------------------------------------------------- RENDERING

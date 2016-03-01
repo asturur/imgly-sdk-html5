@@ -28,7 +28,7 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
     this._stickers = this.getSharedState('stickers')
 
     this._availableStickers = []
-    this._initStickers()
+    this._initStickers(this.props.options.additionalStickers)
 
     this.state = {}
   }
@@ -40,7 +40,44 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
    */
   componentDidMount () {
     super.componentDidMount()
-    this._renderStickers()
+
+    if (this.props.options.stickersJSONPath) {
+      this._loadExternalStickers()
+    } else {
+      this._renderStickers()
+    }
+  }
+
+  // -------------------------------------------------------------------------- EXTERNAL STICKER LOADING
+
+  /**
+   * Loads the stickers from an external JSON source
+   * @private
+   */
+  _loadExternalStickers () {
+    // Make sure not to show any stickers
+    this._availableStickers = []
+    this.forceUpdate()
+
+    const url = this.props.options.stickersJSONPath
+    const loadingModal = ModalManager.instance.displayLoading(this._t('loading.loading'))
+    Utils.getJSONP(url)
+      .then((result) => {
+        loadingModal.close()
+        this._initStickers(result.stickers)
+        this.forceUpdate(() => {
+          this.refs.scrollbar.update()
+          this._renderStickers()
+        })
+      })
+      .catch((e) => {
+        loadingModal.close()
+        const errorModal = ModalManager.instance.displayError(
+          this._t('errors.loadingStickersFailed.title'),
+          e.message
+        )
+        errorModal.on('close', () => { this.props.onBack() })
+      })
   }
 
   // -------------------------------------------------------------------------- STICKER RENDERING
@@ -135,11 +172,11 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
 
   /**
    * Initializes the available stickers
+   * @param {Object[]} [additionalStickers = []]
    * @private
    */
-  _initStickers () {
-    let { additionalStickers, replaceStickers, selectableStickers } = this.props.options
-    additionalStickers = additionalStickers || []
+  _initStickers (additionalStickers = []) {
+    let { replaceStickers, selectableStickers } = this.props.options
     let stickers = Constants.DEFAULTS.STICKERS
 
     if (replaceStickers) {
@@ -334,7 +371,7 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
     const tooltip = this._renderTooltip()
 
     return [tooltip, (<div bem='e:cell m:list'>
-      <ScrollbarComponent>
+      <ScrollbarComponent ref='scrollbar'>
         <ul bem='$e:list'>
           {listItems}
         </ul>
