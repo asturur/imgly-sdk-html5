@@ -90,6 +90,7 @@ export default class JSONLoader {
 
       window.setTimeout(() => {
         if (!succeeded) {
+          this._removeJSONPNode(node)
           failed = true
           reject(new Error('Timeout of 5 seconds exceeded.'))
         }
@@ -100,7 +101,7 @@ export default class JSONLoader {
   /**
    * Creates a JSONP <script> node inside the <head> element
    * @param  {String} fnName
-   * @return {Promise}
+   * @return {DOMElement}
    * @private
    */
   _createJSONPNode (fnName) {
@@ -109,6 +110,16 @@ export default class JSONLoader {
     const scriptNode = document.createElement('script')
     scriptNode.src = JSONPUrl
     headNode.appendChild(scriptNode)
+    return scriptNode
+  }
+
+  /**
+   * Removes the JSONP <script> node from the <head> element
+   * @param  {DOMElement} node
+   * @private
+   */
+  _removeJSONPNode (node) {
+    node.parentNode.removeChild(node)
   }
 
   /**
