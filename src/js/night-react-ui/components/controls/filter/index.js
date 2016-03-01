@@ -81,12 +81,14 @@ FiltersControls.languageKey = 'controls.overview.filters'
 /**
  * The default options for this control
  * @type {Object}
- * @property {PhotoEditorSDK.Filter[]} additionalFilters - An array of additional filters
- * @property {String[]} filters - Identifiers of the enabled {@link PhotoEditorSDK.Filters}
+ * @property {PhotoEditorSDK.Filter[]} [additionalFilters = []]
+ * @property {Boolean} [replaceFilters = false]
+ * @property {String[]} [availableFilters = null]
  */
 FiltersControls.defaultOptions = {
   additionalFilters: [],
-  filters: []
+  replaceFilters: false,
+  availableFilters: null
 }
 
 export default FiltersControls

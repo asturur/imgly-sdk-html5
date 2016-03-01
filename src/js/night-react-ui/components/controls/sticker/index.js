@@ -113,6 +113,7 @@ StickerControls.controlsComponent = StickerControlsComponent
  * This control's canvas component. Used for the upper controls part of the editor (on
  * top of the canvas)
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
+ * @ignore
  */
 StickerControls.canvasControlsComponent = SpritesCanvasControlsComponent
 
@@ -140,9 +141,14 @@ StickerControls.languageKey = 'controls.overview.sticker'
 /**
  * The default options for this control
  * @type {Object}
+ * @property {Object[]} [additionalStickers = []]
+ * @property {Boolean} [replaceStickers = false]
+ * @property {String[]} [availableStickers = null]
  */
 StickerControls.defaultOptions = {
-
+  additionalStickers: [],
+  replaceStickers: false,
+  availableStickers: null
 }
 
 export default StickerControls

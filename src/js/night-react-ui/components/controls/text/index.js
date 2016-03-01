@@ -131,6 +131,7 @@ TextControls.controlsComponent = TextControlsComponent
  * This control's canvas component. Used for the upper controls part of the editor (on
  * top of the canvas)
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
+ * @ignore
  */
 TextControls.canvasControlsComponent = SpritesCanvasControlsComponent
 
@@ -158,9 +159,14 @@ TextControls.languageKey = 'controls.overview.text'
 /**
  * The default options for this control
  * @type {Object}
+ * @property {Object[]} [additionalFonts = []]
+ * @property {Boolean} [replaceFonts = false]
+ * @property {String[]} [availableFonts = null]
  */
 TextControls.defaultOptions = {
-
+  additionalFonts: [],
+  replaceFonts: false,
+  availableFonts: null
 }
 
 export default TextControls

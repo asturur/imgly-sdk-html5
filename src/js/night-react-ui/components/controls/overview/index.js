@@ -27,6 +27,7 @@ OverviewControls.controlsComponent = OverviewControlsComponent
  * This control's canvas component. Used for the upper controls part of the editor (on
  * top of the canvas)
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
+ * @ignore
  */
 OverviewControls.canvasControlsComponent = OverviewCanvasControlsComponent
 

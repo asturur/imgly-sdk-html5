@@ -62,6 +62,7 @@ CropControls.controlsComponent = CropControlsComponent
  * This control's canvas component. Used for the upper controls part of the editor (on
  * top of the canvas)
  * @type {PhotoEditorSDK.UI.NightReact.ControlsComponent}
+ * @ignore
  */
 CropControls.canvasControlsComponent = CropCanvasControlsComponent
 
@@ -89,6 +90,9 @@ CropControls.languageKey = 'controls.overview.crop'
 /**
  * The default options for this control
  * @type {Object}
+ * @property {Object[]} [additionalRatios = []]
+ * @property {Boolean} [replaceRatios = false]
+ * @property {String[]} [availableRatios = null]
  */
 CropControls.defaultOptions = {
 
