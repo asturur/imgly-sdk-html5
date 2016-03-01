@@ -33,9 +33,18 @@ See the examples folder for implementation examples or play with the [demo on ou
 
 ## Setting up the development environment
 
+### Mac OSX
+
 ```shell
 $ xcode-select --install
 $ brew install libtiff jpeg libpng cairo
+$ npm install -g gulp
+$ npm install
+```
+
+### All other environments
+
+```shell
 $ npm install -g gulp
 $ npm install
 ```
@@ -46,7 +55,8 @@ $ npm install
 $ npm test
 ```
 
-## Create a new build
+## Creating a new build
+
 ```shell
 $ npm run build
 ```
@@ -54,16 +64,16 @@ $ npm run build
 ## Building the documentation
 
 ```shell
-$ gulp jsdocs
+$ gulp jsdoc
 ```
 
-The documentation will be in the `doc` directory. **Notice:** Since the PhotoEditor SDK is written in ES6 and JSDoc currently does not support ES6, documentation is not 100% complete.
+The documentation will be in the `doc` directory.
 
 ### License
 Please see [LICENSE](https://github.com/imgly/imgly-sdk-html5/blob/master/LICENSE.md) for licensing details.
 
 ### Authors and Contributors
-Made 2013-2015 by @9elements: Sascha Gehlich ([@saschagehlich](https://github.com/saschagehlich)), Johannes Emerich ([@knuton](https://github.com/knuton)), Carsten Przyluczky ([@K4stor](https://github.com/K4stor)), Sebastian Deutsch ([@sebastiandeutsch](https://github.com/sebastiandeutsch))
+Made 2013-2016 by @9elements: Sascha Gehlich ([@saschagehlich](https://github.com/saschagehlich)), Johannes Emerich ([@knuton](https://github.com/knuton)), Carsten Przyluczky ([@K4stor](https://github.com/K4stor)), Sebastian Deutsch ([@sebastiandeutsch](https://github.com/sebastiandeutsch))
 
 ### Support or Contact
-Contact contact@9elements.com for support requests or to upgrade to an enterprise licence.
+Contact contact@photoeditorsdk.com for support requests or to upgrade to an enterprise licence.
