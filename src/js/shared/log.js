@@ -29,6 +29,10 @@ Log.canLog = (type) => {
   if (currentLevelIndex < maxLevelIndex) return false
   return true
 }
+Log.hasColorfulOutput = () => {
+  return (!process || (process && process.browser)) &&
+    navigator && navigator.userAgent.match(/Gecko|WebKit/i)
+}
 
 Log.printError = (e) => {
   const lines = e.stack.split('\n')
@@ -43,6 +47,9 @@ LEVELS.forEach((level) => {
     if (!Log.canLog(type)) return
 
     const output = args.map((a) => a.toString()).join(' ')
+    if (!Log.hasColorfulOutput()) {
+      return console.log(`PhotoEditorSDK | ${tag} | ${output}`)
+    }
     console.log(
       `%c  %c PhotoEditorSDK %c  %c ${tag} %c  ${output}  %c  `,
       'background: #43ADEB; padding: 5px 0',
