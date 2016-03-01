@@ -549,7 +549,7 @@ class Editor extends EventEmitter {
     return exporter.export()
       .then((output) => {
         this.emit('export', output)
-        this._mediator.emit(Constants.EVENTS.EXPORT, output)
+        this._mediator.emit(Constants.EVENTS.EXPORT, output, this)
 
         if (this._watermarkOperation) {
           this._watermarkOperation.setEnabled(true)
@@ -733,6 +733,12 @@ class Editor extends EventEmitter {
    * @return {PhotoEditorSDK.Math.Vector2}s
    */
   getInputDimensions () { return this._sdk.getInputDimensions() }
+
+  /**
+   * Returns the operations stack
+   * @return {PhotoEditorSDK.OperationsStack}
+   */
+  getOperationsStack () { return this._operationsStack }
 }
 
 export default Editor
