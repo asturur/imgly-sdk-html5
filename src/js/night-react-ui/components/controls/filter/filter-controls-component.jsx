@@ -9,7 +9,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { SDK, ReactBEM, Constants } from '../../../globals'
+import { SDK, Utils, ReactBEM, Constants } from '../../../globals'
 import ControlsComponent from '../controls-component'
 import ScrollbarComponent from '../../scrollbar-component'
 import SliderOverlayComponent from '../slider-overlay-component'
@@ -40,12 +40,23 @@ export default class FilterControlsComponent extends ControlsComponent {
    */
   _initFilters () {
     const filtersMap = SDK.Filters
-    const filters = []
+
+    this._filters = []
     for (let key in filtersMap) {
-      filters.push(filtersMap[key])
+      this._filters.push(filtersMap[key])
     }
-    const additionalFilters = this.props.options.filters || []
-    this._filters = filters.concat(additionalFilters)
+
+    let { additionalFilters, replaceFilters, selectableFilters } = this.props.options
+    additionalFilters = additionalFilters || []
+    if (replaceFilters) {
+      this._filters = additionalFilters
+    } else {
+      this._filters = this._filters.concat(additionalFilters)
+    }
+
+    if (selectableFilters && selectableFilters.length) {
+      this._filters = Utils.select(this._filters, selectableFilters, r => r.identifier)
+    }
   }
 
   // -------------------------------------------------------------------------- EVENTS
