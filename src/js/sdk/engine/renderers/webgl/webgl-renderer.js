@@ -379,5 +379,6 @@ class WebGLRenderer extends BaseRenderer {
 }
 
 WebGLRenderer.contextId = 0
+WebGLRenderer.type = 'WebGL'
 
 export default WebGLRenderer

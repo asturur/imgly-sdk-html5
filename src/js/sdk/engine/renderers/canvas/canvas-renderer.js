@@ -160,5 +160,6 @@ class CanvasRenderer extends BaseRenderer {
 }
 
 CanvasRenderer.contextId = 0
+CanvasRenderer.type = 'Canvas2D'
 
 export default CanvasRenderer

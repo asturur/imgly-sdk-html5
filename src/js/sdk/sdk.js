@@ -96,7 +96,7 @@ class PhotoEditorSDK extends EventEmitter {
 
     this._initRenderer()
 
-    const renderer = this._renderer.constructor.name
+    const renderer = this._renderer.constructor.type
     if (this._options.displayWelcomeMessage) {
       Log.log('Yo!', `Version: ${this.version} (${renderer}) - https://www.photoeditorsdk.com`)
     }
