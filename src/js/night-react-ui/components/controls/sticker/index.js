@@ -144,11 +144,13 @@ StickerControls.languageKey = 'controls.overview.sticker'
  * @property {Object[]} [additionalStickers = []]
  * @property {Boolean} [replaceStickers = false]
  * @property {String[]} [availableStickers = null]
+ * @property {Boolean} [tooltips = false]
  */
 StickerControls.defaultOptions = {
   additionalStickers: [],
   replaceStickers: false,
-  availableStickers: null
+  availableStickers: null,
+  tooltips: false
 }
 
 export default StickerControls

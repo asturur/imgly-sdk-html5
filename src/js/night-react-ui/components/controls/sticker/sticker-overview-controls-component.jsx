@@ -141,7 +141,9 @@ export default class StickerOverviewControlsComponent extends ControlsComponent 
         drawSize.x, drawSize.y)
     })
 
-    const resolvedStickerPath = this._getAssetPath(hoveredSticker)
+    const resolvedStickerPath = this._getAssetPath((
+      hoveredSticker.images.mediaMedium || hoveredSticker.images.mediaBase
+    ).uri)
     image.src = resolvedStickerPath
   }
 
