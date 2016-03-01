@@ -19,6 +19,7 @@ export default class ControlsComponent extends BaseComponent {
 
     this._hasBackButton = true
     this._hasDoneButton = false
+    this._backButtonClicked = false
 
     this._bindAll(
       '_onBackClick',
@@ -34,6 +35,7 @@ export default class ControlsComponent extends BaseComponent {
    * @private
    */
   _onBackClick (e) {
+    this._backButtonClicked = true
     this.props.onSwitchControls('back')
   }
 

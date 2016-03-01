@@ -67,6 +67,7 @@ export default class OrientationControlsComponent extends ControlsComponent {
    */
   _onOperationRemoved (operation) {
     if (operation !== this._operation) return
+    if (this._backButtonClicked) return
 
     // Operation can be removed by the undo button. We need
     // to make sure we re-create the operation for the lifetime
