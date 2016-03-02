@@ -7,3 +7,5 @@ coverage
 .idea
 doc
 build
+.github-token
+.tmp

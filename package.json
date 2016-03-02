@@ -1,12 +1,12 @@
 {
   "name": "photoeditorsdk",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0",
   "description": "The most comprehensive photo editor SDK for HTML5",
-  "repository": "",
+  "repository": "http://github.com/imgly/imgly-sdk-html5",
   "author": "Photo Editor SDK <contact@photoeditorsdk.com>",
   "license": "BSD",
   "scripts": {
-    "build": "ENV=production node_modules/.bin/gulp release",
+    "release": "node scripts/release",
     "test": "node_modules/.bin/mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | node_modules/.bin/coveralls && rm -rf ./coverage",
     "coverage": "NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -x **/ui/** -x **webgl** -- test/**/*.test.js"
@@ -24,6 +24,7 @@
     "gulp": "^3.8.10",
     "gulp-9e-sass-lint": "0.0.8",
     "gulp-changed": "^1.3.0",
+    "gulp-github-release": "^1.1.2",
     "gulp-jsdoc3": "^0.2.0",
     "gulp-notify": "^1.3.1",
     "gulp-rename": "~1.2.0",
@@ -37,11 +38,14 @@
     "gulp-webpack": "^1.4.0",
     "gulp-webserver": "^0.9.1",
     "gulp-yuicompressor": "0.0.3",
+    "gulp-zip": "^3.2.0",
     "istanbul": "^0.3.2",
     "jaguarjs-jsdoc": "git://github.com/imgly/jaguarjs-jsdoc.git#master",
     "jsdoc": "git://github.com/jsdoc3/jsdoc.git#master",
+    "json-loader": "^0.5.2",
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "0.0.1",
+    "prompt": "^1.0.0",
     "raw-loader": "^0.5.1",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
@@ -52,7 +56,6 @@
     "transform-loader": "^0.2.2",
     "vinyl-source-stream": "0.1.1",
     "webpack": "^1.12.1",
-    "webpack-notifier": "^1.2.1",
-    "json-loader": "^0.5.2"
+    "webpack-notifier": "^1.2.1"
   }
 }

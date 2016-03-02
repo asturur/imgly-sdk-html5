@@ -55,10 +55,12 @@ $ npm install
 $ npm test
 ```
 
-## Creating a new build
+## Creating a new release
+
+First, create a [GitHub API token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) and write it to `.github-token`. Then run
 
 ```shell
-$ npm run build
+$ npm run release
 ```
 
 ## Building the documentation
