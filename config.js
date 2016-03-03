@@ -107,7 +107,7 @@ module.exports = {
           test: /\.jsx?$/,
           include: /src\/js/,
           loaders: [
-            'babel-loader?cacheDirectory&sourceMap&externalHelpers'
+            'babel-loader?cacheDirectory&sourceMaps'
           ]
         }
       ]
@@ -115,9 +115,6 @@ module.exports = {
     plugins: [
       new DefinePlugin({
         NODE_ENV: env
-      }),
-      new ProvidePlugin({
-        babelHelpers: path.resolve(source, 'js/sdk/vendor/babel-helpers')
       }),
       new WebpackNotifierPlugin()
     ]
