@@ -11,14 +11,12 @@
 /**
  * @namespace PhotoEditorSDK.UI.NightReact.Controls
  */
-export default {
-  adjustments: require('./adjustments'),
-  crop: require('./crop'),
-  filter: require('./filter'),
-  focus: require('./focus'),
-  border: require('./border'),
-  orientation: require('./orientation'),
-  sticker: require('./sticker'),
-  text: require('./text'),
-  brush: require('./brush')
-}
+export { default as adjustments } from './adjustments'
+export { default as crop } from './crop'
+export { default as filter } from './filter'
+export { default as focus } from './focus'
+export { default as border } from './border'
+export { default as orientation } from './orientation'
+export { default as sticker } from './sticker'
+export { default as text } from './text'
+export { default as brush } from './brush'

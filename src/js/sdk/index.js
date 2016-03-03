@@ -8,11 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { RenderType, ImageFormat } from './constants'
-
-let PhotoEditorSDK = require('./sdk')
-
-PhotoEditorSDK.Engine = require('./engine')
+import PhotoEditorSDK from './sdk'
 
 /**
  * The current version of the SDK
@@ -21,28 +17,54 @@ PhotoEditorSDK.Engine = require('./engine')
  */
 PhotoEditorSDK.version = require('../../../package.json').version
 
-// Exposed classes
-PhotoEditorSDK.Color = require('./lib/color')
-PhotoEditorSDK.Filter = require('./operations/filters/filter')
-PhotoEditorSDK.Operation = require('./operations/operation')
-PhotoEditorSDK.Rectangle = require('./lib/math/rectangle')
-PhotoEditorSDK.EventEmitter = require('./lib/event-emitter')
-PhotoEditorSDK.Utils = require('./lib/utils')
-PhotoEditorSDK.OperationsStack = require('./lib/operations-stack')
-PhotoEditorSDK.EXIF = require('./lib/exif')
-PhotoEditorSDK.Promise = require('./vendor/promise')
-
 // Namespaces
-PhotoEditorSDK.Math = require('./lib/math/')
-PhotoEditorSDK.Operations = require('./operations/')
-PhotoEditorSDK.Filters = require('./operations/filters/')
-PhotoEditorSDK.FilterPrimitives = require('./operations/filters/primitives/')
+import * as Math from './lib/math/'
+PhotoEditorSDK.Math = Math
 
-// Exposed constants
+import * as Operations from './operations/'
+PhotoEditorSDK.Operations = Operations
+
+import * as Filters from './operations/filters/'
+PhotoEditorSDK.Filters = Filters
+
+import * as FilterPrimitives from './operations/filters/primitives/'
+PhotoEditorSDK.FilterPrimitives = FilterPrimitives
+
+import * as Engine from './engine/'
+PhotoEditorSDK.Engine = Engine
+
+// Classes
+import Color from './lib/color'
+PhotoEditorSDK.Color = Color
+
+import Filter from './operations/filters/filter'
+PhotoEditorSDK.Filter = Filter
+
+import Operation from './operations/operation'
+PhotoEditorSDK.Operation = Operation
+
+import EventEmitter from './lib/event-emitter'
+PhotoEditorSDK.EventEmitter = EventEmitter
+
+import Utils from './lib/utils'
+PhotoEditorSDK.Utils = Utils
+
+import OperationsStack from './lib/operations-stack'
+PhotoEditorSDK.OperationsStack = OperationsStack
+
+import EXIF from './lib/exif'
+PhotoEditorSDK.EXIF = EXIF
+
+import Promise from './vendor/promise'
+PhotoEditorSDK.Promise = Promise
+
+// Constants
+import { RenderType, ImageFormat } from './constants'
 PhotoEditorSDK.RenderType = RenderType
 PhotoEditorSDK.ImageFormat = ImageFormat
 
-// Exposed libs
-PhotoEditorSDK.Base64 = require('./lib/base64')
+// Libs
+import { default as Base64 } from './lib/base64'
+PhotoEditorSDK.Base64 = Base64
 
-export default PhotoEditorSDK
+module.exports = PhotoEditorSDK

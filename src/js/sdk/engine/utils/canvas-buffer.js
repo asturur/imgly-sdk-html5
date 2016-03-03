@@ -45,6 +45,8 @@ class CanvasBuffer {
 
   /**
    * Creates a canvas
+   * @return {Canvas}
+   * @private
    */
   _createCanvas () {
     if (typeof document !== 'undefined') {

@@ -11,9 +11,9 @@
 import
   { Constants, Engine, Utils, EventEmitter, Vector2, Log, requestAnimationFrame }
 from './globals'
+import * as Operations from './operations/'
 import OperationsStack from './lib/operations-stack'
 import VersionChecker from './lib/version-checker'
-import Operations from './operations/'
 import Exif from './lib/exif'
 import ImageExporter from './lib/image-exporter'
 import PerformanceTest from './lib/performance-test'

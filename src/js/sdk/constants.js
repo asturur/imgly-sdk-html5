@@ -8,32 +8,31 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-export default {
-  /**
-   * The available render types
-   * @enum {String}
-   * @alias RenderType
-   * @memberof PhotoEditorSDK
-   */
-  RenderType: {
-    IMAGE: 'image',
-    DATAURL: 'data-url',
-    BUFFER: 'buffer',
-    BLOB: 'blob',
-    MSBLOB: 'ms-blob'
-  },
+ /**
+  * The available render types
+  * @enum {String}
+  * @alias RenderType
+  * @memberof PhotoEditorSDK
+  */
+export const RenderType = {
+  IMAGE: 'image',
+  DATAURL: 'data-url',
+  BUFFER: 'buffer',
+  BLOB: 'blob',
+  MSBLOB: 'ms-blob'
+}
 
-  /**
-   * The available image types
-   * @enum {String}
-   * @alias ImageFormat
-   * @memberof PhotoEditorSDK
-   */
-  ImageFormat: {
-    PNG: 'image/png',
-    JPEG: 'image/jpeg'
-  },
-  Events: {
-    OPERATION_UPDATED: 'operation:update'
-  }
+/**
+ * The available image types
+ * @enum {String}
+ * @alias ImageFormat
+ * @memberof PhotoEditorSDK
+ */
+export const ImageFormat = {
+  PNG: 'image/png',
+  JPEG: 'image/jpeg'
+}
+
+export const Events = {
+  OPERATION_UPDATED: 'operation:update'
 }

@@ -15,17 +15,13 @@ import Rectangle from '../lib/math/rectangle'
 import Vector2 from '../lib/math/vector2'
 import EventEmitter from '../lib/event-emitter'
 
-let Globals = {}
+exports.BATCH_SIZE = 2000
+exports.VERTEX_SIZE = 5
+exports.VERTEX_BYTE_SIZE = exports.VERTEX_SIZE * 4
 
-Globals.BATCH_SIZE = 2000
-Globals.VERTEX_SIZE = 5
-Globals.VERTEX_BYTE_SIZE = Globals.VERTEX_SIZE * 4
-
-Globals.Color = Color
-Globals.Matrix = Matrix
-Globals.Vector2 = Vector2
-Globals.Rectangle = Rectangle
-Globals.EventEmitter = EventEmitter
-Globals.Log = Log
-
-export default Globals
+exports.Color = Color
+exports.Matrix = Matrix
+exports.Vector2 = Vector2
+exports.Rectangle = Rectangle
+exports.EventEmitter = EventEmitter
+exports.Log = Log

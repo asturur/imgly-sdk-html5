@@ -11,36 +11,32 @@
 /**
  * @namespace PhotoEditorSDK.Filters
  */
-const Filters = {
-  IdentityFilter: require('./identity-filter'),
-  A15Filter: require('./a15-filter'),
-  BreezeFilter: require('./breeze-filter'),
-  BWFilter: require('./bw-filter'),
-  BWHardFilter: require('./bwhard-filter'),
-  CelsiusFilter: require('./celsius-filter'),
-  ChestFilter: require('./chest-filter'),
-  FixieFilter: require('./fixie-filter'),
-  FoodFilter: require('./food-filter'),
-  FridgeFilter: require('./fridge-filter'),
-  FrontFilter: require('./front-filter'),
-  GlamFilter: require('./glam-filter'),
-  GobblinFilter: require('./gobblin-filter'),
-  K1Filter: require('./k1-filter'),
-  K2Filter: require('./k2-filter'),
-  K6Filter: require('./k6-filter'),
-  KDynamicFilter: require('./kdynamic-filter'),
-  LeninFilter: require('./lenin-filter'),
-  LomoFilter: require('./lomo-filter'),
-  MellowFilter: require('./mellow-filter'),
-  MorningFilter: require('./morning-filter'),
-  OrchidFilter: require('./orchid-filter'),
-  PolaFilter: require('./pola-filter'),
-  Pola669Filter: require('./pola669-filter'),
-  QuoziFilter: require('./quozi-filter'),
-  SemiredFilter: require('./semired-filter'),
-  SunnyFilter: require('./sunny-filter'),
-  TexasFilter: require('./texas-filter'),
-  X400Filter: require('./x400-filter')
-}
-
-export default Filters
+export { default as IdentityFilter } from './identity-filter'
+export { default as A15Filter } from './a15-filter'
+export { default as BreezeFilter } from './breeze-filter'
+export { default as BWFilter } from './bw-filter'
+export { default as BWHardFilter } from './bwhard-filter'
+export { default as CelsiusFilter } from './celsius-filter'
+export { default as ChestFilter } from './chest-filter'
+export { default as FixieFilter } from './fixie-filter'
+export { default as FoodFilter } from './food-filter'
+export { default as FridgeFilter } from './fridge-filter'
+export { default as FrontFilter } from './front-filter'
+export { default as GlamFilter } from './glam-filter'
+export { default as GobblinFilter } from './gobblin-filter'
+export { default as K1Filter } from './k1-filter'
+export { default as K2Filter } from './k2-filter'
+export { default as K6Filter } from './k6-filter'
+export { default as KDynamicFilter } from './kdynamic-filter'
+export { default as LeninFilter } from './lenin-filter'
+export { default as LomoFilter } from './lomo-filter'
+export { default as MellowFilter } from './mellow-filter'
+export { default as MorningFilter } from './morning-filter'
+export { default as OrchidFilter } from './orchid-filter'
+export { default as PolaFilter } from './pola-filter'
+export { default as Pola669Filter } from './pola669-filter'
+export { default as QuoziFilter } from './quozi-filter'
+export { default as SemiredFilter } from './semired-filter'
+export { default as SunnyFilter } from './sunny-filter'
+export { default as TexasFilter } from './texas-filter'
+export { default as X400Filter } from './x400-filter'

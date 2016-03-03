@@ -14,16 +14,14 @@
  * or see our documentation at {@link https://www.photoeditorsdk.com/docs}.
  * @namespace PhotoEditorSDK.FilterPrimitives
  */
-export default {
-  Brightness: require('./brightness'),
-  Contrast: require('./contrast'),
-  Desaturation: require('./desaturation'),
-  Glow: require('./glow'),
-  Gobblin: require('./gobblin'),
-  Grayscale: require('./grayscale'),
-  LookupTable: require('./lookup-table'),
-  Saturation: require('./saturation'),
-  SoftColorOverlay: require('./soft-color-overlay'),
-  ToneCurve: require('./tone-curve'),
-  X400: require('./x400')
-}
+export { default as Brightness } from './brightness'
+export { default as Contrast } from './contrast'
+export { default as Desaturation } from './desaturation'
+export { default as Glow } from './glow'
+export { default as Gobblin } from './gobblin'
+export { default as Grayscale } from './grayscale'
+export { default as LookupTable } from './lookup-table'
+export { default as Saturation } from './saturation'
+export { default as SoftColorOverlay } from './soft-color-overlay'
+export { default as ToneCurve } from './tone-curve'
+export { default as X400 } from './x400'

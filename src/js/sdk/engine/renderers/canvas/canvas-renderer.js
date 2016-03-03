@@ -36,6 +36,7 @@ class CanvasRenderer extends BaseRenderer {
   /**
    * Creates a canvas element
    * @return {Canvas}
+   * @private
    */
   _createCanvas () {
     if (typeof document !== 'undefined') {

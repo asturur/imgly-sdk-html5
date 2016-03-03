@@ -8,12 +8,14 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Vector2 from './vector2'
+import Rectangle from './rectangle'
+import Matrix from './matrix'
+
 /**
  * Some classes that help us do the math
  * @namespace PhotoEditorSDK.Math
  */
-export default {
-  Vector2: require('./vector2'),
-  Rectangle: require('./rectangle'),
-  Matrix: require('./matrix')
+export {
+  Vector2, Rectangle, Matrix
 }

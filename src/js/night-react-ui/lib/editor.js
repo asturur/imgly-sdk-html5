@@ -12,8 +12,8 @@ import {
   EventEmitter, SDK, SDKUtils, Constants, Vector2, Utils,
   requestAnimationFrame, cancelAnimationFrame, Promise, Log
 } from '../globals'
+import * as Controls from '../components/controls/'
 import Exporter from './exporter'
-import Controls from '../components/controls'
 import ImageResizer from './image-resizer'
 
 const MIN_ZOOM_DIMENSIONS = 300

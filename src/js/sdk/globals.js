@@ -10,21 +10,18 @@
 
 import Engine from './engine'
 
+import * as Constants from './constants'
+
 import EventEmitter from './lib/event-emitter'
 import Utils from './lib/utils'
 import Configurable from './lib/configurable'
 import Color from './lib/color'
-import Constants from './constants'
 import Log from '../shared/log'
 import Promise from './vendor/promise'
 
-import Vector2 from './lib/math/vector2'
-import Rectangle from './lib/math/rectangle'
-import Matrix from './lib/math/matrix'
+export { requestAnimationFrame, cancelAnimationFrame } from '../shared/animation-frame'
 
-import { requestAnimationFrame, cancelAnimationFrame } from '../shared/animation-frame'
-
-const Globals = {
+export {
   Engine,
 
   EventEmitter,
@@ -33,11 +30,7 @@ const Globals = {
   Color,
   Constants,
   Log,
-
-  Vector2, Rectangle, Matrix,
-  Promise,
-
-  requestAnimationFrame, cancelAnimationFrame
+  Promise
 }
 
-export default Globals
+export * from './lib/math/'

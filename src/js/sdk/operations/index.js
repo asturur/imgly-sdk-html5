@@ -11,15 +11,13 @@
 /**
  * @namespace PhotoEditorSDK.Operations
  */
-export default {
-  FilterOperation: require('./filter-operation'),
-  CropOperation: require('./crop-operation'),
-  OrientationOperation: require('./orientation-operation'),
-  AdjustmentsOperation: require('./adjustments-operation'),
-  LinearFocusOperation: require('./linear-focus-operation'),
-  RadialFocusOperation: require('./radial-focus-operation'),
-  BorderOperation: require('./border-operation'),
-  SpriteOperation: require('./sprite-operation'),
-  WatermarkOperation: require('./watermark-operation'),
-  BrushOperation: require('./brush-operation')
-}
+export { default as FilterOperation } from './filter-operation'
+export { default as CropOperation } from './crop-operation'
+export { default as OrientationOperation } from './orientation-operation'
+export { default as AdjustmentsOperation } from './adjustments-operation'
+export { default as LinearFocusOperation } from './linear-focus-operation'
+export { default as RadialFocusOperation } from './radial-focus-operation'
+export { default as BorderOperation } from './border-operation'
+export { default as SpriteOperation } from './sprite-operation'
+export { default as WatermarkOperation } from './watermark-operation'
+export { default as BrushOperation } from './brush-operation'

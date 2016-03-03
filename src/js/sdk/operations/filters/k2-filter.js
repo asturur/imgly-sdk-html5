@@ -9,7 +9,7 @@
  */
 
 import Filter from './filter'
-import FilterPrimitives from './primitives'
+import * as FilterPrimitives from './primitives'
 import Color from '../../lib/color'
 
 /**

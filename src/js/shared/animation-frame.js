@@ -30,7 +30,7 @@ if (!cAF) {
   }
 }
 
-export default {
-  requestAnimationFrame: rAF,
-  cancelAnimationFrame: cAF
+export {
+  rAF as requestAnimationFrame,
+  cAF as cancelAnimationFrame
 }
