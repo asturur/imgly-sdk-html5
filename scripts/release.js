@@ -93,6 +93,7 @@ Release.prototype._readReleaseNotes = function () {
 Release.prototype._uploadRelease = function () {
   return new Promise(function (resolve, reject) {
     process.env.ENV = 'production'
+    process.env.UPLOAD = 'true'
     var child = child_process.spawn('gulp', ['release'], {
       stdio: 'inherit',
       env: process.env
