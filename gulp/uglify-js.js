@@ -9,7 +9,7 @@ gulp.task('uglify:js', function () {
     .pipe(uglify({
       preserveComments: function (node, comment) {
         var isLicense = (comment.type === 'comment2' && comment.value.trim().charAt(0) === '!') ||
-          comment.value.indexOf('React v') !== -1
+          (comment.value.indexOf('Facebook, Inc.') !== -1 && comment.value.indexOf('@providesModule React\n') !== -1)
         return isLicense
       }
     }))
