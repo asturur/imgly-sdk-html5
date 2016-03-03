@@ -16,7 +16,8 @@ describe('LinearFocusOperation', function () {
 
   describe('#render', function () {
     it('should succeed', function () {
-      const operation = sdk.createOperation('linear-focus')
+      this.timeout(10000)
+      sdk.createOperation('linear-focus')
 
       return sdk.export()
         .should.be.fulfilled

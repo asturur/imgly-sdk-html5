@@ -26,6 +26,7 @@ describe('FilterOperation', function () {
     for (var name in PhotoEditorSDK.Filters) {
       (function (name) {
         it(`should work with ${name} filter`, function () {
+          this.timeout(10000)
           sdk.getOperationsStack().clear()
           sdk.createOperation('filter', {
             filter: PhotoEditorSDK.Filters[name]

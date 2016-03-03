@@ -14,11 +14,9 @@ describe('RadialFocusOperation', function () {
     sdk = SpecHelpers.initSDK()
   })
 
-  // This operation takes some time on canvas...
-  this.timeout(10000)
-
   describe('#render', function () {
     it('should succeed', function () {
+      this.timeout(10000)
       sdk.createOperation('radial-focus', {
         position: new PhotoEditorSDK.Math.Vector2(0.5, 0.5)
       })
