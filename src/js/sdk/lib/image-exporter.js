@@ -95,7 +95,7 @@ class ImageExporter {
         let outputImage
 
         /* istanbul ignore else  */
-        if (typeof window === 'undefined') {
+        if (typeof Image === 'undefined') {
           // Not a browser environment
           var CanvasImage = require('canvas').Image
           outputImage = new CanvasImage()

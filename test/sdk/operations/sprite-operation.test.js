@@ -13,9 +13,9 @@ import path from 'path'
 import { Image } from 'canvas'
 
 describe('StickerOperation', function () {
-  let kit, stickerImage
+  let sdk, stickerImage
   beforeEach(function () {
-    kit = SpecHelpers.initRenderer()
+    sdk = SpecHelpers.initSDK()
 
     const stickerPath = path.resolve(__dirname, '../assets/sticker.png')
     const stickerImageBuffer = fs.readFileSync(stickerPath)
@@ -25,14 +25,12 @@ describe('StickerOperation', function () {
 
   describe('#render', function () {
     it('should succeed', function () {
-      const operation = kit.createOperation('sticker', {
-        stickers: [
-          { image: stickerImage }
-        ]
+      const operation = sdk.createOperation('sprite')
+      operation.createSticker({
+        image: stickerImage
       })
-      kit.operationsStack.push(operation)
 
-      return kit.render()
+      return sdk.render()
         .should.be.fulfilled
     })
   })

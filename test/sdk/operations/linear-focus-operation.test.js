@@ -8,22 +8,18 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-describe('BrightnessOperation', function () {
-  let kit
-
+describe('LinearFocusOperation', function () {
+  let sdk
   beforeEach(function () {
-    kit = SpecHelpers.initRenderer()
+    sdk = SpecHelpers.initSDK()
   })
 
   describe('#render', function () {
     it('should succeed', function () {
-      const operation = kit.createOperation('brightness')
-      kit.operationsStack.push(operation)
+      const operation = sdk.createOperation('linear-focus')
 
-      return kit.render()
-        .should.be
-        .fulfilled
+      return sdk.export()
+        .should.be.fulfilled
     })
   })
 })
-

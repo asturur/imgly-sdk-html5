@@ -9,12 +9,12 @@
  */
 
 describe('Operation', function () {
-  let kit, TestOperation
+  let sdk, TestOperation
   beforeEach(function () {
-    kit = SpecHelpers.initRenderer()
+    sdk = SpecHelpers.initSDK()
     TestOperation = PhotoEditorSDK.Operation.extend({
       availableOptions: {
-        vec: { type: 'vector2', default: new PhotoEditorSDK.Vector2(100, 200) },
+        vec: { type: 'vector2', default: new PhotoEditorSDK.Math.Vector2(100, 200) },
         col: { type: 'color', default: new PhotoEditorSDK.Color(0, 0, 0, 1) },
         str: { type: 'string', default: 'center', available: ['left', 'center', 'right'] },
         num: { type: 'number', default: 1 },
@@ -31,7 +31,7 @@ describe('Operation', function () {
         }}
       }
     })
-    operation = new TestOperation(kit)
+    operation = new TestOperation(sdk)
   })
 
   var operation
@@ -41,7 +41,7 @@ describe('Operation', function () {
       describe('#getVec()', function () {
         it('should return the default value', function () {
           var value = operation.getVec()
-          value.should.be.an.instanceOf(PhotoEditorSDK.Vector2)
+          value.should.be.an.instanceOf(PhotoEditorSDK.Math.Vector2)
           value.x.should.equal(100)
           value.y.should.equal(200)
         })
@@ -50,7 +50,7 @@ describe('Operation', function () {
       describe('#setVec()', function () {
         describe('with a vector', function () {
           it('should set the value', function () {
-            operation.setVec(new PhotoEditorSDK.Vector2(200, 100))
+            operation.setVec(new PhotoEditorSDK.Math.Vector2(200, 100))
             var value = operation.getVec()
             value.x.should.equal(200)
             value.y.should.equal(100)
@@ -245,24 +245,6 @@ describe('Operation', function () {
             throwable.should.not.throw()
           })
         })
-      })
-    })
-  })
-
-  describe('#setNumberFormat', function () {
-    describe('with an invalid value', function () {
-      it('should throw an error', function () {
-        var throwable = function () {
-          operation.setNumberFormat('foo')
-        }
-        throwable.should.throw('Invalid value for `numberFormat` (valid values are: absolute, relative)')
-      })
-    })
-
-    describe('with a invalid value', function () {
-      it('should set the value', function () {
-        operation.setNumberFormat('absolute')
-        operation.getNumberFormat().should.equal('absolute')
       })
     })
   })

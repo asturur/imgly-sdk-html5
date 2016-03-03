@@ -30,7 +30,7 @@ class CanvasBuffer {
     this._height = height
     this._pixelRatio = pixelRatio
 
-    this._canvas = canvas || document.createElement('canvas')
+    this._canvas = canvas || this._createCanvas()
     this._context = context || this._canvas.getContext('2d')
 
     this._canvas.width = this._width * this._pixelRatio
@@ -41,6 +41,17 @@ class CanvasBuffer {
         filter: []
       }
     ]
+  }
+
+  /**
+   * Creates a canvas
+   */
+  _createCanvas () {
+    if (typeof document !== 'undefined') {
+      return document.createElement('canvas')
+    } else {
+      return new (require('canvas'))()
+    }
   }
 
   /**

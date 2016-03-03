@@ -9,15 +9,15 @@
  */
 
 describe('FilterOperation', function () {
-  let kit
+  let sdk
 
   beforeEach(function () {
-    kit = SpecHelpers.initRenderer()
+    sdk = SpecHelpers.initSDK()
   })
 
   describe('with no selected filter', function () {
     it('rendering should pass (default filter is identity)', function () {
-      return kit.render()
+      return sdk.render()
         .should.be.fulfilled
     })
   })
@@ -26,13 +26,12 @@ describe('FilterOperation', function () {
     for (var name in PhotoEditorSDK.Filters) {
       (function (name) {
         it(`should work with ${name} filter`, function () {
-          kit.operationsStack.clear()
-          const operation = kit.createOperation('filter', {
+          sdk.getOperationsStack().clear()
+          sdk.createOperation('filter', {
             filter: PhotoEditorSDK.Filters[name]
           })
-          kit.operationsStack.push(operation)
 
-          return kit.render()
+          return sdk.render()
             .should.be.fulfilled
         })
       })(name)

@@ -4,22 +4,21 @@
  * requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
  * MIT license
  */
+let rAF = window.requestAnimationFrame
+let cAF = window.cancelAnimationFrame
 
-var rAF = window.requestAnimationFrame
-var cAF = window.cancelAnimationFrame
-
-var lastTime = 0
-var vendors = ['ms', 'moz', 'webkit', 'o']
-for (var x = 0; x < vendors.length && !rAF; ++x) {
+let lastTime = 0
+const vendors = ['ms', 'moz', 'webkit', 'o']
+for (let x = 0; x < vendors.length && !rAF; ++x) {
   rAF = window[vendors[x] + 'RequestAnimationFrame']
   cAF = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame']
 }
 
 if (!rAF) {
   rAF = function (callback, element) {
-    var currTime = new Date().getTime()
-    var timeToCall = Math.max(0, 16 - (currTime - lastTime))
-    var id = window.setTimeout(function () { callback(currTime + timeToCall) }, timeToCall)
+    const currTime = new Date().getTime()
+    const timeToCall = Math.max(0, 16 - (currTime - lastTime))
+    const id = window.setTimeout(function () { callback(currTime + timeToCall) }, timeToCall)
     lastTime = currTime + timeToCall
     return id
   }

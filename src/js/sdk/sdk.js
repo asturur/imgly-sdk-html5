@@ -317,7 +317,7 @@ class PhotoEditorSDK extends EventEmitter {
    * @private
    */
   _checkForUpdates () {
-    if (typeof window !== 'undefined' && this._options.versionCheck) {
+    if (this._options.versionCheck) {
       this._versionChecker = new VersionChecker(this.version)
     }
   }
@@ -556,7 +556,7 @@ class PhotoEditorSDK extends EventEmitter {
 
   /**
    * Sets the rendering offset
-   * @param {PhotoEditorSDK.Vector2|Number} offset
+   * @param {PhotoEditorSDK.Math.Vector2|Number} offset
    * @param {Number} y
    */
   setOffset (offset, y) {

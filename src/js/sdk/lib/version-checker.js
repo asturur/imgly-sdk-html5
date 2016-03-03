@@ -34,6 +34,9 @@ class VersionChecker {
    * @private
    */
   _check () {
+    if (typeof document === 'undefined')
+      return Log.info(this.constructor.name, 'Not in browser environment. Version check skipped.')
+
     let self = this
     window[VERSION_CHECK_FN] = (response) => {
       if (response.outdated) {

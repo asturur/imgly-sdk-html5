@@ -1,4 +1,4 @@
-/* global SpecHelpers, describe, it, beforeEach */
+/* global SpecHelpers, PhotoEditorSDK, describe, it, beforeEach */
 /*
  * Copyright (c) 2013-2016 9elements GmbH
  *
@@ -8,22 +8,21 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-describe('ContrastOperation', function () {
-  let kit
+describe('BorderOperation', function () {
+  let sdk
 
   beforeEach(function () {
-    kit = SpecHelpers.initRenderer()
+    sdk = SpecHelpers.initSDK()
   })
 
   describe('#render', function () {
     it('should succeed', function () {
-      const operation = kit.createOperation('contrast')
-      kit.operationsStack.push(operation)
+      sdk.createOperation('border', {
+        color: new PhotoEditorSDK.Color(0, 0, 0, 1)
+      })
 
-      return kit.render()
-        .should.be
-        .fulfilled
+      return sdk.render()
+        .should.be.fulfilled
     })
   })
 })
-

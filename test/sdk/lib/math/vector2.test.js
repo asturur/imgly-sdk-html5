@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-const { Vector2 } = PhotoEditorSDK
+const { Vector2 } = PhotoEditorSDK.Math
 
 describe('Vector2', function () {
   describe('#constructor', function () {

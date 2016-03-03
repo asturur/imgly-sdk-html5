@@ -8,6 +8,7 @@ var chaiAsPromised = require('chai-as-promised')
 chai.should()
 chai.use(chaiAsPromised)
 
+global.window = global
 global.chaiAsPromised = chaiAsPromised
 global.expect = chai.expect
 global.AssertionError = chai.AssertionError
@@ -15,14 +16,15 @@ global.Assertion = chai.Assertion
 global.assert = chai.assert
 
 global.SpecHelpers = {
-  initRenderer () {
+  initSDK () {
     let image = new canvas.Image()
     let imagePath = path.resolve(__dirname, '../sdk/assets/test.png')
     let buffer = fs.readFileSync(imagePath)
     image.src = buffer
 
     return new PhotoEditorSDK('canvas', {
-      image: image
+      image: image,
+      displayWelcomeMessage: false
     })
   }
 }

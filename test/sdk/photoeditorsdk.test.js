@@ -14,7 +14,7 @@ import path from 'path'
 import fs from 'fs'
 import canvas from 'canvas'
 
-let image, kit
+let image, sdk
 
 describe('PhotoEditorSDK', function () {
   describe('#export', function () {
@@ -24,22 +24,23 @@ describe('PhotoEditorSDK', function () {
       let buffer = fs.readFileSync(imagePath)
       image.src = buffer
 
-      kit = new PhotoEditorSDK.Renderer('canvas', {
-        image: image
+      sdk = new PhotoEditorSDK('canvas', {
+        image: image,
+        displayWelcomeMessage: false
       })
     })
 
     describe('validations', function () {
       describe('when an invalid render type is given', function () {
         it('should throw an error', function () {
-          return kit.export('invalid')
+          return sdk.export('invalid')
             .should.be.rejectedWith(null, 'Invalid render type')
         })
       })
 
       describe('when an invalid image format is given', function () {
         it('should throw an error', function () {
-          return kit.export(null, 'invalid')
+          return sdk.export(null, 'invalid')
             .should.be.rejectedWith(null, 'Invalid image format')
         })
       })
@@ -47,7 +48,7 @@ describe('PhotoEditorSDK', function () {
 
     describe('without any operations on the stack', function () {
       it('should return a promise', function () {
-        return kit.export()
+        return sdk.export()
           .should.be.fulfilled
       })
     })

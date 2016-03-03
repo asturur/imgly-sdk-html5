@@ -9,17 +9,17 @@
  */
 
 describe('OrientationOperation', function () {
-  let kit, image
+  let sdk, image
 
   beforeEach(function () {
-    kit = SpecHelpers.initRenderer()
-    image = kit.getImage()
+    sdk = SpecHelpers.initSDK()
+    image = sdk.getImage()
   })
 
   describe('with a rotation that\'s not divisible by 90', function () {
     it('should fail', function () {
       const throwable = () => {
-        kit.createOperation('orientation', {
+        sdk.createOperation('orientation', {
           rotation: 45
         })
       }
@@ -29,22 +29,20 @@ describe('OrientationOperation', function () {
 
   describe('#render', function () {
     it('should succeed', function () {
-      const operation = kit.createOperation('orientation', {
+      sdk.createOperation('orientation', {
         rotation: 90
       })
-      kit.operationsStack.push(operation)
 
-      return kit.render()
+      return sdk.render()
         .should.be.fulfilled
     })
 
     it('should correctly resize the canvas', function (done) {
-      const operation = kit.createOperation('orientation', {
+      sdk.createOperation('orientation', {
         rotation: 90
       })
-      kit.operationsStack.push(operation)
 
-      kit.export(PhotoEditorSDK.RenderType.IMAGE)
+      sdk.export(PhotoEditorSDK.RenderType.IMAGE)
         .then(function (result) {
           result.width.should.equal(image.height)
           result.height.should.equal(image.width)

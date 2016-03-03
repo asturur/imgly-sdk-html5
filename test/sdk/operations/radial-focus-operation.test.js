@@ -8,10 +8,10 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-describe('RadialBlurOperation', function () {
-  let kit
+describe('RadialFocusOperation', function () {
+  let sdk
   beforeEach(function () {
-    kit = SpecHelpers.initRenderer()
+    sdk = SpecHelpers.initSDK()
   })
 
   // This operation takes some time on canvas...
@@ -19,12 +19,11 @@ describe('RadialBlurOperation', function () {
 
   describe('#render', function () {
     it('should succeed', function () {
-      const operation = kit.createOperation('radial-blur', {
-        position: new PhotoEditorSDK.Vector2(0.5, 0.5)
+      sdk.createOperation('radial-focus', {
+        position: new PhotoEditorSDK.Math.Vector2(0.5, 0.5)
       })
-      kit.operationsStack.push(operation)
 
-      return kit.render()
+      return sdk.render()
         .should.be.fulfilled
     })
   })

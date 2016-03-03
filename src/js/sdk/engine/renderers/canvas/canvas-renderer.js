@@ -30,7 +30,19 @@ class CanvasRenderer extends BaseRenderer {
     super(...args)
     this._type = 'canvas'
 
-    this.setCanvas(this._options.canvas || document.createElement('canvas'))
+    this.setCanvas(this._options.canvas || this._createCanvas())
+  }
+
+  /**
+   * Creates a canvas element
+   * @return {Canvas}
+   */
+  _createCanvas () {
+    if (typeof document !== 'undefined') {
+      return document.createElement('canvas')
+    } else {
+      return new (require('canvas'))()
+    }
   }
 
   /**
