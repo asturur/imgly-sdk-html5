@@ -58,7 +58,8 @@ class BaseTexture extends EventEmitter {
     const source = this._source
 
     const sourceLoaded = source.complete
-    const sourceIsCanvas = source.tagName && source.tagName === 'CANVAS'
+    const sourceIsCanvas = source.constructor.name === 'Canvas' ||
+      source.constructor.name === 'HTMLCanvasElement'
     if (sourceLoaded || sourceIsCanvas) {
       return this._onSourceLoaded()
     }
