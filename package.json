@@ -4,7 +4,7 @@
   "description": "The most comprehensive photo editor SDK for HTML5",
   "repository": "http://github.com/imgly/imgly-sdk-html5",
   "author": "Photo Editor SDK <contact@photoeditorsdk.com>",
-  "license": "BSD",
+  "license": "CC-BY-NC-3.0",
   "scripts": {
     "release": "node scripts/release",
     "test": "node_modules/.bin/mocha",
