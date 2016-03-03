@@ -81,7 +81,7 @@ class Operation extends Configurable {
     const renderer = sdk.getRenderer()
     let promise
     let perf
-    if (PerformanceTest.canLog()) {
+    if (sdk.getOptions().perfTest) {
       perf = new PerformanceTest(this.constructor.name, 'Rendering')
     }
 

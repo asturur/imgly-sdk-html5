@@ -55,7 +55,7 @@ class CanvasRenderer extends BaseRenderer {
     const canvas = this._canvas
     let ctx = canvas.getContext('2d')
 
-    if (Log.canLog('trace')) {
+    if (this._options.debug) {
       ctx = new ContextPerformanceHook(ctx)
     }
 

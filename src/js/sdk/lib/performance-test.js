@@ -9,6 +9,9 @@
  */
 
 import { Log } from '../globals'
+const now = (typeof window !== 'undefined'
+  ? window.performance.now
+  : require('performance-now'))
 
 /**
  * A simple class that tracks the time between start and end and renders it as FPS
@@ -25,25 +28,17 @@ class PerformanceTest {
   constructor (tag, name) {
     this._tag = tag
     this._name = name
-    this._start = window.performance.now()
+    this._start = now()
   }
 
   /**
    * Stops the performance test and prints the result
    */
   stop () {
-    const end = window.performance.now()
+    const end = now()
     const ms = end - this._start
     const fps = Math.round(1000 / ms)
-    Log.info(this._tag, `${this._name} took ${ms.toFixed(2)}ms (${fps} FPS)`)
-  }
-
-  /**
-   * Checks if info logging is available
-   * @return {Boolean}
-   */
-  static canLog () {
-    return Log.canLog('info')
+    Log.log(this._tag, `${this._name} took ${ms.toFixed(2)}ms (${fps} FPS)`)
   }
 }
 

@@ -9,6 +9,9 @@
  */
 
 import { Log } from '../globals'
+const now = (typeof window !== 'undefined'
+  ? window.performance.now
+  : require('performance-now'))
 
 /**
  * Hooks into a rendering context (WebGLRenderingContext or CanvasRenderingContext2D),
@@ -33,9 +36,9 @@ class ContextPerformanceHook {
             return fn.apply(context, args)
           }
 
-          const start = window.performance.now()
+          const start = now()
           const result = fn.apply(context, args)
-          const time = window.performance.now() - start
+          const time = now() - start
 
           const call = {
             functionName: key,
@@ -64,8 +67,8 @@ class ContextPerformanceHook {
    */
   endFrame () {
     const tag = 'Rendering'
-    Log.trace(tag, 'Frame rendering results:')
-    Log.trace(tag, `Context calls: ${this._trackedCalls.length}`)
+    Log.log(tag, 'Frame rendering results:')
+    Log.log(tag, `Context calls: ${this._trackedCalls.length}`)
 
     const groupedCalls = {}
     this._trackedCalls.forEach(({ functionName, duration }) => {
@@ -90,7 +93,7 @@ class ContextPerformanceHook {
     callsArray = callsArray.slice(0, 3)
 
     callsArray.forEach((item) => {
-      Log.trace(tag, `${item.functionName}: ${item.data.calls} calls, ${item.data.totalDuration.toFixed(2)}ms`)
+      Log.log(tag, `${item.functionName}: ${item.data.calls} calls, ${item.data.totalDuration.toFixed(2)}ms`)
     })
   }
 }

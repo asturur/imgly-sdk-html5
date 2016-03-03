@@ -186,7 +186,7 @@ class PhotoEditorSDK extends EventEmitter {
     }
 
     let perfTest
-    if (PerformanceTest.canLog()) {
+    if (this._options.perfTest) {
       perfTest = new PerformanceTest('⚡⚡⚡', 'Frame rendering')
     }
     Log.info('⚡⚡⚡', 'Rendering starts')
@@ -484,7 +484,9 @@ class PhotoEditorSDK extends EventEmitter {
    * Returns the image
    * @return {Image}
    */
-  getImage () { return this._image }
+  getImage () {
+    return this._image
+  }
 
   /**
    * Sets the image and parses the exif data
@@ -629,6 +631,14 @@ class PhotoEditorSDK extends EventEmitter {
    */
   getExif () {
     return this._exif
+  }
+
+  /**
+   * Returns the options
+   * @return {Object}
+   */
+  getOptions () {
+    return this._options
   }
 
   // -------------------------------------------------------------------------- DISPOSAL

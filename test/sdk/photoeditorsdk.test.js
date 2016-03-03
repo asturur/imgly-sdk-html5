@@ -36,6 +36,58 @@ describe('PhotoEditorSDK', function () {
     })
   })
 
+  describe('`debug` option', function () {
+    describe('set to true', function () {
+      before(function () {
+        image = new canvas.Image()
+        let imagePath = path.resolve(__dirname, 'assets/test.png')
+        let buffer = fs.readFileSync(imagePath)
+        image.src = buffer
+
+        sdk = new PhotoEditorSDK('canvas', {
+          displayWelcomeMessage: false,
+          debug: true,
+          image: image
+        })
+
+        sinon.stub(console, 'log')
+      })
+      it('#render should print results about the frame rendering', function () {
+        return sdk.render()
+          .then(function () {
+            console.log.should.have.callCount(5)
+            console.log.restore()
+          })
+      })
+    })
+  })
+
+  describe('`perfTest` option', function () {
+    describe('set to true', function () {
+      before(function () {
+        image = new canvas.Image()
+        let imagePath = path.resolve(__dirname, 'assets/test.png')
+        let buffer = fs.readFileSync(imagePath)
+        image.src = buffer
+
+        sdk = new PhotoEditorSDK('canvas', {
+          displayWelcomeMessage: false,
+          perfTest: true,
+          image: image
+        })
+
+        sinon.stub(console, 'log')
+      })
+      it('#render should print some output', function () {
+        return sdk.render()
+          .then(function () {
+            console.log.should.have.callCount(1)
+            console.log.restore()
+          })
+      })
+    })
+  })
+
   describe('#createOperation', function () {
     beforeEach(function () {
       sdk = new PhotoEditorSDK('canvas', {
