@@ -189,12 +189,8 @@ describe('Operation', function () {
 
     describe('required option', function () {
       describe('#validateSettings', function () {
-        it('should return a rejected Promise', function (done) {
-          operation.validateSettings()
-            .catch(function (err) {
-              err.message.should.equal('Option `req` is required.')
-              done()
-            })
+        it('should return a rejected Promise', function () {
+          return operation.validateSettings().should.be.rejectedWith(Error, 'Error: child: Option `req` is required.')
         })
       })
     })
