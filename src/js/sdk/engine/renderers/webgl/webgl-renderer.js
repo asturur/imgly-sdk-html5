@@ -24,6 +24,7 @@ import ContextPerformanceHook from '../../utils/context-performance-hook'
  * @extends PhotoEditorSDK.Engine.BaseRenderer
  * @memberof PhotoEditorSDK.Engine
  */
+/* istanbul ignore next */
 class WebGLRenderer extends BaseRenderer {
   /**
    * Creates a WebGLRenderer
@@ -358,7 +359,9 @@ class WebGLRenderer extends BaseRenderer {
    * @return {Boolean}
    */
   static isSupported () {
-    if (typeof window === 'undefined') { return false }
+    if (typeof window === 'undefined') {
+      return false
+    }
 
     let canvas = document.createElement('canvas')
     let gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')

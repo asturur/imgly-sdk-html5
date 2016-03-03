@@ -121,6 +121,14 @@ describe('EventEmitter', function () {
   describe('maxListeners', function () {
     describe('with maxListeners set to 5', function () {
       describe('when adding 6 listeners', function () {
+        before(() => {
+          sinon.stub(console, 'log', () => {})
+          sinon.stub(console, 'trace')
+        })
+        after(() => {
+          console.log.restore()
+          console.trace.restore()
+        })
         it('should print an error message', function () {
           ee.setMaxListeners(5)
 
@@ -128,6 +136,10 @@ describe('EventEmitter', function () {
             var fn = function () {}
             ee.on('foo', fn)
           }
+
+          console.log.should.have.been.calledWith(
+            'PhotoEditorSDK | EventEmitter | Possible memory leak detected, added 6 `foo` listeners (current limit is 5)'
+          )
         })
       })
     })

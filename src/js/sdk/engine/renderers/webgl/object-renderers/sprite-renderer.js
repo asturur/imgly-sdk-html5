@@ -17,6 +17,7 @@ import ObjectRenderer from './object-renderer'
  * @extends PhotoEditorSDK.Engine.ObjectRenderer
  * @memberof PhotoEditorSDK.Engine
  */
+/* istanbul ignore next */
 class SpriteRenderer extends ObjectRenderer {
   /**
    * Creates a SpriteRenderer
@@ -67,7 +68,9 @@ class SpriteRenderer extends ObjectRenderer {
 
     // No updated UVs => No rendering
     const uvs = texture.getUVs()
-    if (!uvs) { return }
+    if (!uvs) {
+      return
+    }
 
     // Fill positions array
     const index = this._currentBatchSize * Globals.VERTEX_BYTE_SIZE
@@ -181,7 +184,9 @@ class SpriteRenderer extends ObjectRenderer {
     const renderer = this._renderer
     const gl = renderer.getContext()
 
-    if (this._currentBatchSize === 0) return
+    if (this._currentBatchSize === 0) {
+      return
+    }
 
     if (this._currentBatchSize > Globals.BATCH_SIZE * 0.5) {
       // Upload whole ArrayBuffer
@@ -250,7 +255,9 @@ class SpriteRenderer extends ObjectRenderer {
    * @private
    */
   _renderBatch (baseTexture, batchSize, batchStartIndex) {
-    if (batchSize === 0) return
+    if (batchSize === 0) {
+      return
+    }
 
     const renderer = this._renderer
     const gl = renderer.getContext()

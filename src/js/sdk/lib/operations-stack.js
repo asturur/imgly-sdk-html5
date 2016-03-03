@@ -146,6 +146,7 @@ class OperationsStack extends EventEmitter {
    */
   push (operation) {
     this._stack.push(operation)
+    operation.on('update', this._onOperationUpdate)
   }
 
   /**
@@ -185,7 +186,9 @@ class OperationsStack extends EventEmitter {
    */
   remove (operation) {
     const index = this._stack.indexOf(operation)
-    if (index === -1) return
+    if (index === -1) {
+      return
+    }
     if (this._stack[index]) {
       this._stack[index].off('update', this._onOperationUpdate)
       this._stack[index].dispose()

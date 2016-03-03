@@ -312,8 +312,12 @@ class EXIF {
     let segments = []
     while (stream.getHead() < buf.length) {
       const marker = stream.readInt16()
-      if (marker === 0xffd8) { continue } // SOI
-      if (marker === 0xffda) { break } // SOS Marker
+      if (marker === 0xffd8) {
+        continue
+      } // SOI
+      if (marker === 0xffda) {
+        break
+      } // SOS Marker
 
       if (marker >= 0xff00 && marker <= 0xffff) {
         // Marker (FF-XX-HL-LL)

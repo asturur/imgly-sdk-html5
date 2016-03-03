@@ -110,7 +110,9 @@ class Matrix {
       this.c, this.d, 0,
       this.tx, this.ty, 1
     ]
-    if (typeof Float32Array === 'undefined') return arr
+    if (typeof Float32Array === 'undefined') {
+      return arr
+    }
     return new Float32Array(arr)
   }
 

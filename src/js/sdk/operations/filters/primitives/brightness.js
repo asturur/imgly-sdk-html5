@@ -36,7 +36,9 @@ class BrightnessFilter extends Engine.Filter {
 
     let { brightness } = this._options
 
-    if (brightness === 0) return
+    if (brightness === 0) {
+      return
+    }
     brightness = brightness * 255
 
     for (let i = 0; i < canvas.width * canvas.height; i++) {

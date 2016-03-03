@@ -80,7 +80,9 @@ var shg_table = [
 
 function stackBlurCanvasRGBA( imageData, top_x, top_y, width, height, radius )
 {
-  if ( isNaN(radius) || radius < 1 ) return;
+  if ( isNaN(radius) || radius < 1 ) {
+    return;
+  }
   radius |= 0;
 
   var pixels = imageData.data;

@@ -177,7 +177,9 @@ class Sprite extends Container {
    * @param {PhotoEditorSDK.Engine.Texture} texture
    */
   setTexture (texture) {
-    if (!texture) return
+    if (!texture) {
+      return
+    }
 
     if (this._texture) {
       this._texture.off('update', this._onTextureUpdate)

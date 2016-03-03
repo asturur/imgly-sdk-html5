@@ -218,7 +218,9 @@ class BrushOperation extends Operation {
    * Clears the brush canvas
    */
   clearBrushCanvas () {
-    if (!this._brushCanvas) return
+    if (!this._brushCanvas) {
+      return
+    }
 
     this._brushCanvasDirty = true
     const canvas = this._brushCanvas

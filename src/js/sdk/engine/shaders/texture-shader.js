@@ -17,6 +17,7 @@ import Shader from './shader'
  * @extends PhotoEditorSDK.Engine.Shader
  * @memberof PhotoEditorSDK.Engine
  */
+/* istanbul ignore next */
 class TextureShader extends Shader {
   /**
    * Creates a TextureShader

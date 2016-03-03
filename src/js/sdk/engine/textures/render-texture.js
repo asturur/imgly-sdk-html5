@@ -111,7 +111,9 @@ class RenderTexture extends Texture {
    * @param  {PhotoEditorSDK.Math.Vector2} dimensions
    */
   resizeTo (dimensions) {
-    if (this._width === dimensions.x && this._height === dimensions.y) return
+    if (this._width === dimensions.x && this._height === dimensions.y) {
+      return
+    }
 
     this._width = dimensions.x
     this._height = dimensions.y

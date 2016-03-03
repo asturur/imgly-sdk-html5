@@ -4,16 +4,18 @@ var canvas = require('canvas')
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
+var sinonChai = require('sinon-chai')
 
 chai.should()
 chai.use(chaiAsPromised)
+chai.use(sinonChai)
 
-global.window = global
 global.chaiAsPromised = chaiAsPromised
 global.expect = chai.expect
 global.AssertionError = chai.AssertionError
 global.Assertion = chai.Assertion
 global.assert = chai.assert
+global.sinon = require('sinon')
 
 global.SpecHelpers = {
   initSDK () {

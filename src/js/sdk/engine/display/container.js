@@ -110,7 +110,9 @@ class Container extends DisplayObject {
    * @override
    */
   renderWebGL (renderer) {
-    if (!this._visible) return
+    if (!this._visible) {
+      return
+    }
 
     const filterManager = renderer.getFilterManager()
     if (this._filters && this._filters.length) {
@@ -148,7 +150,9 @@ class Container extends DisplayObject {
    * @override
    */
   renderCanvas (renderer) {
-    if (!this._visible) return
+    if (!this._visible) {
+      return
+    }
 
     const filterManager = renderer.getFilterManager()
     if (this._filters && this._filters.length) {

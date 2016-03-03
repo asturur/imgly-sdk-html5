@@ -38,4 +38,15 @@ describe('FilterOperation', function () {
       })(name)
     }
   })
+
+  describe('#setFilter', function () {
+    it('should correctly update the filter', function () {
+      const filterOperation = sdk.createOperation('filter', {
+        filter: PhotoEditorSDK.Filters.IdentityFilter
+      })
+      const filterInstance = filterOperation._selectedFilter
+      filterOperation.setFilter(PhotoEditorSDK.Filters.A15Filter)
+      filterOperation._selectedFilter.should.not.equal(filterInstance)
+    })
+  })
 })

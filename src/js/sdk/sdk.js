@@ -61,7 +61,7 @@ class PhotoEditorSDK extends EventEmitter {
       canvas: null,
       zoom: 1,
       logLevel: 'warn',
-      pixelRatio: (window && window.devicePixelRatio) || 1
+      pixelRatio: (typeof window !== 'undefined' && window.devicePixelRatio) || 1
     })
 
     this._options.extensions = Utils.defaults(this._options.extensions, {
@@ -129,6 +129,7 @@ class PhotoEditorSDK extends EventEmitter {
    * Gets called when the WebGL context has been restored. Re-triggers a render.
    * @private
    */
+  /* istanbul ignore next */
   _onContextRestored () {
     Log.warn(this.constructor.name, 'Trying to re-render after WebGL context has been restored.')
     this.setAllOperationsToDirty()
@@ -180,7 +181,9 @@ class PhotoEditorSDK extends EventEmitter {
    */
   render () {
     let context = this._renderer.getContext()
-    if (context.startFrame) context.startFrame()
+    if (context.startFrame) {
+      context.startFrame()
+    }
 
     let perfTest
     if (PerformanceTest.canLog()) {
@@ -217,8 +220,12 @@ class PhotoEditorSDK extends EventEmitter {
         this._renderer.render(this._container)
       })
       .then(() => {
-        perfTest && perfTest.stop()
-        if (context.endFrame) context.endFrame()
+        if (perfTest) {
+          perfTest.stop()
+        }
+        if (context.endFrame) {
+          context.endFrame()
+        }
       })
   }
 
@@ -262,7 +269,7 @@ class PhotoEditorSDK extends EventEmitter {
 
     const operation = new Operation(this, options)
     if (addToStack) {
-      this._operationsStack.push(operation)
+      this.addOperation(operation)
     }
     return operation
   }
@@ -357,6 +364,7 @@ class PhotoEditorSDK extends EventEmitter {
     }
 
     switch (this._preferredRenderer) {
+      /* istanbul ignore next */
       case 'webgl':
         this._renderer = Engine.autoDetectRenderer(width, height, rendererOptions)
         this._renderer.on('context-restored', this._onContextRestored)
@@ -395,13 +403,17 @@ class PhotoEditorSDK extends EventEmitter {
    * @TODO Move this somewhere else
    */
   parseExif (image) {
-    if (!image) return
+    if (!image) {
+      return
+    }
     if (Exif.isJPEG(image.src)) {
       let exif = null
       try {
         exif = Exif.fromBase64String(image.src)
       } catch (e) {}
-      if (!exif) return
+      if (!exif) {
+        return
+      }
 
       return exif
     }
@@ -464,7 +476,9 @@ class PhotoEditorSDK extends EventEmitter {
    * Checks if an image is provided
    * @return {Boolean} [description]
    */
-  hasImage () { return this._image !== null && typeof this._image !== 'undefined' }
+  hasImage () {
+    return (this._image !== null && typeof this._image !== 'undefined')
+  }
 
   /**
    * Returns the image
@@ -497,31 +511,41 @@ class PhotoEditorSDK extends EventEmitter {
    * Returns the canvas
    * @return {HTMLCanvasElement}
    */
-  getCanvas () { return this._renderer.getCanvas() }
+  getCanvas () {
+    return this._renderer.getCanvas()
+  }
 
   /**
    * Sets the canvas
    * @param {HTMLCanvasElement} canvas
    */
-  setCanvas (canvas) { this._renderer.setCanvas(canvas) }
+  setCanvas (canvas) {
+    this._renderer.setCanvas(canvas)
+  }
 
   /**
    * Returns the sprite
    * @return {PhotoEditorSDK.Engine.Sprite}
    */
-  getSprite () { return this._sprite }
+  getSprite () {
+    return this._sprite
+  }
 
   /**
    * Returns the container
    * @return {PhotoEditorSDK.Engine.Container}
    */
-  getContainer () { return this._container }
+  getContainer () {
+    return this._container
+  }
 
   /**
    * Returns the operation stack
    * @return {PhotoEditorSDK.OperationsStack}
    */
-  getOperationsStack () { return this._operationsStack }
+  getOperationsStack () {
+    return this._operationsStack
+  }
 
   /**
    * Sets the operations stack
@@ -540,19 +564,25 @@ class PhotoEditorSDK extends EventEmitter {
    * Returns the available operations
    * @return {Operation[]}
    */
-  getOperations () { return this._operations }
+  getOperations () {
+    return this._operations
+  }
 
   /**
    * Returns the renderer
    * @return {PhotoEditorSDK.Engine.BaseRenderer}
    */
-  getRenderer () { return this._renderer }
+  getRenderer () {
+    return this._renderer
+  }
 
   /**
    * Returns the rendering offset
    * @return {PhotoEditorSDK.Math.Vector2}
    */
-  getOffset () { return this._offset }
+  getOffset () {
+    return this._offset
+  }
 
   /**
    * Sets the rendering offset
@@ -571,7 +601,9 @@ class PhotoEditorSDK extends EventEmitter {
    * Returns the zoom level
    * @return {Number}
    */
-  getZoom () { return this._zoom }
+  getZoom () {
+    return this._zoom
+  }
 
   /**
    * Sets the zoom level
@@ -587,13 +619,17 @@ class PhotoEditorSDK extends EventEmitter {
    * Returns the pixel ratio
    * @return {Number}
    */
-  getPixelRatio () { return this._options.pixelRatio }
+  getPixelRatio () {
+    return this._options.pixelRatio
+  }
 
   /**
    * Returns the Exif instance
    * @return {PhotoEditorSDK.Exif} [description]
    */
-  getExif () { return this._exif }
+  getExif () {
+    return this._exif
+  }
 
   // -------------------------------------------------------------------------- DISPOSAL
 

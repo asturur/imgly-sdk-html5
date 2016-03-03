@@ -14,6 +14,7 @@
  * @memberof PhotoEditorSDK.Engine
  * @ignore
  */
+/* istanbul ignore next */
 class Quad {
   constructor (renderer) {
     this._renderer = renderer

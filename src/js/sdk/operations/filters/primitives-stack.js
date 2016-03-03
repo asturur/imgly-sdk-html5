@@ -93,7 +93,9 @@ class PrimitivesStack {
    *              the outputTexture
    */
   render (sdk, outputTexture) {
-    if (this._stack.length === 0) return Promise.resolve()
+    if (this._stack.length === 0) {
+      return Promise.resolve()
+    }
     const renderer = sdk.getRenderer()
 
     let filteredRenderTexture = this._renderTextures[renderer.id]

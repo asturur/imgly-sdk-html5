@@ -29,7 +29,9 @@ class ContextPerformanceHook {
       if (typeof value === 'function') {
         value = function (...args) {
           const fn = context[key]
-          if (!self._tracking) return fn.apply(context, args)
+          if (!self._tracking) {
+            return fn.apply(context, args)
+          }
 
           const start = window.performance.now()
           const result = fn.apply(context, args)

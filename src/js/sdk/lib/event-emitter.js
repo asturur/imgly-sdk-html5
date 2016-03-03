@@ -36,7 +36,9 @@ class EventEmitter {
    */
   unpipeEvents (destination) {
     const i = this._pipeDestinations.indexOf(destination)
-    if (i === -1) return
+    if (i === -1) {
+      return
+    }
     this._pipeDestinations.splice(i, 1)
   }
 

@@ -13,6 +13,7 @@
  * @class
  * @memberof PhotoEditorSDK.Engine
  */
+/* istanbul ignore next */
 class ObjectRenderer {
   /**
    * Creates an ObjectRenderer

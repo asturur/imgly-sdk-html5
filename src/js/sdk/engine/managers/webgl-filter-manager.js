@@ -17,6 +17,7 @@ import Quad from '../utils/quad'
  * @class
  * @memberof PhotoEditorSDK.Engine
  */
+/* istanbul ignore next */
 class WebGLFilterManager {
   constructor (renderer) {
     this._renderer = renderer

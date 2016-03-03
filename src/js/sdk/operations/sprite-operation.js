@@ -41,8 +41,6 @@ class SpriteOperation extends Operation {
       this.removeSprite(sprite)
       this.addSprite(sprite)
     })
-
-    window.spritesContainer = this._container
   }
 
   /**
@@ -293,7 +291,9 @@ class SpriteOperation extends Operation {
     }
 
     sprites.forEach((sprite) => {
-      if (intersectingSprite) return
+      if (intersectingSprite) {
+        return
+      }
 
       const displayObject = sprite.getDisplayObject()
       const stickerBounds = displayObject.getLocalBounds()
@@ -359,7 +359,9 @@ SpriteOperation.prototype.availableOptions = {
     type: 'array', default: [],
     setter: function (sprites, initial) {
       sprites = sprites.map((sprite, i) => {
-        if (sprite instanceof Sprite) return sprite
+        if (sprite instanceof Sprite) {
+          return sprite
+        }
 
         const { type } = sprite
         delete sprite.type

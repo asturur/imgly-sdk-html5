@@ -19,7 +19,7 @@ describe('CropOperation', function () {
   describe('#render', function () {
     describe('with both start and end set', function () {
       it('should correctly resize the canvas', function (done) {
-        const operation = sdk.createOperation('crop', {
+        sdk.createOperation('crop', {
           start: new PhotoEditorSDK.Math.Vector2(0.1, 0.1),
           end: new PhotoEditorSDK.Math.Vector2(0.9, 0.9)
         })
@@ -34,6 +34,102 @@ describe('CropOperation', function () {
           .catch(function (err) {
             done(err)
           })
+      })
+    })
+  })
+
+  describe('#_onOperationUpdate', function () {
+    let cropOperation = null
+    beforeEach(function () {
+      cropOperation = sdk.createOperation('crop', {
+        start: new PhotoEditorSDK.Math.Vector2(0.5, 0.5),
+        end: new PhotoEditorSDK.Math.Vector2(1, 1)
+      })
+    })
+
+    describe('when an OrientationOperation is rotating the image', function () {
+      describe('by 90 degrees', function () {
+        it('should rotate the crop as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setRotation(90)
+
+          const start = cropOperation.getStart()
+          const end = cropOperation.getEnd()
+
+          start.equals(0, 0.5).should.be.true
+          end.equals(0.5, 1).should.be.true
+        })
+      })
+
+      describe('by -90 degrees', function () {
+        it('should rotate the crop as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setRotation(-90)
+
+          const start = cropOperation.getStart()
+          const end = cropOperation.getEnd()
+
+          start.equals(0.5, 0).should.be.true
+          end.equals(1, 0.5).should.be.true
+        })
+      })
+    })
+
+    describe('when an OrientationOperation is flipping the image', function () {
+      describe('horizontally', function () {
+        it('should flip the crop as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setFlipHorizontally(true)
+
+          const start = cropOperation.getStart()
+          const end = cropOperation.getEnd()
+
+          start.equals(0, 0.5).should.be.true
+          end.equals(0.5, 1).should.be.true
+        })
+
+        describe('when image is already rotated', function () {
+          it('should flip the crop correctly', function () {
+            const orientationOperation = sdk.createOperation('orientation', {
+              rotation: 90
+            })
+            orientationOperation.setFlipHorizontally(true)
+
+            const start = cropOperation.getStart()
+            const end = cropOperation.getEnd()
+
+            start.equals(0.5, 0).should.be.true
+            end.equals(1, 0.5).should.be.true
+          })
+        })
+      })
+
+      describe('vertically', function () {
+        it('should flip the crop as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setFlipVertically(true)
+
+          const start = cropOperation.getStart()
+          const end = cropOperation.getEnd()
+
+          start.equals(0.5, 0).should.be.true
+          end.equals(1, 0.5).should.be.true
+        })
+
+        describe('when image is already rotated', function () {
+          it('should flip the crop correctly', function () {
+            const orientationOperation = sdk.createOperation('orientation', {
+              rotation: 90
+            })
+            orientationOperation.setFlipVertically(true)
+
+            const start = cropOperation.getStart()
+            const end = cropOperation.getEnd()
+
+            start.equals(0, 0.5).should.be.true
+            end.equals(0.5, 1).should.be.true
+          })
+        })
       })
     })
   })

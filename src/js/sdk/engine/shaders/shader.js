@@ -16,6 +16,7 @@ const { Log } = Globals
  * @class
  * @memberof PhotoEditorSDK.Engine
  */
+/* istanbul ignore next */
 class Shader {
   /**
    * Creates a Shader
@@ -239,7 +240,9 @@ class Shader {
    * Returns the uniforms
    * @return {Object}
    */
-  getUniforms () { return this._uniforms }
+  getUniforms () {
+    return this._uniforms
+  }
 
   /**
    * Returns the attributes

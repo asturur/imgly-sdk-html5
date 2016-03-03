@@ -1,4 +1,4 @@
-/* global PhotoEditorSDK, describe, it, beforeEach */
+/* global PhotoEditorSDK, sinon */
 /* eslint-disable no-new */
 /*
  * Photo Editor SDK - photoeditorsdk.com
@@ -17,6 +17,50 @@ import canvas from 'canvas'
 let image, sdk
 
 describe('PhotoEditorSDK', function () {
+  describe('`displayWelcomeMessage` option', function () {
+    describe('set to true', function () {
+      before(function () {
+        sinon.stub(console, 'log', () => {})
+        sdk = new PhotoEditorSDK('canvas', {
+          displayWelcomeMessage: true
+        })
+      })
+      after(function () {
+        console.log.restore()
+      })
+      it('should display a welcome message', function () {
+        console.log.should.have.been.calledWith(
+          'PhotoEditorSDK | Yo! | Version: 3.0.0 (Canvas2D) - https://www.photoeditorsdk.com'
+        )
+      })
+    })
+  })
+
+  describe('#createOperation', function () {
+    beforeEach(function () {
+      sdk = new PhotoEditorSDK('canvas', {
+        displayWelcomeMessage: false
+      })
+    })
+    describe('with a valid identifier', function () {
+      it('should return an operation', function () {
+        const operation = sdk.createOperation('border')
+        operation.should.be.instanceOf(PhotoEditorSDK.Operation)
+      })
+    })
+
+    describe('with an invalid identifier', function () {
+      it('should throw an error', function () {
+        const throwable = function () {
+          sdk.createOperation('foobarbaz')
+        }
+        throwable.should.throw(
+          'No operation with identifier `foobarbaz` found.'
+        )
+      })
+    })
+  })
+
   describe('#export', function () {
     beforeEach(function () {
       image = new canvas.Image()

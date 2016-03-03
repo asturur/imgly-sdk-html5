@@ -35,7 +35,9 @@ class ContrastFilter extends Engine.Filter {
     const imageData = inputContext.getImageData(0, 0, canvas.width, canvas.height)
 
     let { contrast } = this._options
-    if (contrast === 1) return
+    if (contrast === 1) {
+      return
+    }
 
     for (let i = 0; i < canvas.width * canvas.height; i++) {
       const index = i * 4

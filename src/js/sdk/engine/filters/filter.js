@@ -79,7 +79,9 @@ class Filter extends Configurable {
     let uniformValue = value
     const optionConfig = this.availableOptions[optionName]
 
-    if (!optionConfig.uniformType) return
+    if (!optionConfig.uniformType) {
+      return
+    }
 
     switch (optionConfig.type) {
       case 'color':
@@ -145,6 +147,7 @@ class Filter extends Configurable {
    * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
    * @return {PhotoEditorSDK.Engine.Shader}
    */
+  /* istanbul ignore next */
   getShaderForRenderer (renderer) {
     const gl = renderer.getContext()
     let shader = this._shaders[gl.id]

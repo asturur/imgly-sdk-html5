@@ -37,7 +37,9 @@ class Path extends EventEmitter {
    * @param  {HTMLCanvasElement} canvas
    */
   renderToCanvas (canvas) {
-    if (this._controlPoints.length < 2) return
+    if (this._controlPoints.length < 2) {
+      return
+    }
 
     let lastControlPoint = this._controlPoints[0]
     let controlPoint = lastControlPoint

@@ -15,6 +15,7 @@ import { Color, Vector2, Matrix, Rectangle } from '../globals'
  * @class
  * @memberof PhotoEditorSDK.Engine
  */
+/* istanbul ignore next */
 class RenderTarget {
   /**
    * Creates a RenderTarget
