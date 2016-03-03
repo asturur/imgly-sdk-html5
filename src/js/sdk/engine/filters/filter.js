@@ -175,6 +175,7 @@ class Filter extends Configurable {
    * @param  {Boolean} clear = false
    */
   apply (renderer, inputTarget, outputTarget, clear = false) {
+    /* istanbul ignore if */
     if (renderer.isOfType('webgl')) {
       this._applyWebGL(renderer, inputTarget, outputTarget, clear)
     } else if (renderer.isOfType('canvas')) {

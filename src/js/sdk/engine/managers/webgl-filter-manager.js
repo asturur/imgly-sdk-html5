@@ -175,6 +175,7 @@ class WebGLFilterManager {
    */
   _onContextChange () {
     this._textures.length = 0
+    /* istanbul ignore next */
     if (this._renderer.isOfType('webgl')) {
       this._quad = new Quad(this._renderer)
     }

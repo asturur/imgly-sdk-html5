@@ -12,26 +12,98 @@ import fs from 'fs'
 import path from 'path'
 import { Image } from 'canvas'
 
-describe('StickerOperation', function () {
-  let sdk, stickerImage
-  beforeEach(function () {
-    sdk = SpecHelpers.initSDK()
+describe('SpriteOperation', function () {
+  let sdk, operation
 
-    const stickerPath = path.resolve(__dirname, '../assets/sticker.png')
-    const stickerImageBuffer = fs.readFileSync(stickerPath)
-    stickerImage = new Image()
-    stickerImage.src = stickerImageBuffer
+  describe('stickers', function () {
+    let stickerImage
+    const addSticker = function (options = {}) {
+      options.image = stickerImage
+      const sticker = operation.createSticker(options)
+      operation.addSprite(sticker)
+    }
+
+    beforeEach(function () {
+      sdk = SpecHelpers.initSDK()
+
+      const stickerPath = path.resolve(__dirname, '../assets/sticker.png')
+      const stickerImageBuffer = fs.readFileSync(stickerPath)
+      stickerImage = new Image()
+      stickerImage.src = stickerImageBuffer
+    })
+
+    describe('without adjustments or flip', function () {
+      describe('#render', function () {
+        it('should succeed', function () {
+          operation = sdk.createOperation('sprite')
+          addSticker()
+
+          return sdk.render()
+            .should.be.fulfilled
+        })
+      })
+    })
+
+    describe('with adjustments', function () {
+      describe('#render', function () {
+        it('should succeed', function () {
+          operation = sdk.createOperation('sprite')
+          addSticker({
+            adjustments: {
+              brightness: 0.5,
+              contrast: 1.5,
+              saturation: 0.5
+            }
+          })
+
+          return sdk.render()
+            .should.be.fulfilled
+        })
+      })
+    })
+
+    describe('with flipped set to true', function () {
+      describe('#render', function () {
+        it('should succeed', function () {
+          operation = sdk.createOperation('sprite')
+          addSticker({
+            flipHorizontally: true,
+            flipVertically: true
+          })
+
+          return sdk.render()
+            .should.be.fulfilled
+        })
+      })
+    })
   })
 
-  describe('#render', function () {
-    it('should succeed', function () {
-      const operation = sdk.createOperation('sprite')
-      operation.createSticker({
-        image: stickerImage
-      })
+  describe('texts', function () {
+    let stickerImage
+    beforeEach(function () {
+      sdk = SpecHelpers.initSDK()
 
-      return sdk.render()
-        .should.be.fulfilled
+      const stickerPath = path.resolve(__dirname, '../assets/sticker.png')
+      const stickerImageBuffer = fs.readFileSync(stickerPath)
+      stickerImage = new Image()
+      stickerImage.src = stickerImageBuffer
+
+      operation = sdk.createOperation('sprite')
+      const text = operation.createText({
+        text: 'This is an example text.'
+      })
+      operation.addSprite(text)
+    })
+
+    describe('without adjustments or flip', function () {
+      describe('#render', function () {
+        it('should succeed', function () {
+          operation = sdk.createOperation('sprite')
+
+          return sdk.render()
+            .should.be.fulfilled
+        })
+      })
     })
   })
 })

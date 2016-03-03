@@ -56,6 +56,7 @@ class RenderTexture extends Texture {
    * @private
    */
   _setupFilterManager () {
+    /* istanbul ignore if */
     if (this._renderer.isOfType('webgl')) {
       this._filterManager = new WebGLFilterManager(this._renderer)
     } else if (this._renderer.isOfType('canvas')) {
@@ -70,6 +71,7 @@ class RenderTexture extends Texture {
    * @private
    */
   _setupBuffer () {
+    /* istanbul ignore if */
     if (this._renderer.isOfType('webgl')) {
       this._setupWebGLBuffer()
     } else if (this._renderer.isOfType('canvas')) {
@@ -130,6 +132,7 @@ class RenderTexture extends Texture {
    * @param  {PhotoEditorSDK.Engine.DisplayObject} displayObject
    */
   render (displayObject) {
+    /* istanbul ignore if */
     if (this._renderer.isOfType('webgl')) {
       this._renderWebGL(displayObject)
     } else if (this._renderer.isOfType('canvas')) {

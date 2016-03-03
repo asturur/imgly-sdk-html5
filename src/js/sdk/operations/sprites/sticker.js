@@ -57,11 +57,12 @@ class Sticker extends Sprite {
     const renderTexture = this._getRenderTexture(renderer)
     const hasAdjustments = this._hasAdjustments()
 
+    this._identitySprite.setFilters(hasAdjustments ? [this._adjustmentsFilter] : [])
+
     // Stickers with adjustments are rendered to a render texture that
     // can be re-used
     if (hasAdjustments) {
       this._identitySprite.setTexture(this._inputTexture)
-      this._identitySprite.setFilters(hasAdjustments ? [this._adjustmentsFilter] : [])
 
       const adjustments = this._options.adjustments
       this._adjustmentsFilter.set({

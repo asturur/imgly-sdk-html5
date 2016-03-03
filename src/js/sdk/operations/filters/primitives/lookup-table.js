@@ -77,6 +77,7 @@ class LookupTable extends Primitive {
    */
   update (sdk) {
     const renderer = sdk.getRenderer()
+    /* istanbul ignore if */
     if (renderer.isOfType('webgl')) {
       this._updateWebGLTexture(sdk)
     } else if (renderer.isOfType('canvas')) {
@@ -107,6 +108,7 @@ class LookupTable extends Primitive {
     texture.setSource(data)
     texture.setGLUnit(TEXTURE_GL_UNIT)
 
+    /* istanbul ignore next */
     if (renderer.isOfType('webgl')) {
       renderer.updateTexture(texture)
     }

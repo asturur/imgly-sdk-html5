@@ -5,7 +5,7 @@
  * MIT License: http://getify.mit-license.org
  * @license
  */
-
+/* istanbul ignore next */
 (function UMD(name,context,definition){
   // special form of UMD for polyfilling across evironments
   context[name] = context[name] || definition();

@@ -139,6 +139,7 @@ class PrimitivesStack {
     const baseTexture = filteredRenderTexture.getBaseTexture()
     baseTexture.setGLUnit(1)
 
+    /* istanbul ignore next */
     if (renderer.isOfType('webgl')) {
       renderer.updateTexture(baseTexture, false)
     }

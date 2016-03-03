@@ -25,7 +25,9 @@ class TextRenderer {
    * @private
    */
   _createCanvas () {
-    this._canvas = document.createElement('canvas')
+    this._canvas = typeof document !== 'undefined'
+      ? document.createElement('canvas')
+      : new (require('canvas'))()
     this._context = this._canvas.getContext('2d')
     this._textSplitter = new TextSplitter(this._context)
   }

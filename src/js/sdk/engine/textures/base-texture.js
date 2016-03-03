@@ -211,6 +211,7 @@ class BaseTexture extends EventEmitter {
    * Disposes the WebGL textures for the given renderer ID
    * @param  {PhotoEditorSDK.Engine.WebGLRenderer} renderer
    */
+  /* istanbul ignore next */
   disposeGLTextures (renderer) {
     if (renderer.isOfType('webgl')) {
       const gl = renderer.getContext()

@@ -104,6 +104,8 @@ class Text extends Sprite {
 
     // Upload texture
     const renderer = sdk.getRenderer()
+
+    /* istanbul ignore next */
     if (renderer.isOfType('webgl')) {
       renderer.updateTexture(textTexture.getBaseTexture())
     }

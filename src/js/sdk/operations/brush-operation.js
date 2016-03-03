@@ -200,6 +200,7 @@ class BrushOperation extends Operation {
     const outputSprite = sdk.getSprite()
     this._inputSprite.setTexture(outputSprite.getTexture())
 
+    /* istanbul ignore next */
     if (renderer.isOfType('webgl')) {
       renderer.updateTexture(this._texture.getBaseTexture())
     }
