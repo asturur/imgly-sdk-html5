@@ -263,15 +263,16 @@ class SpriteOperation extends Operation {
     const outputBounds = outputSprite.getBounds()
     renderTexture.resizeTo(new Vector2(outputBounds.width, outputBounds.height))
 
-    sprites.forEach((sprite) => {
-      sprite.update(sdk)
-    })
+    return Promise.all(sprites.map(s => s.validateSettings()))
+      .then(() => {
+        sprites.forEach((sprite) => {
+          sprite.update(sdk)
+        })
 
-    renderTexture.clear()
-    renderTexture.render(container)
-    outputSprite.setTexture(renderTexture)
-
-    return Promise.resolve()
+        renderTexture.clear()
+        renderTexture.render(container)
+        outputSprite.setTexture(renderTexture)
+      })
   }
 
   /**
