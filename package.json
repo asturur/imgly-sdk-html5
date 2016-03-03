@@ -9,7 +9,7 @@
     "release": "node scripts/release",
     "test": "node_modules/.bin/mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | node_modules/.bin/coveralls && rm -rf ./coverage",
-    "coverage": "NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -x **/ui/** --"
+    "coverage": "NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -x **/ui/**"
   },
   "devDependencies": {
     "babel-core": "^6.6.4",
@@ -43,7 +43,7 @@
     "gulp-webserver": "^0.9.1",
     "gulp-yuicompressor": "0.0.3",
     "gulp-zip": "^3.2.0",
-    "istanbul": "^0.4.2",
+    "istanbul": "^1.0.0-alpha.2",
     "jaguarjs-jsdoc": "git://github.com/imgly/jaguarjs-jsdoc.git#master",
     "jsdoc": "git://github.com/jsdoc3/jsdoc.git#master",
     "json-loader": "^0.5.2",
