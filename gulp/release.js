@@ -5,7 +5,7 @@ var zip = require('gulp-zip')
 var release = require('gulp-github-release')
 
 gulp.task('release', function (cb) {
-  var args = ['clean', 'assets', 'sass', 'standard', 'webpack', 'uglify:js', 'uglify:css', 'release:upload']
+  var args = ['clean', 'assets', 'sass', 'standard', 'sass-lint', 'webpack', 'uglify:js', 'uglify:css', 'release:upload']
   args.push(cb)
   gulpSequence.apply(this, args)
 })

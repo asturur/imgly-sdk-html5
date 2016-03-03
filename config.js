@@ -43,6 +43,11 @@ module.exports = {
     dest: destination + '/assets'
   },
 
+  staticBuildAssets: {
+    src: 'src/*',
+    dest: 'build'
+  },
+
   // Source and destination paths for javascripts
   js: {
     src: source + '/js/*.js',
