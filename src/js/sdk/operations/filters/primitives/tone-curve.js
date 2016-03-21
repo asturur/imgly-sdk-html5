@@ -8,7 +8,6 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import Utils from '../../../lib/utils'
 import LookupTable from './lookup-table'
 
 /**

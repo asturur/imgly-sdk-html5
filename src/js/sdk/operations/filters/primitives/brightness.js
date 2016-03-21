@@ -9,7 +9,6 @@
  */
 
 import { Engine } from '../../../globals'
-import Utils from '../../../lib/utils'
 import Primitive from './primitive'
 
 class BrightnessFilter extends Engine.Filter {

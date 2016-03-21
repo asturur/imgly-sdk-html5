@@ -9,7 +9,6 @@
  */
 
 import Engine from '../../../engine/'
-import Utils from '../../../lib/utils'
 import Primitive from './primitive'
 import Color from '../../../lib/color'
 
