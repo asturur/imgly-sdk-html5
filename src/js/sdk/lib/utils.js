@@ -10,7 +10,7 @@
  */
 
 import Base64 from './base64'
-import nodeCanvas from 'canvas'
+import NodeCanvas from 'canvas'
 
 /**
  * Provides utility functions for internal use
@@ -213,8 +213,8 @@ class Utils {
    * @return {Canvas}
    */
   static createCanvas () {
-    if (nodeCanvas) {
-      return new nodeCanvas()
+    if (NodeCanvas) {
+      return new NodeCanvas()
     } else {
       return document.createElement('canvas')
     }

@@ -8,9 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Log } from '../../globals'
 import ContextPerformanceHook from '../../utils/context-performance-hook'
-
 import BaseRenderer from '../base-renderer'
 import CanvasBuffer from '../../utils/canvas-buffer'
 import CanvasFilterManager from '../../managers/canvas-filter-manager'

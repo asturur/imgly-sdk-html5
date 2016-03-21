@@ -34,7 +34,6 @@ describe('BrushOperation', function () {
   })
 
   describe('#_onOperationUpdate', function () {
-    let sticker = null
     let controlPoints = null
     beforeEach(function () {
       const path = operation.createPath(10, new PhotoEditorSDK.Color(1, 0, 0, 1))
