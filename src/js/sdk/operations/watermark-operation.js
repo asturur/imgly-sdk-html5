@@ -32,45 +32,12 @@ class WatermarkOperation extends Operation {
   }
 
   /**
-   * Renders the watermark using Canvas2d
-   * @param  {PhotoEditorSDK.Engine.CanvasRenderer} renderer
-   * @return {Promise}
-   * @private
-   * @override
-   */
-  _renderCanvas (renderer) {
-    return new Promise((resolve, reject) => {
-      const canvas = renderer.getCanvas()
-      const context = renderer.getContext()
-      const { image } = this._options
-
-      const size = Utils.resizeVectorToFit(
-        new Vector2(image.width, image.height),
-        new Vector2(canvas.width, canvas.height)
-      )
-
-      const position = new Vector2(canvas.width, canvas.height)
-        .divide(2)
-        .subtract(size.clone()
-          .divide(2))
-      context.drawImage(
-        image,
-        position.x, position.y,
-        size.x, size.y
-      )
-
-      resolve()
-    })
-  }
-
-  /**
-   * Renders the watermark using WebGL
+   * Renders the watermark
    * @param  {PhotoEditorSDK} sdk
    * @private
    * @override
    */
-  /* istanbul ignore next */
-  _renderWebGL (sdk) {
+  _render (sdk) {
     if (!this._watermarkTexture) {
       this._watermarkTexture = Engine.Texture.fromImage(this._options.image)
       this._watermarkSprite.setTexture(this._watermarkTexture)

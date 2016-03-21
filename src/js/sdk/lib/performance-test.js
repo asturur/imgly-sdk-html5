@@ -10,7 +10,7 @@
 
 import { Log } from '../globals'
 const now = (typeof window !== 'undefined'
-  ? window.performance.now
+  ? window.performance.now.bind(window.performance)
   : require('performance-now'))
 
 /**
@@ -38,7 +38,7 @@ class PerformanceTest {
     const end = now()
     const ms = end - this._start
     const fps = Math.round(1000 / ms)
-    Log.log(this._tag, `${this._name} took ${ms.toFixed(2)}ms (${fps} FPS)`)
+    Log.info(this._tag, `${this._name} took ${ms.toFixed(2)}ms (${fps} FPS)`)
   }
 }
 

@@ -17,6 +17,7 @@ import VersionChecker from './lib/version-checker'
 import Exif from './lib/exif'
 import ImageExporter from './lib/image-exporter'
 import PerformanceTest from './lib/performance-test'
+import nodeCanvas from 'canvas'
 
 const { RenderType, ImageFormat, Events } = Constants
 
@@ -186,7 +187,7 @@ class PhotoEditorSDK extends EventEmitter {
     }
 
     let perfTest
-    if (this._options.perfTest) {
+    if (Log.canLog('info')) {
       perfTest = new PerformanceTest('⚡⚡⚡', 'Frame rendering')
     }
     Log.info('⚡⚡⚡', 'Rendering starts')
@@ -280,6 +281,14 @@ class PhotoEditorSDK extends EventEmitter {
    */
   addOperation (operation) {
     this._operationsStack.push(operation)
+  }
+
+  /**
+   * Removes the given operation from the operations stack
+   * @param  {PhotoEditorSDK.Operation} operation
+   */
+  removeOperation (operation) {
+    this._operationsStack.remove(operation)
   }
 
   // -------------------------------------------------------------------------- DIMENSIONS
@@ -406,10 +415,20 @@ class PhotoEditorSDK extends EventEmitter {
     if (!image) {
       return
     }
-    if (Exif.isJPEG(image.src)) {
+    let { src } = image
+
+    /* istanbul ignore else */
+    if (nodeCanvas &&
+      image instanceof nodeCanvas.Image &&
+      image.rawSource
+    ) {
+      src = image.rawSource
+    }
+
+    if (Exif.isJPEG(src)) {
       let exif = null
       try {
-        exif = Exif.fromBase64String(image.src)
+        exif = Exif.fromBase64String(src)
       } catch (e) {}
       if (!exif) {
         return

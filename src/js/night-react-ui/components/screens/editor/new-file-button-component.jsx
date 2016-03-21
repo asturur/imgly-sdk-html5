@@ -50,6 +50,7 @@ export default class EditorSubHeaderComponent extends BaseComponent {
    */
   _onNewFile (image) {
     const { editor } = this.context
+    editor.reset()
     editor.setImage(image)
     editor.setZoom('auto')
   }

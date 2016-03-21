@@ -64,6 +64,42 @@ describe('Color', function () {
       hsv[1].should.equal(1.0)
       hsv[2].should.equal(1.0)
     })
+
+    describe('with maximum value being the minimum value', function () {
+      it('should be achromatic', function () {
+        color.r = color.g = color.b = 0
+        const hsv = color.toHSV()
+        hsv[0].should.equal(0.0)
+      })
+    })
+
+    describe('with R being the maximum value and G < B', function () {
+      it('should correctly calculate hue', function () {
+        color.r = 1.0
+        color.g = 0
+        color.b = 0.5
+        const hsv = color.toHSV()
+        hsv[0].toFixed(2).should.equal('0.92')
+      })
+    })
+
+    describe('with G being the maximum value', function () {
+      it('should correctly calculate hue', function () {
+        color.r = color.b = 0
+        color.g = 1
+        const hsv = color.toHSV()
+        hsv[0].toFixed(2).should.equal('0.33')
+      })
+    })
+
+    describe('with B being the maximum value', function () {
+      it('should correctly calculate hue', function () {
+        color.r = color.g = 0
+        color.b = 1
+        const hsv = color.toHSV()
+        hsv[0].toFixed(2).should.equal('0.67')
+      })
+    })
   })
 
   describe('#fromHSV', function () {
@@ -72,9 +108,65 @@ describe('Color', function () {
       color.r.should.equal(1)
       color.g.should.equal(0)
       color.b.should.equal(0)
-      color.r = 1
-      color.g = 0
-      color.b = 0
+    })
+
+    describe('with (h * 6) % 6 === 1', function () {
+      it('should correctly calculate RGB values', function () {
+        color = Color.fromHSV(0.2, 1, 1)
+        color.r.toFixed(2).should.equal('0.80')
+        color.g.should.equal(1)
+        color.b.should.equal(0)
+      })
+    })
+
+    describe('with (h * 6) % 6 === 2', function () {
+      it('should correctly calculate RGB values', function () {
+        color = Color.fromHSV(0.4, 1, 1)
+        color.r.should.equal(0)
+        color.g.should.equal(1)
+        color.b.toFixed(2).should.equal('0.40')
+      })
+    })
+
+    describe('with (h * 6) % 6 === 3', function () {
+      it('should correctly calculate RGB values', function () {
+        color = Color.fromHSV(0.6, 1, 1)
+        color.r.should.equal(0)
+        color.g.toFixed(2).should.equal('0.40')
+        color.b.should.equal(1)
+      })
+    })
+
+    describe('with (h * 6) % 6 === 4', function () {
+      it('should correctly calculate RGB values', function () {
+        color = Color.fromHSV(0.8, 1, 1)
+        color.r.toFixed(2).should.equal('0.80')
+        color.g.should.equal(0)
+        color.b.should.equal(1)
+      })
+    })
+
+    describe('with (h * 6) % 6 === 5', function () {
+      it('should correctly calculate RGB values', function () {
+        color = Color.fromHSV(0.9, 1, 1)
+        color.r.should.equal(1)
+        color.g.should.equal(0)
+        color.b.toFixed(2).should.equal('0.60')
+      })
+    })
+  })
+
+  describe('#equals', function () {
+    describe('when color equals the given one', function () {
+      it('should return true', function () {
+        color.equals(new Color(1, 0, 0, 1)).should.equal(true)
+      })
+    })
+
+    describe('when color does not equal the given one', function () {
+      it('should return false', function () {
+        color.equals(new Color(0, 0, 0, 1)).should.equal(false)
+      })
     })
   })
 

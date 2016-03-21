@@ -8,7 +8,7 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
-import { Promise, Constants, Engine, Vector2, Color } from '../globals'
+import { Promise, Constants, Engine, Vector2, Color, Utils } from '../globals'
 import Operation from './operation'
 import Path from './brush/path'
 import ControlPoint from './brush/control-point'
@@ -29,7 +29,7 @@ class BrushOperation extends Operation {
     super(...args)
 
     this._brushCanvasDirty = true
-    this._brushCanvas = document.createElement('canvas')
+    this._brushCanvas = Utils.createCanvas()
     this._texture = Engine.Texture.fromCanvas(this._brushCanvas)
     this._sprite.setTexture(this._texture)
 

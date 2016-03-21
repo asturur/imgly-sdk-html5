@@ -89,7 +89,10 @@ class Color {
     } else {
       switch (max) {
         case this.r:
-          h = (this.g - this.b) / d + (this.g < this.b ? 6 : 0)
+          h = (this.g - this.b) / d
+          if (this.g < this.b) {
+            h += 6
+          }
           break
         case this.g:
           h = (this.b - this.r) / d + 2

@@ -524,9 +524,7 @@ class Editor extends EventEmitter {
    */
   _setImage (image = this._options.image, exif) {
     this._options.image = image
-    this.reset()
     this._sdk.setImage(image, exif)
-    this._fixOperationsStack()
 
     this.emit('new-image')
   }
@@ -686,6 +684,7 @@ class Editor extends EventEmitter {
    * Resets everything
    */
   reset () {
+    console.error(new Error('wuuut'))
     this._sdk.reset()
     this._history = []
     this._operationsMap = {}

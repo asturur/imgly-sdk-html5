@@ -164,7 +164,7 @@ class WebGLRenderer extends BaseRenderer {
       gl = window.WebGLDebugUtils.makeDebugContext(gl, null, logGL)
     }
 
-    if (Log.canLog('trace')) {
+    if (this._options.debug) {
       gl = new ContextPerformanceHook(gl)
     }
 

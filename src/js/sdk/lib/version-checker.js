@@ -19,6 +19,7 @@ const VERSION_CHECK_URL = `https://www.photoeditorsdk.com/version.json?sdk=html5
  * @memberof PhotoEditorSDK
  * @ignore
  */
+/* istanbul ignore next */
 class VersionChecker {
   /**
    * Creates a new VersionChecker

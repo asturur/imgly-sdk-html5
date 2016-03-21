@@ -25,4 +25,87 @@ describe('RadialFocusOperation', function () {
         .should.be.fulfilled
     })
   })
+
+  describe('#_onOperationUpdate', function () {
+    let radialFocusOperation = null
+    beforeEach(function () {
+      radialFocusOperation = sdk.createOperation('radial-focus', {
+        position: new PhotoEditorSDK.Math.Vector2(0.1, 0.1)
+      })
+    })
+
+    describe('when an OrientationOperation is rotating the image', function () {
+      describe('by 90 degrees', function () {
+        it('should rotate the focus as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setRotation(90)
+
+          const position = radialFocusOperation.getPosition()
+
+          position.equals(0.9, 0.1).should.be.true
+        })
+      })
+
+      describe('by -90 degrees', function () {
+        it('should rotate the focus as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setRotation(-90)
+
+          const position = radialFocusOperation.getPosition()
+
+          position.equals(0.1, 0.9).should.be.true
+        })
+      })
+    })
+
+    describe('when an OrientationOperation is flipping the image', function () {
+      describe('horizontally', function () {
+        it('should flip the focus as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setFlipHorizontally(true)
+
+          const position = radialFocusOperation.getPosition()
+
+          position.equals(0.9, 0.1).should.be.true
+        })
+
+        describe('when image is already rotated', function () {
+          it('should flip the focus correctly', function () {
+            const orientationOperation = sdk.createOperation('orientation', {
+              rotation: 90
+            })
+            orientationOperation.setFlipHorizontally(true)
+
+            const position = radialFocusOperation.getPosition()
+
+            position.equals(0.1, 0.9).should.be.true
+          })
+        })
+      })
+
+      describe('vertically', function () {
+        it('should flip the focus as well', function () {
+          const orientationOperation = sdk.createOperation('orientation')
+          orientationOperation.setFlipVertically(true)
+
+          const position = radialFocusOperation.getPosition()
+
+          position.equals(0.1, 0.9).should.be.true
+        })
+
+        describe('when image is already rotated', function () {
+          it('should flip the focus correctly', function () {
+            const orientationOperation = sdk.createOperation('orientation', {
+              rotation: 90
+            })
+            orientationOperation.setFlipVertically(true)
+
+            const position = radialFocusOperation.getPosition()
+
+            position.equals(0.9, 0.1).should.be.true
+          })
+        })
+      })
+    })
+  })
 })

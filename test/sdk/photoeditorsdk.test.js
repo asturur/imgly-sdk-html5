@@ -17,6 +17,25 @@ import canvas from 'canvas'
 let image, sdk
 
 describe('PhotoEditorSDK', function () {
+  describe('when loading an image with EXIF orientation', function () {
+    it('should automatically create a RotationOperation', function () {
+      image = new canvas.Image()
+      const imagePath = path.resolve(__dirname, 'assets/exif.jpg')
+      const imageData = fs.readFileSync(imagePath, 'base64')
+
+      const src = 'data:image/jpeg;base64,' + imageData
+      image.src = src
+      image.rawSource = src
+
+      sdk = new PhotoEditorSDK('canvas', {
+        displayWelcomeMessage: false,
+        image
+      })
+
+      sdk.getOperationsStack().getStack()[0].should.be.instanceOf(PhotoEditorSDK.Operations.OrientationOperation)
+    })
+  })
+
   describe('`displayWelcomeMessage` option', function () {
     describe('set to true', function () {
       before(function () {
@@ -62,31 +81,31 @@ describe('PhotoEditorSDK', function () {
     })
   })
 
-  describe('`perfTest` option', function () {
-    describe('set to true', function () {
-      before(function () {
-        image = new canvas.Image()
-        let imagePath = path.resolve(__dirname, 'assets/test.png')
-        let buffer = fs.readFileSync(imagePath)
-        image.src = buffer
-
-        sdk = new PhotoEditorSDK('canvas', {
-          displayWelcomeMessage: false,
-          perfTest: true,
-          image: image
-        })
-
-        sinon.stub(console, 'log')
-      })
-      it('#render should print some output', function () {
-        return sdk.render()
-          .then(function () {
-            console.log.should.have.callCount(1)
-            console.log.restore()
-          })
-      })
-    })
-  })
+  // describe('`perfTest` option', function () {
+  //   describe('set to true', function () {
+  //     before(function () {
+  //       image = new canvas.Image()
+  //       let imagePath = path.resolve(__dirname, 'assets/test.png')
+  //       let buffer = fs.readFileSync(imagePath)
+  //       image.src = buffer
+  //
+  //       sdk = new PhotoEditorSDK('canvas', {
+  //         displayWelcomeMessage: false,
+  //         perfTest: true,
+  //         image: image
+  //       })
+  //
+  //       sinon.stub(console, 'log')
+  //     })
+  //     it('#render should print some output', function () {
+  //       return sdk.render()
+  //         .then(function () {
+  //           console.log.should.have.callCount(1)
+  //           console.log.restore()
+  //         })
+  //     })
+  //   })
+  // })
 
   describe('#createOperation', function () {
     beforeEach(function () {

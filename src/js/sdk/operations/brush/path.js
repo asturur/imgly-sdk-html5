@@ -77,6 +77,14 @@ class Path extends EventEmitter {
   }
 
   /**
+   * Returns this path's control points
+   * @return {Array.<PhotoEditorSDK.Operations.BrushOperation.ControlPoint>}
+   */
+  getControlPoints () {
+    return this._controlPoints
+  }
+
+  /**
    * Sets this path to dirty
    */
   setDirty () {

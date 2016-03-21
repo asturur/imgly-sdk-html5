@@ -10,6 +10,7 @@
  */
 
 import Base64 from './base64'
+import nodeCanvas from 'canvas'
 
 /**
  * Provides utility functions for internal use
@@ -205,6 +206,18 @@ class Utils {
     return array.reduce(function (flat, toFlatten) {
       return flat.concat(Array.isArray(toFlatten) ? Utils.flatten(toFlatten) : toFlatten)
     }, [])
+  }
+
+  /**
+   * Creates a canvas DOM element (browser) or a node-canvas canvas (node)
+   * @return {Canvas}
+   */
+  static createCanvas () {
+    if (nodeCanvas) {
+      return new nodeCanvas()
+    } else {
+      return document.createElement('canvas')
+    }
   }
 }
 
