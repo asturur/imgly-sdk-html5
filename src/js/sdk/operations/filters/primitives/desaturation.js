@@ -9,7 +9,6 @@
  */
 
 import Engine from '../../../engine/'
-import Utils from '../../../lib/utils'
 import Primitive from './primitive'
 
 class DesaturationFilter extends Engine.Filter {
@@ -48,6 +47,11 @@ class DesaturationFilter extends Engine.Filter {
   }
 }
 
+/**
+ * Specifies the available options for this filter
+ * @type {Object}
+ * @ignore
+ */
 DesaturationFilter.prototype.availableOptions = {
   desaturation: { type: 'number', default: 1, uniformType: 'f' }
 }
@@ -63,9 +67,6 @@ class Desaturation extends Primitive {
     super(...args)
 
     this._filter = new DesaturationFilter()
-    this._options = Utils.defaults(this._options, {
-      desaturation: 1
-    })
   }
 
   /**
@@ -75,5 +76,12 @@ class Desaturation extends Primitive {
     this._filter.setDesaturation(this._options.desaturation)
   }
 }
+
+/**
+ * Specifies the available options for this primitive
+ * @type {Object}
+ * @ignore
+ */
+Desaturation.prototype.availableOptions = DesaturationFilter.prototype.availableOptions
 
 export default Desaturation

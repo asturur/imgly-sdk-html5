@@ -52,6 +52,11 @@ class BrightnessFilter extends Engine.Filter {
   }
 }
 
+/**
+ * Specifies the available options for this filter
+ * @type {Object}
+ * @ignore
+ */
 BrightnessFilter.prototype.availableOptions = {
   brightness: { type: 'number', default: 0, uniformType: 'f' }
 }
@@ -65,11 +70,7 @@ BrightnessFilter.prototype.availableOptions = {
 class Brightness extends Primitive {
   constructor (...args) {
     super(...args)
-
     this._filter = new BrightnessFilter()
-    this._options = Utils.defaults(this._options, {
-      brightness: 1.0
-    })
   }
 
   /**
@@ -79,5 +80,12 @@ class Brightness extends Primitive {
     this._filter.setBrightness(this._options.brightness)
   }
 }
+
+/**
+ * Specifies the available options for this primitive
+ * @type {Object}
+ * @ignore
+ */
+Brightness.prototype.availableOptions = BrightnessFilter.prototype.availableOptions
 
 export default Brightness

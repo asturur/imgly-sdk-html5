@@ -21,17 +21,15 @@ class ToneCurve extends LookupTable {
   constructor (...args) {
     super(...args)
 
-    this._options = Utils.defaults(this._options, {
-      rgbControlPoints: {
+    if (!this._options.rgbControlPoints) {
+      this._options.rgbControlPoints = {
         red: this._options.controlPoints,
         green: this._options.controlPoints,
         blue: this._options.controlPoints
       }
-    })
-
-    if (typeof this._options.rgbControlPoints !== 'undefined') {
-      this._updateLookupTable()
     }
+
+    this._updateLookupTable()
   }
 
   /**
@@ -203,6 +201,16 @@ class ToneCurve extends LookupTable {
 
     return y2
   }
+}
+
+/**
+ * Specifies the available options for this primitive
+ * @type {Object}
+ * @ignore
+ */
+ToneCurve.prototype.availableOptions = {
+  rgbControlPoints: { type: 'object' },
+  controlPoints: { type: 'array', default: [] }
 }
 
 export default ToneCurve

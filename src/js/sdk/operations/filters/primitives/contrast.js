@@ -9,7 +9,6 @@
  */
 
 import Engine from '../../../engine/'
-import Utils from '../../../lib/utils'
 import Primitive from './primitive'
 
 class ContrastFilter extends Engine.Filter {
@@ -50,6 +49,11 @@ class ContrastFilter extends Engine.Filter {
   }
 }
 
+/**
+ * Specifies the available options for this filter
+ * @type {Object}
+ * @ignore
+ */
 ContrastFilter.prototype.availableOptions = {
   contrast: { type: 'number', default: 1, uniformType: 'f' }
 }
@@ -65,9 +69,6 @@ class Contrast extends Primitive {
     super(...args)
 
     this._filter = new ContrastFilter()
-    this._options = Utils.defaults(this._options, {
-      contrast: 1.0
-    })
   }
 
   /**
@@ -77,5 +78,12 @@ class Contrast extends Primitive {
     this._filter.setContrast(this._options.contrast)
   }
 }
+
+/**
+ * Specifies the available options for this primitive
+ * @type {Object}
+ * @ignore
+ */
+Contrast.prototype.availableOptions = ContrastFilter.prototype.availableOptions
 
 export default Contrast

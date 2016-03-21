@@ -64,6 +64,11 @@ class GlowFilter extends Engine.Filter {
   }
 }
 
+/**
+ * Specifies the available options for this filter
+ * @type {Object}
+ * @ignore
+ */
 GlowFilter.prototype.availableOptions = {
   color: { type: 'color', default: Color.WHITE, uniformType: '3f' }
 }
@@ -79,9 +84,6 @@ class Glow extends Primitive {
     super(...args)
 
     this._filter = new GlowFilter()
-    this._options = Utils.defaults(this._options, {
-      color: new Color(1, 1, 1)
-    })
   }
 
   /**
@@ -91,5 +93,12 @@ class Glow extends Primitive {
     this._filter.setColor(this._options.color)
   }
 }
+
+/**
+ * Specifies the available options for this primitive
+ * @type {Object}
+ * @ignore
+ */
+Glow.prototype.availableOptions = GlowFilter.prototype.availableOptions
 
 export default Glow

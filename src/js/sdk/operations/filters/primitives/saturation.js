@@ -50,6 +50,11 @@ class SaturationFilter extends Engine.Filter {
   }
 }
 
+/**
+ * Specifies the available options for this filter
+ * @type {Object}
+ * @ignore
+ */
 SaturationFilter.prototype.availableOptions = {
   saturation: { type: 'number', default: 0, uniformType: 'f' }
 }
@@ -65,9 +70,6 @@ class Saturation extends Primitive {
     super(...args)
 
     this._filter = new SaturationFilter()
-    this._options = Utils.defaults(this._options, {
-      saturation: 0
-    })
   }
 
   /**
@@ -77,5 +79,12 @@ class Saturation extends Primitive {
     this._filter.setSaturation(this._options.saturation)
   }
 }
+
+/**
+ * Specifies the available options for this primitive
+ * @type {Object}
+ * @ignore
+ */
+Saturation.prototype.availableOptions = SaturationFilter.prototype.availableOptions
 
 export default Saturation

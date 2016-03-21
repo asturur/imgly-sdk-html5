@@ -49,6 +49,11 @@ class SoftColorOverlayFilter extends Engine.Filter {
   }
 }
 
+/**
+ * Specifies the available options for this filter
+ * @type {Object}
+ * @ignore
+ */
 SoftColorOverlayFilter.prototype.availableOptions = {
   color: { type: 'color', default: Color.WHITE, uniformType: '3f' }
 }
@@ -64,9 +69,6 @@ class SoftColorOverlay extends Primitive {
     super(...args)
 
     this._filter = new SoftColorOverlayFilter()
-    this._options = Utils.defaults(this._options, {
-      color: Color.WHITE
-    })
   }
 
   /**
@@ -76,5 +78,12 @@ class SoftColorOverlay extends Primitive {
     this._filter.setColor(this._options.color)
   }
 }
+
+/**
+ * Specifies the available options for this primitive
+ * @type {Object}
+ * @ignore
+ */
+SoftColorOverlay.prototype.availableOptions = SoftColorOverlayFilter.prototype.availableOptions
 
 export default SoftColorOverlay

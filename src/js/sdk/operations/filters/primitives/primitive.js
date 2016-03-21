@@ -9,19 +9,14 @@
  * For commercial use, please contact us at contact@9elements.com
  */
 
+import Configurable from '../../../lib/configurable'
+
 /**
  * Base class for filter primitives.
  * @class
  * @memberof PhotoEditorSDK.FilterPrimitives
  */
-class Primitive {
-  constructor (options) {
-    options = options || {}
-
-    this._glslPrograms = {}
-    this._options = options
-  }
-
+class Primitive extends Configurable {
   /**
    * Gets called before this primitive's filter is being applied
    */
@@ -67,10 +62,10 @@ class Primitive {
     throw new Error('Primitive#renderCanvas is abstract and not implemented in inherited class.')
   }
 
-  get options () {
-    return this._options
-  }
-
+  /**
+   * Returns this primitive's filter
+   * @return {PhotoEditorSDK.Engine.Filter}
+   */
   getFilter () {
     return this._filter
   }
