@@ -7,6 +7,7 @@
   "license": "CC-BY-NC-3.0",
   "scripts": {
     "release": "node scripts/release",
+    "release:dry": "ENV=production UPLOAD=false node_modules/.bin/gulp release",
     "test": "node_modules/.bin/mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | node_modules/.bin/coveralls && rm -rf ./coverage",
     "coverage": "NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -x **/ui/**"
