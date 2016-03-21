@@ -1,6 +1,5 @@
 var path = require('path')
 var WebpackNotifierPlugin = require('webpack-notifier')
-var ProvidePlugin = require('webpack/lib/ProvidePlugin')
 var DefinePlugin = require('webpack/lib/DefinePlugin')
 
 var destination = 'build'
@@ -107,7 +106,7 @@ module.exports = {
           test: /\.jsx?$/,
           include: /src\/js/,
           loaders: [
-            'babel-loader?cacheDirectory&sourceMaps'
+            'babel-loader?cacheDirectory' + (env !== 'production' ? '&sourceMaps' : '')
           ]
         }
       ]
