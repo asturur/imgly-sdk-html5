@@ -178,7 +178,8 @@ export default class CropCanvasControlsComponent extends CanvasControlsComponent
     return {
       left: x,
       top: y,
-      width, height
+      width: Math.round(width),
+      height: Math.round(height)
     }
   }
 
