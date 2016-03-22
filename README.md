@@ -25,7 +25,7 @@ Visit [our website](https://www.photoeditorsdk.com/documentation/html5/getting-s
 ## Preview
 
 <p align="center">
-  <img src="http://i.imgur.com/IFpAsf7.gif" />
+  <img src="http://static.photoeditorsdk.com/html5-editor.gif" />
 </p>
 
 ## Examples
