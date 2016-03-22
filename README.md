@@ -3,13 +3,13 @@
 </p>
 <p align="center">
   <a href="https://travis-ci.org/imgly/imgly-sdk-html5">
-    <img src="http://img.shields.io/travis/imgly/imgly-sdk-html5/master.svg?cb=2" alt="Test Status" />
+    <img src="http://img.shields.io/travis/imgly/imgly-sdk-html5/develop.svg?cb=2" alt="Test Status" />
   </a>
-  <a href="https://coveralls.io/r/imgly/imgly-sdk-html5?branch=master">
-    <img src="http://img.shields.io/coveralls/imgly/imgly-sdk-html5/master.svg?cb=2" alt="Coverage Status" />
+  <a href="https://coveralls.io/r/imgly/imgly-sdk-html5?branch=develop">
+    <img src="http://img.shields.io/coveralls/imgly/imgly-sdk-html5/develop.svg?cb=2" alt="Coverage Status" />
   </a>
-  <a href="https://gitter.im/imgly/imgly-sdk-html5">
-    <img src="https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg" alt="join gitter" />
+  <a href="https://pesdk-slack.herokuapp.com/">
+    <img src="https://pesdk-slack.herokuapp.com/badge.svg" alt="Slack Status" />
   </a>
 </p>
 
