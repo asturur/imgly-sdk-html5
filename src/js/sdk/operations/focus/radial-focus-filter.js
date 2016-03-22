@@ -98,7 +98,7 @@ class RadialFocusFilter extends Engine.Filter {
     const canvasDimensions = new Vector2(canvas.width, canvas.height)
     const pixelRatio = this._maskRenderTarget.getPixelRatio()
 
-    const gradientRadius = this._options.gradientRadius
+    const { radius, gradientRadius } = this._options
     const position = this._options.position.clone()
       .multiply(this._options.texSize)
       .multiply(pixelRatio)
@@ -106,9 +106,10 @@ class RadialFocusFilter extends Engine.Filter {
     // Build gradient
     const gradient = context.createRadialGradient(
       position.x, position.y, 0,
-      position.x, position.y, gradientRadius * pixelRatio
+      position.x, position.y, (radius + gradientRadius) * pixelRatio
     )
     gradient.addColorStop(0, '#FFFFFF')
+    gradient.addColorStop(radius / (radius + gradientRadius), '#FFFFFF')
     gradient.addColorStop(1, '#000000')
 
     // Draw gradient
@@ -149,7 +150,8 @@ class RadialFocusFilter extends Engine.Filter {
 
 RadialFocusFilter.prototype.availableOptions = {
   blurRadius: { type: 'number', default: 30, uniformType: 'f' },
-  gradientRadius: { type: 'number', default: 50, uniformType: 'f' },
+  radius: { type: 'number', default: 50, uniformType: 'f' },
+  gradientRadius: { type: 'number', default: 25, uniformType: 'f' },
   position: { type: 'vector2', default: new Vector2(0.5, 0.5), uniformType: '2f' },
   delta: { type: 'vector2', default: new Vector2(1, 1), uniformType: '2f' },
   texSize: { type: 'vector2', default: new Vector2(100, 100), uniformType: '2f' }

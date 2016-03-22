@@ -159,13 +159,12 @@ class RadialFocusOperation extends Operation {
 
     // Invert Y
     const position = this._options.position.clone()
-
     position.multiply(outputDimensions)
 
+    const { blurRadius, radius, gradientRadius } = this._options
     const commonOptions = {
-      blurRadius: this._options.blurRadius,
-      gradientRadius: this._options.gradientRadius,
-      position: position,
+      blurRadius, radius, gradientRadius,
+      position,
       texSize: outputDimensions
     }
 
@@ -192,9 +191,9 @@ class RadialFocusOperation extends Operation {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
-    const { blurRadius, gradientRadius, position } = this._options
+    const { blurRadius, radius, gradientRadius, position } = this._options
     this._filter.set({
-      blurRadius, gradientRadius, position,
+      blurRadius, radius, gradientRadius, position,
       texSize: sdk.getOutputDimensions()
     })
 
@@ -225,7 +224,8 @@ RadialFocusOperation.identifier = 'radial-focus'
  */
 RadialFocusOperation.prototype.availableOptions = {
   position: { type: 'vector2', default: new Vector2(0.5, 0.5) },
-  gradientRadius: { type: 'number', default: 50 },
+  radius: { type: 'number', default: 50 },
+  gradientRadius: { type: 'number', default: 25 },
   blurRadius: { type: 'number', default: 20 }
 }
 

@@ -5,6 +5,7 @@
 
 precision mediump float;
 uniform sampler2D u_image;
+uniform float u_radius;
 uniform float u_blurRadius;
 uniform float u_gradientRadius;
 uniform vec2 u_position;
@@ -21,7 +22,12 @@ void main() {
     float total = 0.0;
 
     float offset = random(vec3(12.9898, 78.233, 151.7182), 0.0);
-    float radius = smoothstep(0.0, 1.0, abs(distance(v_texCoord * u_texSize, u_position)) / (u_gradientRadius * 2.0)) * u_blurRadius;
+    float radius = smoothstep(
+      0.0, 1.0,
+      (abs(
+        distance(v_texCoord * u_texSize, u_position)
+      ) - u_radius) / (u_gradientRadius * 2.0)
+    ) * u_blurRadius;
     for (float t = -30.0; t <= 30.0; t++) {
         float percent = (t + offset - 0.5) / 30.0;
         float weight = 1.0 - abs(percent);

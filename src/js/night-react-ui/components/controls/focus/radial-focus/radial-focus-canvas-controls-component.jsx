@@ -134,20 +134,24 @@ export default class RadialFocusCanvasControlsComponent extends CanvasControlsCo
       .clone()
       .multiply(outputDimensions)
 
-    const newGradientRadius = newKnobPosition
+    const radius = newKnobPosition
       .clone()
       .subtract(absolutePosition)
       .abs()
       .len()
+    const gradientRadius = radius / 2
 
     this.setState({
       knobPosition: newKnobPosition,
       areaDimensions: new Vector2(
-        newGradientRadius * 2,
-        newGradientRadius * 2
+        radius * 2,
+        radius * 2
       )
     })
-    this._operation.setGradientRadius(newGradientRadius / zoom)
+    this._operation.set({
+      radius: radius / zoom,
+      gradientRadius: gradientRadius / zoom
+    })
 
     editor.render()
   }
@@ -198,11 +202,11 @@ export default class RadialFocusCanvasControlsComponent extends CanvasControlsCo
       .clone()
       .multiply(outputDimensions)
 
-    const gradientRadius = this._operation.getGradientRadius()
+    const radius = this._operation.getRadius()
 
     const areaSize = new Vector2(
-      gradientRadius * 2 * zoom,
-      gradientRadius * 2 * zoom
+      radius * 2 * zoom,
+      radius * 2 * zoom
     )
 
     let newState = {
@@ -212,7 +216,7 @@ export default class RadialFocusCanvasControlsComponent extends CanvasControlsCo
 
     if (!this._knobChangedManually) {
       newState.knobPosition = position.clone()
-        .add(gradientRadius * zoom, 0)
+        .add(radius * zoom, 0)
     }
 
     this.setState(newState)
