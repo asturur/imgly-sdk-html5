@@ -29,7 +29,8 @@ class LinearFocusOperation extends Operation {
     super(...args)
 
     this._lastBlurRadius = this._options.blurRadius
-    this._lastGradientRadius = this._options.gradientRadius
+    this._lastSize = this._options.size
+    this._lastGradientSize = this._options.gradientSize
 
     this._horizontalFilter = new LinearFocusFilter()
     this._verticalFilter = new LinearFocusFilter()
@@ -172,9 +173,10 @@ class LinearFocusOperation extends Operation {
     start.multiply(outputDimensions)
     end.multiply(outputDimensions)
 
+    const { blurRadius, size, gradientSize } = this._options
     const commonOptions = {
-      blurRadius: this._options.blurRadius,
-      gradientRadius: this._options.gradientRadius,
+      blurRadius, size, gradientSize,
+
       start,
       end,
       texSize: outputDimensions
@@ -203,9 +205,9 @@ class LinearFocusOperation extends Operation {
     const outputSprite = sdk.getSprite()
     const renderTexture = this._getRenderTexture(sdk)
 
-    const { blurRadius, gradientRadius, start, end } = this._options
+    const { blurRadius, size, gradientSize, start, end } = this._options
     this._filter.set({
-      blurRadius, gradientRadius, start, end,
+      blurRadius, gradientSize, size, start, end,
       texSize: sdk.getOutputDimensions()
     })
 
@@ -238,7 +240,8 @@ LinearFocusOperation.prototype.availableOptions = {
   start: { type: 'vector2', default: new Vector2(0.0, 0.5) },
   end: { type: 'vector2', default: new Vector2(1.0, 0.5) },
   blurRadius: { type: 'number', default: 30 },
-  gradientRadius: { type: 'number', default: 50 }
+  size: { type: 'number', default: 50 },
+  gradientSize: { type: 'number', default: 50 }
 }
 
 export default LinearFocusOperation

@@ -57,12 +57,12 @@ class LinearFocusFilter extends Engine.Filter {
 
     if (!this._lastStart.equals(this._options.start) ||
         !this._lastEnd.equals(this._options.end) ||
-        this._lastGradientRadius !== this._options.gradientRadius) {
+        this._lastGradientRadius !== this._options.size) {
       this._renderMask()
 
       this._lastStart = this._options.start.clone()
       this._lastEnd = this._options.end.clone()
-      this._lastGradientRadius = this._options.gradientRadius
+      this._lastGradientRadius = this._options.size
     }
 
     if (this._lastBlurRadius !== this._options.blurRadius) {
@@ -101,7 +101,8 @@ class LinearFocusFilter extends Engine.Filter {
 
     const canvasDimensions = new Vector2(canvas.width, canvas.height)
 
-    const gradientRadius = this._options.gradientRadius * pixelRatio
+    const size = this._options.size * pixelRatio
+    const gradientSize = this._options.gradientSize * pixelRatio
     const start = this._options.start.clone()
     const end = this._options.end.clone()
 
@@ -115,17 +116,27 @@ class LinearFocusFilter extends Engine.Filter {
     const factor = dist.clone().divide(totalDist)
 
     const gradientStart = middle.clone()
-      .add(gradientRadius * factor.y, -gradientRadius * factor.x)
+      .add(
+        (size + gradientSize) * factor.y,
+        -(size + gradientSize) * factor.x
+      )
     const gradientEnd = middle.clone()
-      .add(-gradientRadius * factor.y, gradientRadius * factor.x)
+      .add(
+        -(size + gradientSize) * factor.y,
+        (size + gradientSize) * factor.x
+      )
 
     // Build gradient
     const gradient = context.createLinearGradient(
       gradientStart.x, gradientStart.y,
       gradientEnd.x, gradientEnd.y
     )
+    const fullGradientSize = gradientEnd.clone()
+      .subtract(gradientStart)
+      .len()
     gradient.addColorStop(0, '#000000')
-    gradient.addColorStop(0.5, '#FFFFFF')
+    gradient.addColorStop((gradientSize / 2) / fullGradientSize, '#FFFFFF')
+    gradient.addColorStop(1.0 - ((gradientSize / 2) / fullGradientSize), '#FFFFFF')
     gradient.addColorStop(1, '#000000')
 
     // Draw gradient
@@ -166,7 +177,8 @@ class LinearFocusFilter extends Engine.Filter {
 
 LinearFocusFilter.prototype.availableOptions = {
   blurRadius: { type: 'number', default: 30, uniformType: 'f' },
-  gradientRadius: { type: 'number', default: 50, uniformType: 'f' },
+  size: { type: 'number', default: 50, uniformType: 'f' },
+  gradientSize: { type: 'number', default: 50, uniformType: 'f' },
   start: { type: 'vector2', default: new Vector2(0, 0.5), uniformType: '2f' },
   end: { type: 'vector2', default: new Vector2(1, 0.5), uniformType: '2f' },
   delta: { type: 'vector2', default: new Vector2(1, 1), uniformType: '2f' },

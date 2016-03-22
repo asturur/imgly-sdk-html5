@@ -135,16 +135,19 @@ export default class LinearFocusCanvasControlsComponent extends CanvasControlsCo
       .subtract(this.state.areaPosition)
     const newGradientRadius = distance.len() * 2
 
-    let start = this.state.areaPosition.clone()
+    const start = this.state.areaPosition.clone()
       .add(-distance.y, distance.x)
-      .divide(outputDimensions)
-    let end = this.state.areaPosition.clone()
+    const end = this.state.areaPosition.clone()
       .add(distance.y, -distance.x)
-      .divide(outputDimensions)
+    const size = end.clone().subtract(start).len()
+    const gradientSize = size
+
+    start.divide(outputDimensions)
+    end.divide(outputDimensions)
 
     this._operation.set({
-      gradientRadius: newGradientRadius,
-      start, end
+      start, end,
+      size, gradientSize
     })
     this.setState({
       knobPosition: newKnobPosition,
@@ -208,7 +211,7 @@ export default class LinearFocusCanvasControlsComponent extends CanvasControlsCo
     const end = this._operation.getEnd()
       .clone()
       .multiply(outputDimensions)
-    const gradientRadius = this._operation.getGradientRadius()
+    const size = this._operation.getSize()
 
     const dist = end.clone().subtract(start)
     const middle = start.clone()
@@ -216,7 +219,7 @@ export default class LinearFocusCanvasControlsComponent extends CanvasControlsCo
 
     const areaSize = new Vector2(
       outputDimensions.len() * 2,
-      gradientRadius
+      size
     )
 
     const totalDist = dist.len()
@@ -226,7 +229,7 @@ export default class LinearFocusCanvasControlsComponent extends CanvasControlsCo
       areaDimensions: areaSize,
       areaPosition: middle.clone(),
       knobPosition: middle.clone()
-        .add(-gradientRadius * factor.y, gradientRadius * factor.x)
+        .add(-size * factor.y, size * factor.x)
     })
   }
 

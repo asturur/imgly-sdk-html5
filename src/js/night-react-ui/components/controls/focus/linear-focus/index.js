@@ -36,7 +36,8 @@ class LinearFocusControls extends Controls {
     const initialOptions = {
       start: operation.getStart().clone(),
       end: operation.getEnd().clone(),
-      gradientRadius: operation.getGradientRadius(),
+      size: operation.getSize(),
+      gradientSize: operation.getGradientSize(),
       blurRadius: operation.getBlurRadius()
     }
     return {
